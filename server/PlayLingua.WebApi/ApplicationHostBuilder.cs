@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PlayLingua.WebApi.Configuration;
 
 namespace PlayLingua.WebApi
 {
@@ -28,6 +29,9 @@ namespace PlayLingua.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddRouting(options => { options.LowercaseUrls = true; });
+
+            services.AddSwagger();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +46,8 @@ namespace PlayLingua.WebApi
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
+
+            app.AddSwagger();
 
             app.UseEndpoints(endpoints =>
             {
