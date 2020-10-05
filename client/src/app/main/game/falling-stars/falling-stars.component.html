@@ -1,1 +1,13 @@
-<p>falling-stars works!</p>
+<div class="game-board-container">
+  <div class="falling-container">
+    <span *ngFor="let word of words">
+      <span class="box" [ngStyle]="word.style" *ngIf="!word.terminate">
+        {{word.value}}
+      </span>
+    </span>
+
+  </div>
+  <div class="typing-container">
+    <input placeholder="type the word and press enter" [(ngModel)]="currentWord.typingWord">
+  </div>
+</div>
