@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayLingua.WebApi", "PlayLingua.WebApi\PlayLingua.WebApi.csproj", "{564FADEC-A9BA-413B-BF76-CCE396E7934C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{564FADEC-A9BA-413B-BF76-CCE396E7934C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{564FADEC-A9BA-413B-BF76-CCE396E7934C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{564FADEC-A9BA-413B-BF76-CCE396E7934C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{564FADEC-A9BA-413B-BF76-CCE396E7934C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F486C2B0-1121-4F0A-BB42-F554F81589F7}
+	EndGlobalSection
+EndGlobal
