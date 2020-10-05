@@ -1,0 +1,21 @@
+.main-menu-container {
+  text-align: center;
+  border-bottom: solid 1px;
+}
+.menu-container {
+  display: inline-flex;
+  border: solid 1px gray;
+  margin: 1rem;
+  padding: .5rem;
+  color: gray;
+}
+
+.menu-container:hover {
+  cursor: pointer;
+  color: white;
+  background-color: gray;
+}
+
+.menu-container:focus {
+  outline: 0;
+}
