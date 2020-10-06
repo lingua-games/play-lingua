@@ -1,0 +1,29 @@
+<div class="collapse-container" routerLink="./" *ngIf="!showLeftSideMenu()">
+  <span>
+    <fa-icon [icon]="['fas', 'arrow-left']"></fa-icon>
+  </span>
+</div>
+<div class="page-container">
+  <div class="left-side-container"  *ngIf="showLeftSideMenu()">
+    <div class="main-menu-container">
+      <div class="menu-container" routerLink="./falling-stars">
+      <span>
+      click me, im game
+      </span>
+      </div>
+      <div class="menu-container" routerLink="./">
+      <span>
+        Ugly menu 2
+      </span>
+      </div>
+      <div class="menu-container" routerLink="./">
+      <span>
+        Ugly menu 3
+      </span>
+      </div>
+    </div>
+  </div>
+  <div class="router-container">
+    <router-outlet></router-outlet>
+  </div>
+</div>
