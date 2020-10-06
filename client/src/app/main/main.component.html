@@ -8,7 +8,7 @@
     <div class="main-menu-container">
       <div class="menu-container" routerLink="./falling-stars">
       <span>
-      click me, im game
+      Falling stars
       </span>
       </div>
       <div class="menu-container" routerLink="./">
@@ -23,7 +23,7 @@
       </div>
     </div>
   </div>
-  <div class="router-container">
+  <div class="router-container " [ngClass]="{'full-width-container': !showLeftSideMenu()}">
     <router-outlet></router-outlet>
   </div>
 </div>
