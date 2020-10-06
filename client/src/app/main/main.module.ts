@@ -6,6 +6,7 @@ import {FallingStarsComponent} from './game/falling-stars/falling-stars.componen
 import {FormsModule} from '@angular/forms';
 import {FaIconLibrary, FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {faSquare, faCheckSquare, faArrowLeft} from '@fortawesome/free-solid-svg-icons';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -14,7 +15,7 @@ import {faSquare, faCheckSquare, faArrowLeft} from '@fortawesome/free-solid-svg-
     CommonModule,
     MainRoutingModule,
     FormsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
   ]
 })
 export class MainModule {
