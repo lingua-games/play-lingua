@@ -21,10 +21,6 @@
   color: white;
 }
 
-.main-menu-container {
-  margin-top: 3rem;
-}
-
 .collapse-container {
   float: right;
   margin: 20px;
@@ -38,6 +34,7 @@
   display: inline-block;
   width: 80%;
   height: 100vh;
+  padding: 0px 10px;
 }
 
 .menu-container {
@@ -53,6 +50,7 @@
   background-color: gray;
 }
 
-.menu-container:focus {
+.menu-container:focus, .collapse-container:focus {
   outline: 0;
 }
+
