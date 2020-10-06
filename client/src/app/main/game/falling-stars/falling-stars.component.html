@@ -1,4 +1,8 @@
 <div class="game-board-container">
+  <div class="ready-container" *ngIf="showReadyBox()">
+    <h3>Are you ready to start?</h3>
+    <button class="btn btn-success" (click)="startGame()">Start!</button>
+  </div>
   <div class="falling-container">
     <span *ngFor="let word of words">
       <span class="box"
@@ -9,7 +13,22 @@
       </span>
     </span>
   </div>
-  <div class="typing-container">
-    <input placeholder="type the word and press enter" [(ngModel)]="typingWord" (ngModelChange)="checkTypingWord($event)">
+  <div class="text-center">
+    <div class="typing-container">
+      <input
+        class="form-control mt-2"
+        placeholder="type the falling word"
+        [(ngModel)]="typingWord"
+        (ngModelChange)="checkTypingWord($event)">
+
+    </div>
+    <div class="action-container m-2">
+      <button class="btn btn-primary">Reset</button>
+      <button class="btn btn-danger ml-1">Pause</button>
+    </div>
+    <div class="score-container">
+      <p>Total: {{scoreBoard.total}}</p>
+      <p>Correct: {{scoreBoard.correct}}</p>
+    </div>
   </div>
 </div>

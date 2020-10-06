@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {GamesService} from '../../../service/games.service';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {FallingStarsWord} from '../../../models/falling-stars-word.interface';
+import {Score} from '../../../models/score.interface';
 
 @Component({
   selector: 'app-falling-stars',
@@ -19,6 +20,7 @@ import {FallingStarsWord} from '../../../models/falling-stars-word.interface';
 export class FallingStarsComponent implements OnInit {
   words: FallingStarsWord[] = [];
   typingWord: string;
+  scoreBoard: Score = {} as Score;
 
   constructor(private gamesService: GamesService) {
   }
@@ -30,6 +32,8 @@ export class FallingStarsComponent implements OnInit {
   getGameWords(): void {
     this.words = [];
     this.gamesService.getGameWords().subscribe((res: string[]) => {
+      this.scoreBoard.total = res.length;
+      this.scoreBoard.correct = 0;
       res.forEach((element, index: number) => {
         this.words.push({
           value: element,
@@ -39,8 +43,15 @@ export class FallingStarsComponent implements OnInit {
           animating: false
         });
       });
-      this.words[0].animating = true;
     });
+  }
+
+  showReadyBox(): boolean {
+    return !this.words.find(x => x.animating);
+  }
+
+  startGame(): void {
+    this.words[0].animating = true;
   }
 
   boxAnimationDone(word: FallingStarsWord): void {
@@ -62,8 +73,8 @@ export class FallingStarsComponent implements OnInit {
 
   checkTypingWord(event: string): void {
     const activeWord = this.words.find(x => x.animating);
-    if (
-      event.toLowerCase() === activeWord.value.toLowerCase()) {
+    if (event.toLowerCase() === activeWord.value.toLowerCase()) {
+      this.scoreBoard.correct++;
       this.typingWord = '';
       this.boxAnimationDone(activeWord);
     }
