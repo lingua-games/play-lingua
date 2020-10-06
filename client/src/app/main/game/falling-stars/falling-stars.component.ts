@@ -1,14 +1,24 @@
 import {Component, OnInit} from '@angular/core';
 import {GamesService} from '../../../service/games.service';
+import {animate, style, transition, trigger} from '@angular/animations';
+import {FallingStarsWord} from '../../../models/falling-stars-word.interface';
 
 @Component({
   selector: 'app-falling-stars',
   templateUrl: './falling-stars.component.html',
-  styleUrls: ['./falling-stars.component.scss']
+  styleUrls: ['./falling-stars.component.scss'],
+  animations: [
+    trigger('fade', [
+      transition('void => true', [
+        style({top: '-10%'}),
+        animate(5000, style({top: '100%'}))
+      ])
+    ])
+  ]
 })
 export class FallingStarsComponent implements OnInit {
-  words: any[];
-  currentWord: any;
+  words: FallingStarsWord[] = [];
+  typingWord: string;
 
   constructor(private gamesService: GamesService) {
   }
@@ -23,48 +33,40 @@ export class FallingStarsComponent implements OnInit {
       res.forEach((element, index: number) => {
         this.words.push({
           value: element,
-          style: {left: `${index * 10 + 10}%`, top: '-10%'},
-          typingWord: ''
+          // To get random 2 digit number
+          style: {left: `${this.getRandomNumber()}%`},
+          typingWord: '',
+          animating: false
         });
-        // this.startWord(this.words[0]);
       });
+      this.words[0].animating = true;
     });
   }
 
-  startWord(word): void {
-    this.currentWord = word;
-    const presentingWord = setInterval(() => {
-      const top = parseInt(word.style.top, null);
-      if (word.typingWord.toLowerCase() === word.value.toLowerCase()) {
-        word.answered = true;
-        clearInterval(presentingWord);
-        this.endWord(word);
-
-      } else {
-        if (top < 100) {
-          word.style.top = (top + 1) + '%';
-        } else {
-          clearInterval(presentingWord);
-          this.endWord(word);
-        }
-      }
-    }, 500);
-  }
-
-  endWord(word): void {
-    word.terminate = true;
+  boxAnimationDone(word: FallingStarsWord): void {
+    word.animating = false;
     const index = this.words.indexOf(word);
-    if (this.words.length !== index - 1 && this.words[index + 1]) {
-      this.startWord(this.words[index + 1]);
+    if (this.words.length === index + 1) {
+      // It means the game is finish
+    } else {
+      this.words[index + 1].animating = true;
     }
   }
 
-  // checkWord(event: KeyboardEvent): void {
-  //   if (this.typingWord.toLowerCase() === this.currentWord.value.toLowerCase()) {
-  //     clearInterval(this.presentingWord);
-  //     this.endWord(this.currentWord);
-  //     this.typingWord = '';
-  //   }
-  // }
+  getRandomNumber(): number {
+    const result = Math.floor(Math.random() * 90 + 10);
+    // If left of the object would be more than 95%,
+    // then the object overflow from right side of the screen
+    return result > 95 ? result - 10 : result;
+  }
+
+  checkTypingWord(event: string): void {
+    const activeWord = this.words.find(x => x.animating);
+    if (
+      event.toLowerCase() === activeWord.value.toLowerCase()) {
+      this.typingWord = '';
+      this.boxAnimationDone(activeWord);
+    }
+  }
 }
 

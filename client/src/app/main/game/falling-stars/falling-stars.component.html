@@ -1,13 +1,15 @@
 <div class="game-board-container">
   <div class="falling-container">
     <span *ngFor="let word of words">
-      <span class="box" [ngStyle]="word.style" *ngIf="!word.terminate">
+      <span class="box"
+            [@fade]="word.animating"
+            [ngStyle]="word.style" *ngIf="word.animating"
+            (@fade.done)="boxAnimationDone(word)">
         {{word.value}}
       </span>
     </span>
-
   </div>
   <div class="typing-container">
-    <input placeholder="type the word and press enter" [(ngModel)]="currentWord.typingWord">
+    <input placeholder="type the word and press enter" [(ngModel)]="typingWord" (ngModelChange)="checkTypingWord($event)">
   </div>
 </div>
