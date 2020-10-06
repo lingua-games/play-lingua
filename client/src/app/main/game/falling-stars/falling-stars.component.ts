@@ -26,7 +26,7 @@ export class FallingStarsComponent implements OnInit {
           style: {left: `${index * 10 + 10}%`, top: '-10%'},
           typingWord: ''
         });
-        this.startWord(this.words[0]);
+        // this.startWord(this.words[0]);
       });
     });
   }
