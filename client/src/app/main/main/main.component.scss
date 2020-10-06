@@ -1,9 +1,46 @@
-.main-menu-container {
+.left-side-container {
   text-align: center;
-  border-bottom: solid 1px;
+  display: inline-block;
+  width: 20%;
+  height: 100vh;
+  border-right: 1px solid;
 }
+
+.collapse-container {
+  position: fixed;
+  border: 1px solid rgb(33, 47, 60);
+  color: rgb(33, 47, 60);
+  padding: .5rem;
+  border-radius: 50%;
+  z-index: 100;
+}
+
+.collapse-container:hover {
+  background-color: rgb(33, 47, 60);
+  cursor: pointer;
+  color: white;
+}
+
+.main-menu-container {
+  margin-top: 3rem;
+}
+
+.collapse-container {
+  float: right;
+  margin: 20px;
+}
+
+.page-container {
+  display: flex;
+}
+
+.router-container {
+  display: inline-block;
+  width: 80%;
+  height: 100vh;
+}
+
 .menu-container {
-  display: inline-flex;
   border: solid 1px gray;
   margin: 1rem;
   padding: .5rem;

@@ -34,7 +34,6 @@ export class FallingStarsComponent implements OnInit {
   startWord(word): void {
     this.currentWord = word;
     const presentingWord = setInterval(() => {
-      console.log(word);
       const top = parseInt(word.style.top, null);
       if (word.typingWord.toLowerCase() === word.value.toLowerCase()) {
         word.answered = true;
