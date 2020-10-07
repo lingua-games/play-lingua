@@ -7,7 +7,8 @@
     <span *ngFor="let word of words">
       <span class="box"
             [@fade]="word.animating"
-            [ngStyle]="word.style" *ngIf="word.animating"
+            [ngStyle]="word.style"
+            *ngIf="word.animating"
             (@fade.done)="boxAnimationDone(word)">
         {{word.value}}
       </span>

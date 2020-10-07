@@ -3,6 +3,7 @@ import {Routes, RouterModule} from '@angular/router';
 import {FallingStarsComponent} from './game/falling-stars/falling-stars.component';
 import {MainComponent} from './main.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
+import {SuperMarioComponent} from './game/super-mario/super-mario.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
       {
         path: 'falling-stars',
         component: FallingStarsComponent
+      },
+      {
+        path: 'super-mario',
+        component: SuperMarioComponent
       }
     ]
   },

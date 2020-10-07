@@ -7,10 +7,11 @@ import {FormsModule} from '@angular/forms';
 import {FaIconLibrary, FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {faSquare, faCheckSquare, faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import { SuperMarioComponent } from './game/super-mario/super-mario.component';
 
 
 @NgModule({
-  declarations: [MainComponent, FallingStarsComponent],
+  declarations: [MainComponent, FallingStarsComponent, SuperMarioComponent],
   imports: [
     CommonModule,
     MainRoutingModule,
