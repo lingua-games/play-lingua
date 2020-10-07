@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  playlingua-api:
+    image: playlingua-api:latest
+    ports:
+     - 4480:80
+    container_name: playlingua-api
