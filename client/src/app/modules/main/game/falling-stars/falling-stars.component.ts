@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {GamesService} from '../../../service/games.service';
 import {animate, style, transition, trigger} from '@angular/animations';
-import {FallingStarsWord} from '../../../models/falling-stars-word.interface';
-import {Score} from '../../../models/score.interface';
+import {FallingStarsWord} from '../../../../core/models/falling-stars-word.interface';
+import {Score} from '../../../../core/models/score.interface';
+import {GamesService} from '../../../../core/service/games.service';
 
 @Component({
   selector: 'app-falling-stars',

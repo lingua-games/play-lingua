@@ -1,5 +1,5 @@
 import {Component, HostListener, OnInit} from '@angular/core';
-import {MarioModel} from '../../../models/Mario.model';
+import {MarioModel} from '../../../../core/models/Mario.model';
 
 @Component({
   selector: 'app-super-mario',
