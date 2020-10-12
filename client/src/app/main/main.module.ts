@@ -8,6 +8,7 @@ import {FaIconLibrary, FontAwesomeModule} from '@fortawesome/angular-fontawesome
 import {faSquare, faCheckSquare, faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import { SuperMarioComponent } from './game/super-mario/super-mario.component';
+import {MaterialModule} from '../modules/common/material/material.module';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { SuperMarioComponent } from './game/super-mario/super-mario.component';
     MainRoutingModule,
     FormsModule,
     FontAwesomeModule,
+    MaterialModule
   ]
 })
 export class MainModule {
