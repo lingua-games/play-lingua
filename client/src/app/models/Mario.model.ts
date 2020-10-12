@@ -22,7 +22,7 @@ export class MarioModel {
   }
 
   moveRight(distance?: number): void {
-    distance = distance || 1;
+    distance  = distance || 1;
     const right = parseInt(this.style.left, null);
     if (right + parseInt(this.style.width, null) + distance < 100) {
       this.style.left = (right + distance) + '%';
@@ -37,12 +37,15 @@ export class MarioModel {
     }
     height = height || 30;
     const originalTop = this.style.top;
-    // this.style.transition = '1s';
+    this.style.transition = 'top 1s';
     this.isJumping = true;
     this.style.top = (parseInt(this.style.top, null) - height) + '%';
     setTimeout(() => {
       this.style.top = originalTop;
-      this.isJumping = false;
-    }, 500);
+      setTimeout(() => {
+        this.style.transition = '';
+        this.isJumping = false;
+      }, 1000);
+    }, 1000);
   }
 }
