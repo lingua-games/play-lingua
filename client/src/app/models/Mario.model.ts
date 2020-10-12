@@ -1,6 +1,6 @@
 import {ElementStyle} from './element-style.model';
 
-export class Mario {
+export class MarioModel {
   isJumping?: boolean;
   style: ElementStyle;
 
@@ -11,19 +11,23 @@ export class Mario {
     this.style = style;
   }
 
-  moveLeft(width?: number): void {
-    width = width || 1;
+  moveLeft(distance?: number): void {
+    distance = distance || 1;
     const left = parseInt(this.style.left, null);
-    if (left >= 1) {
-      this.style.left = (left - width) + '%';
+    if (left >= distance) {
+      this.style.left = (left - distance) + '%';
+    } else {
+      this.style.left = '0%';
     }
   }
 
-  moveRight(width?: number): void {
-    width = width || 1;
+  moveRight(distance?: number): void {
+    distance = distance || 1;
     const right = parseInt(this.style.left, null);
-    if (right + width < 100) {
-      this.style.left = (right + width) + '%';
+    if (right + parseInt(this.style.width, null) + distance < 100) {
+      this.style.left = (right + distance) + '%';
+    } else {
+      this.style.left = (100 - parseInt(this.style.width, null)) + '%';
     }
   }
 
@@ -33,15 +37,12 @@ export class Mario {
     }
     height = height || 30;
     const originalTop = this.style.top;
-    this.style.transition = '1s';
+    // this.style.transition = '1s';
     this.isJumping = true;
     this.style.top = (parseInt(this.style.top, null) - height) + '%';
     setTimeout(() => {
       this.style.top = originalTop;
-      setTimeout(() => {
-        this.style.transition = '100ms';
-        this.isJumping = false;
-      }, 1000);
-    }, 1000);
+      this.isJumping = false;
+    }, 500);
   }
 }

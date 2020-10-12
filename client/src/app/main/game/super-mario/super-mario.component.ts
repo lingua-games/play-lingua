@@ -1,5 +1,5 @@
 import {Component, HostListener, OnInit} from '@angular/core';
-import {Mario} from '../../../models/Mario';
+import {MarioModel} from '../../../models/Mario.model';
 
 @Component({
   selector: 'app-super-mario',
@@ -8,19 +8,34 @@ import {Mario} from '../../../models/Mario';
 })
 export class SuperMarioComponent implements OnInit {
 
-  mario: Mario = new Mario();
+  mario: MarioModel = new MarioModel();
+
+  movingRightInterval?: number;
+  movingLeftInterval?: number;
 
   @HostListener('document:keydown ', ['$event'])
-  handleKeyboardEvent(event: KeyboardEvent): void {
+  keyDownEvent(event: KeyboardEvent): void {
     switch (event.code) {
       case 'ArrowLeft':
-        this.moveLeft();
+        this.startMovingLeft();
         break;
       case 'ArrowRight':
-        this.moveRight();
+        this.startMovingRight();
         break;
       case 'Space':
         this.jump();
+        break;
+    }
+  }
+
+  @HostListener('document:keyup', ['$event'])
+  keyUpEvent(event: KeyboardEvent): void {
+    switch (event.code) {
+      case 'ArrowLeft':
+        this.stopMovingLeft();
+        break;
+      case 'ArrowRight':
+        this.stopMovingRight();
         break;
     }
   }
@@ -40,12 +55,30 @@ export class SuperMarioComponent implements OnInit {
     });
   }
 
-  moveLeft(): void {
-    this.mario.moveLeft(2);
+  stopMovingLeft(): void {
+    clearInterval(this.movingLeftInterval);
+    this.movingLeftInterval = null;
   }
 
-  moveRight(): void {
-    this.mario.moveRight(2);
+  startMovingLeft(): void {
+    if (!this.movingLeftInterval) {
+      this.movingLeftInterval = setInterval(() => {
+        this.mario.moveLeft(1);
+      }, 30);
+    }
+  }
+
+  stopMovingRight(): void {
+    clearInterval(this.movingRightInterval);
+    this.movingRightInterval = null;
+  }
+
+  startMovingRight(): void {
+    if (!this.movingRightInterval) {
+      this.movingRightInterval = setInterval(() => {
+        this.mario.moveRight(1);
+      }, 30);
+    }
   }
 
   jump(): void {
