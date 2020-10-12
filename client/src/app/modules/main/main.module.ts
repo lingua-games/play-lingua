@@ -5,9 +5,9 @@ import {MainRoutingModule} from './main-routing.module';
 import {FallingStarsComponent} from './game/falling-stars/falling-stars.component';
 import {FormsModule} from '@angular/forms';
 import {FaIconLibrary, FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {faSquare, faCheckSquare, faArrowLeft} from '@fortawesome/free-solid-svg-icons';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import { SuperMarioComponent } from './game/super-mario/super-mario.component';
+import {MaterialModule} from '../common/material/material.module';
 
 
 @NgModule({
@@ -17,6 +17,7 @@ import { SuperMarioComponent } from './game/super-mario/super-mario.component';
     MainRoutingModule,
     FormsModule,
     FontAwesomeModule,
+    MaterialModule
   ]
 })
 export class MainModule {
