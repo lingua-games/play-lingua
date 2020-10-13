@@ -1,4 +1,12 @@
-<div class="main-container">
+<div class="main-container" style="overflow: hidden">
   <div class="mario" [ngStyle]="mario.style"></div>
   <div class="ground"></div>
+  <div *ngFor="let enemy of enemies">
+    <div
+      [ngStyle]="enemy.style"
+      [@move]="enemy.status === 0"
+      (@move.done)="nextEnemy(enemy, $event)"
+      *ngIf="checkEnemyLife(enemy)">{{enemy.text}}
+    </div>
+  </div>
 </div>

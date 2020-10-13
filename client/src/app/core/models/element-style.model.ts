@@ -6,4 +6,8 @@ export class ElementStyle {
   height?: string;
   left?: string;
   transition?: string;
+  right?: string;
+  bottom?: string;
+  borderRadius?: string;
+  padding?: string;
 }
