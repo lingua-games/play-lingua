@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PlayLingua.Adapter.InMemoryDb;
 using PlayLingua.WebApi.Configuration;
 
 namespace PlayLingua.WebApi
@@ -32,6 +33,8 @@ namespace PlayLingua.WebApi
             services.AddRouting(options => { options.LowercaseUrls = true; });
 
             services.AddSwagger();
+
+            services.AddInMemoryRepository();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
