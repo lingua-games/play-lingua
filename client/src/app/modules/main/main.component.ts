@@ -1,18 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
-  styleUrls: ['./main.component.scss']
+  styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
+  constructor(private router: Router) {}
 
-  constructor(private router: Router) {
-  }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   showLeftSideMenu(): boolean {
     return this.router.url === '/home';
