@@ -19,7 +19,7 @@ namespace PlayLingua.Adapter.InMemoryDb.Repositories
 
             for (var i = 3; i < 10; i++)
             {
-                chapterList.Add(new Chapter(Guid.NewGuid(), $"Chapter {i}", $"Description for chapter {i} on dutch book"));
+                chapterList.Add(new Chapter(Guid.NewGuid(), $"Chapter {i}", $"Sample chapter {i}"));
             }
 
             _data.Add(StaticData.DutchBook, chapterList);
