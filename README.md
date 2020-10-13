@@ -1,6 +1,21 @@
-# How to setup and run the project
-## Client
-1. Install the [latest node version](https://nodejs.org/en/)
-2. Open ``cmd`` and navigate to [client](./client) directory
-3. Execute ``npm install`` and then ``npm run start``
-4. Brows [localhost:4000](http://localhost:4000/)
+10 words 
+
+-tables
+-- create date
+-- last modified date
+
+-words
+-- id
+-- dutchWord
+-- Meaning in english
+-- book id
+-- chapter id
+
+-chapter
+-- id
+-- name
+-- description
+
+-books
+-- id
+-- name
