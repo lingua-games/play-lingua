@@ -1,5 +1,6 @@
 $orange-color: #F5612C;
 $blue-color: #2DADB7;
+$white-color:#FFFFFF;
 .welcome-body {
     height: 100vh;
     width: 100%;
@@ -8,33 +9,23 @@ $blue-color: #2DADB7;
     background-size: cover;
 }
 
-.website-title {
-    font-family: cursive;
+.title-container {
     font-size: 3vw;
     font-weight: bold;
     color: $orange-color;
     width: fit-content;
-    position: fixed;
-    z-index: 2;
     margin-top: 3%;
     margin-left: 8%;
 }
 
-.motto {
-    font-family: cursive;
+.motto-container {
     font-size: 2vw;
     color: $orange-color;
-    width: fit-content;
-    position: fixed;
-    z-index: 2;
     margin-top: 7%;
     margin-left: 3%;
 }
 
-.button {
-    font-family: cursive;
-    position: fixed;
-    z-index: 2;
+.button-container {
     height: 100%;
     width: 100%;
     position: relative;
@@ -42,7 +33,7 @@ $blue-color: #2DADB7;
 
 .start-button {
     background-color: $orange-color;
-    color: white;
+    color: $white-color;
     font-size: 1.7vw;
     position: absolute;
     top: 60%;
@@ -54,7 +45,7 @@ $blue-color: #2DADB7;
 }
 
 .start-button:hover {
-    background-color: white;
+    background-color: $white-color;
     color: $orange-color;
     border: $orange-color 2px solid;
     font-weight: bold;
@@ -69,11 +60,11 @@ $blue-color: #2DADB7;
     border: none;
     border-radius: 2%;
     background-color: $orange-color;
-    color: white;
+    color: $white-color;
 }
 
 .admin-button:hover {
-    background-color: white;
+    background-color: $white-color;
     color: $orange-color;
     border: $orange-color 1px solid;
 }
