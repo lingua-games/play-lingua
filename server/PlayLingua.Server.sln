@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayLingua.WebApi", "PlayLi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayLingua.Domain", "PlayLingua.Domain\PlayLingua.Domain.csproj", "{AF448E26-2E64-492A-9E78-EB469E573515}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayLingua.Adapter.InMemoryDb", "PlayLingua.Adapter.InMemoryDb\PlayLingua.Adapter.InMemoryDb.csproj", "{1E188F40-6BDF-4EDF-BA10-4CEE6C086DD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayLingua.Adapter.InMemoryDb", "PlayLingua.Adapter.InMemoryDb\PlayLingua.Adapter.InMemoryDb.csproj", "{1E188F40-6BDF-4EDF-BA10-4CEE6C086DD6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
