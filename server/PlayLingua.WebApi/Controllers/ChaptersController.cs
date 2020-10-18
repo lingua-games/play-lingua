@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Ports;
+using PlayLingua.WebApi.Dto;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PlayLingua.WebApi.Controllers
 {
@@ -21,7 +23,7 @@ namespace PlayLingua.WebApi.Controllers
         public ActionResult<List<Word>> Words(Guid chapterId)
         {
             var words = _wordRepository.GetWords(chapterId);
-            return Ok(words);
+            return Ok(words.Select(WordDto.Map));
         }
     }
 }
