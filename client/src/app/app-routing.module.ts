@@ -1,21 +1,27 @@
-import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import { WelcomeComponent } from './modules/welcome/welcome.component';
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'welcome',
     pathMatch: 'full',
   },
   {
+    path: 'welcome',
+    loadChildren: () =>
+      import('./modules/welcome/welcome.module').then((m) => m.WelcomeModule),
+  },
+  {
     path: 'home',
-    loadChildren: () => import('./modules/main/main.module').then(m => m.MainModule)
-  }
+    loadChildren: () =>
+      import('./modules/main/main.module').then((x) => x.MainModule),
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule {
-}
+export class AppRoutingModule {}

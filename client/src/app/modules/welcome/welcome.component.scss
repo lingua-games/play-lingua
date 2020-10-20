@@ -1,0 +1,71 @@
+$orange-color: #F5612C;
+$blue-color: #2DADB7;
+$white-color:#FFFFFF;
+.welcome-body {
+    height: 100vh;
+    width: 100%;
+    background-image: url(../../../assets/images/background/welcome-background.png);
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    position: relative;
+}
+
+.title-container {
+    background-color: $white-color;
+    color: $orange-color;
+    position: absolute;
+    top: 1%;
+    left: 1%;
+    padding: 1%;
+    border-radius: 10px;
+    box-shadow: 10px 10px 10px rgb(245, 97, 44, 0.5);
+}
+
+.title-header {
+    font-size: 3vw;
+    margin-bottom: 7%;
+}
+
+.motto {
+    font-size: 2vw;
+}
+
+.start-button {
+    background-color: $orange-color;
+    color: $white-color;
+    font-size: 1.7vw;
+    position: absolute;
+    top: 60%;
+    left: 3%;
+    padding: 2%;
+    border-radius: 10px;
+    box-shadow: 10px 10px 10px rgb(247, 180, 87);
+    cursor: pointer;
+    outline: none;
+}
+
+.start-button:hover {
+    background-color: $white-color;
+    color: $orange-color;
+    border: $orange-color 2px solid;
+}
+
+.admin-button {
+    font-size: 1vw;
+    position: absolute;
+    top: 5%;
+    right: 4%;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: $orange-color;
+    color: $white-color;
+    cursor: pointer;
+    box-shadow: 10px 10px 10px rgb(247, 180, 87);
+}
+
+.admin-button:hover {
+    background-color: $white-color;
+    color: $orange-color;
+    border: $orange-color 1px solid;
+}
