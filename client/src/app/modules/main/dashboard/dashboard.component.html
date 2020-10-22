@@ -1,2 +1,6 @@
-<h4>Hello welcome</h4>
-<p>We are supper exited to present our thoughts here</p>
+<div>
+    <span class="title-container">Select Game:</span>
+</div>
+<div *ngFor="let gameMenu of gameMenus" class="game-container">
+    {{gameMenu.name}}
+</div>
