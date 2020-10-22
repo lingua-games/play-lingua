@@ -1,8 +1,12 @@
-import {Component, HostListener, OnInit} from '@angular/core';
-import {MarioModel} from '../../../../core/models/Mario.model';
-import {GamesService} from '../../../../core/service/games.service';
-import {MarioEnemy, MarioEnemyStatus} from '../../../../core/models/mario-enemy.model';
-import {animate, style, transition, trigger} from '@angular/animations';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { MarioModel } from '../../../../core/models/Mario.model';
+import { GamesService } from '../../../../core/service/games.service';
+import {
+  MarioEnemy,
+  MarioEnemyStatus,
+} from '../../../../core/models/mario-enemy.model';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { bubble } from 'ngx-bootstrap/chronos/duration/bubble';
 
 @Component({
   selector: 'app-super-mario',
@@ -11,22 +15,20 @@ import {animate, style, transition, trigger} from '@angular/animations';
   animations: [
     trigger('move', [
       transition('void => true', [
-        style({right: '-5%'}),
-        animate(6000, style({right: '100%'}))
-      ])
-    ])
-  ]
+        style({ right: '0' }),
+        animate(6000, style({ right: '100%' })),
+      ]),
+    ]),
+  ],
 })
 export class SuperMarioComponent implements OnInit {
-
   mario: MarioModel = new MarioModel();
   enemies: MarioEnemy[];
   movingRightInterval?: number;
   movingLeftInterval?: number;
   jumpHeight = 30;
 
-  constructor(private gamesService: GamesService) {
-  }
+  constructor(private gamesService: GamesService) {}
 
   @HostListener('document:keydown ', ['$event'])
   keyDownEvent(event: KeyboardEvent): void {
@@ -59,15 +61,14 @@ export class SuperMarioComponent implements OnInit {
     this.mario.setStyle({
       border: '1px solid',
       position: 'absolute',
-      top: '85%',
+      bottom: '10%',
       width: '3%',
       height: '5%',
       left: '10%',
-      transition: '100ms',
+      transition: '10ms',
     });
     this.startGame();
   }
-
 
   startGame(): void {
     this.getWords();
@@ -75,44 +76,71 @@ export class SuperMarioComponent implements OnInit {
 
   getWords(): void {
     this.enemies = [];
-    this.gamesService.getGameWords().subscribe((res: string[]) => {
-      res.forEach(element => {
-        console.log();
-        this.enemies.push({
-          text: element,
-          status: MarioEnemyStatus.WaitingForStart,
-          style: {
-            position: 'absolute',
-            bottom: Math.floor(Math.random() * (this.jumpHeight + Math.abs(1) + 1)) + 10 + '%',
-            right: '0',
-            border: 'solid 1px gray',
-            borderRadius: '10%',
-            padding: '5px'
-          }
+    this.gamesService.getGameWords().subscribe(
+      (res: string[]) => {
+        res.forEach((element) => {
+          this.enemies.push({
+            text: element,
+            status: MarioEnemyStatus.WaitingForStart,
+            style: {
+              position: 'absolute',
+              // random number between floor and max top of the Mario
+              bottom:
+                Math.floor(
+                  Math.random() * (this.jumpHeight + Math.abs(1) + 1)
+                ) +
+                10 +
+                '%',
+              left: '100%',
+              border: 'solid 1px gray',
+              borderRadius: '10%',
+              padding: '5px',
+              height: '5%',
+            },
+          });
         });
-      });
-      this.enemies[0].status = MarioEnemyStatus.Start;
-    }, () => {
-    });
+        this.startAnimating(this.enemies[0]);
+      },
+      () => {}
+    );
   }
 
-  checkEnemyLife(enemy): boolean {
-    if (enemy.status === 0) {
-      return true;
-    }
-    console.log(enemy.style);
-    // console.log(this.mario.style);
-    return false;
-  }
+  startAnimating(enemy: MarioEnemy): void {
+    enemy.status = MarioEnemyStatus.Start;
+    const animateInterval = setInterval(() => {
+      enemy.style.transition = '100ms';
+      enemy.style.left = (
+        parseInt(enemy.style.left, null) -
+        1 +
+        '%'
+      ).toString();
 
-  nextEnemy(enemy: MarioEnemy, event: any): void {
-    const indexOfEnemy = this.enemies.indexOf(enemy);
-    if (this.enemies.length <= indexOfEnemy + 1) {
-      enemy.status = MarioEnemyStatus.Finished;
-      return;
-    }
-    enemy.status = MarioEnemyStatus.Finished;
-    this.enemies[indexOfEnemy + 1].status = MarioEnemyStatus.Start;
+      if (
+        parseInt(enemy.style.left, null) <=
+        parseInt(this.mario.style.left, null) +
+          parseInt(this.mario.style.width, null)
+      ) {
+        if (
+          // IMPORTANT: I calculated bottoms but did not
+          // calculate the tops yet.
+          parseInt(this.mario.style.bottom, null) >=
+            parseInt(enemy.style.bottom, null) &&
+          parseInt(this.mario.style.bottom, null) <=
+            parseInt(enemy.style.bottom, null) +
+              parseInt(enemy.style.height, null)
+        ) {
+          console.log('Hitted');
+        }
+      }
+      if (parseInt(enemy.style.left, null) <= -5) {
+        clearInterval(animateInterval);
+        const index = this.enemies.indexOf(enemy);
+        if (index + 1 < this.enemies.length) {
+          enemy.status = MarioEnemyStatus.Finished;
+          this.startAnimating(this.enemies[index + 1]);
+        }
+      }
+    }, 400);
   }
 
   stopMovingLeft(): void {

@@ -4,9 +4,9 @@
   <div *ngFor="let enemy of enemies">
     <div
       [ngStyle]="enemy.style"
-      [@move]="enemy.status === 0"
-      (@move.done)="nextEnemy(enemy, $event)"
-      *ngIf="checkEnemyLife(enemy)">{{enemy.text}}
+      *ngIf="enemy.status === 0"
+      >
+      {{enemy.text}}
     </div>
   </div>
 </div>
