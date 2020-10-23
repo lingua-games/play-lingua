@@ -62,7 +62,7 @@ export class SuperMarioComponent implements OnInit {
       border: '1px solid',
       position: 'absolute',
       bottom: '10%',
-      width: '3%',
+      width: '2%',
       height: '5%',
       left: '10%',
       transition: '10ms',
@@ -96,6 +96,8 @@ export class SuperMarioComponent implements OnInit {
               borderRadius: '10%',
               padding: '5px',
               height: '5%',
+              width: '5%',
+              textAlign: 'center',
             },
           });
         });
@@ -115,21 +117,30 @@ export class SuperMarioComponent implements OnInit {
         '%'
       ).toString();
 
-      if (
-        parseInt(enemy.style.left, null) <=
+      // Managing left-right hit
+      const enemyLeft = parseInt(enemy.style.left, null);
+      const enemyRight =
+        parseInt(enemy.style.left, null) + parseInt(enemy.style.width, null);
+      const marioLeft = parseInt(this.mario.style.left, null);
+      const marioRight =
         parseInt(this.mario.style.left, null) +
-          parseInt(this.mario.style.width, null)
+        parseInt(this.mario.style.width, null);
+      const enemyTop =
+        parseInt(enemy.style.bottom, null) + parseInt(enemy.style.height, null);
+      const enemyButton = parseInt(enemy.style.bottom, null);
+      const marioButton = parseInt(this.mario.style.bottom, null);
+      const marioTop = marioButton + parseInt(this.mario.style.height, null);
+      if (
+        ((marioLeft > enemyLeft && marioLeft < enemyRight) ||
+          (marioRight > enemyLeft && marioRight < enemyRight)) &&
+        ((marioTop < enemyTop && marioTop > enemyButton) ||
+          (marioButton < enemyTop && marioButton > enemyButton))
       ) {
-        if (
-          // IMPORTANT: I calculated bottoms but did not
-          // calculate the tops yet.
-          parseInt(this.mario.style.bottom, null) >=
-            parseInt(enemy.style.bottom, null) &&
-          parseInt(this.mario.style.bottom, null) <=
-            parseInt(enemy.style.bottom, null) +
-              parseInt(enemy.style.height, null)
-        ) {
-          console.log('Hitted');
+        clearInterval(animateInterval);
+        const index = this.enemies.indexOf(enemy);
+        if (index + 1 < this.enemies.length) {
+          enemy.status = MarioEnemyStatus.Finished;
+          this.startAnimating(this.enemies[index + 1]);
         }
       }
       if (parseInt(enemy.style.left, null) <= -5) {
@@ -140,7 +151,7 @@ export class SuperMarioComponent implements OnInit {
           this.startAnimating(this.enemies[index + 1]);
         }
       }
-    }, 400);
+    }, 50);
   }
 
   stopMovingLeft(): void {
