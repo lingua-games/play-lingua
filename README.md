@@ -1,3 +1,9 @@
-## Description of front-end and backend are exist in client and server directories
+## Welcome to play lingua project
 
-## Hello world 123
+## Some quick links
+
+#### [How to run client](./client)
+
+#### [How to run Backend](./server)
+
+#### [How pipelines works](./.github/workflows)
