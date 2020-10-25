@@ -1,3 +1,3 @@
 Backend application for PlayLingua app
 
-## .Net Core 3.1
+## .Nett Core 3.1
