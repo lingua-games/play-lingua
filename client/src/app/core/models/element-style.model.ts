@@ -4,6 +4,7 @@ export class ElementStyle {
   top?: string;
   width?: string;
   height?: string;
+  textAlign?: string;
   left?: string;
   transition?: string;
   right?: string;
