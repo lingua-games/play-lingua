@@ -2,13 +2,12 @@ name: Angular
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -16,17 +15,17 @@ jobs:
         node-version: [10.x, 12.x, 14.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js 12
-      uses: actions/setup-node@v1
-      with:
-        node-version: '12'
-    - name: Install dependencies
-    run: npm install
-    working-directory: client
-    - name: Run unit tests
-    run: npm run test:prod
-    working-directory: client
-    - name: Build code
-    run: npm run build:prod
-    working-directory: client
+      - uses: actions/checkout@v2
+      - name: Use Node.js 12
+          uses: actions/setup-node@v1
+          with:
+            node-version: "12"
+      - name: Install dependencies
+          run: npm install
+          working-directory: client
+      - name: Run unit tests
+          run: npm run test:prod
+          working-directory: client
+      - name: Build code
+          run: npm run build:prod
+          working-directory: client
