@@ -2,6 +2,8 @@ name: Angular
 
 on:
   push:
+    paths:
+      - "client/**"
     branches: [main]
   pull_request:
     branches: [main]
