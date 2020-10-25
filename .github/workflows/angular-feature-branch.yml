@@ -13,8 +13,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup Nodejs
-      uses: actions/setup-Nodejs@v1
-      with: Nodejs: 12
+      uses: actions/setup-node@v2.1.2
+      with: Nodejs: 12.0.0
     - name: Install dependencies
       run: npm Install
       working-directory: client
