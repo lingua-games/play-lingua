@@ -1,0 +1,26 @@
+name: Angular
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # - uses: actions/checkout@v2
+    - name: Setup Nodejs
+      uses: actions/setup-Nodejs@v1
+      with: Nodejs: 12
+    - name: Install dependencies
+      run: npm Install
+      working-directory: client
+    - name: Unit tests
+      run: npm run test:prod
+      working-directory: client
+    - name: build
+      run: npm run build:prod
+      working-directory: client
