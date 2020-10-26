@@ -1,5 +1,6 @@
 export class GameMenu {
   name: string;
   image?: string;
-  link?: string;
+  route?: string;
+  isDesigned: boolean;
 }

@@ -2,12 +2,16 @@
     <div class="title-container">
         <span>Select a game</span>
     </div>
-    <div *ngFor="let gameMenu of gameMenus" class="game-container" [id]="gameMenu.name">
-        {{gameMenu.name}} <br>
-        <img *ngIf="gameMenu.image" [src]="gameMenu.image" class="game-menu-images" /> <br>
-        <a href="gameMenu.link" class="play-button">Play</a>
+    <div *ngFor="let gameMenu of gameMenus" class="game-container">
+        <p>
+            {{gameMenu.name}}
+        </p>
+        <div>
+            <img *ngIf="gameMenu.image" [src]="gameMenu.image" class="game-menu-images" />
+        </div>
+        <div>
+            <span *ngIf="!gameMenu.isDesigned" class="play-button">Coming soon</span>
+            <span *ngIf="gameMenu.isDesigned" [routerLink]="gameMenu.route" class="play-button">Play</span>
+        </div>
     </div>
-
-
-
 </div>
