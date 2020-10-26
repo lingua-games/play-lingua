@@ -1,7 +1,8 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { GamesService } from 'src/app/core/service/games.service';
-
+import { FallingStarsWord } from '../../../../core/models/falling-stars-word.interface';
 import { FallingStarsComponent } from './falling-stars.component';
 
 describe('FallingStarsComponent', () => {
@@ -20,6 +21,7 @@ describe('FallingStarsComponent', () => {
           useValue: mockGamesService,
         },
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));
 
@@ -74,5 +76,28 @@ describe('FallingStarsComponent', () => {
     expect(component.words[0].animating).toBe(true);
   });
 
-  // unit tests has not finished
+  it('should set word.animating to false on calling boxAnimationDone', () => {
+    const mockValue = { animating: true } as FallingStarsWord;
+
+    component.boxAnimationDone(mockValue);
+
+    expect(mockValue.animating).toBe(false);
+  });
+
+  it('getRandomNumber should return number smaller than 95', () => {
+    const expectedValue = component.getRandomNumber();
+
+    expect(expectedValue).toBeLessThan(95);
+  });
+
+  it('checkTypingWord should call boxAnimationDone with active word', () => {
+    component.words = [
+      { animating: true, value: 'testValue', style: {}, typingWord: '' },
+    ];
+    spyOn(component, 'boxAnimationDone');
+
+    component.checkTypingWord('testValue');
+
+    expect(component.boxAnimationDone).toHaveBeenCalledWith(component.words[0]);
+  });
 });
