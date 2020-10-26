@@ -1,3 +1,4 @@
+import { BrowserModule } from '@angular/platform-browser';
 import { GameMenu } from './../../../core/models/game.menu.model';
 import { Component, OnInit } from '@angular/core';
 
@@ -11,11 +12,29 @@ export class DashboardComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.gameMenus.push({ name: 'Super Mario' });
-    this.gameMenus.push({ name: 'Falling Star' });
-    this.gameMenus.push({ name: 'Game' });
-    this.gameMenus.push({ name: 'Game' });
-    this.gameMenus.push({ name: 'Game' });
-    this.gameMenus.push({ name: 'Game' });
+    this.gameMenus.push({
+      name: 'Super Mario',
+      image: './../../../../assets/images/GameMenu/super-mario.png',
+    });
+    this.gameMenus.push({
+      name: 'Falling Star',
+      image: './../../../../assets/images/GameMenu/falling-star.png',
+    });
+    this.gameMenus.push({
+      name: 'Game',
+      image: './../../../../assets/images/GameMenu/game.jpg',
+    });
+    this.gameMenus.push({
+      name: 'Game',
+      image: './../../../../assets/images/GameMenu/game.jpg',
+    });
+    this.gameMenus.push({
+      name: 'Game',
+      image: './../../../../assets/images/GameMenu/game.jpg',
+    });
+    this.gameMenus.push({
+      name: 'Game',
+      image: './../../../../assets/images/GameMenu/game.jpg',
+    });
   }
 }

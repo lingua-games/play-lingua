@@ -1,6 +1,13 @@
-<div>
-    <span class="title-container">Select Game:</span>
-</div>
-<div *ngFor="let gameMenu of gameMenus" class="game-container">
-    {{gameMenu.name}}
+<div class="game-menu-body">
+    <div class="title-container">
+        <span>Select a game</span>
+    </div>
+    <div *ngFor="let gameMenu of gameMenus" class="game-container" [id]="gameMenu.name">
+        {{gameMenu.name}} <br>
+        <img *ngIf="gameMenu.image" [src]="gameMenu.image" class="game-menu-images" /> <br>
+        <a href="gameMenu.link" class="play-button">Play</a>
+    </div>
+
+
+
 </div>
