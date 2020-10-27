@@ -5,7 +5,9 @@
     "ng": "ng",
     "start": "ng serve --port=4000 -o",
     "build": "ng build",
-    "test": "ng test",
+    "test": "ng test --code-coverage",
+    "test:prod": "ng test --watch=false --browsers=ChromeHeadless",
+    "build:prod": "ng build --prod --aot",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
