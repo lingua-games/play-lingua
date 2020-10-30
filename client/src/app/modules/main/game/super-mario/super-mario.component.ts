@@ -107,6 +107,7 @@ export class SuperMarioComponent implements OnInit {
     );
   }
 
+  // The method does not have test yet because it is not finalized.
   startAnimating(enemy: MarioEnemy): void {
     enemy.status = MarioEnemyStatus.Start;
     const animateInterval = setInterval(() => {
