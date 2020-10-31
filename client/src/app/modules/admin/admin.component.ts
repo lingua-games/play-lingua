@@ -13,8 +13,8 @@ export class AdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.menus = [];
-    this.menus.push({ label: 'book', url: './chapters' } as AdminMenu);
-    this.menus.push({ label: 'chapters', url: './books' } as AdminMenu);
+    this.menus.push({ label: 'book', url: './books' } as AdminMenu);
+    this.menus.push({ label: 'chapters', url: './chapters' } as AdminMenu);
     this.menus.push({ label: 'word', url: './words' } as AdminMenu);
   }
 }
