@@ -11,6 +11,6 @@
 
 End to End testing is a methodolgy used to test an application from a user's perspective. The tests ensure the application performs as expected from start to finish. As the tests run, you will see the browser interaction just as a user would use your application. Angular end to end tests are powered by a framework called Protractor.
 
-### How to run the test
+### How to run the test 
 
 - Execute `npm run e2e`
