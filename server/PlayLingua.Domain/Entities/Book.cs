@@ -6,11 +6,11 @@ namespace PlayLingua.Domain.Entities
     {
         public Book(Guid bookId, string name)
         {
-            BookId = bookId;
+            Id = bookId;
             Name   = name;
         }
 
-        public Guid BookId { get; }
+        public Guid Id { get; }
         public string Name { get; }
     }
 }
