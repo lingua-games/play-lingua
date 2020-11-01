@@ -24,8 +24,8 @@ import { bubble } from 'ngx-bootstrap/chronos/duration/bubble';
 export class SuperMarioComponent implements OnInit {
   mario: MarioModel = new MarioModel();
   enemies: MarioEnemy[];
-  movingRightInterval?: number;
-  movingLeftInterval?: number;
+  movingRightInterval?: NodeJS.Timeout;
+  movingLeftInterval?: NodeJS.Timeout;
   jumpHeight = 30;
 
   constructor(private gamesService: GamesService) {}

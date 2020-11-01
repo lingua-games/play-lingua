@@ -2,14 +2,14 @@
   <th>No</th>
   <th>Name</th>
   <th>
-    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+    <fa-icon [icon]="['fas', 'plus']" (click)="openAddEditDialog()"></fa-icon>
   </th>
   <tbody>
   <tr *ngFor="let book of books;let index = index">
     <td>{{index + 1}}</td>
     <td>{{book.name}}</td>
     <td>
-      <fa-icon [icon]="['far', 'edit']"></fa-icon>
+      <fa-icon [icon]="['far', 'edit']" (click)="openAddEditDialog(book)"></fa-icon>
       <fa-icon [icon]="['fas', 'trash']"></fa-icon>
     </td>
   </tr>

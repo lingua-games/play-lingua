@@ -6,6 +6,9 @@ import { WordsComponent } from './words/words.component';
 import { ChaptersComponent } from './chapters/chapters.component';
 import { BooksComponent } from './books/books.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { AddEditBookDialogComponent } from './books/add-edit-book.dialog/add-edit-book.dialog.component';
+import { MaterialModule } from '../common/material/material.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -13,7 +16,14 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     WordsComponent,
     ChaptersComponent,
     BooksComponent,
+    AddEditBookDialogComponent,
   ],
-  imports: [CommonModule, AdminRoutingModule, FontAwesomeModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    AdminRoutingModule,
+    FontAwesomeModule,
+    MaterialModule,
+  ],
 })
 export class AdminModule {}
