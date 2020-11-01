@@ -10,7 +10,7 @@
     <td>{{book.name}}</td>
     <td>
       <fa-icon [icon]="['far', 'edit']" (click)="openAddEditDialog(book)"></fa-icon>
-      <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+      <fa-icon [icon]="['fas', 'trash']" (click)="deleteBook(book.id)"></fa-icon>
     </td>
   </tr>
   </tbody>

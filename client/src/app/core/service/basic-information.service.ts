@@ -9,15 +9,9 @@ import { retry } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class BasicInformationService {
-  mockBooks: Book[] = [];
   bookUrl = environment.apiUrl + 'books';
 
-  constructor(private http: HttpClient) {
-    this.mockBooks.push({ name: 'Book 1', id: 1 });
-    this.mockBooks.push({ name: 'Book 2', id: 2 });
-    this.mockBooks.push({ name: 'Book 3', id: 3 });
-    this.mockBooks.push({ name: 'Book 4', id: 4 });
-  }
+  constructor(private http: HttpClient) {}
 
   getBooks(): Observable<Book[]> {
     return this.http.get<Book[]>(this.bookUrl);

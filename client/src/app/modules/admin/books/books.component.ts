@@ -39,10 +39,12 @@ export class BooksComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((res: Book) => {
-      if (res.id) {
-        this.editBook(res);
-      } else {
-        this.addBook(res);
+      if (res) {
+        if (res.id) {
+          this.editBook(res);
+        } else {
+          this.addBook(res);
+        }
       }
     });
   }
@@ -50,7 +52,7 @@ export class BooksComponent implements OnInit {
   addBook(book: Book): void {
     this.basicInformationService.addBook(book).subscribe(
       (res: Book) => {
-        console.log(res);
+        this.books.push(res);
       },
       (error: any) => {
         // Todo: handle error
@@ -61,7 +63,6 @@ export class BooksComponent implements OnInit {
   editBook(book: Book): void {
     this.basicInformationService.editBook(book).subscribe(
       (res: Book) => {
-        console.log(res);
         this.getBooks();
       },
       (error: any) => {
@@ -72,7 +73,9 @@ export class BooksComponent implements OnInit {
 
   deleteBook(id: number): void {
     this.basicInformationService.deleteBook(id).subscribe(
-      (res: Book) => {},
+      (res: Book) => {
+        this.books.splice(this.books.indexOf(res));
+      },
       (error: any) => {
         // Todo: handle error
       }
