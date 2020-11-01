@@ -2,15 +2,15 @@
   <th>No</th>
   <th>Name</th>
   <th>
-add
+    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
   </th>
   <tbody>
   <tr *ngFor="let book of books;let index = index">
     <td>{{index + 1}}</td>
     <td>{{book.name}}</td>
     <td>
-      edit
-      delete
+      <fa-icon [icon]="['far', 'edit']"></fa-icon>
+      <fa-icon [icon]="['fas', 'trash']"></fa-icon>
     </td>
   </tr>
   </tbody>
