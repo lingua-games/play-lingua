@@ -2,7 +2,7 @@
     <div class="title-container">
         <span>Select a game</span>
     </div>
-    <div *ngFor="let gameMenu of gameMenus" class="game-container">
+    <div *ngFor="let gameMenu of gameMenus" class="game-container" [id]="gameMenu.id">
         <p>
             {{gameMenu.name}}
         </p>

@@ -16,12 +16,14 @@ export class DashboardComponent implements OnInit {
       name: 'Super Mario',
       image: './../../../../assets/images/GameMenu/super-mario.png',
       route: 'super-mario',
+      id: 'super-mario',
       isDesigned: true,
     });
     this.gameMenus.push({
-      name: 'Falling Star',
+      name: 'Falling Stars',
       image: './../../../../assets/images/GameMenu/falling-star.png',
       route: 'falling-stars',
+      id: 'falling-stars',
       isDesigned: true,
     });
     this.gameMenus.push({

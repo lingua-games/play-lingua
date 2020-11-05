@@ -3,4 +3,5 @@ export class GameMenu {
   image?: string;
   route?: string;
   isDesigned: boolean;
+  id?: string;
 }
