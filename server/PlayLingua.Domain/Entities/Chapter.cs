@@ -4,14 +4,13 @@ namespace PlayLingua.Domain.Entities
 {
     public class Chapter
     {
-        public Chapter(Guid chapterId, string name, string description)
+        public Chapter(string name, string description)
         {
-            ChapterId   = chapterId;
             Name        = name;
             Description = description;
         }
 
-        public Guid ChapterId { get; }
+        public int ChapterId { get; }
         public string Name { get; }
         public string Description { get; }
     }

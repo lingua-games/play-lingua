@@ -13,24 +13,24 @@ namespace PlayLingua.Adapter.InMemoryDb.Repositories
         public ChapterRepository()
         {
             var chapterList = new List<Chapter> { 
-                new Chapter(StaticData.Chapter1, "Chapter 1", "Description for chapter 1 on dutch book"),
-                new Chapter(StaticData.Chapter2, "Chapter 2", "Description for chapter 2 on dutch book")
+                new Chapter("Chapter 1", "Description for chapter 1 on dutch book"),
+                new Chapter("Chapter 2", "Description for chapter 2 on dutch book")
             };
 
             for (var i = 3; i < 10; i++)
             {
-                chapterList.Add(new Chapter(Guid.NewGuid(), $"Chapter {i}", $"Sample chapter {i}"));
+                chapterList.Add(new Chapter($"Chapter {i}", $"Sample chapter {i}"));
             }
 
-            _data.Add(StaticData.DutchBook, chapterList);
+            //_data.Add(chapterList);
         }
 
-        public List<Chapter> GetChapters(Guid bookId)
+        public List<Chapter> GetChapters(int bookId)
         {
-            if (!_data.ContainsKey(bookId))
+            if (!_data.ContainsKey(Guid.NewGuid()))
                 return new List<Chapter>();
 
-            return _data[bookId];
+            return _data[Guid.NewGuid()];
         }
     }
 }

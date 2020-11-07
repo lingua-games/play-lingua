@@ -5,7 +5,7 @@ namespace PlayLingua.WebApi.Dto
 {
     public class BookDto
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
 
         public static BookDto Map(Book entity)

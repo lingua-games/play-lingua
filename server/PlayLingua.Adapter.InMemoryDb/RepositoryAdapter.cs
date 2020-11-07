@@ -8,7 +8,6 @@ namespace PlayLingua.Adapter.InMemoryDb
     {
         public static void AddInMemoryRepository(this IServiceCollection services)
         {
-            services.AddSingleton<IBookRepository, BookRepository>();
             services.AddSingleton<IChapterRepository, ChapterRepository>();
             services.AddSingleton<IWordRepository, WordRepository>();
         }

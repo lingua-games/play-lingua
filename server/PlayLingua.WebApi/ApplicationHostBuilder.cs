@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PlayLingua.Adapter.InMemoryDb;
+using PlayLingua.Data;
 using PlayLingua.WebApi.Configuration;
 
 namespace PlayLingua.WebApi
@@ -35,7 +36,8 @@ namespace PlayLingua.WebApi
 
             services.AddSwagger();
 
-            services.AddInMemoryRepository();
+            //services.AddInMemoryRepository();
+            services.AddInDbRepository();
 
             // TODO: Below line should be disabled in production mode or at release time because we are going to
             // Release both backend and front-end in a package and with a common origin. 

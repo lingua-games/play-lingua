@@ -22,7 +22,7 @@ namespace PlayLingua.Adapter.InMemoryDb.Repositories
                 new Word(Guid.NewGuid(), LangCodeEnum.EN, "Good evening", LangCodeEnum.NL, "Goedenavond")
             };
 
-            _data.Add(StaticData.Chapter1, chapter1Words);
+            //_data.Add(StaticData.Chapter1, chapter1Words);
 
             var chapter2Words = new List<Word>
             {
@@ -31,7 +31,7 @@ namespace PlayLingua.Adapter.InMemoryDb.Repositories
                 new Word(Guid.NewGuid(), LangCodeEnum.EN, "Answer", LangCodeEnum.NL, "Antwoord")
             };
 
-            _data.Add(StaticData.Chapter2, chapter2Words);
+            //_data.Add(StaticData.Chapter2, chapter2Words);
         }
 
         public List<Word> GetWords(Guid chapterId)

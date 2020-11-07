@@ -5,7 +5,7 @@ namespace PlayLingua.WebApi.Dto
 {
     public class ChapterDto
     {
-        public Guid ChapterId { get; set; }
+        public int ChapterId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
 

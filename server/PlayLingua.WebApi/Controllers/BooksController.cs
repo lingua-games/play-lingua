@@ -15,17 +15,15 @@ namespace PlayLingua.WebApi.Controllers
         private readonly IBookRepository _bookRepository;
         private readonly IChapterRepository _chapterRepository;
 
-        public BooksController(IBookRepository bookRepository, IChapterRepository chapterRepository)
+        public BooksController(IBookRepository bookRepository)
         {
             _bookRepository = bookRepository;
-            _chapterRepository = chapterRepository;
         }
 
         [HttpGet]
         public ActionResult<List<Book>> List()
         {
-            var books = _bookRepository.List();
-            return Ok(books.Select(BookDto.Map));
+            return Ok(_bookRepository.List());
         }
 
         [HttpPost]
@@ -43,19 +41,18 @@ namespace PlayLingua.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Update(Guid id, Book book)
+        public ActionResult Update(int id, Book book)
         {
-            var UpdatedBook = _bookRepository.Update(id, book);
-            return Ok();
+            book.Id = id;
+            _bookRepository.Update(book);
+            return Ok(book);
         }
 
-        [HttpGet("{bookId}/chapters")]
-        public ActionResult<List<Chapter>> GetChapters(Guid bookId)
-        {
-            var chapters = _chapterRepository.GetChapters(bookId);
-            return Ok(chapters.Select(ChapterDto.Map));
-        }
-
-
+        //[HttpGet("{bookId}/chapters")]
+        //public ActionResult<List<Chapter>> GetChapters(int bookId)
+        //{
+        //    var chapters = _chapterRepository.GetChapters(bookId);
+        //    return Ok(chapters.Select(ChapterDto.Map));
+        //}
     }
 }

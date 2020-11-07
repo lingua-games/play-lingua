@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PlayLingua.Adapter.InMemoryDb\PlayLingua.Adapter.InMemoryDb.csproj" />
+    <ProjectReference Include="..\PlayLingua.Data\PlayLingua.Data.csproj" />
   </ItemGroup>
 
 
