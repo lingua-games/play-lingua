@@ -22,8 +22,7 @@ namespace PlayLingua.Host
             services.AddControllers().AddNewtonsoftJson();
             services.AddControllers();
             services.AddRouting(options => { options.LowercaseUrls = true; });
-
-            services.AddSwagger();
+            services.AddRazorPages();
 
             //services.AddInMemoryRepository();
             services.AddInDbRepository(Configuration.GetConnectionString("playLinguaConnection"));
@@ -43,27 +42,33 @@ namespace PlayLingua.Host
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // TODO: Below line should be disabled in production mode or at release time because we are going to
             // Release both backend and front-end in a package and with a common origin. 
             app.UseCors("Port-4000-allow-policy");
 
-            var env = app.ApplicationServices.GetService<IWebHostEnvironment>();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
             app.UseHttpsRedirection();
-            app.UseRouting();
-            app.UseAuthorization();
+            app.UseStaticFiles();
 
-            app.AddSwagger();
+            app.UseRouting();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapRazorPages();
             });
         }
     }

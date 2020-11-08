@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayLingua.Domain", "PlayLi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayLingua.Data", "PlayLingua.Data\PlayLingua.Data.csproj", "{F6E5D8C9-3578-4307-BDFC-06A320317542}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayLingua.Host", "PlayLingua.Host\PlayLingua.Host.csproj", "{1EB82475-A256-4EE0-AB09-9E6BEB0DDC04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayLingua.Host", "PlayLingua.Host\PlayLingua.Host.csproj", "{1EB82475-A256-4EE0-AB09-9E6BEB0DDC04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
