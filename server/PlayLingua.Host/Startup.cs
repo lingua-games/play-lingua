@@ -3,33 +3,19 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PlayLingua.Adapter.InMemoryDb;
 using PlayLingua.Data;
-using PlayLingua.WebApi.Configuration;
 
-namespace PlayLingua.WebApi
+namespace PlayLingua.Host
 {
-    public class ApplicationHostBuilder
+    public class Startup
     {
-        private string[] _args;
-
-        public ApplicationHostBuilder(string[] args)
+        public Startup(IConfiguration configuration)
         {
-            _args = args;
+            Configuration = configuration;
         }
 
-        public IHostBuilder Create()
-        {
-            //return Host.CreateDefaultBuilder(_args).ConfigureServices((context, services) =>
-            //       {
-            //           ConfigureServices(context.Configuration, services);
-            //       });
-            return Host.CreateDefaultBuilder(_args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.ConfigureServices(ConfigureServices).Configure(Configure);
-                });
-        }
+        public IConfiguration Configuration { get; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -40,7 +26,7 @@ namespace PlayLingua.WebApi
             services.AddSwagger();
 
             //services.AddInMemoryRepository();
-            services.AddInDbRepository("");
+            services.AddInDbRepository(Configuration.GetConnectionString("playLinguaConnection"));
 
             // TODO: Below line should be disabled in production mode or at release time because we are going to
             // Release both backend and front-end in a package and with a common origin. 

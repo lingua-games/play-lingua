@@ -10,7 +10,6 @@ namespace PlayLingua.WebApi
         {
             var applicationHostBuilder = new ApplicationHostBuilder(args);
             var hostBuilder = applicationHostBuilder.Create();
-
             hostBuilder.Build().Run();
         }
     }

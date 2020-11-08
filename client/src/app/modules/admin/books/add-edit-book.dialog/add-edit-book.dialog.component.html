@@ -4,8 +4,10 @@
 <div mat-dialog-content>
     <div class="form-group">
       <label for="bookName">Book name</label>
-      <input type="email" class="form-control" [(ngModel)]="book.name" id="bookName" aria-describedby="emailHelp" placeholder="Book name">
+      <input type="text" class="form-control" [(ngModel)]="book.name" id="bookName" aria-describedby="emailHelp" placeholder="Book name">
       <small id="emailHelp" class="form-text text-muted">If book name is empty here would be red and alertyyyy</small>
+      <input type="text" class="form-control" [(ngModel)]="book.targetLanguage" id="targetLanguage" placeholder="Target language">
+      <small id="targetLanguageHelp" class="form-text text-muted">If targetLanguage name is empty here would be red and alertyyyy</small>
     </div>
 </div>
 <div mat-dialog-actions>

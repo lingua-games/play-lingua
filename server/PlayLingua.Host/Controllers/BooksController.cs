@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Ports;
-using PlayLingua.WebApi.Dto;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace PlayLingua.WebApi.Controllers
+namespace PlayLingua.Host.Controllers
 {
     [ApiController]
     [Route("[controller]")]

@@ -22,7 +22,7 @@ namespace PlayLingua.Data
         public Book Add(Book book)
         {
             var sql =
-                "insert into PlayLingua.dbo.Book (Name) VALUES(@Name);" +
+                "insert into PlayLingua.dbo.Book (Name, TargetLanguage) VALUES(@Name, @TargetLanguage);" +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var id = db.Query<int>(sql, book).Single();

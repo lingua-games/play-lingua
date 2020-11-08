@@ -5,10 +5,9 @@ namespace PlayLingua.Data
 {
     public static class RepositoryAdapter
     {
-        public static void AddInDbRepository(this IServiceCollection services)
+        public static void AddInDbRepository(this IServiceCollection services, string connectionString)
         {
-            services.AddSingleton<IBookRepository, BookRepository>(x =>
-             new BookRepository(@"Server=DESKTOP-H95V4NE\MSSQLSERVER_ARAS;Database=PlayLingua;User Id=sa;password=123456;Trusted_Connection=False;MultipleActiveResultSets=true;"));
+            services.AddSingleton<IBookRepository, BookRepository>(x => new BookRepository(connectionString));
         }
     }
 }
