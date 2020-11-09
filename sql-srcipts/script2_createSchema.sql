@@ -1,21 +1,23 @@
-CREATE TABLE [PlayLingua].[dbo].[Book] (
+use [DB_A6A40C_playlingua]
+
+CREATE TABLE [dbo].[Book] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
     [Name]   [varchar](100) NOT NULL,
 	[TargetLanguage]   [varchar](100) NOT NULL,
 )
 GO
 
-CREATE TABLE [PlayLingua].[dbo].[Chapter] (
+CREATE TABLE [dbo].[Chapter] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
     [Name]        [varchar](50) NOT NULL,
     [Description] [varchar](200),
 	[BookId]        int NOT NULL,
 )
-ALTER TABLE [PlayLingua].[dbo].[Chapter] ADD CONSTRAINT [FK_Chapter_BookId]
-FOREIGN KEY ([BookId]) REFERENCES [PlayLingua].[dbo].[Book] ([Id])
+ALTER TABLE [dbo].[Chapter] ADD CONSTRAINT [FK_Chapter_BookId]
+FOREIGN KEY ([BookId]) REFERENCES [dbo].[Book] ([Id])
 GO
 
-CREATE TABLE [PlayLingua].[dbo].[Word] (
+CREATE TABLE [dbo].[Word] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
     [BaseLanguage]   [varchar](5)       NOT NULL,
     [BaseWord]       [varchar](100)     NOT NULL,
@@ -24,10 +26,10 @@ CREATE TABLE [PlayLingua].[dbo].[Word] (
 	[BookId]         int				NOT NULL,
 	[ChapterId]      int				NOT NULL,
 )
-ALTER TABLE [PlayLingua].[dbo].[Word] ADD CONSTRAINT [FK_Word_BookId]
-FOREIGN KEY ([BookId]) REFERENCES [PlayLingua].[dbo].[Book] ([Id])
+ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_BookId]
+FOREIGN KEY ([BookId]) REFERENCES [dbo].[Book] ([Id])
 GO
-ALTER TABLE [PlayLingua].[dbo].[Word] ADD CONSTRAINT [FK_Word_ChapterId]
-FOREIGN KEY ([ChapterId]) REFERENCES [PlayLingua].[dbo].[Chapter] ([Id])
+ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_ChapterId]
+FOREIGN KEY ([ChapterId]) REFERENCES [dbo].[Chapter] ([Id])
 GO
 
