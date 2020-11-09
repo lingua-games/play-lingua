@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace PlayLingua.Adapter.InMemoryDb.Repositories
+namespace PlayLingua.Data
 {
     public class ChapterRepository : IChapterRepository
     {
