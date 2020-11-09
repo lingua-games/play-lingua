@@ -5,4 +5,4 @@ EXPOSE 443
 
 WORKDIR /app
 COPY [".", "."]
-ENTRYPOINT ["dotnet", "PlayLingua.WebApi.dll"]
+ENTRYPOINT ["dotnet", "PlayLingua.Host.dll"]
