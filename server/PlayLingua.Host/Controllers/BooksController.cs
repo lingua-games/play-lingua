@@ -17,10 +17,25 @@ namespace PlayLingua.Host.Controllers
             _bookRepository = bookRepository;
         }
 
+        [HttpPost]
+        public ActionResult<List<Book>> Test()
+        {
+            return Ok();
+        }
+
         [HttpGet]
         public ActionResult<List<Book>> List()
         {
-            return Ok(_bookRepository.List());
+            try
+            {
+                return Ok(_bookRepository.List());
+
+            }
+            catch 
+            {
+                return Ok(_bookRepository.List());
+            }                
+
         }
 
         [HttpPost]

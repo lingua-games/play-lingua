@@ -22,7 +22,7 @@ namespace PlayLingua.Host
             services.AddControllers().AddNewtonsoftJson();
             services.AddControllers();
             services.AddRouting(options => { options.LowercaseUrls = true; });
-            services.AddRazorPages();
+            //services.AddRazorPages();
 
             //services.AddInMemoryRepository();
             services.AddRepository(Configuration.GetConnectionString("playLinguaConnection"));
@@ -66,10 +66,10 @@ namespace PlayLingua.Host
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapRazorPages();
-            });
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapRazorPages();
+            //});
         }
     }
 }
