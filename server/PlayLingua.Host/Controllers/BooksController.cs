@@ -10,7 +10,7 @@ namespace PlayLingua.Host.Controllers
     public class BooksController : ControllerBase
     {
         private readonly IBookRepository _bookRepository;
-        private readonly IChapterRepository _chapterRepository;
+        // private readonly IChapterRepository _chapterRepository;
 
         public BooksController(IBookRepository bookRepository)
         {
