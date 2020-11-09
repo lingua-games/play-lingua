@@ -25,7 +25,7 @@ namespace PlayLingua.Host
             services.AddRazorPages();
 
             //services.AddInMemoryRepository();
-            services.AddInDbRepository(Configuration.GetConnectionString("playLinguaConnection"));
+            services.AddRepository(Configuration.GetConnectionString("playLinguaConnection"));
 
             // TODO: Below line should be disabled in production mode or at release time because we are going to
             // Release both backend and front-end in a package and with a common origin. 

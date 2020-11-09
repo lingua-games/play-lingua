@@ -2,35 +2,38 @@
 using PlayLingua.Domain.Ports;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace PlayLingua.Adapter.InMemoryDb.Repositories
 {
     public class ChapterRepository : IChapterRepository
     {
-        //_data : BookId - Chapters
-        private readonly Dictionary<Guid, List<Chapter>> _data = new Dictionary<Guid, List<Chapter>>();
+        private IDbConnection db;
 
-        public ChapterRepository()
+        public ChapterRepository(string connectionString)
         {
-            var chapterList = new List<Chapter> { 
-                new Chapter("Chapter 1", "Description for chapter 1 on dutch book"),
-                new Chapter("Chapter 2", "Description for chapter 2 on dutch book")
-            };
-
-            for (var i = 3; i < 10; i++)
-            {
-                chapterList.Add(new Chapter($"Chapter {i}", $"Sample chapter {i}"));
-            }
-
-            //_data.Add(chapterList);
+            db = new SqlConnection(connectionString);
         }
 
-        public List<Chapter> GetChapters(int bookId)
+        public Chapter Add(Chapter book)
         {
-            if (!_data.ContainsKey(Guid.NewGuid()))
-                return new List<Chapter>();
+            throw new NotImplementedException();
+        }
 
-            return _data[Guid.NewGuid()];
+        public void Delete(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Chapter> List(int bookId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(Chapter book)
+        {
+            throw new NotImplementedException();
         }
     }
 }

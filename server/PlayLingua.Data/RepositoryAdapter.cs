@@ -5,9 +5,11 @@ namespace PlayLingua.Data
 {
     public static class RepositoryAdapter
     {
-        public static void AddInDbRepository(this IServiceCollection services, string connectionString)
+        public static void AddRepository(this IServiceCollection services, string connectionString)
         {
             services.AddSingleton<IBookRepository, BookRepository>(x => new BookRepository(connectionString));
+            services.AddSingleton<IChapterRepository, ChapterRepository>(x => new ChapterRepository(connectionString));
+            services.AddSingleton<IWordRepository, WordRepository>(x => new WordRepository(connectionString));
         }
     }
 }
