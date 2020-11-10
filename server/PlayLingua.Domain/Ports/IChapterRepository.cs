@@ -6,6 +6,9 @@ namespace PlayLingua.Domain.Ports
 {
     public interface IChapterRepository
     {
-        List<Chapter> GetChapters(Guid bookId);
+        List<Chapter> List(int bookId);
+        Chapter Add(Chapter book);
+        void Delete(string id);
+        void Update(Chapter book);
     }
 }

@@ -8,7 +8,7 @@ namespace PlayLingua.Domain.Ports
     {
         List<Book> List();
         Book Add(Book book);
-        bool Delete(string id);
-        Book Update(Guid id, Book book);
+        void Delete(string id);
+        void Update(Book book);
     }
 }

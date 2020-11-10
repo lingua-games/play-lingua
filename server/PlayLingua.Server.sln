@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayLingua.WebApi", "PlayLingua.WebApi\PlayLingua.WebApi.csproj", "{564FADEC-A9BA-413B-BF76-CCE396E7934C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayLingua.Domain", "PlayLingua.Domain\PlayLingua.Domain.csproj", "{AF448E26-2E64-492A-9E78-EB469E573515}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayLingua.Adapter.InMemoryDb", "PlayLingua.Adapter.InMemoryDb\PlayLingua.Adapter.InMemoryDb.csproj", "{1E188F40-6BDF-4EDF-BA10-4CEE6C086DD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayLingua.Data", "PlayLingua.Data\PlayLingua.Data.csproj", "{F6E5D8C9-3578-4307-BDFC-06A320317542}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayLingua.Host", "PlayLingua.Host\PlayLingua.Host.csproj", "{1EB82475-A256-4EE0-AB09-9E6BEB0DDC04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,18 +15,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{564FADEC-A9BA-413B-BF76-CCE396E7934C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{564FADEC-A9BA-413B-BF76-CCE396E7934C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{564FADEC-A9BA-413B-BF76-CCE396E7934C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{564FADEC-A9BA-413B-BF76-CCE396E7934C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AF448E26-2E64-492A-9E78-EB469E573515}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AF448E26-2E64-492A-9E78-EB469E573515}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF448E26-2E64-492A-9E78-EB469E573515}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF448E26-2E64-492A-9E78-EB469E573515}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1E188F40-6BDF-4EDF-BA10-4CEE6C086DD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E188F40-6BDF-4EDF-BA10-4CEE6C086DD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1E188F40-6BDF-4EDF-BA10-4CEE6C086DD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1E188F40-6BDF-4EDF-BA10-4CEE6C086DD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6E5D8C9-3578-4307-BDFC-06A320317542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6E5D8C9-3578-4307-BDFC-06A320317542}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6E5D8C9-3578-4307-BDFC-06A320317542}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6E5D8C9-3578-4307-BDFC-06A320317542}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EB82475-A256-4EE0-AB09-9E6BEB0DDC04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EB82475-A256-4EE0-AB09-9E6BEB0DDC04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EB82475-A256-4EE0-AB09-9E6BEB0DDC04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EB82475-A256-4EE0-AB09-9E6BEB0DDC04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
