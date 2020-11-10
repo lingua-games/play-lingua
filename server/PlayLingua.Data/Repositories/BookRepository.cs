@@ -22,7 +22,7 @@ namespace PlayLingua.Data
         public Book Add(Book book)
         {
             var sql =
-                "insert into PlayLingua.dbo.Book (Name, TargetLanguage) VALUES(@Name, @TargetLanguage);" +
+                "insert into dbo.Book (Name, TargetLanguage) VALUES(@Name, @TargetLanguage);" +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var id = db.Query<int>(sql, book).Single();
@@ -33,17 +33,17 @@ namespace PlayLingua.Data
 
         public void Delete(string id)
         {
-            db.Query("delete from PlayLingua.dbo.Book where Id = @id", new { id });
+            db.Query("delete from dbo.Book where Id = @id", new { id });
         }
 
         public List<Book> List()
         {
-            return db.Query<Book>("select * from PlayLingua.dbo.Book").ToList();
+            return db.Query<Book>("select * from dbo.Book").ToList();
         }
 
         public void Update(Book book)
         {
-            db.Query("update PlayLingua.dbo.Book SET Name = @Name WHERE Id = @Id", book);
+            db.Query("update dbo.Book SET Name = @Name WHERE Id = @Id", book);
         }
     }
 }
