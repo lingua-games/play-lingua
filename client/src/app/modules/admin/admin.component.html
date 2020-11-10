@@ -1,0 +1,10 @@
+<div>
+  <div class="left-container side-container">
+    <div *ngFor="let menu of menus" class="menu-container" [routerLink]="menu.url">
+      {{menu.label}}
+    </div>
+  </div>
+  <div class="right-container side-container">
+    <router-outlet></router-outlet>
+  </div>
+</div>

@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PlayLingua.Domain.Entities;
 
 namespace PlayLingua.Domain.Ports
 {
     public interface IBookRepository
     {
-        List<Book> GetBooks();
+        List<Book> List();
+        Book Add(Book book);
+        void Delete(string id);
+        void Update(Book book);
     }
 }

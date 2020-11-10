@@ -18,10 +18,15 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/main/main.module').then((x) => x.MainModule),
   },
+  {
+    path: 'admin',
+    loadChildren: () =>
+      import('./modules/admin/admin.module').then((x) => x.AdminModule),
+  },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

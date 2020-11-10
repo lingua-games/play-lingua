@@ -162,7 +162,7 @@ export class SuperMarioComponent implements OnInit {
 
   startMovingLeft(): void {
     if (!this.movingLeftInterval) {
-      this.movingLeftInterval = setInterval(() => {
+      this.movingLeftInterval = +setInterval(() => {
         this.mario.moveLeft(1);
       }, 30);
     }
@@ -175,7 +175,7 @@ export class SuperMarioComponent implements OnInit {
 
   startMovingRight(): void {
     if (!this.movingRightInterval) {
-      this.movingRightInterval = setInterval(() => {
+      this.movingRightInterval = +setInterval(() => {
         this.mario.moveRight(1);
       }, 30);
     }
