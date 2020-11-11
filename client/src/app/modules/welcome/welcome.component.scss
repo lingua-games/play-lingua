@@ -50,22 +50,3 @@ $white-color:#FFFFFF;
     color: $orange-color;
     border: $orange-color 2px solid;
 }
-
-.admin-button {
-    font-size: 1vw;
-    position: absolute;
-    top: 5%;
-    right: 4%;
-    padding: 5px;
-    border-radius: 10px;
-    background-color: $orange-color;
-    color: $white-color;
-    cursor: pointer;
-    box-shadow: 10px 10px 10px rgb(247, 180, 87);
-}
-
-.admin-button:hover {
-    background-color: $white-color;
-    color: $orange-color;
-    border: $orange-color 1px solid;
-}
