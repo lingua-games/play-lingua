@@ -5,7 +5,7 @@ describe('workspace-project App', () => {
   let page: AppPage;
 
   beforeEach(() => {
-    browser.get(browser.baseUrl + '/main');
+    browser.get(browser.baseUrl + '#/main');
   });
 
   it('should present Select a game as header', () => {
@@ -68,7 +68,7 @@ describe('workspace-project App', () => {
 
       const expectedUrl = browser.getCurrentUrl();
 
-      expect(expectedUrl).toEqual('http://localhost:4200/main/falling-stars');
+      expect(expectedUrl).toEqual('http://localhost:4200/#/main/falling-stars');
     });
   });
 });
