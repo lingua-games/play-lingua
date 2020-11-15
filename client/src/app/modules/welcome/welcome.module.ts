@@ -11,6 +11,7 @@ import { RegisterComponent } from './register/register.component';
 import { ChooseLanguagesComponent } from './choose-languages/choose-languages.component';
 import { PrimengModule } from '../common/primeng/primeng.module';
 import { FormsModule } from '@angular/forms';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [

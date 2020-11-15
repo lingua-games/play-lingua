@@ -11,6 +11,7 @@ import { GreetingComponent } from './greeting/greeting.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ChooseLanguagesComponent } from './choose-languages/choose-languages.component';
+import { environment } from '../../../environments/environment';
 
 export interface CanComponentDeactivate {
   canDeactivate: () => Promise<boolean>;
@@ -25,7 +26,7 @@ export class DeactivateWithDelay
     state: RouterStateSnapshot
   ): any {
     return new Promise((resolve) => {
-      setTimeout(() => resolve(true), 500);
+      setTimeout(() => resolve(true), environment.intervalForRoundMainPage / 4);
     });
   }
 }

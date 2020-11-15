@@ -1,4 +1,27 @@
 <div class="welcome-inner-main-container">
-  <p-multiSelect [options]="cities" [(ngModel)]="selectedCities" defaultLabel="Select a City" optionLabel="name"></p-multiSelect>
-  <p-multiSelect [options]="cities" [(ngModel)]="selectedCities" defaultLabel="Select a City" optionLabel="name"></p-multiSelect>
+  <div class="header-container">
+    <button pButton pRipple type="button" icon="pi pi-arrow-left" routerLink="../"
+            class="btn-back p-button-rounded p-button-info p-button-outlined"></button>
+    <h3>Choose base and target languages</h3>
+  </div>
+  <div class="text-container">
+    <span>I am speaking</span>
+  </div>
+  <div>
+    <p-multiSelect [options]="allLanguages" [styleClass]="checkFormValidation('baseLanguages')"
+                   [(ngModel)]="baseLanguages" defaultLabel="Select base language"
+                   optionLabel="fullName"></p-multiSelect>
+  </div>
+  <div class="text-container">
+    <span>And I want to learn</span>
+  </div>
+  <div>
+    <p-multiSelect [options]="allLanguages" [styleClass]="checkFormValidation('targetLanguages')"
+                   [(ngModel)]="targetLanguages" defaultLabel="Select base language"
+                   optionLabel="fullName"></p-multiSelect>
+  </div>
+  <div class="mt-2">
+    <button pButton pRipple type="button" label="Lets go" class="p-button-success" (click)="submit()"></button>
+  </div>
+
 </div>

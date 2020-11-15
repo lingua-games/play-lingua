@@ -5,3 +5,19 @@
   max-height: 50vh;
   width: 50%;
 }
+
+.text-container {
+  margin: .5rem 0;
+}
+
+::ng-deep .p-multiselect {
+  width: 70%;
+}
+
+.btn-back {
+  float: left;
+}
+
+::ng-deep .field-not-valid {
+  border: solid 1px red;
+}
