@@ -1,13 +1,23 @@
-<div class="welcome-body">
-    <div class="title-container">
-        <div class="title-header">
-            <span> Play-Lingua</span>
+<div class="parent-container">
+  <div class="main-container" [ngStyle]="style">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4">
+        <div class="box-container">
+          <router-outlet></router-outlet>
         </div>
-        <div class="motto">
-            <span> Play & Learn a New Language!</span>
-        </div>
+      </div>
+      <div class="col-sm-4"></div>
     </div>
-    <div class="start-button" routerLink="../main">
-        <span>Let's Get Started!</span>
+    <div class="row center-row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6 earth-container"></div>
+      <div class="col-sm-3"></div>
     </div>
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
 </div>
