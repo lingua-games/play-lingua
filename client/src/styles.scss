@@ -2,8 +2,15 @@ html,
 body {
     height: 100%;
     margin: 0;
+  overflow: hidden;
 }
 
 * {
     font-family: cursive;
+}
+
+.welcome-inner-main-container {
+  background-color: rgba(0,0,0, 0.1);
+  border-radius: 2rem;
+  padding: 1rem;
 }
