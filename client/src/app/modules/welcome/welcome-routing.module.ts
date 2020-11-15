@@ -9,6 +9,8 @@ import {
 } from '@angular/router';
 import { GreetingComponent } from './greeting/greeting.component';
 import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { ChooseLanguagesComponent } from './choose-languages/choose-languages.component';
 
 export interface CanComponentDeactivate {
   canDeactivate: () => Promise<boolean>;
@@ -41,6 +43,16 @@ const routes: Routes = [
       {
         path: 'login',
         component: LoginComponent,
+        canDeactivate: [DeactivateWithDelay],
+      },
+      {
+        path: 'register',
+        component: RegisterComponent,
+        canDeactivate: [DeactivateWithDelay],
+      },
+      {
+        path: 'choose-languages',
+        component: ChooseLanguagesComponent,
         canDeactivate: [DeactivateWithDelay],
       },
     ],
