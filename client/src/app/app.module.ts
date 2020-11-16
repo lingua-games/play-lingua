@@ -11,8 +11,6 @@ import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
-import { ToastModule } from 'primeng/toast';
-import { PrimengModule } from './modules/common/primeng/primeng.module';
 
 @NgModule({
   declarations: [AppComponent],

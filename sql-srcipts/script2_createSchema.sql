@@ -1,5 +1,13 @@
 use [DB_A6A40C_playlingua]
 
+CREATE TABLE [dbo].[Language] (
+    [Id] int IDENTITY(1,1) PRIMARY KEY,
+    [Code]   [varchar](10) NOT NULL,
+	[Name]   [varchar](200) NOT NULL,
+	[NativeName]   [nvarchar](200) NOT NULL,
+)
+GO
+
 CREATE TABLE [dbo].[Book] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
     [Name]   [varchar](100) NOT NULL,

@@ -10,6 +10,7 @@ namespace PlayLingua.Data
             services.AddSingleton<IBookRepository, BookRepository>(x => new BookRepository(connectionString));
             services.AddSingleton<IChapterRepository, ChapterRepository>(x => new ChapterRepository(connectionString));
             services.AddSingleton<IWordRepository, WordRepository>(x => new WordRepository(connectionString));
+            services.AddSingleton<ILanguageRepository, LanguageRepository>(x => new LanguageRepository(connectionString));
         }
     }
 }
