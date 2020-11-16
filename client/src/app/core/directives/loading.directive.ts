@@ -23,7 +23,7 @@ export class LoadingDirective implements OnInit, OnChanges {
     this.element.nativeElement.style.transition = '2s';
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     if (this.loadingFlag) {
       this.element.nativeElement.style.pointerEvents = 'none';
       this.element.nativeElement.style.animation =
