@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Book } from '../models/book.interface';
 import { environment } from '../../../environments/environment';
-import { retry } from 'rxjs/operators';
+import { catchError, retry } from 'rxjs/operators';
 import { LanguageModel } from '../models/language.model';
 
 @Injectable({

@@ -13,6 +13,7 @@ import { PrimengModule } from '../common/primeng/primeng.module';
 import { FormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { LoadingDirective } from '../../core/directives/loading.directive';
+import { NotificationService } from '../../core/service/notification.service';
 
 @NgModule({
   declarations: [

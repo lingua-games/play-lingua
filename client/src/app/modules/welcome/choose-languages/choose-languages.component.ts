@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { BasicInformationService } from '../../../core/service/basic-information.service';
 import { LanguageModel } from '../../../core/models/language.model';
 import { ValidationModel } from '../../../core/models/validation.model';
-import { MessageService } from 'primeng/api';
 import { ApiResult } from '../../../core/models/api-result.model';
+import {
+  NotificationService,
+  Severity,
+} from '../../../core/service/notification.service';
 
 @Component({
   selector: 'app-choose-languages',
@@ -18,7 +21,7 @@ export class ChooseLanguagesComponent implements OnInit {
 
   constructor(
     private basicInformationService: BasicInformationService,
-    private messageService: MessageService
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -31,8 +34,8 @@ export class ChooseLanguagesComponent implements OnInit {
       (res: LanguageModel[]) => {
         this.allLanguages.setData(res);
       },
-      (error: any) => {},
-      () => {
+      (error: any) => {
+        this.ngOnInit();
         this.allLanguages.setLoading(false);
       }
     );
@@ -64,11 +67,7 @@ export class ChooseLanguagesComponent implements OnInit {
     }
 
     this.formValidation.forEach((element: ValidationModel) => {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: element.message,
-      });
+      this.notificationService.showMessage(element.message, Severity.error);
     });
   }
 }
