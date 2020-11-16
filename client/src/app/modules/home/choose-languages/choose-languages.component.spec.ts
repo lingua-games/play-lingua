@@ -3,20 +3,22 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ChooseLanguagesComponent } from './choose-languages.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MessageService } from 'primeng/api';
+import { NotificationService } from '../../../core/service/notification.service';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('ChooseLanguagesComponent', () => {
   let component: ChooseLanguagesComponent;
   let fixture: ComponentFixture<ChooseLanguagesComponent>;
-  let mockMessageService;
+  let mockNotificationService;
   beforeEach(async(() => {
-    mockMessageService = jasmine.createSpyObj(['add']);
+    mockNotificationService = jasmine.createSpyObj(['showMessage']);
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule],
       declarations: [ChooseLanguagesComponent],
       providers: [
         {
-          provide: MessageService,
-          useValue: mockMessageService,
+          provide: NotificationService,
+          useValue: mockNotificationService,
         },
       ],
     }).compileComponents();

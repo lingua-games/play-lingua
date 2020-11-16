@@ -1,14 +1,15 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { GameMenu } from './../../../core/models/game.menu.model';
+import { GameMenu } from '../../../core/models/game.menu.model';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
+  selector: 'app-game-menu',
+  templateUrl: './game-menu.component.html',
+  styleUrls: ['./game-menu.component.scss'],
 })
-export class DashboardComponent implements OnInit {
+export class GameMenuComponent implements OnInit {
   gameMenus: GameMenu[] = [];
+
   constructor() {}
 
   ngOnInit(): void {
@@ -36,25 +37,12 @@ export class DashboardComponent implements OnInit {
       image: './../../../../assets/images/GameMenu/game.jpg',
       isDesigned: false,
     });
-    this.gameMenus.push({
-      name: 'Game',
-      image: './../../../../assets/images/GameMenu/game.jpg',
-      isDesigned: false,
-    });
-    this.gameMenus.push({
-      name: 'Game',
-      image: './../../../../assets/images/GameMenu/game.jpg',
-      isDesigned: false,
-    });
-    this.gameMenus.push({
-      name: 'Game',
-      image: './../../../../assets/images/GameMenu/game.jpg',
-      isDesigned: false,
-    });
-    this.gameMenus.push({
-      name: 'Game',
-      image: './../../../../assets/images/GameMenu/game.jpg',
-      isDesigned: false,
-    });
+  }
+
+  setBackgroundImage(image: string): any {
+    return {
+      background: `url("${image}") no-repeat center`,
+      backgroundSize: '4vw',
+    };
   }
 }

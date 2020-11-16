@@ -7,6 +7,7 @@ import {
   NotificationService,
   Severity,
 } from '../../../core/service/notification.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-choose-languages',
@@ -21,7 +22,8 @@ export class ChooseLanguagesComponent implements OnInit {
 
   constructor(
     private basicInformationService: BasicInformationService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -85,5 +87,7 @@ export class ChooseLanguagesComponent implements OnInit {
         target: this.targetLanguages.map((x) => x.id),
       })
     );
+
+    this.router.navigate(['./game-menu']);
   }
 }

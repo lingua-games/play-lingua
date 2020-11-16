@@ -12,6 +12,7 @@ import { RegisterComponent } from './register/register.component';
 import { ChooseLanguagesComponent } from './choose-languages/choose-languages.component';
 import { environment } from '../../../environments/environment';
 import { HomeComponent } from './home.component';
+import { GameMenuComponent } from './game-menu/game-menu.component';
 
 export interface CanComponentDeactivate {
   canDeactivate: () => Promise<boolean>;
@@ -54,6 +55,11 @@ const routes: Routes = [
       {
         path: 'choose-languages',
         component: ChooseLanguagesComponent,
+        canDeactivate: [DeactivateWithDelay],
+      },
+      {
+        path: 'game-menu',
+        component: GameMenuComponent,
         canDeactivate: [DeactivateWithDelay],
       },
     ],

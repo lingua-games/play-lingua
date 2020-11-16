@@ -1,0 +1,35 @@
+<div class="welcome-inner-main-container">
+  <div class="row">
+    <div class="menu-container col-sm-2 ml-5 mr-5">
+      <div class="greeting-container">
+        <h3>Welcome dear user</h3>
+        <hr>
+        <div class="action-menu-container" routerLink="../choose-languages">Edit languages</div>
+        <div class="action-menu-container mt-2" routerLink="../login">Login</div>
+        <div class="action-menu-container mt-2" routerLink="../register">Register</div>
+        <div class="action-menu-container mt-2">Scores</div>
+        <div class="action-menu-container mt-2">History</div>
+      </div>
+    </div>
+    <div class="col-sm-9">
+      <div *ngFor="let gameMenu of gameMenus" [id]="gameMenu.id">
+        <div class="header-container row">
+          <div class="col-sm-12">
+            {{gameMenu.name}}
+          </div>
+        </div>
+        <div class="row body-container">
+          <div class="col-sm-1 logo-container" [ngStyle]="setBackgroundImage(gameMenu.image)"></div>
+          <div class="col-sm-9 gif-container">GIF WILL BE HERE</div>
+          <div class="col-sm-2 play-button-container" *ngIf="gameMenu.isDesigned">
+            <span class="lets-go-text">Lets go!</span>
+          </div>
+          <div class="col-sm-2 coming-soon-button-container" *ngIf="!gameMenu.isDesigned">
+            <span class="lets-go-text">Coming soon!</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
