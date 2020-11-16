@@ -12,6 +12,7 @@ import { ChooseLanguagesComponent } from './choose-languages/choose-languages.co
 import { PrimengModule } from '../common/primeng/primeng.module';
 import { FormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
+import { LoadingDirective } from '../../core/directives/loading.directive';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ToastModule } from 'primeng/toast';
     LoginComponent,
     RegisterComponent,
     ChooseLanguagesComponent,
+    LoadingDirective,
   ],
   imports: [CommonModule, WelcomeRoutingModule, PrimengModule, FormsModule],
   providers: [DeactivateWithDelay],

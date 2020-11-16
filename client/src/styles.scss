@@ -1,16 +1,32 @@
 html,
 body {
-    height: 100%;
-    margin: 0;
+  height: 100%;
+  margin: 0;
   overflow: hidden;
 }
 
 * {
-    font-family: cursive;
+  font-family: cursive;
 }
 
 .welcome-inner-main-container {
-  background-color: rgba(0,0,0, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
   border-radius: 2rem;
   padding: 1rem;
+}
+
+@keyframes loading-animation {
+  0% { filter: blur(8px) }
+  25% { filter: blur(12px) }
+  50% { filter: blur(14px) }
+  75% { filter: blur(12px) }
+  100% { filter: blur(8px) }
+}
+
+@keyframes stop-loading-animation {
+  0% { filter: blur(10px) }
+  25% { filter: blur(8px) }
+  50% { filter: blur(6px) }
+  75% { filter: blur(3px) }
+  100% { filter: blur(0px) }
 }
