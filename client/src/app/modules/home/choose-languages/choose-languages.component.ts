@@ -35,7 +35,10 @@ export class ChooseLanguagesComponent implements OnInit {
         this.allLanguages.setData(res);
       },
       (error: any) => {
-        this.ngOnInit();
+        this.notificationService.showMessage(
+          'Failed to load languages',
+          Severity.error
+        );
         this.allLanguages.setLoading(false);
       }
     );
@@ -49,6 +52,7 @@ export class ChooseLanguagesComponent implements OnInit {
   }
 
   submit(): void {
+    localStorage.removeItem('lingua-selected-languages');
     this.formValidation = [];
     if (this.baseLanguages.length === 0) {
       this.formValidation.push({
@@ -69,5 +73,17 @@ export class ChooseLanguagesComponent implements OnInit {
     this.formValidation.forEach((element: ValidationModel) => {
       this.notificationService.showMessage(element.message, Severity.error);
     });
+
+    if (this.formValidation.length > 0) {
+      return;
+    }
+
+    localStorage.setItem(
+      'lingua-selected-languages',
+      JSON.stringify({
+        base: this.baseLanguages.map((x) => x.id),
+        target: this.targetLanguages.map((x) => x.id),
+      })
+    );
   }
 }

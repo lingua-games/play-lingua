@@ -3,11 +3,11 @@ import { NavigationStart, Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
 @Component({
-  selector: 'app-welcome',
-  templateUrl: './welcome.component.html',
-  styleUrls: ['./welcome.component.scss'],
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
 })
-export class WelcomeComponent implements OnInit {
+export class HomeComponent implements OnInit {
   style: any = {};
 
   constructor(private router: Router) {

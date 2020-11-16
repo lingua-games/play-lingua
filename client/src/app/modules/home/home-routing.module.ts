@@ -1,4 +1,3 @@
-import { WelcomeComponent } from './welcome.component';
 import { Injectable, NgModule } from '@angular/core';
 import {
   Routes,
@@ -12,6 +11,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ChooseLanguagesComponent } from './choose-languages/choose-languages.component';
 import { environment } from '../../../environments/environment';
+import { HomeComponent } from './home.component';
 
 export interface CanComponentDeactivate {
   canDeactivate: () => Promise<boolean>;
@@ -34,7 +34,7 @@ export class DeactivateWithDelay
 const routes: Routes = [
   {
     path: '',
-    component: WelcomeComponent,
+    component: HomeComponent,
     children: [
       {
         path: '',
@@ -64,4 +64,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class WelcomeRoutingModule {}
+export class HomeRoutingModule {}
