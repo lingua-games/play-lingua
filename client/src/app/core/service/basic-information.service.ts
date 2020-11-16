@@ -5,6 +5,7 @@ import { Book } from '../models/book.interface';
 import { environment } from '../../../environments/environment';
 import { catchError, retry } from 'rxjs/operators';
 import { LanguageModel } from '../models/language.model';
+import { GameMenu } from '../models/game.menu.model';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +30,35 @@ export class BasicInformationService {
 
   editBook(book: Book): Observable<any> {
     return this.http.put(`${this.bookUrl}/${book.id}`, book);
+  }
+
+  getGameMenus(): GameMenu[] {
+    const menus: GameMenu[] = [];
+    menus.push({
+      name: 'Super Mario',
+      image: './../../../../assets/images/GameMenu/super-mario.png',
+      route: 'super-mario',
+      id: 'super-mario',
+      isDesigned: true,
+    });
+    menus.push({
+      name: 'Falling Stars',
+      image: './../../../../assets/images/GameMenu/falling-star.png',
+      route: 'falling-stars',
+      id: 'falling-stars',
+      isDesigned: true,
+    });
+    menus.push({
+      name: 'Game',
+      image: './../../../../assets/images/GameMenu/game.jpg',
+      isDesigned: false,
+    });
+    menus.push({
+      name: 'Game',
+      image: './../../../../assets/images/GameMenu/game.jpg',
+      isDesigned: false,
+    });
+    return menus;
   }
 
   getAllLanguages(): Observable<LanguageModel[]> {

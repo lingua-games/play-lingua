@@ -27,6 +27,9 @@ export class ChooseLanguagesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (localStorage.getItem('lingua-selected-languages')) {
+      this.router.navigate(['./game-menu']);
+    }
     this.getLanguages();
   }
 

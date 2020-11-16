@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { LoadingDirective } from '../../core/directives/loading.directive';
 import { DeactivateWithDelay, HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
+import { GameMenuComponent } from './game-menu/game-menu.component';
 
 @NgModule({
   declarations: [
@@ -17,9 +18,11 @@ import { HomeComponent } from './home.component';
     LoginComponent,
     RegisterComponent,
     ChooseLanguagesComponent,
+    GameMenuComponent,
     LoadingDirective,
   ],
   imports: [CommonModule, HomeRoutingModule, PrimengModule, FormsModule],
   providers: [DeactivateWithDelay],
+  exports: [LoadingDirective],
 })
 export class HomeModule {}

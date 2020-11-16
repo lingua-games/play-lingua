@@ -11,15 +11,9 @@ import {
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { SuperMarioComponent } from './game/super-mario/super-mario.component';
 import { MaterialModule } from '../common/material/material.module';
-import { GameMenuComponent } from '../home/game-menu/game-menu.component';
 
 @NgModule({
-  declarations: [
-    GameMenuComponent,
-    MainComponent,
-    FallingStarsComponent,
-    SuperMarioComponent,
-  ],
+  declarations: [MainComponent, FallingStarsComponent, SuperMarioComponent],
   imports: [
     CommonModule,
     MainRoutingModule,

@@ -28,7 +28,6 @@ namespace PlayLingua.Data
             var id = db.Query<int>(sql, book).Single();
             book.Id = id;
             return book;
-
         }
 
         public void Delete(string id)

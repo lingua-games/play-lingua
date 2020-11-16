@@ -4,19 +4,11 @@ namespace PlayLingua.Domain.Entities
 {
     public class Word
     {
-        public Word(Guid wordId, LangCodeEnum baseLanguage, string baseWord, LangCodeEnum targetLanguage, string translate)
-        {
-            WordId         = wordId;
-            BaseLanguage   = baseLanguage;
-            BaseWord       = baseWord;
-            TargetLanguage = targetLanguage;
-            Translate      = translate;
-        }
 
-        public Guid WordId { get; }
-        public LangCodeEnum BaseLanguage { get; }
-        public string BaseWord { get; }
-        public LangCodeEnum TargetLanguage { get; }
-        public string Translate { get; }
+        public Guid WordId { get; set; }
+        public LangCodeEnum BaseLanguage { get; set; }
+        public string BaseWord { get; set; }
+        public LangCodeEnum TargetLanguage { get; set; }
+        public string Translate { get; set; }
     }
 }
