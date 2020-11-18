@@ -13,6 +13,7 @@ import { ChooseLanguagesComponent } from './choose-languages/choose-languages.co
 import { environment } from '../../../environments/environment';
 import { HomeComponent } from './home.component';
 import { GameMenuComponent } from './game-menu/game-menu.component';
+import { PrepareAddWordsComponent } from './prepare-add-words/prepare-add-words.component';
 
 export interface CanComponentDeactivate {
   canDeactivate: () => Promise<boolean>;
@@ -60,6 +61,11 @@ const routes: Routes = [
       {
         path: 'game-menu',
         component: GameMenuComponent,
+        canDeactivate: [DeactivateWithDelay],
+      },
+      {
+        path: 'prepare-adding-words',
+        component: PrepareAddWordsComponent,
         canDeactivate: [DeactivateWithDelay],
       },
     ],

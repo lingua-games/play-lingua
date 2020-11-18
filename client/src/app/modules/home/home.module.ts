@@ -10,6 +10,7 @@ import { LoadingDirective } from '../../core/directives/loading.directive';
 import { DeactivateWithDelay, HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
 import { GameMenuComponent } from './game-menu/game-menu.component';
+import { PrepareAddWordsComponent } from './prepare-add-words/prepare-add-words.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { GameMenuComponent } from './game-menu/game-menu.component';
     ChooseLanguagesComponent,
     GameMenuComponent,
     LoadingDirective,
+    PrepareAddWordsComponent,
   ],
   imports: [CommonModule, HomeRoutingModule, PrimengModule, FormsModule],
   providers: [DeactivateWithDelay],
