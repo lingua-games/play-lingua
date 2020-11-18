@@ -29,6 +29,7 @@ export class ChooseLanguagesComponent implements OnInit {
   ngOnInit(): void {
     if (localStorage.getItem('lingua-selected-languages')) {
       this.router.navigate(['./game-menu']);
+      return;
     }
     this.getLanguages();
   }
@@ -86,8 +87,18 @@ export class ChooseLanguagesComponent implements OnInit {
     localStorage.setItem(
       'lingua-selected-languages',
       JSON.stringify({
-        base: this.baseLanguages.map((x) => x.id),
-        target: this.targetLanguages.map((x) => x.id),
+        base: this.baseLanguages.map((x: LanguageModel) => {
+          return {
+            id: x.id,
+            name: x.name,
+          };
+        }),
+        target: this.targetLanguages.map((x: LanguageModel) => {
+          return {
+            id: x.id,
+            name: x.name,
+          };
+        }),
       })
     );
 

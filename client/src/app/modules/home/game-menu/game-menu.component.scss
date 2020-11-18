@@ -59,6 +59,18 @@
   color: #fff;
 }
 
+.play-button-error-container {
+  height: 10vh;
+  position: relative;
+
+  background-color: #53ceb8;
+  color: #FF0000;
+  padding-top: 10px;
+  span {
+    font-size: 1vw;
+  }
+}
+
 .coming-soon-button-container {
   height: 10vh;
   position: relative;
@@ -93,8 +105,4 @@
   text-align: center;
   padding-top: 3vh;
 }
-
-
-
-
 

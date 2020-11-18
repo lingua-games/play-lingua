@@ -5,6 +5,11 @@ import { Router } from '@angular/router';
 import { WordService } from '../../../core/service/word.service';
 import { ApiResult } from '../../../core/models/api-result.model';
 import { SelectedLanguageInquiryModel } from '../../../core/models/selected-language-inquiry.model';
+import {
+  NotificationService,
+  Severity,
+} from '../../../core/service/notification.service';
+import { LanguageModel } from '../../../core/models/language.model';
 
 @Component({
   selector: 'app-game-menu',
@@ -13,13 +18,14 @@ import { SelectedLanguageInquiryModel } from '../../../core/models/selected-lang
 })
 export class GameMenuComponent implements OnInit {
   gameMenus: GameMenu[] = [];
-  selectedLanguages: { base: number[]; target: number[] };
+  selectedLanguages: { base: LanguageModel[]; target: LanguageModel[] };
   inquiryResult: ApiResult<any> = new ApiResult<any>();
 
   constructor(
     private router: Router,
     private basicInformationService: BasicInformationService,
-    private wordService: WordService
+    private wordService: WordService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -33,6 +39,7 @@ export class GameMenuComponent implements OnInit {
     ) {
       localStorage.removeItem('lingua-selected-languages');
       this.router.navigate(['./choose-languages']);
+      return;
     }
     this.getSelectedLanguagesInformation();
     this.getMenus();
@@ -41,12 +48,21 @@ export class GameMenuComponent implements OnInit {
   getSelectedLanguagesInformation(): void {
     this.inquiryResult.setLoading(true);
     this.wordService
-      .getSelectedLanguagesInformation(this.selectedLanguages)
+      .getSelectedLanguagesInformation({
+        base: this.selectedLanguages.base.map((x) => x.id),
+        target: this.selectedLanguages.target.map((x) => x.id),
+      })
       .subscribe(
         (res: SelectedLanguageInquiryModel) => {
           this.inquiryResult.setData(res);
         },
-        (error: any) => {}
+        (error: any) => {
+          this.notificationService.showMessage(
+            'Unable to get language information',
+            Severity.error
+          );
+          this.inquiryResult.setError(error);
+        }
       );
   }
 
