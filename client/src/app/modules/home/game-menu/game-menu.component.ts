@@ -18,7 +18,10 @@ import { LanguageModel } from '../../../core/models/language.model';
 })
 export class GameMenuComponent implements OnInit {
   gameMenus: GameMenu[] = [];
-  selectedLanguages: { base: LanguageModel[]; target: LanguageModel[] };
+  selectedLanguages: { base: LanguageModel[]; target: LanguageModel[] } = {
+    base: [],
+    target: [],
+  };
   inquiryResult: ApiResult<any> = new ApiResult<any>();
 
   constructor(

@@ -15,7 +15,7 @@
       <div class="row">
         <div class="col-sm-12 alert alert-warning">
           <span class="mr-2">Oops, You selected</span>
-          <span *ngFor="let selectedLanguage of selectedLanguages.base;let index = index">
+          <span *ngFor="let selectedLanguage of selectedLanguages?.base;let index = index">
             <strong *ngIf="selectedLanguages.base.length - 1 === index">{{selectedLanguage.name}}</strong>
             <strong *ngIf="selectedLanguages.base.length - 1 !==  index">{{selectedLanguage.name + ', '}}</strong>
           </span>
