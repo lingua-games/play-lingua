@@ -1,4 +1,3 @@
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MainComponent } from './main.component';
@@ -14,12 +13,7 @@ import { SuperMarioComponent } from './game/super-mario/super-mario.component';
 import { MaterialModule } from '../common/material/material.module';
 
 @NgModule({
-  declarations: [
-    MainComponent,
-    FallingStarsComponent,
-    SuperMarioComponent,
-    DashboardComponent,
-  ],
+  declarations: [MainComponent, FallingStarsComponent, SuperMarioComponent],
   imports: [
     CommonModule,
     MainRoutingModule,

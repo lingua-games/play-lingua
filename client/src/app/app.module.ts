@@ -9,8 +9,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
+import { ErrorIntercept } from './core/service/error.interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,6 +21,13 @@ import { BrowserModule } from '@angular/platform-browser';
     HttpClientModule,
     BrowserModule,
     BrowserAnimationsModule,
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorIntercept,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })

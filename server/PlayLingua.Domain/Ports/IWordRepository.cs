@@ -1,5 +1,5 @@
 ﻿using PlayLingua.Domain.Entities;
-using System;
+using PlayLingua.Domain.Models;
 using System.Collections.Generic;
 
 namespace PlayLingua.Domain.Ports
@@ -10,5 +10,6 @@ namespace PlayLingua.Domain.Ports
         Word Add(Word book);
         void Delete(string id);
         void Update(Word book);
+        LanguageInformation InquiryAboutSelectedLanguages(Language baseLanguage);
     }
 }

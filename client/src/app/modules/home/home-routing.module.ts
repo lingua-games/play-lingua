@@ -1,4 +1,3 @@
-import { WelcomeComponent } from './welcome.component';
 import { Injectable, NgModule } from '@angular/core';
 import {
   Routes,
@@ -12,6 +11,9 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ChooseLanguagesComponent } from './choose-languages/choose-languages.component';
 import { environment } from '../../../environments/environment';
+import { HomeComponent } from './home.component';
+import { GameMenuComponent } from './game-menu/game-menu.component';
+import { PrepareAddWordsComponent } from './prepare-add-words/prepare-add-words.component';
 
 export interface CanComponentDeactivate {
   canDeactivate: () => Promise<boolean>;
@@ -34,7 +36,7 @@ export class DeactivateWithDelay
 const routes: Routes = [
   {
     path: '',
-    component: WelcomeComponent,
+    component: HomeComponent,
     children: [
       {
         path: '',
@@ -56,6 +58,16 @@ const routes: Routes = [
         component: ChooseLanguagesComponent,
         canDeactivate: [DeactivateWithDelay],
       },
+      {
+        path: 'game-menu',
+        component: GameMenuComponent,
+        canDeactivate: [DeactivateWithDelay],
+      },
+      {
+        path: 'prepare-adding-words',
+        component: PrepareAddWordsComponent,
+        canDeactivate: [DeactivateWithDelay],
+      },
     ],
   },
 ];
@@ -64,4 +76,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class WelcomeRoutingModule {}
+export class HomeRoutingModule {}

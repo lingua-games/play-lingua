@@ -2,8 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { BasicInformationService } from '../../../core/service/basic-information.service';
 import { LanguageModel } from '../../../core/models/language.model';
 import { ValidationModel } from '../../../core/models/validation.model';
-import { MessageService } from 'primeng/api';
 import { ApiResult } from '../../../core/models/api-result.model';
+import {
+  NotificationService,
+  Severity,
+} from '../../../core/service/notification.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-choose-languages',
@@ -18,10 +22,15 @@ export class ChooseLanguagesComponent implements OnInit {
 
   constructor(
     private basicInformationService: BasicInformationService,
-    private messageService: MessageService
+    private notificationService: NotificationService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
+    if (localStorage.getItem('lingua-selected-languages')) {
+      this.router.navigate(['./game-menu']);
+      return;
+    }
     this.getLanguages();
   }
 
@@ -31,8 +40,11 @@ export class ChooseLanguagesComponent implements OnInit {
       (res: LanguageModel[]) => {
         this.allLanguages.setData(res);
       },
-      (error: any) => {},
-      () => {
+      (error: any) => {
+        this.notificationService.showMessage(
+          'Failed to load languages',
+          Severity.error
+        );
         this.allLanguages.setLoading(false);
       }
     );
@@ -46,6 +58,7 @@ export class ChooseLanguagesComponent implements OnInit {
   }
 
   submit(): void {
+    localStorage.removeItem('lingua-selected-languages');
     this.formValidation = [];
     if (this.baseLanguages.length === 0) {
       this.formValidation.push({
@@ -64,11 +77,31 @@ export class ChooseLanguagesComponent implements OnInit {
     }
 
     this.formValidation.forEach((element: ValidationModel) => {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: element.message,
-      });
+      this.notificationService.showMessage(element.message, Severity.error);
     });
+
+    if (this.formValidation.length > 0) {
+      return;
+    }
+
+    localStorage.setItem(
+      'lingua-selected-languages',
+      JSON.stringify({
+        base: this.baseLanguages.map((x: LanguageModel) => {
+          return {
+            id: x.id,
+            name: x.name,
+          };
+        }),
+        target: this.targetLanguages.map((x: LanguageModel) => {
+          return {
+            id: x.id,
+            name: x.name,
+          };
+        }),
+      })
+    );
+
+    this.router.navigate(['./game-menu']);
   }
 }

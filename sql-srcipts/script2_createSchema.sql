@@ -27,12 +27,12 @@ GO
 
 CREATE TABLE [dbo].[Word] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
-    [BaseLanguage]   [varchar](5)       NOT NULL,
-    [BaseWord]       [varchar](100)     NOT NULL,
-    [TargetLanguage] [varchar](5)       NOT NULL,
-    [Translate]      [varchar](100)     NOT NULL,
-	[BookId]         int				NOT NULL,
-	[ChapterId]      int				NOT NULL,
+    [BaseLanguageId]   int                NOT NULL,
+    [BaseWord]         [varchar](100)     NOT NULL,
+    [TargetLanguageId] int                NOT NULL,
+    [Translate]        [varchar](100)     NOT NULL,
+	[BookId]           int			      NOT NULL,
+	[ChapterId]        int				  NOT NULL,
 )
 ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_BookId]
 FOREIGN KEY ([BookId]) REFERENCES [dbo].[Book] ([Id])
@@ -40,4 +40,15 @@ GO
 ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_ChapterId]
 FOREIGN KEY ([ChapterId]) REFERENCES [dbo].[Chapter] ([Id])
 GO
+ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_BaseLanguageId]
+FOREIGN KEY ([BaseLanguageId]) REFERENCES [dbo].[Language] ([Id])
+GO
+ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_TargetLanguageId]
+FOREIGN KEY ([TargetLanguageId]) REFERENCES [dbo].[Language] ([Id])
+GO
 
+CREATE TABLE [dbo].[BaseLanguageToTargetLanguage] (
+    [Id] int IDENTITY(1,1) PRIMARY KEY,
+    [BaseLanguageId]   int                NOT NULL,
+    [TargetLanguageId] int                NOT NULL,
+)

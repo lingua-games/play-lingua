@@ -1,9 +1,8 @@
-import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
-import {FallingStarsComponent} from './game/falling-stars/falling-stars.component';
-import {MainComponent} from './main.component';
-import {DashboardComponent} from './dashboard/dashboard.component';
-import {SuperMarioComponent} from './game/super-mario/super-mario.component';
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { FallingStarsComponent } from './game/falling-stars/falling-stars.component';
+import { MainComponent } from './main.component';
+import { SuperMarioComponent } from './game/super-mario/super-mario.component';
 
 const routes: Routes = [
   {
@@ -11,25 +10,19 @@ const routes: Routes = [
     component: MainComponent,
     children: [
       {
-        path: '',
-        component: DashboardComponent
-      },
-      {
         path: 'falling-stars',
-        component: FallingStarsComponent
+        component: FallingStarsComponent,
       },
       {
         path: 'super-mario',
-        component: SuperMarioComponent
-      }
-    ]
+        component: SuperMarioComponent,
+      },
+    ],
   },
-
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class MainRoutingModule {
-}
+export class MainRoutingModule {}
