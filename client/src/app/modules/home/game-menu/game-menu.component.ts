@@ -45,6 +45,11 @@ export class GameMenuComponent implements OnInit {
     this.getMenus();
   }
 
+  navigateToEditLanguages(): void {
+    localStorage.removeItem('lingua-selected-languages');
+    this.router.navigate(['../choose-languages']);
+  }
+
   getSelectedLanguagesInformation(): void {
     this.inquiryResult.setLoading(true);
     this.wordService

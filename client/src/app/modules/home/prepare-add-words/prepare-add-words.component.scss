@@ -1,6 +1,14 @@
 .welcome-inner-main-container {
   margin-left: 35%;
-  margin-top: -20vh;
+  margin-top: -10rem;
   max-height: 50vh;
   width: 30%;
+  padding: 3vh;
+  position: relative;
+}
+
+.btn-back {
+  position: absolute;
+  left: -3rem;
+  top: .5rem;
 }
