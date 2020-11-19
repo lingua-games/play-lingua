@@ -8,6 +8,7 @@ namespace PlayLingua.Data
         public static void AddRepository(this IServiceCollection services, string connectionString)
         {
             services.AddSingleton<IBookRepository, BookRepository>(x => new BookRepository(connectionString));
+            services.AddSingleton<IUserRepository, UserRepository>(x => new UserRepository(connectionString));
             services.AddSingleton<IChapterRepository, ChapterRepository>(x => new ChapterRepository(connectionString));
             services.AddSingleton<IWordRepository, WordRepository>(x => new WordRepository(connectionString));
             services.AddSingleton<ILanguageRepository, LanguageRepository>(x => new LanguageRepository(connectionString));

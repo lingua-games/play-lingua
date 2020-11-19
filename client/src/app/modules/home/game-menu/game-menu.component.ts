@@ -10,6 +10,7 @@ import {
   Severity,
 } from '../../../core/service/notification.service';
 import { LanguageModel } from '../../../core/models/language.model';
+import { InquiryResultModel } from '../../../core/models/inquiry-result.model';
 
 @Component({
   selector: 'app-game-menu',
@@ -22,7 +23,9 @@ export class GameMenuComponent implements OnInit {
     base: [],
     target: [],
   };
-  inquiryResult: ApiResult<any> = new ApiResult<any>();
+  inquiryResult: ApiResult<InquiryResultModel> = new ApiResult<
+    InquiryResultModel
+  >();
 
   constructor(
     private router: Router,

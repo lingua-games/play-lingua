@@ -13,15 +13,17 @@
     </div>
     <div class="col-sm-9" appLoading [loadingFlag]="inquiryResult.isLoading">
       <div class="row">
-        <div class="col-sm-12 alert alert-warning">
+        <div class="col-sm-12 alert alert-warning" *ngIf="!inquiryResult.hasError && !inquiryResult.data?.hasWord">
           <span class="mr-2">Oops, You selected</span>
           <span *ngFor="let selectedLanguage of selectedLanguages?.base;let index = index">
             <strong *ngIf="selectedLanguages.base.length - 1 === index">{{selectedLanguage.name}}</strong>
             <strong *ngIf="selectedLanguages.base.length - 1 !==  index">{{selectedLanguage.name + ', '}}</strong>
           </span>
           <span class="ml-2">as your base languages, but unfortunately we dont have any information with any of the selected
-          languages. The good news is, you can be the first one who is adding words. For adding your custom words</span>
-          <button class="m-2 btn btn-info" routerLink="../prepare-adding-words">Click here</button>
+          languages. The good news is, you can be the first one who is adding words. For adding your custom words you should </span>
+          <button class="m-2 btn btn-info" routerLink="../prepare-adding-words">Login</button>
+          or
+          <button class="m-2 btn btn-info" routerLink="../prepare-adding-words">Register</button>
         </div>
       </div>
       <div *ngFor="let gameMenu of gameMenus" [id]="gameMenu.id">
