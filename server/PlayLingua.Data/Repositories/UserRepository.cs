@@ -21,7 +21,13 @@ namespace PlayLingua.Data
 
         public User Add(User user)
         {
-            throw new NotImplementedException();
+            var sql =
+                "insert into dbo.Users (Username, Password) VALUES(@Username, @Password);" +
+                "SELECT CAST(SCOPE_IDENTITY() as int)";
+
+            var id = db.Query<int>(sql, user).Single();
+            user.Id = id;
+            return user;
         }
 
         public void Delete(string id)
@@ -31,7 +37,7 @@ namespace PlayLingua.Data
 
         public List<User> List()
         {
-            throw new NotImplementedException();
+            return db.Query<User>("select * from dbo.Users").ToList();
         }
 
         public void Update(User user)

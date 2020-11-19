@@ -2,6 +2,7 @@
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Ports;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PlayLingua.Host.Controllers
 {
@@ -34,6 +35,10 @@ namespace PlayLingua.Host.Controllers
         [HttpPost]
         public ActionResult<User> Add([FromBody] User user)
         {
+            if (_userRepository.List().Where(x => x.Username == user.Username).Any())
+            {
+                return StatusCode(406, "This email is already exist");
+            }
             var addedUser = _userRepository.Add(user);
             return Ok(addedUser);
         }
@@ -52,12 +57,5 @@ namespace PlayLingua.Host.Controllers
             _userRepository.Update(user);
             return Ok(user);
         }
-
-        //[HttpGet("{bookId}/chapters")]
-        //public ActionResult<List<Chapter>> GetChapters(int bookId)
-        //{
-        //    var chapters = _chapterRepository.GetChapters(bookId);
-        //    return Ok(chapters.Select(ChapterDto.Map));
-        //}
     }
 }
