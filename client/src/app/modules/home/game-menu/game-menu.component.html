@@ -4,7 +4,8 @@
       <div class="greeting-container">
         <h3>{{getUsername()}}</h3>
         <hr>
-        <div class="action-menu-container" (click)="navigateToEditLanguages()" *ngIf="isLoggedIn()">Change languages</div>
+        <div class="action-menu-container" (click)="navigateToEditLanguages()" *ngIf="isLoggedIn()">Change languages
+        </div>
         <div class="action-menu-container mt-2" routerLink="../login" *ngIf="!isLoggedIn()">Login</div>
         <div class="action-menu-container mt-2" routerLink="../register" *ngIf="!isLoggedIn()">Register</div>
         <div class="action-menu-container mt-2" *ngIf="isLoggedIn()">Scores</div>
@@ -22,10 +23,17 @@
             <strong *ngIf="selectedLanguages.base.length - 1 !==  index">{{selectedLanguage.name + ', '}}</strong>
           </span>
           <span class="ml-2">as your base languages, but unfortunately we dont have any information with any of the selected
-          languages. The good news is, you can be the first one who is adding words. For adding your custom words you should </span>
-          <button class="m-2 btn btn-info" routerLink="../prepare-adding-words">Login</button>
-          or
-          <button class="m-2 btn btn-info" routerLink="../prepare-adding-words">Register</button>
+          languages. The good news is, you can be the first one who is adding words.</span>
+          <span *ngIf="isLoggedIn()">
+            <span> For adding your custom words </span>
+            <button class="m-2 btn btn-info" routerLink="../prepare-adding-words">Click here</button>
+          </span>
+          <span *ngIf="!isLoggedIn()">
+            <span>For adding your custom words you should </span>
+            <button class="m-2 btn btn-info">Login</button>
+            or
+            <button class="m-2 btn btn-info">Register</button>
+          </span>
         </div>
       </div>
       <div *ngFor="let gameMenu of gameMenus" [id]="gameMenu.id">
