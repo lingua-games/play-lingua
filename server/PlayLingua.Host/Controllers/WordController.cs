@@ -21,12 +21,16 @@ namespace PlayLingua.Host.Controllers
         [HttpPost]
         public ActionResult<LanguageInquiryResult> InquiryAboutSelectedLanguages([FromBody] SelectedLanguageModel model)
         {
-            var result = new LanguageInquiryResult();
-            result.LanguageInformation = new List<LanguageInformation>();
+            var result = new LanguageInquiryResult
+            {
+                LanguageInformation = new List<LanguageInformation>()
+            };
             foreach (var item in model.Base)
             {
-                var language = new Language();
-                language.Id = item;
+                var language = new Language
+                {
+                    Id = item
+                };
                 var tableResult = _wordRepository.InquiryAboutSelectedLanguages(language);
                 if (tableResult != null)
                 {

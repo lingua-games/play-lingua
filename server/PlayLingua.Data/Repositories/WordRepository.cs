@@ -13,7 +13,7 @@ namespace PlayLingua.Data
 {
     public class WordRepository : IWordRepository
     {
-        private IDbConnection db;
+        private readonly IDbConnection db;
         public WordRepository(string connectionString)
         {
             db = new SqlConnection(connectionString);

@@ -11,6 +11,7 @@ import { DeactivateWithDelay, HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
 import { GameMenuComponent } from './game-menu/game-menu.component';
 import { PrepareAddWordsComponent } from './prepare-add-words/prepare-add-words.component';
+import { AddWordByUserComponent } from './add-word-by-user/add-word-by-user.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { PrepareAddWordsComponent } from './prepare-add-words/prepare-add-words.
     GameMenuComponent,
     LoadingDirective,
     PrepareAddWordsComponent,
+    AddWordByUserComponent,
   ],
   imports: [CommonModule, HomeRoutingModule, PrimengModule, FormsModule],
   providers: [DeactivateWithDelay],
