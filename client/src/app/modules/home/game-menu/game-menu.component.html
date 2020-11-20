@@ -2,13 +2,15 @@
   <div class="row">
     <div class="menu-container col-sm-2 ml-5 mr-5">
       <div class="greeting-container">
-        <h3>Welcome dear user</h3>
+        <h3>{{getUsername()}}</h3>
         <hr>
-        <div class="action-menu-container" (click)="navigateToEditLanguages()">Edit languages</div>
-        <div class="action-menu-container mt-2" routerLink="../login">Login</div>
-        <div class="action-menu-container mt-2" routerLink="../register">Register</div>
-        <div class="action-menu-container mt-2">Scores</div>
-        <div class="action-menu-container mt-2">History</div>
+        <div class="action-menu-container" (click)="navigateToEditLanguages()" *ngIf="isLoggedIn()">Change languages</div>
+        <div class="action-menu-container mt-2" routerLink="../login" *ngIf="!isLoggedIn()">Login</div>
+        <div class="action-menu-container mt-2" routerLink="../register" *ngIf="!isLoggedIn()">Register</div>
+        <div class="action-menu-container mt-2" *ngIf="isLoggedIn()">Scores</div>
+        <div class="action-menu-container mt-2">Score board</div>
+        <div class="action-menu-container mt-2" *ngIf="isLoggedIn()">History</div>
+        <div class="action-menu-container mt-2" *ngIf="isLoggedIn()">Log out</div>
       </div>
     </div>
     <div class="col-sm-9" appLoading [loadingFlag]="inquiryResult.isLoading">

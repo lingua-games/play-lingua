@@ -22,7 +22,7 @@ namespace PlayLingua.Data
         public User Add(User user)
         {
             var sql =
-                "insert into dbo.Users (Username, Password) VALUES(@Username, @Password);" +
+                "insert into dbo.Users (Email, Password) VALUES(@Email, @Password);" +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var id = db.Query<int>(sql, user).Single();

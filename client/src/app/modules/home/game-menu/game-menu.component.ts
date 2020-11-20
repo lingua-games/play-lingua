@@ -51,6 +51,15 @@ export class GameMenuComponent implements OnInit {
     this.getMenus();
   }
 
+  getUsername(): string {
+    const email = localStorage.getItem('lingua-email');
+    return email ? `Welcome dear ${email}` : 'Welcome dear guest';
+  }
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('lingua-token');
+  }
+
   navigateToEditLanguages(): void {
     localStorage.removeItem('lingua-selected-languages');
     this.router.navigate(['../choose-languages']);

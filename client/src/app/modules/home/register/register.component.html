@@ -1,8 +1,8 @@
 <form  class="welcome-inner-main-container">
   <div class="form-group">
     <label for="inputEmail">Email address</label>
-    <input type="email" class="form-control" id="inputEmail" name="inputEmail" aria-describedby="emailHelp" placeholder="Enter email" [(ngModel)]="user.username">
-    <small id="emailHelp" class="form-text text-danger" *ngIf="errors.username">{{errors.username}}</small>
+    <input type="email" class="form-control" id="inputEmail" name="inputEmail" aria-describedby="emailHelp" placeholder="Email" [(ngModel)]="user.email">
+    <small id="emailHelp" class="form-text text-danger" *ngIf="errors.email">{{errors.email}}</small>
   </div>
   <div class="form-group">
     <label for="inputPassword">Password</label>
@@ -15,6 +15,9 @@
   </div>
   <hr>
   <div class="mt-2 text-center">
-    <input class="btn btn-success" type="submit" (click)="submit()" label="Submit">
+    <button class="btn btn-success" type="submit" [disabled]="isLoading" (click)="submit()">
+      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="isLoading"></span>
+      {{isLoading ? 'Loading...' : 'Submit'}}
+    </button>
   </div>
 </form>
