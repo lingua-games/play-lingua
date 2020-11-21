@@ -8,6 +8,8 @@ import {
   Severity,
 } from '../../../core/service/notification.service';
 import { Router } from '@angular/router';
+import { SelectedLanguageService } from '../../../core/service/selected-language.service';
+import { SelectedLanguageModel } from '../../../core/models/selected-language.model';
 
 @Component({
   selector: 'app-choose-languages',
@@ -23,7 +25,8 @@ export class ChooseLanguagesComponent implements OnInit {
   constructor(
     private basicInformationService: BasicInformationService,
     private notificationService: NotificationService,
-    private router: Router
+    private router: Router,
+    private selectedLanguageService: SelectedLanguageService
   ) {}
 
   ngOnInit(): void {
@@ -84,6 +87,35 @@ export class ChooseLanguagesComponent implements OnInit {
       return;
     }
 
+    if (localStorage.getItem('lingua-token')) {
+      this.saveToBackend();
+    } else {
+      // This block is for guest
+      // BUT
+      // It also can save to backend with finding a uniq number/string from
+      // user computer and fetch data with found id later for this user.
+      this.saveToLocalStorage();
+      this.router.navigate(['./game-menu']);
+    }
+  }
+
+  saveToBackend(): void {
+    this.allLanguages.setLoading(false);
+    const apiData: SelectedLanguageModel = {
+      baseLanguages: JSON.stringify(this.baseLanguages),
+      targetLanguages: JSON.stringify(this.targetLanguages),
+    } as SelectedLanguageModel;
+    this.selectedLanguageService.add(apiData).subscribe(
+      (res: SelectedLanguageModel) => {
+        this.saveToLocalStorage();
+        this.allLanguages.setLoading(false);
+        this.router.navigate(['./game-menu']);
+      },
+      (error: string) => {}
+    );
+  }
+
+  saveToLocalStorage(): void {
     localStorage.setItem(
       'lingua-selected-languages',
       JSON.stringify({
@@ -101,7 +133,5 @@ export class ChooseLanguagesComponent implements OnInit {
         }),
       })
     );
-
-    this.router.navigate(['./game-menu']);
   }
 }

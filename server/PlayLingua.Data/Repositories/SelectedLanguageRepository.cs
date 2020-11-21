@@ -10,24 +10,18 @@ using System.Net.WebSockets;
 
 namespace PlayLingua.Data
 {
-    public class UserRepository : IUserRepository
+    public class SelectedLanguageRepository : ISelectedLanguagesRepository
     {
         private readonly IDbConnection db;
 
-        public UserRepository(string connectionString)
+        public SelectedLanguageRepository(string connectionString)
         {
             db = new SqlConnection(connectionString);
         }
 
-        public User Add(User user)
+        public SelectedLanguages Add(SelectedLanguages book)
         {
-            var sql =
-                "insert into dbo.Users (Email, Password) VALUES(@Email, @Password);" +
-                "SELECT CAST(SCOPE_IDENTITY() as int)";
-
-            var id = db.Query<int>(sql, user).Single();
-            user.Id = id;
-            return user;
+            throw new NotImplementedException();
         }
 
         public void Delete(string id)
@@ -35,12 +29,12 @@ namespace PlayLingua.Data
             throw new NotImplementedException();
         }
 
-        public List<User> List()
+        public List<SelectedLanguages> List()
         {
-            return db.Query<User>("select * from dbo.Users").ToList();
+            throw new NotImplementedException();
         }
 
-        public void Update(User user)
+        public void Update(SelectedLanguages book)
         {
             throw new NotImplementedException();
         }

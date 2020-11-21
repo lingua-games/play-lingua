@@ -11,6 +11,7 @@ import {
 } from '../../../core/service/notification.service';
 import { LanguageModel } from '../../../core/models/language.model';
 import { InquiryResultModel } from '../../../core/models/inquiry-result.model';
+import { SecurityService } from '../../../core/service/security.service';
 
 @Component({
   selector: 'app-game-menu',
@@ -31,7 +32,8 @@ export class GameMenuComponent implements OnInit {
     private router: Router,
     private basicInformationService: BasicInformationService,
     private wordService: WordService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private securityService: SecurityService
   ) {}
 
   ngOnInit(): void {
@@ -51,9 +53,22 @@ export class GameMenuComponent implements OnInit {
     this.getMenus();
   }
 
+  getUsername(): string {
+    const email = localStorage.getItem('lingua-email');
+    return email ? `Welcome dear ${email}` : 'Welcome dear guest';
+  }
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('lingua-token');
+  }
+
   navigateToEditLanguages(): void {
     localStorage.removeItem('lingua-selected-languages');
     this.router.navigate(['../choose-languages']);
+  }
+
+  logout(): void {
+    this.securityService.logout();
   }
 
   getSelectedLanguagesInformation(): void {

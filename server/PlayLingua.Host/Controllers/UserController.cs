@@ -35,7 +35,7 @@ namespace PlayLingua.Host.Controllers
         [HttpPost]
         public ActionResult<User> Add([FromBody] User user)
         {
-            if (_userRepository.List().Where(x => x.Username == user.Username).Any())
+            if (_userRepository.List().Where(x => x.Email == user.Email).Any())
             {
                 return StatusCode(406, "This email is already exist");
             }

@@ -12,7 +12,7 @@ namespace PlayLingua.Data
 {
     public class BookRepository : IBookRepository
     {
-        private IDbConnection db;
+        private readonly IDbConnection db;
 
         public BookRepository(string connectionString)
         {
