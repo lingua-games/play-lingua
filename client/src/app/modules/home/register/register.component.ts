@@ -27,7 +27,11 @@ export class RegisterComponent implements OnInit {
     private securityService: SecurityService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (localStorage.getItem('lingua-token')) {
+      this.router.navigate(['game-menu']);
+    }
+  }
 
   submit(): void {
     this.errors = {};

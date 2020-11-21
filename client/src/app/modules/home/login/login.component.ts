@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SecurityService } from '../../../core/service/security.service';
 import { UserModel } from '../../../core/models/user.model';
 import { LoginResultModel } from '../../../core/models/login-result.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -14,9 +15,16 @@ export class LoginComponent implements OnInit {
   formError: any = {};
   isLoading: boolean;
 
-  constructor(private securityService: SecurityService) {}
+  constructor(
+    private securityService: SecurityService,
+    private router: Router
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (localStorage.getItem('lingua-token')) {
+      this.router.navigate(['game-menu']);
+    }
+  }
 
   login(): void {
     if (!this.user.email) {
