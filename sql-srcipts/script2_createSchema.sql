@@ -60,3 +60,15 @@ CREATE TABLE [dbo].[Users] (
 	[Password]   [varchar](200) NOT NULL,
 )
 GO
+
+CREATE TABLE [dbo].[SelectedLanguages] (
+    [Id] int IDENTITY(1,1) PRIMARY KEY,
+    [BaseLanguages]   [varchar](500) NOT NULL,
+	[TargetLanguages]   [varchar](500) NOT NULL,
+	[UserId]   int NOT NULL,
+)
+ALTER TABLE [dbo].[SelectedLanguages] ADD CONSTRAINT [FK_SelectedLanguages_UserId]
+FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([Id])
+GO
+
+

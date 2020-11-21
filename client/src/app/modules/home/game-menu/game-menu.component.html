@@ -11,7 +11,7 @@
         <div class="action-menu-container mt-2" *ngIf="isLoggedIn()">Scores</div>
         <div class="action-menu-container mt-2">Score board</div>
         <div class="action-menu-container mt-2" *ngIf="isLoggedIn()">History</div>
-        <div class="action-menu-container mt-2" *ngIf="isLoggedIn()">Log out</div>
+        <div class="action-menu-container mt-2" *ngIf="isLoggedIn()" (click)="logout()">Log out</div>
       </div>
     </div>
     <div class="col-sm-9" appLoading [loadingFlag]="inquiryResult.isLoading">

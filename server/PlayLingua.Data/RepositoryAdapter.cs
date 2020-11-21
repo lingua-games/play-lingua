@@ -12,6 +12,7 @@ namespace PlayLingua.Data
             services.AddSingleton<IWordRepository, WordRepository>(x => new WordRepository(connectionString));
             services.AddSingleton<ILanguageRepository, LanguageRepository>(x => new LanguageRepository(connectionString));
             services.AddSingleton<IAuthRepository, AuthRepository>(x => new AuthRepository(connectionString, secret));
+            services.AddSingleton<ISelectedLanguagesRepository, SelectedLanguageRepository>(x => new SelectedLanguageRepository(connectionString));
             services.AddTransient<IUserRepository, UserRepository>(x => new UserRepository(connectionString));
         }
     }

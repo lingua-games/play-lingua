@@ -43,6 +43,7 @@ export class LoginComponent implements OnInit {
       (res: LoginResultModel) => {
         if (res.isLogin) {
           localStorage.setItem('lingua-token', res.token);
+          this.router.navigate(['../game-menu']);
         } else {
           this.errorMessage = res.message;
         }

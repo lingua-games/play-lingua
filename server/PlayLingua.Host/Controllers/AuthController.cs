@@ -3,6 +3,7 @@ using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Ports;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 
 namespace PlayLingua.Host.Controllers
 {
