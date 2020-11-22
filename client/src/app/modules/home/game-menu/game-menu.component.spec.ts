@@ -5,6 +5,7 @@ import { GameMenuComponent } from './game-menu.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NotificationService } from '../../../core/service/notification.service';
+import { Router } from '@angular/router';
 
 describe('GameMenuComponent', () => {
   let component: GameMenuComponent;
@@ -13,12 +14,19 @@ describe('GameMenuComponent', () => {
   beforeEach(async(() => {
     mockNotificationService = jasmine.createSpyObj(['showMessage']);
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientTestingModule],
+      imports: [HttpClientTestingModule],
       declarations: [GameMenuComponent],
       providers: [
         {
           provide: NotificationService,
           useValue: mockNotificationService,
+        },
+        {
+          provide: Router,
+          useValue: {
+            url: 'choose-languages',
+            navigate: jasmine.createSpy('navigate'),
+          },
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],
