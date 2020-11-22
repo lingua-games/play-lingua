@@ -46,11 +46,12 @@ namespace PlayLingua.Data
                     IsLogin = true,
                     User = new User
                     {
-                        Email= selectedUser.Email,
+                        Email = selectedUser.Email,
                         Id = selectedUser.Id
                     }
                 };
-            } else
+            }
+            else
             {
                 return new LoginResult
                 {
@@ -60,24 +61,48 @@ namespace PlayLingua.Data
             }
         }
 
-        public string GenerateToken(int userId)
+        public string GenerateToken(User user)
         {
-            var mySecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Secret));
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Secret));
+            //var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
-            var myIssuer = "Lingua.security.com";
-            var myAudience = "Lingua.security.com";
+            //var claims = new List<Claim>
+            //{
+            //    new Claim(ClaimTypes.Email, user.Email),
+            //    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                
+            //    new Claim(ClaimTypes.Role, "Simple user")
+            //};
+
+            //var tokenOptions = new JwtSecurityToken(
+            //    issuer: "Lingua.security.com",
+            //    audience: "Lingua.security.com",
+            //    claims: claims,
+            //    
+            //    expires: DateTime.Now.AddDays(7),
+            //    signingCredentials: signingCredentials
+            //    );
+
+            //return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-            new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-                }),
+                Subject = new ClaimsIdentity(
+                    new Claim[]
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                        new Claim(ClaimTypes.Email, user.Email.ToString()),
+                        // Todo: Work on the roles
+                        new Claim(ClaimTypes.Role, ""),
+                    }
+                ),
+                // TODO: Expiration of token should test in both front-end and backend
                 Expires = DateTime.UtcNow.AddDays(7),
-                Issuer = myIssuer,
-                Audience = myAudience,
-                SigningCredentials = new SigningCredentials(mySecurityKey, SecurityAlgorithms.HmacSha256Signature)
+                Issuer = "Lingua.security.com",
+                Audience = "Lingua.security.com",
+                SigningCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256Signature)
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);

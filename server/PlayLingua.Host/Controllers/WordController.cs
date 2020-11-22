@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
@@ -9,7 +10,7 @@ namespace PlayLingua.Host.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WordController : ControllerBase
+    public class WordController : BaseController
     {
         private readonly IWordRepository _wordRepository;
 
@@ -59,12 +60,6 @@ namespace PlayLingua.Host.Controllers
 
         //}
 
-        //[HttpPost]
-        //public ActionResult<Book> Add([FromBody] Book book)
-        //{
-        //    var addedBook = _bookRepository.Add(book);
-        //    return Ok(addedBook);
-        //}
 
         //[HttpDelete("{id}")]
         //public ActionResult Delete(string id)

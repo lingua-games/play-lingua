@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Ports;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PlayLingua.Host.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class LanguageController : ControllerBase
+    public class LanguageController : BaseController
     {
         private readonly ILanguageRepository _languageRepository;
 
