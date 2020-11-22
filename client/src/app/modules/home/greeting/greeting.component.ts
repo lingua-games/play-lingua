@@ -11,7 +11,6 @@ export class GreetingComponent implements OnInit {
 
   ngOnInit(): void {
     if (localStorage.getItem('lingua-token')) {
-      debugger;
       this.router.navigate(['game-menu']);
     }
   }

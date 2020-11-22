@@ -8,16 +8,16 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
-export class ErrorIntercept implements HttpInterceptor {
+export class TokenIntercept implements HttpInterceptor {
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    console.log('error');
-    return next.handle(request).pipe(
-      catchError((error: HttpErrorResponse) => {
-        return throwError(error.error);
-      })
-    );
+    request = request.clone({
+      setHeaders: {
+        Authorization: `Bearer ${localStorage.getItem('lingua-token')}`,
+      },
+    });
+    return next.handle(request);
   }
 }

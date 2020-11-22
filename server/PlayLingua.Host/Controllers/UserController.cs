@@ -8,7 +8,7 @@ namespace PlayLingua.Host.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UserController : ControllerBase
+    public class UserController : BaseController
     {
         private readonly IUserRepository _userRepository;
         // private readonly IChapterRepository _chapterRepository;

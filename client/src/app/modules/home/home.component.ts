@@ -13,7 +13,6 @@ export class HomeComponent implements OnInit {
   constructor(private router: Router) {
     router.events.subscribe((val) => {
       if (val instanceof NavigationStart) {
-        console.log(this.style.transform);
         if (!this.style.transform) {
           this.style.transform = `rotate(0deg)`;
         }

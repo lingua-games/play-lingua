@@ -7,7 +7,7 @@ namespace PlayLingua.Host.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class BooksController : ControllerBase
+    public class BooksController : BaseController
     {
         private readonly IBookRepository _bookRepository;
         // private readonly IChapterRepository _chapterRepository;

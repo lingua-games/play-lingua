@@ -6,6 +6,6 @@ namespace PlayLingua.Domain.Ports
     public interface IAuthRepository
     {
         LoginResult Login(User user);
-        string GenerateToken(int userId);
+        string GenerateToken(User userId);
     }
 }

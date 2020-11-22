@@ -12,6 +12,7 @@ import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorIntercept } from './core/service/error.interceptor';
+import { TokenIntercept } from './core/service/token.interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,6 +24,11 @@ import { ErrorIntercept } from './core/service/error.interceptor';
     BrowserAnimationsModule,
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenIntercept,
+      multi: true,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorIntercept,

@@ -7,9 +7,7 @@ export class LoadingDirective implements OnInit, OnChanges {
   // tslint:disable-next-line:no-input-rename
   @Input('loadingFlag') loadingFlag: boolean;
 
-  constructor(private element: ElementRef) {
-    console.log(this.loadingFlag);
-  }
+  constructor(private element: ElementRef) {}
 
   ngOnInit(): void {
     this.element.nativeElement.style.transition = '2s';

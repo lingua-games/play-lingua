@@ -25,7 +25,7 @@ namespace PlayLingua.Host.Controllers
             var result = _authRepository.Login(user);
             if (result.IsLogin)
             {
-                result.Token = _authRepository.GenerateToken(result.User.Id);
+                result.Token = _authRepository.GenerateToken(result.User);
             }
              
             return Ok(result);

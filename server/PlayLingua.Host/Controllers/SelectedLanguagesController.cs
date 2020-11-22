@@ -7,7 +7,7 @@ namespace PlayLingua.Host.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class SelectedLanguagesController : ControllerBase
+    public class SelectedLanguagesController : BaseController
     {
         private readonly ISelectedLanguagesRepository _selectedLanguagesRepository;
 
@@ -19,8 +19,7 @@ namespace PlayLingua.Host.Controllers
         [HttpPost]
         public ActionResult<Book> Add([FromBody] SelectedLanguages selectedLanguages)
         {
-            var claimsIdentity = this.User.Identity as ClaimsIdentity;
-            var userId = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
+            selectedLanguages.UserId = GetUser().Id;
             var addedSelection = _selectedLanguagesRepository.Add(selectedLanguages);
             return Ok(addedSelection);
         }
