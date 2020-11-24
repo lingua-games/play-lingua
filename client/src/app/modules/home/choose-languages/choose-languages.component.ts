@@ -7,7 +7,7 @@ import {
   NotificationService,
   Severity,
 } from '../../../core/service/notification.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SelectedLanguageService } from '../../../core/service/selected-language.service';
 import { SelectedLanguageModel } from '../../../core/models/selected-language.model';
 
@@ -26,15 +26,26 @@ export class ChooseLanguagesComponent implements OnInit {
     private basicInformationService: BasicInformationService,
     private notificationService: NotificationService,
     private router: Router,
-    private selectedLanguageService: SelectedLanguageService
+    private selectedLanguageService: SelectedLanguageService,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    if (localStorage.getItem('lingua-selected-languages')) {
-      this.router.navigate(['./game-menu']);
-      return;
+    if (!this.activatedRoute.snapshot.paramMap.get('mode')) {
+      if (localStorage.getItem('lingua-selected-languages')) {
+        this.router.navigate(['./game-menu']);
+        return;
+      }
     }
     this.getLanguages();
+  }
+
+  navigateBack(): void {
+    if (this.activatedRoute.snapshot.paramMap.get('mode')) {
+      this.router.navigate(['./game-menu']);
+    } else {
+      this.router.navigate(['../']);
+    }
   }
 
   getLanguages(): void {
@@ -42,6 +53,12 @@ export class ChooseLanguagesComponent implements OnInit {
     this.basicInformationService.getAllLanguages().subscribe(
       (res: LanguageModel[]) => {
         this.allLanguages.setData(res);
+        if (
+          this.activatedRoute.snapshot.paramMap.get('mode') &&
+          this.activatedRoute.snapshot.paramMap.get('mode') === 'edit'
+        ) {
+          this.fillDataInModels();
+        }
       },
       (error: any) => {
         this.notificationService.showMessage(
@@ -51,6 +68,31 @@ export class ChooseLanguagesComponent implements OnInit {
         this.allLanguages.setLoading(false);
       }
     );
+  }
+
+  fillDataInModels(): void {
+    const storedData = JSON.parse(
+      localStorage.getItem('lingua-selected-languages')
+    );
+    if (storedData && storedData.base) {
+      this.baseLanguages = [];
+      this.allLanguages.data.forEach((element: LanguageModel) => {
+        if (
+          storedData &&
+          storedData.base &&
+          storedData.base.find((x) => x.id === element.id)
+        ) {
+          this.baseLanguages.push(element);
+        }
+        if (
+          storedData &&
+          storedData.target &&
+          storedData.target.find((x) => x.id === element.id)
+        ) {
+          this.targetLanguages.push(element);
+        }
+      });
+    }
   }
 
   checkFormValidation(fieldName: string): string {
@@ -88,6 +130,7 @@ export class ChooseLanguagesComponent implements OnInit {
     }
 
     if (localStorage.getItem('lingua-token')) {
+      this.allLanguages.setLoading(true);
       this.saveToBackend();
     } else {
       // This block is for guest
@@ -100,7 +143,6 @@ export class ChooseLanguagesComponent implements OnInit {
   }
 
   saveToBackend(): void {
-    this.allLanguages.setLoading(false);
     const apiData: SelectedLanguageModel = {
       baseLanguages: JSON.stringify(this.baseLanguages),
       targetLanguages: JSON.stringify(this.targetLanguages),
@@ -111,7 +153,9 @@ export class ChooseLanguagesComponent implements OnInit {
         this.allLanguages.setLoading(false);
         this.router.navigate(['./game-menu']);
       },
-      (error: string) => {}
+      (error: string) => {
+        this.allLanguages.setLoading(false);
+      }
     );
   }
 

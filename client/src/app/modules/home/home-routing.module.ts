@@ -60,6 +60,11 @@ const routes: Routes = [
         canDeactivate: [DeactivateWithDelay],
       },
       {
+        path: 'choose-languages/:mode',
+        component: ChooseLanguagesComponent,
+        canDeactivate: [DeactivateWithDelay],
+      },
+      {
         path: 'game-menu',
         component: GameMenuComponent,
         canDeactivate: [DeactivateWithDelay],

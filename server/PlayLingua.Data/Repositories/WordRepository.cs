@@ -35,7 +35,9 @@ namespace PlayLingua.Data
                 left join[dbo].Word as Word on Language.id = word.id
                 where word.id = @Id";
 
+            db.Close();
             var result = db.Query<LanguageInformation>(sql, language).SingleOrDefault();
+            
             return result;
         }
 

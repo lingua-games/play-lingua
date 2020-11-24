@@ -7,10 +7,8 @@ namespace PlayLingua.Domain.Entities
     {
         public int Id { get; set; }
         [Required]
-        [MaxLength(500)]
         public string BaseLanguages { get; set; }
         [Required]
-        [MaxLength(500)]
         public string TargetLanguages { get; set; }
         public int UserId { get; set; }
 

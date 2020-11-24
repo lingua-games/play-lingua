@@ -19,9 +19,15 @@ namespace PlayLingua.Data
             db = new SqlConnection(connectionString);
         }
 
-        public SelectedLanguages Add(SelectedLanguages book)
+        public SelectedLanguages Add(SelectedLanguages selectedLanguages)
         {
-            throw new NotImplementedException();
+            var sql =
+                "insert into [dbo].[SelectedLanguages] ([BaseLanguages], [TargetLanguages], [UserId]) VALUES(@BaseLanguages, @TargetLanguages, @UserId);" +
+                "SELECT CAST(SCOPE_IDENTITY() as int)";
+
+            var id = db.Query<int>(sql, selectedLanguages).Single();
+            selectedLanguages.Id = id;
+            return selectedLanguages;
         }
 
         public void Delete(string id)
@@ -29,14 +35,19 @@ namespace PlayLingua.Data
             throw new NotImplementedException();
         }
 
+        public SelectedLanguages GetByUserId(int userId)
+        {
+            return db.Query<SelectedLanguages>("select * from [dbo].[SelectedLanguages] where UserId = @userId", new { userId }).SingleOrDefault();
+        }
+
         public List<SelectedLanguages> List()
         {
             throw new NotImplementedException();
         }
 
-        public void Update(SelectedLanguages book)
+        public void Update(SelectedLanguages selectedLanguages)
         {
-            throw new NotImplementedException();
+            db.Query("update [dbo].[SelectedLanguages] SET [BaseLanguages] = @BaseLanguages,[TargetLanguages] = @TargetLanguages WHERE Id = @Id", selectedLanguages);
         }
     }
 }
