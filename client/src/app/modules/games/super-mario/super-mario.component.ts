@@ -1,10 +1,10 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { MarioModel } from '../../../../core/models/Mario.model';
-import { GamesService } from '../../../../core/service/games.service';
+import { MarioModel } from '../../../core/models/Mario.model';
+import { GamesService } from '../../../core/service/games.service';
 import {
   MarioEnemy,
   MarioEnemyStatus,
-} from '../../../../core/models/mario-enemy.model';
+} from '../../../core/models/mario-enemy.model';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { bubble } from 'ngx-bootstrap/chronos/duration/bubble';
 
