@@ -12,6 +12,7 @@ import { HomeComponent } from './home.component';
 import { GameMenuComponent } from './game-menu/game-menu.component';
 import { PrepareAddWordsComponent } from './prepare-add-words/prepare-add-words.component';
 import { AddWordByUserComponent } from './add-word-by-user/add-word-by-user.component';
+import { MaterialModule } from '../common/material/material.module';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,13 @@ import { AddWordByUserComponent } from './add-word-by-user/add-word-by-user.comp
     PrepareAddWordsComponent,
     AddWordByUserComponent,
   ],
-  imports: [CommonModule, HomeRoutingModule, PrimengModule, FormsModule],
+  imports: [
+    CommonModule,
+    HomeRoutingModule,
+    PrimengModule,
+    FormsModule,
+    MaterialModule,
+  ],
   providers: [DeactivateWithDelay],
   exports: [LoadingDirective],
 })

@@ -44,7 +44,7 @@ export class BasicInformationService {
     menus.push({
       name: 'Falling Stars',
       image: './../../../../assets/images/GameMenu/falling-star.png',
-      route: 'falling-stars',
+      route: '../games/falling-stars',
       id: 'falling-stars',
       isDesigned: true,
     });
