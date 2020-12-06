@@ -23,21 +23,23 @@ import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
 })
 export class FallingStarsComponent implements OnInit {
   words: FallingStarsWord[] = [];
-  typingWord: string;
   scoreBoard: Score = {} as Score;
 
   constructor(private gamesService: GamesService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
-    // this.showStartDialog();
+    this.showStartDialog();
     this.getGameWords();
-    this.startGame();
   }
 
   showStartDialog(): void {
     const dialog = this.dialog.open(StartGameDialogComponent, {
       disableClose: true,
       width: '30%',
+    });
+
+    dialog.afterClosed().subscribe((res: any) => {
+      // this.startGame();
     });
   }
 
@@ -48,6 +50,7 @@ export class FallingStarsComponent implements OnInit {
       .subscribe((res: WordKeyValueModel<string[]>[]) => {
         this.scoreBoard.total = res.length;
         this.scoreBoard.correct = 0;
+        this.scoreBoard.inCorrect = 0;
         res.forEach((element) => {
           this.words.push({
             key: element.key,
@@ -126,14 +129,18 @@ export class FallingStarsComponent implements OnInit {
     return result > 95 ? result - 10 : result;
   }
 
-  checkSelectedAnswer(item: string): void {}
-
-  checkTypingWord(event: string): void {
+  checkSelectedAnswer(item: string): void {
     const activeWord = this.words.find((x) => x.animating);
-    if (event.toLowerCase() === activeWord.key.toLowerCase()) {
+    if (
+      activeWord.correctAnswers.find(
+        (x) => x.toLowerCase() === item.toLowerCase()
+      )
+    ) {
       this.scoreBoard.correct++;
-      this.typingWord = '';
-      this.boxAnimationDone(activeWord);
+    } else {
+      this.scoreBoard.inCorrect++;
     }
+    this.boxAnimationDone(activeWord);
+    console.log(this.scoreBoard);
   }
 }

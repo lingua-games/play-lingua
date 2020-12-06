@@ -56,7 +56,14 @@ describe('FallingStarsComponent', () => {
 
   it('should return true if no word is animating in showReadyBox method', () => {
     component.words = [
-      { animating: false, style: {}, typingWord: '', value: 'a' },
+      {
+        animating: false,
+        style: {},
+        possibleAnswers: ['a'],
+        correctAnswers: [],
+        key: '',
+        selectedAnswer: '',
+      },
     ];
     mockGamesService.getGameWords.and.callFake(() => {
       return of();
@@ -68,9 +75,7 @@ describe('FallingStarsComponent', () => {
   });
 
   it('should set animating of first word to true on startGame method', () => {
-    component.words = [
-      { animating: false, style: {}, typingWord: '', value: 'a' },
-    ];
+    component.words = [{ animating: false, style: {} } as FallingStarsWord];
 
     component.startGame();
 
@@ -91,13 +96,11 @@ describe('FallingStarsComponent', () => {
     expect(expectedValue).toBeLessThan(95);
   });
 
-  it('checkTypingWord should call boxAnimationDone with active word', () => {
-    component.words = [
-      { animating: true, value: 'testValue', style: {}, typingWord: '' },
-    ];
+  it('checkSelectedAnswer should call boxAnimationDone with active word', () => {
+    component.words = [{ animating: true, style: {} } as FallingStarsWord];
     spyOn(component, 'boxAnimationDone');
 
-    component.checkTypingWord('testValue');
+    component.checkSelectedAnswer('testValue');
 
     expect(component.boxAnimationDone).toHaveBeenCalledWith(component.words[0]);
   });

@@ -7,25 +7,19 @@
            *ngIf="word.animating"
            (@fade.done)="boxAnimationDone(word)">
         <span>{{word.key}}</span>
-      </div>
-    </span>
+  </div>
+  </span>
   </div>
   <div class="ground-container text-center">
     <div class="answer-container">
-      <div class="answer-item-container mr-2" *ngFor="let answer of getAnswers()">
-        {{answer}}
+      <div class="answer-item-container mr-4" *ngFor="let answer of getAnswers();let index = index" (click)="checkSelectedAnswer(answer)">
+        <div class="item-number-container">
+          <span class="number-index">{{index + 1}}</span>
+        </div>
+        <div class="answer-text-container">
+          <span>{{answer}}</span>
+        </div>
       </div>
     </div>
-    <!--    <div class="typing-container">-->
-    <!--      <input-->
-    <!--        class="form-control mt-2"-->
-    <!--        placeholder="type the falling word"-->
-    <!--        [(ngModel)]="typingWord"-->
-    <!--        (ngModelChange)="checkTypingWord($event)">-->
-    <!--    </div>-->
-    <!--    <div class="score-container">-->
-    <!--      <p>Total: {{scoreBoard.total}}</p>-->
-    <!--      <p>Correct: {{scoreBoard.correct}}</p>-->
-    <!--    </div>-->
   </div>
 </div>
