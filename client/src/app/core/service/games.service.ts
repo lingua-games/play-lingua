@@ -1,22 +1,20 @@
-import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { WordKeyValueModel } from '../models/word-key-value.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GamesService {
+  constructor() {}
 
-  constructor() {
-  }
-
-  getGameWords(): Observable<string[]> {
-    return of(
-      [
-        'Apple',
-        'Banana',
-        'Orange',
-        'Pineapple',
-        'Cherry',
-      ]);
+  getGameWords(): Observable<WordKeyValueModel<string[]>[]> {
+    return of([
+      { key: 'Apple', value: ['appel'] },
+      { key: 'Banana', value: ['banaan'] },
+      { key: 'Orange', value: ['oranje'] },
+      { key: 'Pineapple', value: ['ananas'] },
+      { key: 'Cherry', value: ['kers'] },
+    ]);
   }
 }
