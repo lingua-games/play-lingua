@@ -5,8 +5,17 @@
   <div class="best-score-container">
     Your best score is 200 correct answers in 20 seconds.
   </div>
+  <hr>
   <app-game-hint></app-game-hint>
   <hr>
+  <mat-form-field appearance="fill" class="select-book-input">
+    <mat-label>Select language</mat-label>
+    <mat-select [(ngModel)]="selectedBook">
+      <mat-option *ngFor="let book of books" [value]="book">
+        {{book.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
   <mat-form-field appearance="fill" class="select-book-input">
     <mat-label>Select a book</mat-label>
     <mat-select [(ngModel)]="selectedBook">

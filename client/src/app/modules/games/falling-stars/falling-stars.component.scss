@@ -53,11 +53,30 @@
   display: inline-block;
   border: solid .2rem rgba(0, 128, 0, .8);
   color: rgba(0, 128, 0, .8);
-  border-radius: 10px;
   margin-top: 1rem;
-  padding: 1rem;
   width: 10%;
   background-color: white;
+  font-size: 1vw;
+
+  border-bottom-right-radius: 20px;
+  border-top-left-radius: 20px;
+}
+
+.item-number-container {
+  float: left;
+  border-right: solid .1rem;
+  padding: 1rem .5rem;
+}
+
+.answer-item-container:hover {
+  cursor: pointer;
+  transition: 100ms;
+  border-color: rgba(0, 128, 0, .4);
+  color: rgba(0, 128, 0, .4);
+}
+
+.answer-text-container {
+  padding: 1rem .5rem;
 }
 
 .answer-container {

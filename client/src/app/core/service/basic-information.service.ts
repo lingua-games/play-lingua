@@ -317,6 +317,22 @@ export class BasicInformationService {
         key: 'ESC',
         description: 'Pause the game and show menus',
       });
+      result.push({
+        key: 'NUM 1',
+        description: 'Choose option number 1',
+      });
+      result.push({
+        key: 'NUM 2',
+        description: 'Choose option number 2',
+      });
+      result.push({
+        key: 'NUM 3',
+        description: 'Choose option number 3',
+      });
+      result.push({
+        key: 'NUM 4',
+        description: 'Choose option number 4',
+      });
     }
 
     return result;
