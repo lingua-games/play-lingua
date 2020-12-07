@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StartGameDialogComponent } from './start-game-dialog.component';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('StartGameDialogComponent', () => {
   let component: StartGameDialogComponent;
@@ -8,9 +9,9 @@ describe('StartGameDialogComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ StartGameDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [StartGameDialogComponent],
+      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

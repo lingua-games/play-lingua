@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PrepareAddWordsComponent } from './prepare-add-words.component';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('PrepareAddWordsComponent', () => {
   let component: PrepareAddWordsComponent;
@@ -8,9 +9,9 @@ describe('PrepareAddWordsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PrepareAddWordsComponent ]
-    })
-    .compileComponents();
+      declarations: [PrepareAddWordsComponent],
+      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

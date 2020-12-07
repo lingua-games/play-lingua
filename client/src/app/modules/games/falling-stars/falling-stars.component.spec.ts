@@ -1,18 +1,35 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { GamesService } from 'src/app/core/service/games.service';
 import { FallingStarsWord } from '../../../core/models/falling-stars-word.interface';
 import { FallingStarsComponent } from './falling-stars.component';
+import { MatDialog } from '@angular/material/dialog';
 
 describe('FallingStarsComponent', () => {
   let component: FallingStarsComponent;
   let fixture: ComponentFixture<FallingStarsComponent>;
   let mockGamesService;
+  let mockMatDialog;
+
   let sampleWords;
+
   beforeEach(async(() => {
-    sampleWords = ['Apple', 'Banana', 'Orange', 'Pineapple', 'Cherry'];
+    sampleWords = [
+      { key: 'Apple', value: ['appel'] },
+      { key: 'Banana', value: ['banaan'] },
+      { key: 'Orange', value: ['oranje'] },
+      { key: 'Pineapple', value: ['ananas'] },
+      { key: 'Cherry', value: ['kers'] },
+    ];
     mockGamesService = jasmine.createSpyObj(['getGameWords']);
+    mockMatDialog = jasmine.createSpyObj('dialog', {
+      open: {
+        afterClosed: () => {
+          return of('result');
+        },
+      },
+    });
     TestBed.configureTestingModule({
       declarations: [FallingStarsComponent],
       providers: [
@@ -20,8 +37,12 @@ describe('FallingStarsComponent', () => {
           provide: GamesService,
           useValue: mockGamesService,
         },
+        {
+          provide: MatDialog,
+          useValue: mockMatDialog,
+        },
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   }));
 
@@ -93,11 +114,17 @@ describe('FallingStarsComponent', () => {
   it('getRandomNumber should return number smaller than 95', () => {
     const expectedValue = component.getRandomNumber();
 
-    expect(expectedValue).toBeLessThan(95);
+    expect(expectedValue).toBeLessThan(96);
   });
 
   it('checkSelectedAnswer should call boxAnimationDone with active word', () => {
-    component.words = [{ animating: true, style: {} } as FallingStarsWord];
+    component.words = [
+      {
+        animating: true,
+        style: {},
+        correctAnswers: ['testValue'],
+      } as FallingStarsWord,
+    ];
     spyOn(component, 'boxAnimationDone');
 
     component.checkSelectedAnswer('testValue');

@@ -19,6 +19,13 @@ const routes: Routes = [
         (x) => x.FallingStarsModule
       ),
   },
+  {
+    path: 'games/super-mario',
+    loadChildren: () =>
+      import('./modules/games/super-mario/super-mario.module').then(
+        (x) => x.SuperMarioModule
+      ),
+  },
 ];
 
 @NgModule({

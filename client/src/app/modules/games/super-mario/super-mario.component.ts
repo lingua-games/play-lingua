@@ -6,7 +6,7 @@ import {
   MarioEnemyStatus,
 } from '../../../core/models/mario-enemy.model';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { bubble } from 'ngx-bootstrap/chronos/duration/bubble';
+import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
 
 @Component({
   selector: 'app-super-mario',
@@ -77,10 +77,10 @@ export class SuperMarioComponent implements OnInit {
   getWords(): void {
     this.enemies = [];
     this.gamesService.getGameWords().subscribe(
-      (res: string[]) => {
+      (res: WordKeyValueModel<string[]>[]) => {
         res.forEach((element) => {
           this.enemies.push({
-            text: element,
+            text: element.key,
             status: MarioEnemyStatus.WaitingForStart,
             style: {
               position: 'absolute',

@@ -141,6 +141,5 @@ export class FallingStarsComponent implements OnInit {
       this.scoreBoard.inCorrect++;
     }
     this.boxAnimationDone(activeWord);
-    console.log(this.scoreBoard);
   }
 }

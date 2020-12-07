@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { NotificationService } from './notification.service';
 import { MessageService } from 'primeng/api';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('NotificationService', () => {
   let service: NotificationService;
@@ -19,6 +20,7 @@ describe('NotificationService', () => {
           useValue: {},
         },
       ],
+      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
     TestBed.configureTestingModule({});
     service = TestBed.inject(NotificationService);
