@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationStart, Router } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -9,10 +9,15 @@ import { environment } from '../../../environments/environment';
 })
 export class HomeComponent implements OnInit {
   style: any = {};
+  isLoading: boolean;
 
   constructor(private router: Router) {
     router.events.subscribe((val) => {
       if (val instanceof NavigationStart) {
+        if (val.url.indexOf('games/') > -1) {
+          this.isLoading = true;
+          return;
+        }
         if (!this.style.transform) {
           this.style.transform = `rotate(0deg)`;
         }
@@ -22,6 +27,13 @@ export class HomeComponent implements OnInit {
         newRouteValue = newRouteValue === 0 ? 360 : 0;
         this.style.transition = environment.intervalForRoundMainPage + 'ms';
         this.style.transform = `rotate(${newRouteValue}deg)`;
+      }
+
+      if (val instanceof NavigationEnd) {
+        if (val.url.indexOf('games/') > -1) {
+          this.isLoading = false;
+          return;
+        }
       }
     });
   }

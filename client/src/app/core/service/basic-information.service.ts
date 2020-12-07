@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Book } from '../models/book.interface';
 import { environment } from '../../../environments/environment';
-import { catchError, retry } from 'rxjs/operators';
 import { LanguageModel } from '../models/language.model';
 import { GameMenu } from '../models/game.menu.model';
+import { EGame } from '../models/e-game';
+import { GameHint } from '../models/game-hint.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -44,7 +45,7 @@ export class BasicInformationService {
     menus.push({
       name: 'Falling Stars',
       image: './../../../../assets/images/GameMenu/falling-star.png',
-      route: 'falling-stars',
+      route: '../games/falling-stars',
       id: 'falling-stars',
       isDesigned: true,
     });
@@ -307,5 +308,33 @@ export class BasicInformationService {
     // ];
     // this.http.post(`${this.languageUrl}`, items).subscribe(() => {});
     return this.http.get<LanguageModel[]>(`${this.languageUrl}`);
+  }
+
+  gameHints(game: EGame): GameHint[] {
+    const result: GameHint[] = [];
+    if (game === EGame.fallingStars) {
+      result.push({
+        key: 'ESC',
+        description: 'Pause the game and show menus',
+      });
+      result.push({
+        key: 'NUM 1',
+        description: 'Choose option number 1',
+      });
+      result.push({
+        key: 'NUM 2',
+        description: 'Choose option number 2',
+      });
+      result.push({
+        key: 'NUM 3',
+        description: 'Choose option number 3',
+      });
+      result.push({
+        key: 'NUM 4',
+        description: 'Choose option number 4',
+      });
+    }
+
+    return result;
   }
 }

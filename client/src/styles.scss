@@ -30,3 +30,7 @@ body {
   75% { filter: blur(3px) }
   100% { filter: blur(0px) }
 }
+
+.mat-dialog-container {
+  padding: 0px !important;
+}

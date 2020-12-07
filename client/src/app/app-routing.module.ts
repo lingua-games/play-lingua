@@ -8,14 +8,23 @@ const routes: Routes = [
       import('./modules/home/home.module').then((m) => m.HomeModule),
   },
   {
-    path: 'main',
-    loadChildren: () =>
-      import('./modules/main/main.module').then((x) => x.MainModule),
-  },
-  {
     path: 'admin',
     loadChildren: () =>
       import('./modules/admin/admin.module').then((x) => x.AdminModule),
+  },
+  {
+    path: 'games/falling-stars',
+    loadChildren: () =>
+      import('./modules/games/falling-stars/falling-stars.module').then(
+        (x) => x.FallingStarsModule
+      ),
+  },
+  {
+    path: 'games/super-mario',
+    loadChildren: () =>
+      import('./modules/games/super-mario/super-mario.module').then(
+        (x) => x.SuperMarioModule
+      ),
   },
 ];
 

@@ -1,0 +1,85 @@
+.game-board-container {
+  width: 100%;
+  height: 100vh;
+  background-image: url("../../../../assets/images/background/falling-stars-bg.jpeg");
+}
+
+.falling-container {
+  height: 90%;
+  position: relative;
+  overflow: hidden;
+}
+
+.ground-container {
+  background-image: url("../../../../assets/images/background/falling-stars-ground-bg.png");
+  background-size: contain;
+  height: 10%;
+}
+
+.box {
+  background-image: url("../../../../assets/images/background/star-bg.png");
+  height: 9rem;
+  width: 11rem;
+  text-align: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  position: absolute;
+  background-size: 90% 90%;
+  font-size: 1vw;
+  color: #800080;
+  top: 50px;
+  line-height: 9rem;
+}
+
+.ready-container {
+  border: solid 1px gray;
+  position: absolute;
+  width: 30%;
+  top: 20%;
+  left: 35%;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 10px 10px 10px red;
+  padding-top: 10px;
+  z-index: 150;
+
+  .btn {
+    margin: 50px 0 10px 0;
+  }
+}
+
+.answer-item-container {
+  display: inline-block;
+  border: solid .2rem rgba(0, 128, 0, .8);
+  color: rgba(0, 128, 0, .8);
+  margin-top: 1rem;
+  width: 10%;
+  background-color: white;
+  font-size: 1vw;
+
+  border-bottom-right-radius: 20px;
+  border-top-left-radius: 20px;
+}
+
+.item-number-container {
+  float: left;
+  border-right: solid .1rem;
+  padding: 1rem .5rem;
+}
+
+.answer-item-container:hover {
+  cursor: pointer;
+  transition: 100ms;
+  border-color: rgba(0, 128, 0, .4);
+  color: rgba(0, 128, 0, .4);
+}
+
+.answer-text-container {
+  padding: 1rem .5rem;
+}
+
+.answer-container {
+  height: 100%;
+  padding-top: .5rem
+}

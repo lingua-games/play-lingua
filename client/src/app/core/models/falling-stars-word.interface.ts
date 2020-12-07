@@ -1,6 +1,8 @@
-export interface FallingStarsWord {
+export class FallingStarsWord {
   animating: boolean;
-  value: string;
+  key: string;
   style: {};
-  typingWord: string;
+  selectedAnswer: string;
+  correctAnswers: string[];
+  possibleAnswers: string[];
 }

@@ -48,7 +48,7 @@
           <div class="col-sm-2 play-button-error-container" *ngIf="!inquiryResult.isLoading && inquiryResult.hasError">
             <span>Could not get data from server!</span>
           </div>
-          <div class="col-sm-2 play-button-container" *ngIf="gameMenu.isDesigned && !inquiryResult.hasError">
+          <div class="col-sm-2 play-button-container" *ngIf="gameMenu.isDesigned && !inquiryResult.hasError" [routerLink]="gameMenu.route">
             <span class="lets-go-text">Lets go!</span>
           </div>
           <div class="col-sm-2 coming-soon-button-container" *ngIf="!gameMenu.isDesigned && !inquiryResult.hasError">

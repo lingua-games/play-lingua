@@ -5,6 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MessageService } from 'primeng/api';
 import { NotificationService } from '../../../core/service/notification.service';
 import { RouterTestingModule } from '@angular/router/testing';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ChooseLanguagesComponent', () => {
   let component: ChooseLanguagesComponent;
@@ -21,6 +22,7 @@ describe('ChooseLanguagesComponent', () => {
           useValue: mockNotificationService,
         },
       ],
+      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   }));
 
