@@ -121,6 +121,22 @@ export class ChooseLanguagesComponent implements OnInit {
       });
     }
 
+    if (this.targetLanguages.length > 5) {
+      this.formValidation.push({
+        isValid: false,
+        message: 'Target language should be less than 5',
+        field: 'targetLanguages',
+      });
+    }
+
+    if (this.baseLanguages.length > 5) {
+      this.formValidation.push({
+        isValid: false,
+        message: 'Base language should be less than 5',
+        field: 'baseLanguages',
+      });
+    }
+
     this.formValidation.forEach((element: ValidationModel) => {
       this.notificationService.showMessage(element.message, Severity.error);
     });
