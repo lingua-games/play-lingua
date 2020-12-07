@@ -63,8 +63,7 @@ export class GameMenuComponent implements OnInit {
   }
 
   navigateToEditLanguages(): void {
-    localStorage.removeItem('lingua-selected-languages');
-    this.router.navigate(['../choose-languages']);
+    this.router.navigate(['../choose-languages/edit']);
   }
 
   logout(): void {

@@ -17,10 +17,21 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Book> Add([FromBody] SelectedLanguages selectedLanguages)
+        public ActionResult<SelectedLanguages> Add([FromBody] SelectedLanguages selectedLanguages)
         {
             selectedLanguages.UserId = GetUser().Id;
-            var addedSelection = _selectedLanguagesRepository.Add(selectedLanguages);
+            var addedSelection = new SelectedLanguages();
+            var selectedLanguageByUserId = _selectedLanguagesRepository.GetByUserId(selectedLanguages.UserId);
+            if (selectedLanguageByUserId == null)
+            {
+                addedSelection = _selectedLanguagesRepository.Add(selectedLanguages);
+            }
+            else
+            {
+                selectedLanguages.Id = selectedLanguageByUserId.Id;
+                _selectedLanguagesRepository.Update(selectedLanguages);
+            }
+
             return Ok(addedSelection);
         }
     }

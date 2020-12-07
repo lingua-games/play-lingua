@@ -7,8 +7,10 @@ namespace PlayLingua.Domain.Ports
     public interface ISelectedLanguagesRepository
     {
         List<SelectedLanguages> List();
-        SelectedLanguages Add(SelectedLanguages book);
+        SelectedLanguages GetByUserId(int userId);
+        SelectedLanguages Add(SelectedLanguages selectedLanguages);
         void Delete(string id);
-        void Update(SelectedLanguages book);
+        void Update(SelectedLanguages selectedLanguages);
+
     }
 }
