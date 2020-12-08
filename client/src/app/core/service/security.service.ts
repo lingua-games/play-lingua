@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { LoginResultModel } from '../models/login-result.model';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
+import { NotificationService, Severity } from './notification.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,11 @@ import { Router } from '@angular/router';
 export class SecurityService {
   authUrl = environment.apiUrl + 'Auth';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private notificationService: NotificationService
+  ) {}
 
   login(user: UserModel): Observable<LoginResultModel> {
     return this.http.post<LoginResultModel>(this.authUrl, user);
@@ -22,6 +27,17 @@ export class SecurityService {
     localStorage.removeItem('lingua-token');
     localStorage.removeItem('lingua-email');
     localStorage.removeItem('lingua-selected-languages');
+    this.router.navigate(['../']);
+  }
+
+  logoutOn401(): void {
+    localStorage.removeItem('lingua-token');
+    localStorage.removeItem('lingua-email');
+    localStorage.removeItem('lingua-selected-languages');
+    this.notificationService.showMessage(
+      'Security issue, please login again',
+      Severity.error
+    );
     this.router.navigate(['../']);
   }
 }

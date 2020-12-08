@@ -64,27 +64,6 @@ namespace PlayLingua.Data
         public string GenerateToken(User user)
         {
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Secret));
-            //var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-
-            //var claims = new List<Claim>
-            //{
-            //    new Claim(ClaimTypes.Email, user.Email),
-            //    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                
-            //    new Claim(ClaimTypes.Role, "Simple user")
-            //};
-
-            //var tokenOptions = new JwtSecurityToken(
-            //    issuer: "Lingua.security.com",
-            //    audience: "Lingua.security.com",
-            //    claims: claims,
-            //    
-            //    expires: DateTime.Now.AddDays(7),
-            //    signingCredentials: signingCredentials
-            //    );
-
-            //return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor

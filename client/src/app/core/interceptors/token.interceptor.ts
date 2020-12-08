@@ -7,7 +7,9 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export class TokenIntercept implements HttpInterceptor {
   intercept(
     request: HttpRequest<any>,
@@ -15,7 +17,7 @@ export class TokenIntercept implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     request = request.clone({
       setHeaders: {
-        Authorization: `Bearer ${localStorage.getItem('lingua-token')}`,
+        Authorization: `Bearer asdS${localStorage.getItem('lingua-token')}`,
       },
     });
     return next.handle(request);

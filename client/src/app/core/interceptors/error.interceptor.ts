@@ -1,21 +1,28 @@
 import {
+  HttpErrorResponse,
   HttpEvent,
   HttpHandler,
-  HttpRequest,
-  HttpErrorResponse,
   HttpInterceptor,
+  HttpRequest,
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
+import { SecurityService } from '../service/security.service';
+import { Injectable } from '@angular/core';
 
+@Injectable({ providedIn: 'root' })
 export class ErrorIntercept implements HttpInterceptor {
+  constructor(private securityService: SecurityService) {}
+
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    console.log('error');
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          this.securityService.logout();
+        }
         return throwError(error.error);
       })
     );
