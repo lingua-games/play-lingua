@@ -13,11 +13,7 @@ import { NotificationService, Severity } from './notification.service';
 export class SecurityService {
   authUrl = environment.apiUrl + 'Auth';
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private notificationService: NotificationService
-  ) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   login(user: UserModel): Observable<LoginResultModel> {
     return this.http.post<LoginResultModel>(this.authUrl, user);
@@ -34,10 +30,6 @@ export class SecurityService {
     localStorage.removeItem('lingua-token');
     localStorage.removeItem('lingua-email');
     localStorage.removeItem('lingua-selected-languages');
-    this.notificationService.showMessage(
-      'Security issue, please login again',
-      Severity.error
-    );
     this.router.navigate(['../']);
   }
 }

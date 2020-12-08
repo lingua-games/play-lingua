@@ -21,7 +21,7 @@ export class ErrorIntercept implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
-          this.securityService.logout();
+          this.securityService.logoutOn401();
         }
         return throwError(error.error);
       })

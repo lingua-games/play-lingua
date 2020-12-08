@@ -3,6 +3,7 @@ import { SecurityService } from '../../../core/service/security.service';
 import { UserModel } from '../../../core/models/user.model';
 import { LoginResultModel } from '../../../core/models/login-result.model';
 import { Router } from '@angular/router';
+import { LanguageModel } from '../../../core/models/language.model';
 
 @Component({
   selector: 'app-login',
@@ -43,6 +44,14 @@ export class LoginComponent implements OnInit {
       (res: LoginResultModel) => {
         if (res.isLogin) {
           localStorage.setItem('lingua-token', res.token);
+          if (res.user.isSelectedLanguages) {
+            if (!localStorage.getItem('lingua-selected-languages')) {
+              localStorage.setItem(
+                'lingua-selected-languages',
+                `{ "base": ${res.user.baseLanguages}, "target": ${res.user.targetLanguages} }`
+              );
+            }
+          }
           this.router.navigate(['../game-menu']);
         } else {
           this.errorMessage = res.message;

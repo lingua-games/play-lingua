@@ -30,7 +30,12 @@ namespace PlayLingua.Data
         public LoginResult Login(User user)
         {
             var result = new LoginResult();
-            string query = @"SELECT * FROM [DB_A6A40C_playlingua].[dbo].[Users] where Email = @Email";
+            string query = @"
+                              SELECT * FROM [DB_A6A40C_playlingua].[dbo].[Users] 
+                              left join [DB_A6A40C_playlingua].[dbo].[SelectedLanguages]
+                              on [Users].Id = [SelectedLanguages].UserId
+                              where Email = @Email
+                            ";
             var usersWithSelectedEmail = db.Query<User>(query, user).ToList();
 
             if (!usersWithSelectedEmail.Any())
@@ -47,7 +52,12 @@ namespace PlayLingua.Data
                     User = new User
                     {
                         Email = selectedUser.Email,
-                        Id = selectedUser.Id
+                        Id = selectedUser.Id,
+                        BaseLanguages = selectedUser.BaseLanguages,
+                        TargetLanguages = selectedUser.TargetLanguages,
+                        IsSelectedLanguages =
+                            (!string.IsNullOrWhiteSpace(selectedUser.TargetLanguages) && !string.IsNullOrWhiteSpace(selectedUser.BaseLanguages)) ? true : false
+
                     }
                 };
             }

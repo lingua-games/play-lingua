@@ -17,7 +17,7 @@ export class TokenIntercept implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     request = request.clone({
       setHeaders: {
-        Authorization: `Bearer asdS${localStorage.getItem('lingua-token')}`,
+        Authorization: `Bearer ${localStorage.getItem('lingua-token')}`,
       },
     });
     return next.handle(request);
