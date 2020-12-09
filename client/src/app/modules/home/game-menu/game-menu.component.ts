@@ -66,6 +66,9 @@ export class GameMenuComponent implements OnInit {
   openSelectDefaultLanguageDialog(): void {
     const dialogRef = this.dialog.open(SelectDefaultLanguageDialogComponent, {
       disableClose: true,
+      width: '50%',
+      height: '50vh',
+      panelClass: 'select-language-dialog',
     });
   }
 

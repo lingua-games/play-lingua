@@ -1,1 +1,29 @@
-<p>select-default-language-dialog works!</p>
+<div class="main-container">
+  <div class="body-container">
+    <div class="header-container">
+      Set your default base and target languages
+    </div>
+    <div class="row select-language-container">
+      <div class="col-sm-4">
+        <div class="select-language-header-container">
+          Select base language
+        </div>
+        <p-dropdown [options]="baseLanguages" [(ngModel)]="selectedItems.defaultBaseLanguage" placeholder="Base language" optionLabel="name" [showClear]="true"></p-dropdown>
+      </div>
+      <div class="col-sm-4">
+        <div class="select-language-header-container">
+          Select target language
+        </div>
+        <p-dropdown [options]="targetLanguages" [(ngModel)]="selectedItems.defaultTargetLanguage" placeholder="Target language" optionLabel="name" [showClear]="true"></p-dropdown>
+      </div>
+      <div class="col-sm-4 submit-container">
+        <div class="select-language-header-container">
+        </div>
+        <button class="btn btn-success" type="submit" [disabled]="isLoading" (click)="submit()">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="isLoading"></span>
+          {{isLoading ? 'Loading...' : 'Submit'}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

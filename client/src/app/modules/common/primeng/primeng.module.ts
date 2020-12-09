@@ -4,9 +4,10 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { NotificationService } from '../../../core/service/notification.service';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
-  exports: [ButtonModule, MultiSelectModule, ToastModule],
+  exports: [ButtonModule, MultiSelectModule, ToastModule, DropdownModule],
   providers: [MessageService, NotificationService],
 })
 export class PrimengModule {}
