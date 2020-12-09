@@ -5,6 +5,7 @@ import {
   Severity,
 } from '../../service/notification.service';
 import { SelectedLanguageService } from '../../service/selected-language.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-select-default-language-dialog',
@@ -22,15 +23,19 @@ export class SelectDefaultLanguageDialogComponent implements OnInit {
 
   constructor(
     private notificationService: NotificationService,
-    private languageService: SelectedLanguageService
+    private languageService: SelectedLanguageService,
+    public dialogRef: MatDialogRef<SelectDefaultLanguageDialogComponent>
   ) {}
 
   ngOnInit(): void {
     const selectedLanguages = JSON.parse(
       localStorage.getItem('lingua-selected-languages')
     );
-    this.baseLanguages = selectedLanguages.base;
-    this.targetLanguages = selectedLanguages.target;
+
+    if (selectedLanguages) {
+      this.baseLanguages = selectedLanguages.base;
+      this.targetLanguages = selectedLanguages.target;
+    }
   }
 
   submit(): void {
