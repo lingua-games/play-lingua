@@ -6,4 +6,6 @@ export class UserModel {
   public baseLanguages: string;
   public targetLanguages: string;
   public isSelectedLanguages: boolean;
+  public defaultBaseLanguage: number;
+  public defaultTargetLanguage: number;
 }

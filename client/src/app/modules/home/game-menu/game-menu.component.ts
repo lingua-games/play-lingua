@@ -12,6 +12,8 @@ import {
 import { LanguageModel } from '../../../core/models/language.model';
 import { InquiryResultModel } from '../../../core/models/inquiry-result.model';
 import { SecurityService } from '../../../core/service/security.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { SelectDefaultLanguageDialogComponent } from '../../../core/dialogs/select-default-language-dialog/select-default-language-dialog.component';
 
 @Component({
   selector: 'app-game-menu',
@@ -33,7 +35,8 @@ export class GameMenuComponent implements OnInit {
     private basicInformationService: BasicInformationService,
     private wordService: WordService,
     private notificationService: NotificationService,
-    private securityService: SecurityService
+    private securityService: SecurityService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -49,8 +52,21 @@ export class GameMenuComponent implements OnInit {
       this.router.navigate(['./choose-languages']);
       return;
     }
-    this.getSelectedLanguagesInformation();
     this.getMenus();
+
+    if (!localStorage.getItem('lingua-default-languages')) {
+      this.inquiryResult.setLoading(true);
+      this.openSelectDefaultLanguageDialog();
+      return;
+    }
+
+    this.getSelectedLanguagesInformation();
+  }
+
+  openSelectDefaultLanguageDialog(): void {
+    const dialogRef = this.dialog.open(SelectDefaultLanguageDialogComponent, {
+      disableClose: true,
+    });
   }
 
   getUsername(): string {

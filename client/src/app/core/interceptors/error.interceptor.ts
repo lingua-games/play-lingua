@@ -23,6 +23,13 @@ export class ErrorIntercept implements HttpInterceptor {
         if (error.status === 401) {
           this.securityService.logoutOn401();
         }
+        if (error.status >= 500 && error.status < 600) {
+          return throwError('Unable to perform this action');
+        }
+
+        if (error.status === 0) {
+          return throwError('No response from server');
+        }
         return throwError(error.error);
       })
     );

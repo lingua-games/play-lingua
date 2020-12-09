@@ -1,4 +1,4 @@
-<div class="welcome-inner-main-container">
+<div class="welcome-inner-main-container" appLoading [loadingFlag]="inquiryResult.isLoading">
   <div class="row">
     <div class="menu-container col-sm-2 ml-5 mr-5">
       <div class="greeting-container">
@@ -14,7 +14,7 @@
         <div class="action-menu-container mt-2" *ngIf="isLoggedIn()" (click)="logout()">Log out</div>
       </div>
     </div>
-    <div class="col-sm-9" appLoading [loadingFlag]="inquiryResult.isLoading">
+    <div class="col-sm-9" >
       <div class="row">
         <div class="col-sm-12 alert alert-warning" *ngIf="!inquiryResult.hasError && !inquiryResult.data?.hasWord">
           <span class="mr-2">Oops, You selected</span>
