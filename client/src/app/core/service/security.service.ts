@@ -20,9 +20,7 @@ export class SecurityService {
   }
 
   logout(): void {
-    localStorage.removeItem('lingua-token');
-    localStorage.removeItem('lingua-email');
-    localStorage.removeItem('lingua-selected-languages');
+    localStorage.clear();
     this.router.navigate(['../']);
   }
 
