@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlayLingua.Domain.Entities;
+using PlayLingua.Domain.models;
 using PlayLingua.Domain.Ports;
 using System.Security.Claims;
 
@@ -35,6 +36,15 @@ namespace PlayLingua.Host.Controllers
             }
 
             return Ok(addedSelection);
+        }
+
+        [HttpPost("setDefaultSelection")]
+        [Authorize]
+        public ActionResult<SelectedLanguages> SetDefaultSelection([FromBody] SelectDefaultLanguageModel selectDefaultLanguageModel)
+        {
+            var userId = GetUser().Id;
+            _selectedLanguagesRepository.SetDefaultLanguages(selectDefaultLanguageModel, userId);
+            return Ok();
         }
     }
 }

@@ -26,9 +26,12 @@ export class GameMenuComponent implements OnInit {
     base: [],
     target: [],
   };
-  inquiryResult: ApiResult<InquiryResultModel> = new ApiResult<
-    InquiryResultModel
-  >();
+  defaultSelectedLanguages: {
+    defaultBaseLanguage: LanguageModel;
+    defaultTargetLanguage: LanguageModel;
+  } = {} as any;
+  loadingFullPage: boolean;
+  inquiryResult: ApiResult<boolean> = new ApiResult<boolean>();
 
   constructor(
     private router: Router,
@@ -55,12 +58,16 @@ export class GameMenuComponent implements OnInit {
     this.getMenus();
 
     if (!localStorage.getItem('lingua-default-languages')) {
-      this.inquiryResult.setLoading(true);
+      this.loadingFullPage = true;
       this.openSelectDefaultLanguageDialog();
       return;
+    } else {
+      this.defaultSelectedLanguages = JSON.parse(
+        localStorage.getItem('lingua-default-languages')
+      );
+      console.log(this.defaultSelectedLanguages);
+      this.getSelectedLanguagesInformation();
     }
-
-    this.getSelectedLanguagesInformation();
   }
 
   openSelectDefaultLanguageDialog(): void {
@@ -69,6 +76,11 @@ export class GameMenuComponent implements OnInit {
       width: '50%',
       height: '50vh',
       panelClass: 'select-language-dialog',
+    });
+
+    dialogRef.afterClosed().subscribe((res) => {
+      this.loadingFullPage = false;
+      this.getSelectedLanguagesInformation();
     });
   }
 
@@ -93,11 +105,11 @@ export class GameMenuComponent implements OnInit {
     this.inquiryResult.setLoading(true);
     this.wordService
       .getSelectedLanguagesInformation({
-        base: this.selectedLanguages.base.map((x) => x.id),
-        target: this.selectedLanguages.target.map((x) => x.id),
+        base: this.defaultSelectedLanguages.defaultBaseLanguage.id,
+        target: this.defaultSelectedLanguages.defaultTargetLanguage.id,
       })
       .subscribe(
-        (res: SelectedLanguageInquiryModel) => {
+        (res: boolean) => {
           this.inquiryResult.setData(res);
         },
         (error: any) => {

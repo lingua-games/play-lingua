@@ -28,15 +28,13 @@ namespace PlayLingua.Data
             throw new NotImplementedException();
         }
 
-        public LanguageInformation InquiryAboutSelectedLanguages(Language language)
+        public bool InquiryAboutSelectedLanguages(SelectedLanguageModel language)
         {
             var sql =
-                @"SELECT Language.Code as Code, Language.Name as Name from [dbo].Language as Language  
-                left join[dbo].Word as Word on Language.id = word.id
-                where word.id = @Id";
+                @"SELECT * FROM [DB_A6A40C_playlingua].[dbo].[Word] where BaseLanguageId = @Base and TargetLanguageId = @Target";
 
             db.Close();
-            var result = db.Query<LanguageInformation>(sql, language).SingleOrDefault();
+            var result = db.Query<LanguageInformation>(sql, language).Any();
             
             return result;
         }

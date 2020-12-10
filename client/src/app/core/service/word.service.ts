@@ -12,9 +12,12 @@ export class WordService {
   constructor(private http: HttpClient) {}
 
   getSelectedLanguagesInformation(data: {
-    base: number[];
-    target: number[];
+    base: number;
+    target: number;
   }): Observable<any> {
-    return this.http.post<any>(this.wordUrl, data);
+    return this.http.post<any>(
+      this.wordUrl + '/inquiry-about-selected-language',
+      data
+    );
   }
 }

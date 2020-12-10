@@ -1,4 +1,4 @@
-<div class="welcome-inner-main-container" appLoading [loadingFlag]="inquiryResult.isLoading">
+<div class="welcome-inner-main-container" appLoading [loadingFlag]="loadingFullPage">
   <div class="row">
     <div class="menu-container col-sm-2 ml-5 mr-5">
       <div class="greeting-container">
@@ -14,9 +14,9 @@
         <div class="action-menu-container mt-2" *ngIf="isLoggedIn()" (click)="logout()">Log out</div>
       </div>
     </div>
-    <div class="col-sm-9" >
+    <div class="col-sm-9" appLoading [loadingFlag]="inquiryResult.isLoading">
       <div class="row">
-        <div class="col-sm-12 alert alert-warning" *ngIf="!inquiryResult.hasError && !inquiryResult.data?.hasWord">
+        <div class="col-sm-12 alert alert-warning" *ngIf="!inquiryResult.hasError && !inquiryResult.data">
           <span class="mr-2">Oops, You selected</span>
           <span *ngFor="let selectedLanguage of selectedLanguages?.base;let index = index">
             <strong *ngIf="selectedLanguages.base.length - 1 === index">{{selectedLanguage.name}}</strong>

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using PlayLingua.Domain.models;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace PlayLingua.Domain.Entities
 {
-    public class User
+    public class User: SelectDefaultLanguageModel
     {
         public int Id { get; set; }
         [Required]
@@ -15,7 +16,6 @@ namespace PlayLingua.Domain.Entities
         public string BaseLanguages { get; set; }
         public string TargetLanguages { get; set; }
         public bool IsSelectedLanguages { get; set; }
-        public int DefaultBaseLanguage { get; set; }
-        public int DefaultTargetLanguage { get; set; }
+
     }
 }

@@ -19,30 +19,10 @@ namespace PlayLingua.Host.Controllers
             _wordRepository = wordRepository;
         }
 
-        [HttpPost]
-        public ActionResult<LanguageInquiryResult> InquiryAboutSelectedLanguages([FromBody] SelectedLanguageModel model)
+        [HttpPost("inquiry-about-selected-language")]
+        public ActionResult<bool> InquiryAboutSelectedLanguages([FromBody] SelectedLanguageModel model)
         {
-            var result = new LanguageInquiryResult
-            {
-                LanguageInformation = new List<LanguageInformation>()
-            };
-            foreach (var item in model.Base)
-            {
-                var language = new Language
-                {
-                    Id = item
-                };
-                var tableResult = _wordRepository.InquiryAboutSelectedLanguages(language);
-                if (tableResult != null)
-                {
-                    result.LanguageInformation.Add(tableResult);
-                }
-            }
-            if (result.LanguageInformation.Any())
-            {
-                result.HasWord = true;
-            }
-            return Ok(result);
+            return Ok(_wordRepository.InquiryAboutSelectedLanguages(model));
         }
 
         //[HttpGet]

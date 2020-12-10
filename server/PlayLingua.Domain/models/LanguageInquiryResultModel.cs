@@ -5,12 +5,6 @@ using System.Threading.Tasks;
 
 namespace PlayLingua.Domain.Models
 {
-    public class LanguageInquiryResult
-    {
-        public bool HasWord { get; set; }
-        public List<LanguageInformation> LanguageInformation { get; set; }
-    }
-
     public class LanguageInformation
     {
         public int NumberOfWords { get; set; }
