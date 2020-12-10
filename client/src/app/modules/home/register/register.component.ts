@@ -8,7 +8,6 @@ import {
 import { Router } from '@angular/router';
 import { SecurityService } from '../../../core/service/security.service';
 import { LoginResultModel } from '../../../core/models/login-result.model';
-import { loadavg } from 'os';
 
 @Component({
   selector: 'app-register',
@@ -76,6 +75,12 @@ export class RegisterComponent implements OnInit {
         );
         localStorage.setItem('lingua-token', res.token);
         localStorage.setItem('lingua-email', res.user.email);
+        if (res.user.defaultBaseLanguage && res.user.defaultTargetLanguage) {
+          localStorage.setItem(
+            'lingua-default-languages',
+            `{defaultBaseLanguage: ${res.user.defaultBaseLanguage}, defaultBaseLanguage: ${res.user.defaultTargetLanguage} }`
+          );
+        }
         this.router.navigate(['../game-menu']);
       },
       (error: string) => {}

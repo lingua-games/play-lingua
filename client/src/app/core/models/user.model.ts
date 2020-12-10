@@ -3,4 +3,9 @@ export class UserModel {
   public email: string;
   public password: string;
   public rePassword: string;
+  public baseLanguages: string;
+  public targetLanguages: string;
+  public isSelectedLanguages: boolean;
+  public defaultBaseLanguage: number;
+  public defaultTargetLanguage: number;
 }

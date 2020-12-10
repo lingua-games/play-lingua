@@ -30,7 +30,12 @@ namespace PlayLingua.Data
         public LoginResult Login(User user)
         {
             var result = new LoginResult();
-            string query = @"SELECT * FROM [DB_A6A40C_playlingua].[dbo].[Users] where Email = @Email";
+            string query = @"
+                              SELECT * FROM [DB_A6A40C_playlingua].[dbo].[Users] 
+                              left join [DB_A6A40C_playlingua].[dbo].[SelectedLanguages]
+                              on [Users].Id = [SelectedLanguages].UserId
+                              where Email = @Email
+                            ";
             var usersWithSelectedEmail = db.Query<User>(query, user).ToList();
 
             if (!usersWithSelectedEmail.Any())
@@ -47,7 +52,12 @@ namespace PlayLingua.Data
                     User = new User
                     {
                         Email = selectedUser.Email,
-                        Id = selectedUser.Id
+                        Id = selectedUser.Id,
+                        BaseLanguages = selectedUser.BaseLanguages,
+                        TargetLanguages = selectedUser.TargetLanguages,
+                        IsSelectedLanguages =
+                            (!string.IsNullOrWhiteSpace(selectedUser.TargetLanguages) && !string.IsNullOrWhiteSpace(selectedUser.BaseLanguages)) ? true : false
+
                     }
                 };
             }
@@ -64,27 +74,6 @@ namespace PlayLingua.Data
         public string GenerateToken(User user)
         {
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Secret));
-            //var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-
-            //var claims = new List<Claim>
-            //{
-            //    new Claim(ClaimTypes.Email, user.Email),
-            //    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                
-            //    new Claim(ClaimTypes.Role, "Simple user")
-            //};
-
-            //var tokenOptions = new JwtSecurityToken(
-            //    issuer: "Lingua.security.com",
-            //    audience: "Lingua.security.com",
-            //    claims: claims,
-            //    
-            //    expires: DateTime.Now.AddDays(7),
-            //    signingCredentials: signingCredentials
-            //    );
-
-            //return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor

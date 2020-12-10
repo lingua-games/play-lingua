@@ -10,6 +10,6 @@ namespace PlayLingua.Domain.Ports
         Word Add(Word book);
         void Delete(string id);
         void Update(Word book);
-        LanguageInformation InquiryAboutSelectedLanguages(Language baseLanguage);
+        bool InquiryAboutSelectedLanguages(SelectedLanguageModel baseLanguage);
     }
 }

@@ -7,7 +7,7 @@ namespace PlayLingua.Domain.Models
 {
     public class SelectedLanguageModel
     {
-        public List<int> Base { get; set; }
-        public List<int> Target { get; set; }
+        public int Base { get; set; }
+        public int Target { get; set; }
     }
 }

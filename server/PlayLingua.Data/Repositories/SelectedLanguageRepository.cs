@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using PlayLingua.Domain.Entities;
+using PlayLingua.Domain.models;
 using PlayLingua.Domain.Ports;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,15 @@ namespace PlayLingua.Data
         public List<SelectedLanguages> List()
         {
             throw new NotImplementedException();
+        }
+
+        public void SetDefaultLanguages(SelectDefaultLanguageModel selectDefaultLanguageModel, int userId)
+        {
+            db.Query(
+                @"
+                    UPDATE [DB_A6A40C_playlingua].[dbo].[Users] 
+                    SET [DefaultTargetLanguage] = @DefaultTargetLanguage ,[DefaultBaseLanguage] = @DefaultBaseLanguage 
+                    where id = @UserId", new { selectDefaultLanguageModel.DefaultTargetLanguage, selectDefaultLanguageModel.DefaultBaseLanguage, userId });
         }
 
         public void Update(SelectedLanguages selectedLanguages)

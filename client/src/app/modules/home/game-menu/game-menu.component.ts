@@ -12,6 +12,8 @@ import {
 import { LanguageModel } from '../../../core/models/language.model';
 import { InquiryResultModel } from '../../../core/models/inquiry-result.model';
 import { SecurityService } from '../../../core/service/security.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { SelectDefaultLanguageDialogComponent } from '../../../core/dialogs/select-default-language-dialog/select-default-language-dialog.component';
 
 @Component({
   selector: 'app-game-menu',
@@ -24,16 +26,20 @@ export class GameMenuComponent implements OnInit {
     base: [],
     target: [],
   };
-  inquiryResult: ApiResult<InquiryResultModel> = new ApiResult<
-    InquiryResultModel
-  >();
+  defaultSelectedLanguages: {
+    defaultBaseLanguage: LanguageModel;
+    defaultTargetLanguage: LanguageModel;
+  } = {} as any;
+  loadingFullPage: boolean;
+  inquiryResult: ApiResult<boolean> = new ApiResult<boolean>();
 
   constructor(
     private router: Router,
     private basicInformationService: BasicInformationService,
     private wordService: WordService,
     private notificationService: NotificationService,
-    private securityService: SecurityService
+    private securityService: SecurityService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -49,8 +55,33 @@ export class GameMenuComponent implements OnInit {
       this.router.navigate(['./choose-languages']);
       return;
     }
-    this.getSelectedLanguagesInformation();
     this.getMenus();
+
+    if (!localStorage.getItem('lingua-default-languages')) {
+      this.loadingFullPage = true;
+      this.openSelectDefaultLanguageDialog();
+      return;
+    } else {
+      this.defaultSelectedLanguages = JSON.parse(
+        localStorage.getItem('lingua-default-languages')
+      );
+      console.log(this.defaultSelectedLanguages);
+      this.getSelectedLanguagesInformation();
+    }
+  }
+
+  openSelectDefaultLanguageDialog(): void {
+    const dialogRef = this.dialog.open(SelectDefaultLanguageDialogComponent, {
+      disableClose: true,
+      width: '50%',
+      height: '50vh',
+      panelClass: 'select-language-dialog',
+    });
+
+    dialogRef.afterClosed().subscribe((res) => {
+      this.loadingFullPage = false;
+      this.getSelectedLanguagesInformation();
+    });
   }
 
   getUsername(): string {
@@ -74,11 +105,11 @@ export class GameMenuComponent implements OnInit {
     this.inquiryResult.setLoading(true);
     this.wordService
       .getSelectedLanguagesInformation({
-        base: this.selectedLanguages.base.map((x) => x.id),
-        target: this.selectedLanguages.target.map((x) => x.id),
+        base: this.defaultSelectedLanguages.defaultBaseLanguage.id,
+        target: this.defaultSelectedLanguages.defaultTargetLanguage.id,
       })
       .subscribe(
-        (res: SelectedLanguageInquiryModel) => {
+        (res: boolean) => {
           this.inquiryResult.setData(res);
         },
         (error: any) => {

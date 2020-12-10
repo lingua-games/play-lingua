@@ -11,8 +11,9 @@ import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
-import { ErrorIntercept } from './core/service/error.interceptor';
-import { TokenIntercept } from './core/service/token.interceptor';
+import { ErrorIntercept } from './core/interceptors/error.interceptor';
+import { TokenIntercept } from './core/interceptors/token.interceptor';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,6 +25,7 @@ import { TokenIntercept } from './core/service/token.interceptor';
     BrowserAnimationsModule,
   ],
   providers: [
+    MessageService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenIntercept,

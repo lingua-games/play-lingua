@@ -58,13 +58,23 @@ CREATE TABLE [dbo].[Users] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
     [Email]   [varchar](100) NOT NULL,
 	[Password]   [varchar](200) NOT NULL,
+	[DefaultTargetLanguage]   int,
+	[DefaultBaseLanguage]   int,
 )
 GO
+ALTER TABLE [dbo].[Users] ADD CONSTRAINT [FK_User_DefaultTargetLanguage]
+FOREIGN KEY ([DefaultTargetLanguage]) REFERENCES [dbo].[Language] ([Id])
+GO
+ALTER TABLE [dbo].[Users] ADD CONSTRAINT [FK_User_DefaultBaseLanguage]
+FOREIGN KEY ([DefaultBaseLanguage]) REFERENCES [dbo].[Language] ([Id])
+GO
+
+
 
 CREATE TABLE [dbo].[SelectedLanguages] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
-    [BaseLanguages]   [varchar](500) NOT NULL,
-	[TargetLanguages]   [varchar](500) NOT NULL,
+    [BaseLanguages]   [nvarchar](500) NOT NULL,
+	[TargetLanguages]   [nvarchar](500) NOT NULL,
 	[UserId]   int NOT NULL,
 )
 ALTER TABLE [dbo].[SelectedLanguages] ADD CONSTRAINT [FK_SelectedLanguages_UserId]

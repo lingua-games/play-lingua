@@ -20,4 +20,15 @@ export class SelectedLanguageService {
       selectedLanguages
     );
   }
+
+  public setDefaultLanguage(selectedItems: any): Observable<any> {
+    console.log(selectedItems);
+    return this.http.post<SelectedLanguageModel>(
+      this.selectionLanguageUrl + '/setDefaultSelection',
+      {
+        defaultBaseLanguage: selectedItems.defaultBaseLanguage.id,
+        defaultTargetLanguage: selectedItems.defaultTargetLanguage.id,
+      }
+    );
+  }
 }
