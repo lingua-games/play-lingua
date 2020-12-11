@@ -26,6 +26,13 @@ const routes: Routes = [
         (x) => x.SuperMarioModule
       ),
   },
+  {
+    path: 'word-management',
+    loadChildren: () =>
+      import('./modules/word-management/word-management.module').then(
+        (x) => x.WordManagementModule
+      ),
+  },
 ];
 
 @NgModule({

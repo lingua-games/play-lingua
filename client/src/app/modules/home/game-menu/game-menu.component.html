@@ -10,8 +10,18 @@
         <div class="action-menu-container mt-2" routerLink="../register" *ngIf="!isLoggedIn()">Register</div>
         <div class="action-menu-container mt-2" *ngIf="isLoggedIn()">Scores</div>
         <div class="action-menu-container mt-2">Score board</div>
-        <div class="action-menu-container mt-2" *ngIf="isLoggedIn()">History</div>
+        <div class="action-menu-container mt-2" routerLink="../word-management" *ngIf="isLoggedIn()">Manage your words</div>
         <div class="action-menu-container mt-2" *ngIf="isLoggedIn()" (click)="logout()">Log out</div>
+        <hr>
+        <div class="description-menu-container mt-2"
+             *ngIf="defaultSelectedLanguages.defaultTargetLanguage && defaultSelectedLanguages.defaultBaseLanguage">
+          I know
+          <strong>{{defaultSelectedLanguages.defaultBaseLanguage.name}}</strong>
+          and I want to learn
+          <strong>{{defaultSelectedLanguages.defaultTargetLanguage.name}}</strong>
+          . This is my default learning path, but I can always
+          <strong class="change-default-action">change this default</strong>
+        </div>
       </div>
     </div>
     <div class="col-sm-9" appLoading [loadingFlag]="inquiryResult.isLoading">

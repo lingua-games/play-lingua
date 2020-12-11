@@ -14,7 +14,6 @@ import { environment } from '../../../environments/environment';
 import { HomeComponent } from './home.component';
 import { GameMenuComponent } from './game-menu/game-menu.component';
 import { PrepareAddWordsComponent } from './prepare-add-words/prepare-add-words.component';
-import { AddWordByUserComponent } from './add-word-by-user/add-word-by-user.component';
 import { FallingStarsComponent } from '../games/falling-stars/falling-stars.component';
 
 export interface CanComponentDeactivate {
@@ -73,11 +72,6 @@ const routes: Routes = [
       {
         path: 'prepare-adding-words',
         component: PrepareAddWordsComponent,
-        canDeactivate: [DeactivateWithDelay],
-      },
-      {
-        path: 'add-words',
-        component: AddWordByUserComponent,
         canDeactivate: [DeactivateWithDelay],
       },
     ],

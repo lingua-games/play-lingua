@@ -1,0 +1,33 @@
+.left-container {
+  border-right: 1px solid lightgray;
+  height: 100vh;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, .2);
+}
+
+.row {
+  background-image: url("../../../assets/images/background/word-management-bg.jpg");
+  background-size: 100% 100%;
+}
+
+.menu-container {
+  width: 90%;
+  text-align: center;
+  margin-top: 1rem;
+  border: solid 1px lightgray;
+  margin-left: 10%;
+  background-color: rgb(205, 92, 92);
+  padding: 1vh;
+  font-size: .8vw;
+  color: lightgray;
+  transition: 300ms;
+}
+
+.menu-container:hover {
+  cursor: pointer;
+  background-color: rgb(240, 128, 128);
+}
+
+.active-route {
+  background-color: rgb(240, 128, 128);
+}

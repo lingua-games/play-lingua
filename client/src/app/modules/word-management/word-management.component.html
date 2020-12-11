@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col-sm-2 left-container">
+    <div
+      class="menu-container"
+      routerLink="./list"
+      [ngClass]="{'active-route': currentRoute === '/word-management/list'}">
+      List of added words
+    </div>
+    <div
+      class="menu-container"
+      routerLink="./add"
+      [ngClass]="{'active-route': currentRoute === '/word-management/add'}">
+        Add a new word
+    </div>
+    <div class="menu-container" routerLink="../game-menu">Back to game menu</div>
+  </div>
+  <div class="col-sm-10 right-container">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+

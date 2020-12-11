@@ -14,7 +14,10 @@ export class HomeComponent implements OnInit {
   constructor(private router: Router) {
     router.events.subscribe((val) => {
       if (val instanceof NavigationStart) {
-        if (val.url.indexOf('games/') > -1) {
+        if (
+          val.url.indexOf('games/') > -1 ||
+          val.url.indexOf('word-management') > -1
+        ) {
           this.isLoading = true;
           return;
         }

@@ -44,13 +44,26 @@ export class LoginComponent implements OnInit {
       (res: LoginResultModel) => {
         if (res.isLogin) {
           localStorage.setItem('lingua-token', res.token);
+
+          const defaultBaseLanguageFromAPI = JSON.parse(
+            res.user.baseLanguages
+          ).find((x) => x.id === res.user.defaultBaseLanguage);
+          const defaultTargetLanguageFromAPI = JSON.parse(
+            res.user.targetLanguages
+          ).find((x) => x.id === res.user.defaultTargetLanguage);
+
+          localStorage.setItem(
+            'lingua-default-languages',
+            JSON.stringify({
+              defaultBaseLanguage: defaultBaseLanguageFromAPI,
+              defaultTargetLanguage: defaultTargetLanguageFromAPI,
+            })
+          );
           if (res.user.isSelectedLanguages) {
-            if (!localStorage.getItem('lingua-selected-languages')) {
-              localStorage.setItem(
-                'lingua-selected-languages',
-                `{ "base": ${res.user.baseLanguages}, "target": ${res.user.targetLanguages} }`
-              );
-            }
+            localStorage.setItem(
+              'lingua-selected-languages',
+              `{ "base": ${res.user.baseLanguages}, "target": ${res.user.targetLanguages} }`
+            );
           }
           this.router.navigate(['../game-menu']);
         } else {

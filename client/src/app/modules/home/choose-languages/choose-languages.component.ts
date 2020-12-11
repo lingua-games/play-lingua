@@ -176,6 +176,7 @@ export class ChooseLanguagesComponent implements OnInit {
   }
 
   saveToLocalStorage(): void {
+    // TODO: USER SHOULD NOT BE ALLOWED TO CHANGE HIS DEFAULT LANGUAGE
     localStorage.setItem(
       'lingua-selected-languages',
       JSON.stringify({
