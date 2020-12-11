@@ -5,6 +5,7 @@ import { NotificationService } from '../../service/notification.service';
 import { Router } from '@angular/router';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MatDialogRef } from '@angular/material/dialog';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('SelectDefaultLanguageDialogComponent', () => {
   let component: SelectDefaultLanguageDialogComponent;
@@ -29,6 +30,7 @@ describe('SelectDefaultLanguageDialogComponent', () => {
           useValue: mockNotificationService,
         },
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));
 

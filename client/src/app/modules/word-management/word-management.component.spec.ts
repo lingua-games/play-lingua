@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WordManagementComponent } from './word-management.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('WordManagementComponent', () => {
   let component: WordManagementComponent;
@@ -8,9 +9,9 @@ describe('WordManagementComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WordManagementComponent ]
-    })
-    .compileComponents();
+      imports: [RouterTestingModule],
+      declarations: [WordManagementComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
