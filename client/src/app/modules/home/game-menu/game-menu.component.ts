@@ -65,7 +65,6 @@ export class GameMenuComponent implements OnInit {
       this.defaultSelectedLanguages = JSON.parse(
         localStorage.getItem('lingua-default-languages')
       );
-      console.log(this.defaultSelectedLanguages);
       this.getSelectedLanguagesInformation();
     }
   }
@@ -80,6 +79,9 @@ export class GameMenuComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((res) => {
       this.loadingFullPage = false;
+      this.defaultSelectedLanguages = JSON.parse(
+        localStorage.getItem('lingua-default-languages')
+      );
       this.getSelectedLanguagesInformation();
     });
   }

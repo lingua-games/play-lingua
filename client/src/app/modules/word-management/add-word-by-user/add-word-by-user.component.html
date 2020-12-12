@@ -1,1 +1,24 @@
-<p>add-word-by-user works!</p>
+<div class="row select-language-container">
+  <div class="col-sm-5">
+    <p-dropdown [options]="baseLanguages"
+                [(ngModel)]="selectedBaseLanguage"
+                placeholder="Base language"
+                optionLabel="name"
+                [showClear]="true">
+    </p-dropdown>
+  </div>
+  <div class="col-sm-5">
+    <p-dropdown [options]="targetLanguages"
+                [(ngModel)]="selectedTargetLanguage"
+                placeholder="Target language"
+                optionLabel="name"
+                [showClear]="true"
+                class="ml-3">
+    </p-dropdown>
+  </div>
+  <div class="col-sm-2">
+    <button class="btn btn-success ml-2" type="submit" (click)="submitSelectedLanguages()">
+      Next
+    </button>
+  </div>
+</div>

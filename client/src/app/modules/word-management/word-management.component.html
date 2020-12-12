@@ -3,14 +3,14 @@
     <div
       class="menu-container"
       routerLink="./list"
-      [ngClass]="{'active-route': currentRoute === '/word-management/list'}">
+      [ngClass]="{'active-route': currentRoute === '/word-management/list' || currentRoute === '/word-management'}">
       List of added words
     </div>
     <div
       class="menu-container"
       routerLink="./add"
       [ngClass]="{'active-route': currentRoute === '/word-management/add'}">
-        Add a new word
+      Add a new word
     </div>
     <div class="menu-container" routerLink="../game-menu">Back to game menu</div>
   </div>

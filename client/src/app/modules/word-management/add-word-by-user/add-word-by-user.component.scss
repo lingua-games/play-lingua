@@ -1,0 +1,13 @@
+.select-language-container {
+  border: solid 1px lightgray;
+  width: 94%;
+  margin-left: 3%;
+  padding: .5rem;
+  margin-top: 1vh;
+  background-color: rgba(0,0,0,.1);
+}
+
+::ng-deep .p-dropdown {
+  width: 100%;
+}
+
