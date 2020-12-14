@@ -4,12 +4,7 @@ import {
   NotificationService,
   Severity,
 } from '../../../core/service/notification.service';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormControl,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-add-word-by-user',
