@@ -38,6 +38,10 @@ describe('AddWordByUserComponent', () => {
     fixture.detectChanges();
   });
 
+  afterAll(() => {
+    localStorage.clear();
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });

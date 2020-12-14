@@ -47,6 +47,10 @@ describe('GameMenuComponent', () => {
     component = fixture.componentInstance;
   });
 
+  afterAll(() => {
+    localStorage.clear();
+  });
+
   it('should create', () => {
     component.selectedLanguages = { bas: [1] } as any;
     localStorage.setItem(
