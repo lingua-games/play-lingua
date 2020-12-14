@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "husky": {
     "hooks": {
-      "pre-commit": "ng lint"
+      "pre-commit": "ng lint",
+      "pre-push": "ng lint"
     }
   },
   "scripts": {
