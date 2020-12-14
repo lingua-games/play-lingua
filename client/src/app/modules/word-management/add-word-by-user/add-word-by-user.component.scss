@@ -11,3 +11,15 @@
   width: 100%;
 }
 
+.pre-text-container {
+  background-color: white;
+  color: gray;
+  border: solid 1px lightgray;
+  font-size: .8vw;
+  text-align: center;
+  padding: .5rem;
+}
+
+::ng-deep .field-not-valid {
+  border: solid 1px red;
+}

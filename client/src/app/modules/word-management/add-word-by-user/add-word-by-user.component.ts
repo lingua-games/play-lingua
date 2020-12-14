@@ -1,5 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { LanguageModel } from '../../../core/models/language.model';
+import {
+  NotificationService,
+  Severity,
+} from '../../../core/service/notification.service';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-add-word-by-user',
@@ -7,13 +17,31 @@ import { LanguageModel } from '../../../core/models/language.model';
   styleUrls: ['./add-word-by-user.component.scss'],
 })
 export class AddWordByUserComponent implements OnInit {
-  selectedBaseLanguage: LanguageModel = new LanguageModel();
-  selectedTargetLanguage: LanguageModel = new LanguageModel();
-
   baseLanguages: LanguageModel[] = [];
   targetLanguages: LanguageModel[] = [];
 
-  constructor() {}
+  selectLanguageForm = this.formBuilder.group({
+    baseLanguage: ['', Validators.required],
+    targetLanguage: ['', Validators.required],
+    isSelectedLanguageSubmit: [false],
+  });
+
+  get baseLanguage(): AbstractControl {
+    return this.selectLanguageForm.get('baseLanguage');
+  }
+
+  get targetLanguage(): AbstractControl {
+    return this.selectLanguageForm.get('targetLanguage');
+  }
+
+  get isSelectedLanguageSubmit(): AbstractControl {
+    return this.selectLanguageForm.get('isSelectedLanguageSubmit');
+  }
+
+  constructor(
+    private notificationService: NotificationService,
+    private formBuilder: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     this.getBaseAndTargetLanguages();
@@ -27,5 +55,41 @@ export class AddWordByUserComponent implements OnInit {
     this.targetLanguages = selectedLanguages.target;
   }
 
-  submitSelectedLanguages(): void {}
+  submitSelectedLanguages(): void {
+    if (this.isSelectedLanguageSubmit.value) {
+      this.isSelectedLanguageSubmit.setValue(false);
+      return;
+    }
+    if (this.selectLanguageForm.invalid) {
+      this.selectLanguageForm.markAsDirty();
+      if (this.baseLanguage.invalid) {
+        this.notificationService.showMessage(
+          'Base language has not selected yet',
+          Severity.error,
+          '',
+          'bc'
+        );
+      }
+
+      if (this.targetLanguage.invalid) {
+        this.notificationService.showMessage(
+          'Target language has not selected yet',
+          Severity.error,
+          '',
+          'bc'
+        );
+      }
+      return;
+    }
+    this.isSelectedLanguageSubmit.setValue(true);
+  }
+
+  checkFormValidation(fieldName: string): string {
+    // if (
+    //   this.formValidation.find((x: ValidationModel) => x.field === fieldName)
+    // ) {
+    //   return 'field-not-valid';
+    // }
+    return '';
+  }
 }

@@ -1,24 +1,62 @@
-<div class="row select-language-container">
-  <div class="col-sm-5">
-    <p-dropdown [options]="baseLanguages"
-                [(ngModel)]="selectedBaseLanguage"
-                placeholder="Base language"
-                optionLabel="name"
-                [showClear]="true">
-    </p-dropdown>
+<p-toast position="bottom-center" key="bc"></p-toast>
+<p-toast></p-toast>
+
+<form [formGroup]="selectLanguageForm" class="row select-language-container">
+  <div class="col-sm-1 pre-text-container">
+    From
   </div>
-  <div class="col-sm-5">
-    <p-dropdown [options]="targetLanguages"
-                [(ngModel)]="selectedTargetLanguage"
-                placeholder="Target language"
+  <div class="col-sm-4">
+    <p-dropdown [options]="baseLanguages"
+                placeholder="Base language"
+                formControlName="baseLanguage"
                 optionLabel="name"
                 [showClear]="true"
-                class="ml-3">
+                [disabled]="isSelectedLanguageSubmit.value"
+                [styleClass]="baseLanguage.invalid && selectLanguageForm.dirty ? 'field-not-valid' : ''">
     </p-dropdown>
   </div>
-  <div class="col-sm-2">
+  <div class="col-sm-1 pre-text-container">
+    <span>To</span>
+  </div>
+  <div class="col-sm-4">
+    <p-dropdown [options]="targetLanguages"
+                placeholder="Target language"
+                optionLabel="name"
+                formControlName="targetLanguage"
+                [showClear]="true"
+                [disabled]="isSelectedLanguageSubmit.value"
+                [styleClass]="targetLanguage.invalid && selectLanguageForm.dirty ? 'field-not-valid' : ''">
+    </p-dropdown>
+  </div>
+  <div class="col-sm-2 text-right">
     <button class="btn btn-success ml-2" type="submit" (click)="submitSelectedLanguages()">
-      Next
+      {{isSelectedLanguageSubmit.value ? 'Edit' : 'Next'}}
     </button>
   </div>
-</div>
+</form>
+
+<!--<div class="row select-language-container">-->
+<!--  <div class="col-sm-5">-->
+<!--    <p-dropdown [options]="baseLanguages"-->
+<!--                [(ngModel)]="addWordForm.selectedBaseLanguage"-->
+<!--                placeholder="Book"-->
+<!--                optionLabel="name"-->
+<!--                [showClear]="true">-->
+<!--    </p-dropdown>-->
+<!--  </div>-->
+<!--  <div class="col-sm-5">-->
+<!--    <p-dropdown [options]="targetLanguages"-->
+<!--                [(ngModel)]="addWordForm.selectedTargetLanguage"-->
+<!--                placeholder="Target language"-->
+<!--                optionLabel="name"-->
+<!--                [showClear]="true"-->
+<!--                class="ml-3">-->
+<!--    </p-dropdown>-->
+<!--  </div>-->
+<!--  <div class="col-sm-2 text-right">-->
+<!--    <button class="btn btn-success ml-2" type="submit" (click)="submitSelectedLanguages()">-->
+<!--      Next-->
+<!--    </button>-->
+<!--  </div>-->
+<!--</div>-->
+
