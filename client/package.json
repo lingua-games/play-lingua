@@ -1,6 +1,11 @@
 {
   "name": "client",
   "version": "0.0.0",
+  "husky": {
+    "hooks": {
+      "pre-commit": "ng lint"
+    }
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port=4000 -o",
@@ -46,6 +51,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",
+    "husky": "^4.3.6",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~5.0.0",
