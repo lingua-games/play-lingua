@@ -1,12 +1,7 @@
 {
   "name": "client",
   "version": "0.0.0",
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged && ng lint && ng test",
-      "pre-push": "ng build --aot true"
-    }
-  },
+
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port=4000 -o",
@@ -19,6 +14,12 @@
     "e2e:ci": "ng e2e -c ci"
   },
   "private": true,
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged && ng lint && ng test",
+      "pre-push": "ng build --aot true"
+    }
+  },
   "dependencies": {
     "@angular/animations": "~10.0.6",
     "@angular/cdk": "^10.2.4",
