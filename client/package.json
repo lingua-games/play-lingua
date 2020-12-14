@@ -1,16 +1,10 @@
 {
   "name": "client",
   "version": "0.0.0",
-  "lint-staged": {
-    "src/**/*.{js,ts,scss,md,html,json}": [
-      "prettier --write",
-      "git add"
-    ]
-  },
   "husky": {
     "hooks": {
-      "pre-commit": "ng lint",
-      "pre-push": "ng lint"
+      "pre-commit": "pretty-quick --staged && ng lint && ng test",
+      "pre-push": "ng build --aot true"
     }
   },
   "scripts": {
