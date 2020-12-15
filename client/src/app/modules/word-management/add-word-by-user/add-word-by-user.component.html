@@ -1,62 +1,75 @@
-<p-toast position="bottom-center" key="bc"></p-toast>
+<p-toast position='bottom-center' key='bc'></p-toast>
 <p-toast></p-toast>
 
-<form [formGroup]="selectLanguageForm" class="row select-language-container">
-  <div class="col-sm-1 pre-text-container">
+<form [formGroup]='selectLanguageForm' class='row select-language-container' appLoading [loadingFlag]='isLoading'>
+  <div class='col-sm-1 pre-text-container'>
     From
   </div>
-  <div class="col-sm-4">
-    <p-dropdown [options]="baseLanguages"
-                placeholder="Base language"
-                formControlName="baseLanguage"
-                optionLabel="name"
-                [showClear]="true"
-                [disabled]="isSelectedLanguageSubmit.value"
+  <div class='col-sm-4'>
+    <p-dropdown [options]='baseLanguages'
+                placeholder='Base language'
+                formControlName='baseLanguage'
+                optionLabel='name'
+                [showClear]='true'
+                [disabled]='isSelectedLanguageSubmit.value'
                 [styleClass]="baseLanguage.invalid && selectLanguageForm.dirty ? 'field-not-valid' : ''">
     </p-dropdown>
   </div>
-  <div class="col-sm-1 pre-text-container">
+  <div class='col-sm-1 pre-text-container'>
     <span>To</span>
   </div>
-  <div class="col-sm-4">
-    <p-dropdown [options]="targetLanguages"
-                placeholder="Target language"
-                optionLabel="name"
-                formControlName="targetLanguage"
-                [showClear]="true"
-                [disabled]="isSelectedLanguageSubmit.value"
+  <div class='col-sm-4'>
+    <p-dropdown [options]='targetLanguages'
+                placeholder='Target language'
+                optionLabel='name'
+                formControlName='targetLanguage'
+                [showClear]='true'
+                [disabled]='isSelectedLanguageSubmit.value'
                 [styleClass]="targetLanguage.invalid && selectLanguageForm.dirty ? 'field-not-valid' : ''">
     </p-dropdown>
   </div>
-  <div class="col-sm-2 text-right">
-    <button class="btn btn-success ml-2" type="submit" (click)="submitSelectedLanguages()">
+  <div class='col-sm-2 text-right'>
+    <button class='btn ml-2' [ngClass]="isSelectedLanguageSubmit.value ? 'btn-primary' : 'btn-success'" type='submit'
+            (click)='submitSelectedLanguages()'>
       {{isSelectedLanguageSubmit.value ? 'Edit' : 'Next'}}
     </button>
   </div>
 </form>
 
-<!--<div class="row select-language-container">-->
-<!--  <div class="col-sm-5">-->
-<!--    <p-dropdown [options]="baseLanguages"-->
-<!--                [(ngModel)]="addWordForm.selectedBaseLanguage"-->
-<!--                placeholder="Book"-->
-<!--                optionLabel="name"-->
-<!--                [showClear]="true">-->
-<!--    </p-dropdown>-->
-<!--  </div>-->
-<!--  <div class="col-sm-5">-->
-<!--    <p-dropdown [options]="targetLanguages"-->
-<!--                [(ngModel)]="addWordForm.selectedTargetLanguage"-->
-<!--                placeholder="Target language"-->
-<!--                optionLabel="name"-->
-<!--                [showClear]="true"-->
-<!--                class="ml-3">-->
-<!--    </p-dropdown>-->
-<!--  </div>-->
-<!--  <div class="col-sm-2 text-right">-->
-<!--    <button class="btn btn-success ml-2" type="submit" (click)="submitSelectedLanguages()">-->
-<!--      Next-->
-<!--    </button>-->
-<!--  </div>-->
-<!--</div>-->
-
+<form [formGroup]='selectBookForm' class='select-language-container'>
+  <div class='row'>
+    <div class='col-sm-1 text-center form-check'>
+      <button pButton
+              pRipple
+              type='button'
+              [icon]="selectBookRandom.value === 'book' ? 'pi pi-check': 'pi'"
+              class='p-button-rounded'
+              (click)="selectBookRandom.setValue('book')"></button>
+    </div>
+    <div class='col-sm-4'>
+      <p-dropdown [options]='visibleBooks'
+                  placeholder='Select a book'
+                  formControlName='book'
+                  optionLabel='name'
+                  [disabled]="selectBookRandom.value === 'random'"
+                  [showClear]='true'
+                  [styleClass]="baseLanguage.invalid && selectLanguageForm.dirty ? 'field-not-valid' : ''">
+      </p-dropdown>
+    </div>
+  </div>
+  <div class='row mt-2'>
+    <div class='col-sm-1 text-center'>
+      <button pButton
+              pRipple
+              type='button'
+              [icon]="selectBookRandom.value === 'random' ? 'pi pi-check': 'pi'"
+              class='p-button-rounded'
+              (click)="selectBookRandom.setValue('random')"></button>
+    </div>
+    <div class='col-sm-6'>
+      <div class='random-word-text-container'>
+        I dont want to select any book, just want to add some words randomly.
+      </div>
+    </div>
+  </div>
+</form>

@@ -11,8 +11,11 @@ GO
 CREATE TABLE [dbo].[Book] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
     [Name]   [varchar](100) NOT NULL,
-	[TargetLanguage]   [varchar](100) NOT NULL,
+	[TargetLanguageId]   int NOT NULL,
 )
+GO
+ALTER TABLE [dbo].[Book] ADD CONSTRAINT [FK_Book_TargetLanguageId]
+FOREIGN KEY ([TargetLanguageId]) REFERENCES [dbo].[Language] ([Id])
 GO
 
 CREATE TABLE [dbo].[Chapter] (

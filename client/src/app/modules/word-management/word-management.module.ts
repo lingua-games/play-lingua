@@ -6,6 +6,8 @@ import { AddWordByUserComponent } from './add-word-by-user/add-word-by-user.comp
 import { ListWordsByUserComponent } from './list-words-by-user/list-words-by-user.component';
 import { PrimengModule } from '../common/primeng/primeng.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LoadingDirective } from '../../core/directives/loading.directive';
+import { DirectiveModule } from '../../core/directives/directive.module';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     PrimengModule,
     FormsModule,
     ReactiveFormsModule,
+    DirectiveModule,
   ],
 })
 export class WordManagementModule {}

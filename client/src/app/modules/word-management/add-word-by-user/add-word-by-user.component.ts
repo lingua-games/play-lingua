@@ -5,6 +5,9 @@ import {
   Severity,
 } from '../../../core/service/notification.service';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { BookChapterService } from '../../../core/service/book-chapter.service';
+import { BookModel } from '../../../core/models/book.model';
+import { Book } from '../../../core/models/book.interface';
 
 @Component({
   selector: 'app-add-word-by-user',
@@ -14,6 +17,9 @@ import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 export class AddWordByUserComponent implements OnInit {
   baseLanguages: LanguageModel[] = [];
   targetLanguages: LanguageModel[] = [];
+  visibleBooks: BookModel[] = [];
+  allBooks: BookModel[] = [];
+  isLoading: boolean;
 
   selectLanguageForm = this.formBuilder.group({
     baseLanguage: ['', Validators.required],
@@ -33,13 +39,38 @@ export class AddWordByUserComponent implements OnInit {
     return this.selectLanguageForm.get('isSelectedLanguageSubmit');
   }
 
+  selectBookForm = this.formBuilder.group({
+    book: [''],
+    selectBookRandom: ['book'],
+  });
+
+  get selectBookRandom(): AbstractControl {
+    return this.selectBookForm.get('selectBookRandom');
+  }
+
   constructor(
     private notificationService: NotificationService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private bookChapterService: BookChapterService
   ) {}
 
   ngOnInit(): void {
     this.getBaseAndTargetLanguages();
+    this.getBooks();
+  }
+
+  getBooks(): void {
+    this.isLoading = true;
+    this.allBooks = [];
+    this.bookChapterService.getBooksByLanguages([1, 2, 3]).subscribe(
+      (res: BookModel[]) => {
+        this.allBooks = res;
+        this.isLoading = false;
+      },
+      (error: string) => {
+        this.isLoading = false;
+      }
+    );
   }
 
   getBaseAndTargetLanguages(): void {
@@ -77,6 +108,10 @@ export class AddWordByUserComponent implements OnInit {
       return;
     }
     this.isSelectedLanguageSubmit.setValue(true);
+    this.visibleBooks = this.allBooks.filter(
+      (x) => x.TargetLanguageId === this.baseLanguage.value.id
+    );
+    console.log(this.visibleBooks);
   }
 
   checkFormValidation(fieldName: string): string {

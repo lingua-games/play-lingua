@@ -4,7 +4,7 @@
   margin-left: 3%;
   padding: .5rem;
   margin-top: 1vh;
-  background-color: rgba(0,0,0,.1);
+  background-color: rgba(0, 0, 0, .1);
 }
 
 ::ng-deep .p-dropdown {
@@ -23,3 +23,19 @@
 ::ng-deep .field-not-valid {
   border: solid 1px red;
 }
+
+.random-word-text-container {
+  border: solid 1px lightgray;
+  box-shadow: .05rem .05rem .05rem .05rem lightgray;
+  background-color: white;
+  color: gray;
+  padding: .5rem;
+}
+
+.p-button-rounded {
+  border: solid 1px lightgray;
+  color: gray;
+  background-color: white;
+  padding: 5px;
+}
+
