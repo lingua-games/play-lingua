@@ -4,10 +4,14 @@ import {
   NotificationService,
   Severity,
 } from '../../../core/service/notification.service';
-import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  Validators,
+} from '@angular/forms';
 import { BookChapterService } from '../../../core/service/book-chapter.service';
 import { BookModel } from '../../../core/models/book.model';
-import { Book } from '../../../core/models/book.interface';
 
 @Component({
   selector: 'app-add-word-by-user',
@@ -22,7 +26,7 @@ export class AddWordByUserComponent implements OnInit {
   isLoading: boolean;
 
   selectLanguageForm = this.formBuilder.group({
-    baseLanguage: ['', Validators.required],
+    baseLanguage: [{ value: '' }, Validators.required],
     targetLanguage: ['', Validators.required],
     isSelectedLanguageSubmit: [false],
   });
@@ -57,14 +61,40 @@ export class AddWordByUserComponent implements OnInit {
   ngOnInit(): void {
     this.getBaseAndTargetLanguages();
     this.getBooks();
+
+    this.isSelectedLanguageSubmit.valueChanges.subscribe((value) => {
+      if (value) {
+        this.baseLanguage.disable();
+        this.targetLanguage.disable();
+      } else {
+        this.baseLanguage.enable();
+        this.targetLanguage.enable();
+      }
+    });
+  }
+
+  bookSelectionChange(event): void {
+    if (event.value.id === 0) {
+      // TODO OPEN ADD BOOK DIALOG
+    }
   }
 
   getBooks(): void {
     this.isLoading = true;
     this.allBooks = [];
+    this.allBooks.push({
+      TargetLanguageId: 0,
+      name: 'Add new book',
+      id: 0,
+    });
     this.bookChapterService.getBooksByLanguages([1, 2, 3]).subscribe(
       (res: BookModel[]) => {
-        this.allBooks = res;
+        if (res && res.length) {
+          res.forEach((element) => {
+            this.allBooks.push(element);
+          });
+        }
+
         this.isLoading = false;
       },
       (error: string) => {
@@ -109,9 +139,9 @@ export class AddWordByUserComponent implements OnInit {
     }
     this.isSelectedLanguageSubmit.setValue(true);
     this.visibleBooks = this.allBooks.filter(
-      (x) => x.TargetLanguageId === this.baseLanguage.value.id
+      (x: BookModel) =>
+        x.TargetLanguageId === this.baseLanguage.value.id || x.id === 0
     );
-    console.log(this.visibleBooks);
   }
 
   checkFormValidation(fieldName: string): string {

@@ -11,7 +11,6 @@
                 formControlName='baseLanguage'
                 optionLabel='name'
                 [showClear]='true'
-                [disabled]='isSelectedLanguageSubmit.value'
                 [styleClass]="baseLanguage.invalid && selectLanguageForm.dirty ? 'field-not-valid' : ''">
     </p-dropdown>
   </div>
@@ -24,7 +23,6 @@
                 optionLabel='name'
                 formControlName='targetLanguage'
                 [showClear]='true'
-                [disabled]='isSelectedLanguageSubmit.value'
                 [styleClass]="targetLanguage.invalid && selectLanguageForm.dirty ? 'field-not-valid' : ''">
     </p-dropdown>
   </div>
@@ -44,14 +42,14 @@
               type='button'
               [icon]="selectBookRandom.value === 'book' ? 'pi pi-check': 'pi'"
               class='p-button-rounded'
-              (click)="selectBookRandom.setValue('book')"></button>
+              (click)="selectBookRandom.setValue('book'); selectBookForm.enable()"></button>
     </div>
     <div class='col-sm-4'>
       <p-dropdown [options]='visibleBooks'
                   placeholder='Select a book'
                   formControlName='book'
                   optionLabel='name'
-                  [disabled]="selectBookRandom.value === 'random'"
+                  (onChange)='bookSelectionChange($event)'
                   [showClear]='true'
                   [styleClass]="baseLanguage.invalid && selectLanguageForm.dirty ? 'field-not-valid' : ''">
       </p-dropdown>
@@ -64,7 +62,7 @@
               type='button'
               [icon]="selectBookRandom.value === 'random' ? 'pi pi-check': 'pi'"
               class='p-button-rounded'
-              (click)="selectBookRandom.setValue('random')"></button>
+              (click)="selectBookRandom.setValue('random'); selectBookForm.disable()"></button>
     </div>
     <div class='col-sm-6'>
       <div class='random-word-text-container'>
