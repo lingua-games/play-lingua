@@ -35,7 +35,7 @@ namespace PlayLingua.Host.Controllers
         [HttpPost]
         public ActionResult<Book> Add([FromBody] Book book)
         {
-            var addedBook = _bookRepository.Add(book);
+            var addedBook = _bookRepository.Add(book, GetUser().Id);
             return Ok(addedBook);
         }
 

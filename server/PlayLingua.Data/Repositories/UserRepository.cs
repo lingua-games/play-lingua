@@ -21,8 +21,9 @@ namespace PlayLingua.Data
 
         public User Add(User user)
         {
+            user.AddedDate = DateTime.Now;
             var sql =
-                "insert into dbo.Users (Email, Password) VALUES(@Email, @Password);" +
+                "insert into dbo.Users (Email, Password, AddedDate) VALUES(@Email, @Password, @AddedDate);" +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var id = db.Query<int>(sql, user).Single();

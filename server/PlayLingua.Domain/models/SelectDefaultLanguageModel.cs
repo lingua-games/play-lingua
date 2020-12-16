@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using PlayLingua.Domain.Entities;
 
 namespace PlayLingua.Domain.models
 {
-    public class SelectDefaultLanguageModel
+    public class SelectDefaultLanguageModel: BaseModel
     {
         public int DefaultBaseLanguage { get; set; }
         public int DefaultTargetLanguage { get; set; }

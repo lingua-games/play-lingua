@@ -22,8 +22,10 @@ namespace PlayLingua.Data
 
         public SelectedLanguages Add(SelectedLanguages selectedLanguages)
         {
+            selectedLanguages.AddedDate = DateTime.Now;
             var sql =
-                "insert into [dbo].[SelectedLanguages] ([BaseLanguages], [TargetLanguages], [UserId]) VALUES(@BaseLanguages, @TargetLanguages, @UserId);" +
+                @"insert into [dbo].[SelectedLanguages] ([BaseLanguages], [TargetLanguages], [UserId], [AddedDate]) 
+                    VALUES(@BaseLanguages, @TargetLanguages, @UserId, @AddedDate);" +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var id = db.Query<int>(sql, selectedLanguages).Single();
@@ -50,14 +52,20 @@ namespace PlayLingua.Data
         {
             db.Query(
                 @"
-                    UPDATE [DB_A6A40C_playlingua].[dbo].[Users] 
+                    UPDATE [dbo].[Users] 
                     SET [DefaultTargetLanguage] = @DefaultTargetLanguage ,[DefaultBaseLanguage] = @DefaultBaseLanguage 
                     where id = @UserId", new { selectDefaultLanguageModel.DefaultTargetLanguage, selectDefaultLanguageModel.DefaultBaseLanguage, userId });
         }
 
         public void Update(SelectedLanguages selectedLanguages)
         {
-            db.Query("update [dbo].[SelectedLanguages] SET [BaseLanguages] = @BaseLanguages,[TargetLanguages] = @TargetLanguages WHERE Id = @Id", selectedLanguages);
+            selectedLanguages.LastUpdateDate = DateTime.Now;
+            db.Query(@"
+                update [dbo].[SelectedLanguages] 
+                    SET [BaseLanguages] = @BaseLanguages,
+                        [TargetLanguages] = @TargetLanguages,
+                        [LastUpdateDate] = @LastUpdateDate 
+                    WHERE Id = @Id", selectedLanguages);
         }
     }
 }

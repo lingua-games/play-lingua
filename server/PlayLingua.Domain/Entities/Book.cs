@@ -2,7 +2,7 @@
 
 namespace PlayLingua.Domain.Entities
 {
-    public class Book
+    public class Book: BaseModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

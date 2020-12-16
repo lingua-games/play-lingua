@@ -31,8 +31,8 @@ namespace PlayLingua.Data
         {
             var result = new LoginResult();
             string query = @"
-                              SELECT * FROM [DB_A6A40C_playlingua].[dbo].[Users] 
-                              left join [DB_A6A40C_playlingua].[dbo].[SelectedLanguages]
+                              SELECT * FROM [dbo].[Users] 
+                              left join [dbo].[SelectedLanguages]
                               on [Users].Id = [SelectedLanguages].UserId
                               where Email = @Email
                             ";
