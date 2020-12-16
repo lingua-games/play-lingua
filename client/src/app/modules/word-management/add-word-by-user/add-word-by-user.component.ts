@@ -12,6 +12,8 @@ import {
 } from '@angular/forms';
 import { BookChapterService } from '../../../core/service/book-chapter.service';
 import { BookModel } from '../../../core/models/book.model';
+import { MatDialog } from '@angular/material/dialog';
+import { AddBookDialogComponent } from '../add-book-dialog/add-book-dialog.component';
 
 @Component({
   selector: 'app-add-word-by-user',
@@ -55,10 +57,14 @@ export class AddWordByUserComponent implements OnInit {
   constructor(
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
-    private bookChapterService: BookChapterService
+    private bookChapterService: BookChapterService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
+    // TODO, remove
+    this.bookSelectionChange({});
+
     this.getBaseAndTargetLanguages();
     this.getBooks();
 
@@ -74,9 +80,11 @@ export class AddWordByUserComponent implements OnInit {
   }
 
   bookSelectionChange(event): void {
-    if (event.value.id === 0) {
-      // TODO OPEN ADD BOOK DIALOG
-    }
+    // if (event.value.id === 0) {
+    this.dialog.open(AddBookDialogComponent, {
+      width: '40%',
+    });
+    // }
   }
 
   getBooks(): void {

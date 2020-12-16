@@ -6,14 +6,16 @@ import { AddWordByUserComponent } from './add-word-by-user/add-word-by-user.comp
 import { ListWordsByUserComponent } from './list-words-by-user/list-words-by-user.component';
 import { PrimengModule } from '../common/primeng/primeng.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LoadingDirective } from '../../core/directives/loading.directive';
 import { DirectiveModule } from '../../core/directives/directive.module';
+import { AddBookDialogComponent } from './add-book-dialog/add-book-dialog.component';
+import { MaterialModule } from '../common/material/material.module';
 
 @NgModule({
   declarations: [
     WordManagementComponent,
     AddWordByUserComponent,
     ListWordsByUserComponent,
+    AddBookDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -22,6 +24,7 @@ import { DirectiveModule } from '../../core/directives/directive.module';
     FormsModule,
     ReactiveFormsModule,
     DirectiveModule,
+    MaterialModule,
   ],
 })
 export class WordManagementModule {}

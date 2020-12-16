@@ -4,15 +4,13 @@ import { BasicInformationService } from '../../../core/service/basic-information
 import { Router } from '@angular/router';
 import { WordService } from '../../../core/service/word.service';
 import { ApiResult } from '../../../core/models/api-result.model';
-import { SelectedLanguageInquiryModel } from '../../../core/models/selected-language-inquiry.model';
 import {
   NotificationService,
   Severity,
 } from '../../../core/service/notification.service';
 import { LanguageModel } from '../../../core/models/language.model';
-import { InquiryResultModel } from '../../../core/models/inquiry-result.model';
 import { SecurityService } from '../../../core/service/security.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { SelectDefaultLanguageDialogComponent } from '../../../core/dialogs/select-default-language-dialog/select-default-language-dialog.component';
 
 @Component({
