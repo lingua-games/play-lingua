@@ -50,11 +50,19 @@ namespace PlayLingua.Data
 
         public void SetDefaultLanguages(SelectDefaultLanguageModel selectDefaultLanguageModel, int userId)
         {
+            selectDefaultLanguageModel.LastUpdateDate = DateTime.Now;
             db.Query(
                 @"
                     UPDATE [dbo].[Users] 
-                    SET [DefaultTargetLanguage] = @DefaultTargetLanguage ,[DefaultBaseLanguage] = @DefaultBaseLanguage 
-                    where id = @UserId", new { selectDefaultLanguageModel.DefaultTargetLanguage, selectDefaultLanguageModel.DefaultBaseLanguage, userId });
+                        SET 
+                            [DefaultTargetLanguage] = @DefaultTargetLanguage ,
+                            [DefaultBaseLanguage] = @DefaultBaseLanguage,
+                            [LastUpdateDate] = @LastUpdateDate
+                        where id = @UserId", new { 
+                    selectDefaultLanguageModel.DefaultTargetLanguage, 
+                    selectDefaultLanguageModel.DefaultBaseLanguage,
+                    selectDefaultLanguageModel.LastUpdateDate,
+                    userId });
         }
 
         public void Update(SelectedLanguages selectedLanguages)
