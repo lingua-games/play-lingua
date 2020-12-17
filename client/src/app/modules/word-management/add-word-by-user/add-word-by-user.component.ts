@@ -54,6 +54,10 @@ export class AddWordByUserComponent implements OnInit {
     return this.selectBookForm.get('selectBookRandom');
   }
 
+  get book(): AbstractControl {
+    return this.selectBookForm.get('book');
+  }
+
   constructor(
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
@@ -62,9 +66,6 @@ export class AddWordByUserComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // TODO, remove
-    this.bookSelectionChange({});
-
     this.getBaseAndTargetLanguages();
     this.getBooks();
 
@@ -80,18 +81,29 @@ export class AddWordByUserComponent implements OnInit {
   }
 
   bookSelectionChange(event): void {
-    // if (event.value.id === 0) {
-    this.dialog.open(AddBookDialogComponent, {
-      width: '40%',
-    });
-    // }
+    if (event.value.id === 0) {
+      const dialogRef = this.dialog.open(AddBookDialogComponent, {
+        width: '40%',
+        data: this.targetLanguages,
+      });
+
+      dialogRef.afterClosed().subscribe((res: any) => {
+        const itemToAdd = {
+          id: 10,
+          targetLanguageId: this.targetLanguage.value.id,
+          name: res.bookName,
+        };
+        this.visibleBooks = [...this.visibleBooks, itemToAdd];
+        this.book.setValue(itemToAdd);
+      });
+    }
   }
 
   getBooks(): void {
     this.isLoading = true;
     this.allBooks = [];
     this.allBooks.push({
-      TargetLanguageId: 0,
+      targetLanguageId: 0,
       name: 'Add new book',
       id: 0,
     });
@@ -148,7 +160,7 @@ export class AddWordByUserComponent implements OnInit {
     this.isSelectedLanguageSubmit.setValue(true);
     this.visibleBooks = this.allBooks.filter(
       (x: BookModel) =>
-        x.TargetLanguageId === this.baseLanguage.value.id || x.id === 0
+        x.targetLanguageId === this.targetLanguage.value.id || x.id === 0
     );
   }
 

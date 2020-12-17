@@ -10,12 +10,12 @@ export class BookChapterService {
 
   getBooksByLanguages(languageIds: number[]): Observable<BookModel[]> {
     return of([
-      { id: 1, name: 'book1', TargetLanguageId: 123 },
-      { id: 1, name: 'book aaa', TargetLanguageId: 38 },
-      { id: 1, name: 'book bbb', TargetLanguageId: 123 },
-      { id: 1, name: 'book ccc', TargetLanguageId: 123 },
-      { id: 1, name: 'book sss', TargetLanguageId: 38 },
-      { id: 1, name: 'book asdfz', TargetLanguageId: 123 },
+      { id: 1, name: 'book1', targetLanguageId: 367 },
+      { id: 1, name: 'book aaa', targetLanguageId: 398 },
+      { id: 1, name: 'book bbb', targetLanguageId: 367 },
+      { id: 1, name: 'book ccc', targetLanguageId: 398 },
+      { id: 1, name: 'book sss', targetLanguageId: 367 },
+      { id: 1, name: 'book zzz', targetLanguageId: 398 },
     ]);
   }
 }
