@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DirectiveModule } from '../../core/directives/directive.module';
 import { AddBookDialogComponent } from './add-book-dialog/add-book-dialog.component';
 import { MaterialModule } from '../common/material/material.module';
+import { AddChapterDialogComponent } from './add-chapter-dialog/add-chapter-dialog.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { MaterialModule } from '../common/material/material.module';
     AddWordByUserComponent,
     ListWordsByUserComponent,
     AddBookDialogComponent,
+    AddChapterDialogComponent,
   ],
   imports: [
     CommonModule,

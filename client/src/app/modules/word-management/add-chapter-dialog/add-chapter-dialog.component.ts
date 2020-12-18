@@ -8,39 +8,39 @@ import {
 } from '../../../core/service/notification.service';
 
 @Component({
-  selector: 'app-add-book-dialog',
-  templateUrl: './add-book-dialog.component.html',
-  styleUrls: ['./add-book-dialog.component.scss'],
+  selector: 'app-add-chapter-dialog',
+  templateUrl: './add-chapter-dialog.component.html',
+  styleUrls: ['./add-chapter-dialog.component.scss'],
 })
-export class AddBookDialogComponent implements OnInit {
-  addBookForm = this.formBuilder.group({
-    bookName: ['', Validators.required],
+export class AddChapterDialogComponent implements OnInit {
+  addChapterForm = this.formBuilder.group({
+    chapterName: ['', Validators.required],
   });
 
-  get bookName(): AbstractControl {
-    return this.addBookForm.get('bookName');
+  get chapterName(): AbstractControl {
+    return this.addChapterForm.get('chapterName');
   }
 
   constructor(
     private formBuilder: FormBuilder,
-    public dialogRef: MatDialogRef<AddBookDialogComponent>,
+    public dialogRef: MatDialogRef<AddChapterDialogComponent>,
     private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {}
 
   submitForm(): void {
-    if (this.bookName.invalid) {
+    if (this.chapterName.invalid) {
       this.notificationService.showMessage(
-        'Book name field is empty',
+        'Chapter name is empty',
         Severity.error
       );
     }
 
-    if (this.addBookForm.invalid) {
+    if (this.addChapterForm.invalid) {
       return;
     }
 
-    this.dialogRef.close(this.addBookForm.value);
+    this.dialogRef.close(this.addChapterForm.value);
   }
 }

@@ -14,6 +14,8 @@ import { BookChapterService } from '../../../core/service/book-chapter.service';
 import { BookModel } from '../../../core/models/book.model';
 import { MatDialog } from '@angular/material/dialog';
 import { AddBookDialogComponent } from '../add-book-dialog/add-book-dialog.component';
+import { ChapterModel } from '../../../core/models/chapter.model';
+import { AddChapterDialogComponent } from '../add-chapter-dialog/add-chapter-dialog.component';
 
 @Component({
   selector: 'app-add-word-by-user',
@@ -23,9 +25,9 @@ import { AddBookDialogComponent } from '../add-book-dialog/add-book-dialog.compo
 export class AddWordByUserComponent implements OnInit {
   baseLanguages: LanguageModel[] = [];
   targetLanguages: LanguageModel[] = [];
-  visibleBooks: BookModel[] = [];
-  allBooks: BookModel[] = [];
-  isLoading: boolean;
+  books: BookModel[] = [];
+  chapters: ChapterModel[] = [];
+  isBookLoading: boolean;
 
   selectLanguageForm = this.formBuilder.group({
     baseLanguage: [{ value: '' }, Validators.required],
@@ -47,6 +49,7 @@ export class AddWordByUserComponent implements OnInit {
 
   selectBookForm = this.formBuilder.group({
     book: [''],
+    chapter: [''],
     selectBookRandom: ['book'],
   });
 
@@ -58,6 +61,10 @@ export class AddWordByUserComponent implements OnInit {
     return this.selectBookForm.get('book');
   }
 
+  get chapter(): AbstractControl {
+    return this.selectBookForm.get('chapter');
+  }
+
   constructor(
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
@@ -66,8 +73,8 @@ export class AddWordByUserComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getBaseAndTargetLanguages();
     this.getBooks();
+    this.getBaseAndTargetLanguages();
 
     this.isSelectedLanguageSubmit.valueChanges.subscribe((value) => {
       if (value) {
@@ -81,46 +88,87 @@ export class AddWordByUserComponent implements OnInit {
   }
 
   bookSelectionChange(event): void {
-    if (event.value.id === 0) {
-      const dialogRef = this.dialog.open(AddBookDialogComponent, {
-        width: '40%',
-        data: this.targetLanguages,
-      });
+    if (event.value.id === -1) {
+      this.dialog
+        .open(AddBookDialogComponent, {
+          width: '40%',
+        })
+        .afterClosed()
+        .subscribe((res: any) => {
+          if (res) {
+            const itemToAdd = {
+              id: 0,
+              targetLanguageId: this.targetLanguage.value.id,
+              name: res.bookName,
+            };
+            this.books = [...this.books, itemToAdd];
+            this.book.setValue(itemToAdd);
+          } else {
+            this.book.setValue('');
+          }
+        });
+    } else {
+      this.chapters = [];
+      this.bookChapterService
+        .getChaptersByBookId(event.value.id)
+        .subscribe((res: ChapterModel[]) => {
+          this.chapters.push({
+            id: -1,
+            name: 'Add new chapter',
+          });
+          res.forEach((chapter) => {
+            this.chapters.push(chapter);
+          });
+        });
+    }
+  }
 
-      dialogRef.afterClosed().subscribe((res: any) => {
-        const itemToAdd = {
-          id: 10,
-          targetLanguageId: this.targetLanguage.value.id,
-          name: res.bookName,
-        };
-        this.visibleBooks = [...this.visibleBooks, itemToAdd];
-        this.book.setValue(itemToAdd);
-      });
+  chapterSelectionChange(event): void {
+    if (event.value.id === -1) {
+      this.dialog
+        .open(AddChapterDialogComponent, {
+          width: '40%',
+        })
+        .afterClosed()
+        .subscribe((res: any) => {
+          if (res) {
+            const itemToAdd = {
+              id: 0,
+              name: res.chapterName,
+            };
+            this.chapters = [...this.chapters, itemToAdd];
+            this.chapter.setValue(itemToAdd);
+          } else {
+            this.chapter.setValue('');
+          }
+        });
     }
   }
 
   getBooks(): void {
-    this.isLoading = true;
-    this.allBooks = [];
-    this.allBooks.push({
+    this.isBookLoading = true;
+    this.books = [];
+    this.books.push({
       targetLanguageId: 0,
       name: 'Add new book',
-      id: 0,
+      id: -1,
     });
-    this.bookChapterService.getBooksByLanguages([1, 2, 3]).subscribe(
-      (res: BookModel[]) => {
-        if (res && res.length) {
-          res.forEach((element) => {
-            this.allBooks.push(element);
-          });
-        }
+    this.bookChapterService
+      .getBooksByLanguages(this.targetLanguage.value.id)
+      .subscribe(
+        (res: BookModel[]) => {
+          if (res && res.length) {
+            res.forEach((element) => {
+              this.books.push(element);
+            });
+          }
 
-        this.isLoading = false;
-      },
-      (error: string) => {
-        this.isLoading = false;
-      }
-    );
+          this.isBookLoading = false;
+        },
+        (error: string) => {
+          this.isBookLoading = false;
+        }
+      );
   }
 
   getBaseAndTargetLanguages(): void {
@@ -158,18 +206,6 @@ export class AddWordByUserComponent implements OnInit {
       return;
     }
     this.isSelectedLanguageSubmit.setValue(true);
-    this.visibleBooks = this.allBooks.filter(
-      (x: BookModel) =>
-        x.targetLanguageId === this.targetLanguage.value.id || x.id === 0
-    );
-  }
-
-  checkFormValidation(fieldName: string): string {
-    // if (
-    //   this.formValidation.find((x: ValidationModel) => x.field === fieldName)
-    // ) {
-    //   return 'field-not-valid';
-    // }
-    return '';
+    this.getBooks();
   }
 }
