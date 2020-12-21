@@ -4,18 +4,15 @@ import {
   NotificationService,
   Severity,
 } from '../../../core/service/notification.service';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormControl,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { BookChapterService } from '../../../core/service/book-chapter.service';
 import { BookModel } from '../../../core/models/book.model';
 import { MatDialog } from '@angular/material/dialog';
 import { AddBookDialogComponent } from '../add-book-dialog/add-book-dialog.component';
 import { ChapterModel } from '../../../core/models/chapter.model';
 import { AddChapterDialogComponent } from '../add-chapter-dialog/add-chapter-dialog.component';
+import { AddWordFormModel } from '../../../core/models/add-word-form.model';
+import { WordToAddModel } from '../../../core/models/word-to-add.model';
 
 @Component({
   selector: 'app-add-word-by-user',
@@ -28,6 +25,7 @@ export class AddWordByUserComponent implements OnInit {
   books: BookModel[] = [];
   chapters: ChapterModel[] = [];
   isBookLoading: boolean;
+  formData: AddWordFormModel = new AddWordFormModel();
 
   selectLanguageForm = this.formBuilder.group({
     baseLanguage: [{ value: '' }, Validators.required],
@@ -48,8 +46,8 @@ export class AddWordByUserComponent implements OnInit {
   }
 
   selectBookForm = this.formBuilder.group({
-    book: [''],
-    chapter: [''],
+    book: ['', Validators.required],
+    chapter: ['', Validators.required],
     selectBookRandom: ['book'],
   });
 
@@ -73,6 +71,8 @@ export class AddWordByUserComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.submitSelectedBooks();
+
     this.getBooks();
     this.getBaseAndTargetLanguages();
 
@@ -177,6 +177,87 @@ export class AddWordByUserComponent implements OnInit {
     );
     this.baseLanguages = selectedLanguages.base;
     this.targetLanguages = selectedLanguages.target;
+  }
+
+  submitSelectedBooks(): void {
+    // if (this.selectBookRandom.value === 'book') {
+    //   if (this.book.invalid) {
+    //     this.notificationService.showMessage(
+    //       'Please select a book',
+    //       Severity.error,
+    //       '',
+    //       'bc'
+    //     );
+    //   } else {
+    //     if (this.chapter.invalid) {
+    //       this.notificationService.showMessage(
+    //         'Please select a chapter',
+    //         Severity.error,
+    //         '',
+    //         'bc'
+    //       );
+    //     }
+    //   }
+    //
+    //   if (this.selectBookForm.invalid) {
+    //     return;
+    //   }
+    // }
+
+    if (this.formData.words.length === 0) {
+      this.formData.words.push({
+        base: '',
+        targets: [{ value: '' }],
+        isEditing: true,
+      });
+    }
+  }
+
+  addWordSeries(word: WordToAddModel): void {
+    if (!word.base) {
+      this.notificationService.showMessage(
+        'Base word is empty',
+        Severity.error,
+        '',
+        'bc'
+      );
+      return;
+    }
+
+    if (word.targets.filter((x) => x.value === '').length > 0) {
+      this.notificationService.showMessage(
+        'All the target words should be filled',
+        Severity.error,
+        '',
+        'bc'
+      );
+      return;
+    }
+
+    this.formData.words.map((x) => (x.isEditing = false));
+    this.formData.words.push({
+      base: '',
+      targets: [{ value: '' }],
+      isEditing: true,
+    });
+
+    console.log(this.formData);
+  }
+
+  disableAddTarget(word: WordToAddModel): boolean {
+    return word.targets.filter((x) => x.value === '').length > 0;
+  }
+
+  disableRemoveTarget(word: WordToAddModel): boolean {
+    return word.targets && word.targets.length <= 1;
+  }
+
+  removeTargetWord(word: WordToAddModel): void {
+    word.targets.splice(word.targets.length - 1, 1);
+  }
+
+  addTargetWord(word: WordToAddModel): void {
+    word.targets.push({ value: '' });
   }
 
   submitSelectedLanguages(): void {
