@@ -205,10 +205,12 @@ export class AddWordByUserComponent implements OnInit {
     // }
 
     if (this.formData.words.length === 0) {
-      this.formData.words.push({
-        base: '',
-        targets: [{ value: '' }],
-      });
+      for (let i = 0; i < 15; i++) {
+        this.formData.words.push({
+          base: '',
+          targets: [{ value: '' }],
+        });
+      }
     }
   }
 

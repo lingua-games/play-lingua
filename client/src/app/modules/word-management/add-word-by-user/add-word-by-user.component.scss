@@ -49,3 +49,15 @@
   padding: .5rem;
   height: fit-content;
 }
+
+.words-container {
+  height: 65vh;
+}
+
+.word-list-container {
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 90%;
+}
+
+
