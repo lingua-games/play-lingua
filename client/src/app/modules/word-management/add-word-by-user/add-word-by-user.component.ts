@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { LanguageModel } from '../../../core/models/language.model';
 import {
   NotificationService,
@@ -71,8 +71,6 @@ export class AddWordByUserComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.submitSelectedBooks();
-
     this.getBooks();
     this.getBaseAndTargetLanguages();
 
@@ -146,6 +144,8 @@ export class AddWordByUserComponent implements OnInit {
   }
 
   getBooks(): void {
+    this.selectBookForm.reset();
+    this.selectBookRandom.setValue('book');
     this.isBookLoading = true;
     this.books = [];
     this.books.push({
@@ -180,36 +180,27 @@ export class AddWordByUserComponent implements OnInit {
   }
 
   submitSelectedBooks(): void {
-    // if (this.selectBookRandom.value === 'book') {
-    //   if (this.book.invalid) {
-    //     this.notificationService.showMessage(
-    //       'Please select a book',
-    //       Severity.error,
-    //       '',
-    //       'bc'
-    //     );
-    //   } else {
-    //     if (this.chapter.invalid) {
-    //       this.notificationService.showMessage(
-    //         'Please select a chapter',
-    //         Severity.error,
-    //         '',
-    //         'bc'
-    //       );
-    //     }
-    //   }
-    //
-    //   if (this.selectBookForm.invalid) {
-    //     return;
-    //   }
-    // }
+    if (this.selectBookRandom.value === 'book') {
+      if (this.book.invalid) {
+        this.notificationService.showMessage(
+          'Please select a book',
+          Severity.error,
+          '',
+          'bc'
+        );
+      } else {
+        if (this.chapter.invalid) {
+          this.notificationService.showMessage(
+            'Please select a chapter',
+            Severity.error,
+            '',
+            'bc'
+          );
+        }
+      }
 
-    if (this.formData.words.length === 0) {
-      for (let i = 0; i < 15; i++) {
-        this.formData.words.push({
-          base: '',
-          targets: [{ value: '' }],
-        });
+      if (this.selectBookForm.invalid) {
+        return;
       }
     }
   }
@@ -228,13 +219,15 @@ export class AddWordByUserComponent implements OnInit {
     this.formData.words.splice(index, 1);
   }
 
-  addWordSeries(): void {
+  addWordSeries(el: Element): void {
     this.formData.words.push({
       base: '',
       targets: [{ value: '' }],
     });
-
-    console.log(this.formData);
+    console.log(el);
+    setTimeout(() => {
+      el.scrollTo({ left: 0, top: el.scrollHeight, behavior: 'smooth' });
+    }, 1);
   }
 
   disableAddTarget(word: WordToAddModel): boolean {
