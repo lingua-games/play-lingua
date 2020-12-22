@@ -101,12 +101,12 @@
   </div>
 </form>
 
-<div class='select-language-container words-container' appLoading [loadingFlag]='isBookLoading'>
-  <div class='row' style='margin: 0; height: 10%'>
-    <div class='col-sm-3 text-center word-header-container mb-3 pb-3'>
+<div class='fill-words-container words-container' appLoading [loadingFlag]='isBookLoading'>
+  <div class='row fill-word-header-container'>
+    <div class='col-sm-3 text-center word-header-container'>
       Source word
     </div>
-    <div class='col-sm-9 text-center word-header-container mb-3 pb-3'>
+    <div class='col-sm-9 text-center word-header-container'>
       Target word(s)
     </div>
   </div>
@@ -150,8 +150,20 @@
         </div>
       </div>
     </div>
-    <button class='btn btn-success' (click)='addWordSeries()'>
-      More
-    </button>
+  </div>
+  <div class='word-list-action-container row pt-3'>
+    <div class='col-sm-6 text-left'>
+      <button class='btn btn-info' (click)='addWordSeries()'>
+        More word
+      </button>
+    </div>
+    <div class='col-sm-6 text-right'>
+      <button class='btn btn-info mr-2' (click)='addWordSeries()'>
+        Save to draft
+      </button>
+      <button class='btn btn-success mr-4' (click)='addWordSeries()'>
+        Submit form
+      </button>
+    </div>
   </div>
 </div>

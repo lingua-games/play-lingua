@@ -5,6 +5,33 @@
   padding: .5rem;
   margin-top: 1vh;
   background-color: rgba(0, 0, 0, .1);
+
+  .word-list-container {
+    background-color: rgba(0, 0, 0, .1);
+    border-radius: 10px;
+    padding: .5rem;
+  }
+}
+
+.fill-words-container {
+  width: 94%;
+  margin-left: 3%;
+  margin-top: 1vh;
+  height: 65vh;
+
+  .fill-word-header-container {
+    margin: 0;
+  }
+
+  .word-list-container {
+    background-color: rgba(0, 0, 0, .1);
+    padding: .5rem;
+  }
+
+  .word-list-action-container {
+    background-color: rgba(0, 0, 0, .1);
+    margin: 1% 0 0 0;
+  }
 }
 
 ::ng-deep .p-dropdown {
@@ -36,10 +63,6 @@
   padding: 5px;
 }
 
-.word-devider {
-  border-left: solid 1px
-}
-
 .word-header-container {
   background-color: white;
   color: gray;
@@ -50,14 +73,13 @@
   height: fit-content;
 }
 
-.words-container {
-  height: 65vh;
-}
-
 .word-list-container {
   overflow-x: hidden;
   overflow-y: auto;
-  max-height: 90%;
+  height: 80%;
 }
 
+.word-list-action-container {
+  height: 10%;
+}
 
