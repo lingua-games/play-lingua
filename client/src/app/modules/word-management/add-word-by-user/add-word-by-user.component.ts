@@ -208,37 +208,28 @@ export class AddWordByUserComponent implements OnInit {
       this.formData.words.push({
         base: '',
         targets: [{ value: '' }],
-        isEditing: true,
       });
     }
   }
 
-  addWordSeries(word: WordToAddModel): void {
-    if (!word.base) {
+  removeWordSeries(word: WordToAddModel): void {
+    if (this.formData.words.length < 2) {
       this.notificationService.showMessage(
-        'Base word is empty',
+        'For this action you need to have at least 2 added words',
         Severity.error,
         '',
         'bc'
       );
       return;
     }
+    const index = this.formData.words.indexOf(word);
+    this.formData.words.splice(index, 1);
+  }
 
-    if (word.targets.filter((x) => x.value === '').length > 0) {
-      this.notificationService.showMessage(
-        'All the target words should be filled',
-        Severity.error,
-        '',
-        'bc'
-      );
-      return;
-    }
-
-    this.formData.words.map((x) => (x.isEditing = false));
+  addWordSeries(): void {
     this.formData.words.push({
       base: '',
       targets: [{ value: '' }],
-      isEditing: true,
     });
 
     console.log(this.formData);

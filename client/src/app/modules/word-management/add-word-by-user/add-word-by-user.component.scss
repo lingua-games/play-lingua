@@ -39,3 +39,13 @@
 .word-devider {
   border-left: solid 1px
 }
+
+.word-header-container {
+  background-color: white;
+  color: gray;
+  border: solid 1px lightgray;
+  font-size: 1vw;
+  text-align: center;
+  padding: .5rem;
+  height: fit-content;
+}

@@ -102,37 +102,46 @@
 </form>
 
 <div class='select-language-container' appLoading [loadingFlag]='isBookLoading'>
-  <div class='row' *ngFor='let word of formData.words;let index = index'>
-    <div class='col-sm-1 text-center'>
-      <button class='btn btn-success' [ngClass]="word.isEditing ? 'btn-success' : 'btn-info'" (click)='addWordSeries(word)'>
-        {{word.isEditing ? 'More' : 'Edit'}}
-      </button>
+  <div class='row' style='margin: 0'>
+    <div class='col-sm-3 text-center word-header-container mb-3 pb-3'>
+      Source word
     </div>
-    <div class='col-sm-2'>
-      <input [disabled]='!word.isEditing' type='email' class='form-control' aria-describedby='emailHelp'
-             placeholder='Base word' [(ngModel)]='word.base'>
+    <div class='col-sm-9 text-center word-header-container mb-3 pb-3'>
+      Target word(s)
+    </div>
+  </div>
+  <div class='row' *ngFor='let word of formData.words;let index = index'>
+    <div class='col-sm-3 mt-2 form-row'>
+      <div class='col-sm-2'>
+        <button class='btn btn-danger' (click)='removeWordSeries(word)'>
+          -
+        </button>
+      </div>
+      <div class='col-sm-10'>
+        <input type='email' class='form-control' aria-describedby='emailHelp' placeholder='Base word'
+               [(ngModel)]='word.base'>
+      </div>
     </div>
     <div class='col-sm-9'>
-      <div class='row'>
+      <div class='row mt-2'>
         <div class='col-sm-3 mb-2' *ngFor='let target of word.targets'>
           <input
             type='text'
             class='form-control'
             aria-describedby='emailHelp'
             placeholder='Target word'
-            [disabled]='!word.isEditing'
             [(ngModel)]='target.value'
           >
         </div>
         <div class='col-sm-2'>
           <button class='btn mr-1 btn-danger'
-                  [disabled]='disableRemoveTarget(word) || !word.isEditing'
+                  [disabled]='disableRemoveTarget(word)'
                   (click)='removeTargetWord(word)'>
             {{'-'}}
           </button>
           <button class='btn btn-success'
                   type='submit'
-                  [disabled]='disableAddTarget(word) || !word.isEditing'
+                  [disabled]='disableAddTarget(word)'
                   (click)='addTargetWord(word)'>
             {{'+'}}
           </button>
@@ -140,4 +149,7 @@
       </div>
     </div>
   </div>
+  <button class='btn btn-success' (click)='addWordSeries()'>
+    More
+  </button>
 </div>
