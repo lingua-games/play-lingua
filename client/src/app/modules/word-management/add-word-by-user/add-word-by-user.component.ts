@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LanguageModel } from '../../../core/models/language.model';
 import {
   NotificationService,
@@ -71,8 +71,8 @@ export class AddWordByUserComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getBooks();
     this.getBaseAndTargetLanguages();
+    this.checkDraft();
 
     this.isSelectedLanguageSubmit.valueChanges.subscribe((value) => {
       if (value) {
@@ -83,6 +83,36 @@ export class AddWordByUserComponent implements OnInit {
         this.targetLanguage.enable();
       }
     });
+  }
+
+  checkDraft(): void {
+    if (!localStorage.getItem('lingua-add-word-draft')) {
+      return;
+    }
+
+    const draft = JSON.parse(
+      localStorage.getItem('lingua-add-word-draft')
+    ) as AddWordFormModel;
+
+    this.baseLanguage.setValue(draft.baseLanguage);
+    this.targetLanguage.setValue(draft.targetLanguage);
+
+    if (!!draft.targetLanguage && !!draft.baseLanguage) {
+      this.isSelectedLanguageSubmit.setValue(true);
+      if (draft.isRandom === 'random') {
+        this.selectBookRandom.setValue('random');
+      } else {
+        this.selectBookRandom.setValue('book');
+        this.getBooks();
+        if (draft.book) {
+          this.book.setValue(draft.book);
+          this.bookSelectionChange({ value: draft.book });
+          this.chapter.setValue(draft.chapter);
+        }
+      }
+    }
+
+    this.formData.words = draft.words;
   }
 
   bookSelectionChange(event): void {
@@ -244,6 +274,25 @@ export class AddWordByUserComponent implements OnInit {
 
   addTargetWord(word: WordToAddModel): void {
     word.targets.push({ value: '' });
+  }
+
+  saveToDraft(): void {
+    this.formData.baseLanguage = this.baseLanguage.value;
+    this.formData.targetLanguage = this.targetLanguage.value;
+    this.formData.isRandom = this.selectBookRandom.value;
+    this.formData.book = this.book.value;
+    this.formData.chapter = this.chapter.value;
+
+    localStorage.setItem(
+      'lingua-add-word-draft',
+      JSON.stringify(this.formData)
+    );
+    this.notificationService.showMessage(
+      'Saved to draft',
+      Severity.success,
+      '',
+      'bc'
+    );
   }
 
   submitSelectedLanguages(): void {

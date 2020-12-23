@@ -58,6 +58,7 @@
                   optionLabel='name'
                   (onChange)='bookSelectionChange($event)'
                   [showClear]='true'
+                  [disabled]="selectBookRandom.value === 'random'"
                   [styleClass]="book.invalid && selectLanguageForm.dirty ? 'field-not-valid' : ''">
 
       </p-dropdown>
@@ -66,11 +67,11 @@
       Chapter
     </div>
     <div class='col-sm-4'>
-
       <p-dropdown [options]='chapters'
                   placeholder='Select a chapter'
                   formControlName='chapter'
                   optionLabel='name'
+                  [disabled]="selectBookRandom.value === 'random'"
                   (onChange)='chapterSelectionChange($event)'
                   [showClear]='true'>
 
@@ -87,6 +88,7 @@
       <button pButton
               pRipple
               type='button'
+
               [icon]="selectBookRandom.value === 'random' ? 'pi pi-check': 'pi'"
               class='p-button-rounded'
               (click)="selectBookRandom.setValue('random'); selectBookForm.disable()"></button>
@@ -157,7 +159,7 @@
       </button>
     </div>
     <div class='col-sm-6 text-right'>
-      <button class='btn btn-info mr-2'>
+      <button class='btn btn-info mr-2' (click)='saveToDraft()'>
         Save to draft
       </button>
       <button class='btn btn-success mr-4'>

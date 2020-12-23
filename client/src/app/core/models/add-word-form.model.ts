@@ -7,6 +7,6 @@ export class AddWordFormModel {
   public targetLanguage: number;
   public book: BookModel;
   public chapter: ChapterModel;
-  public isRandom: boolean;
+  public isRandom: string;
   public words: WordToAddModel[] = [];
 }
