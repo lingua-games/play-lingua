@@ -1,12 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { BookModel } from '../models/book.model';
+import { AddWordFormModel } from '../models/add-word-form.model';
+import { delay } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BookChapterService {
   constructor() {}
+
+  submitForm(form: AddWordFormModel): Observable<boolean> {
+    return of(true).pipe(delay(3000));
+  }
 
   getBooksByLanguages(languageIds: number): Observable<BookModel[]> {
     return of([

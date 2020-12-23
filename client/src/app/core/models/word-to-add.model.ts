@@ -1,8 +1,9 @@
 export class WordToAddModel {
-  base: string;
-  targets: TargetModel[];
+  base: SourceTargetModel;
+  targets: SourceTargetModel[];
 }
 
-export class TargetModel {
+export class SourceTargetModel {
   value: string;
+  isValid?: boolean;
 }
