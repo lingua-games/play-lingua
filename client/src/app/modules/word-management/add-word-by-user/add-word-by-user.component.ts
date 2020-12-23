@@ -12,7 +12,10 @@ import { AddBookDialogComponent } from '../add-book-dialog/add-book-dialog.compo
 import { ChapterModel } from '../../../core/models/chapter.model';
 import { AddChapterDialogComponent } from '../add-chapter-dialog/add-chapter-dialog.component';
 import { AddWordFormModel } from '../../../core/models/add-word-form.model';
-import { WordToAddModel } from '../../../core/models/word-to-add.model';
+import {
+  SourceTargetModel,
+  WordToAddModel,
+} from '../../../core/models/word-to-add.model';
 
 @Component({
   selector: 'app-add-word-by-user',
@@ -25,10 +28,11 @@ export class AddWordByUserComponent implements OnInit {
   books: BookModel[] = [];
   chapters: ChapterModel[] = [];
   isBookLoading: boolean;
+  isPageLoading: boolean;
   formData: AddWordFormModel = new AddWordFormModel();
 
   selectLanguageForm = this.formBuilder.group({
-    baseLanguage: [{ value: '' }, Validators.required],
+    baseLanguage: ['', Validators.required],
     targetLanguage: ['', Validators.required],
     isSelectedLanguageSubmit: [false],
   });
@@ -236,23 +240,14 @@ export class AddWordByUserComponent implements OnInit {
   }
 
   removeWordSeries(word: WordToAddModel): void {
-    if (this.formData.words.length < 2) {
-      this.notificationService.showMessage(
-        'For this action you need to have at least 2 added words',
-        Severity.error,
-        '',
-        'bc'
-      );
-      return;
-    }
     const index = this.formData.words.indexOf(word);
     this.formData.words.splice(index, 1);
   }
 
   addWordSeries(el: Element): void {
     this.formData.words.push({
-      base: '',
-      targets: [{ value: '' }],
+      base: { value: '', isValid: true },
+      targets: [{ value: '', isValid: true }],
     });
     console.log(el);
     setTimeout(() => {
@@ -273,7 +268,77 @@ export class AddWordByUserComponent implements OnInit {
   }
 
   addTargetWord(word: WordToAddModel): void {
-    word.targets.push({ value: '' });
+    word.targets.push({ value: '', isValid: true });
+  }
+
+  submitForm(): void {
+    if (this.selectBookRandom.value === 'book') {
+      if (this.book.invalid) {
+        this.notificationService.showMessage(
+          'Please select a book',
+          Severity.error,
+          '',
+          'bc'
+        );
+      }
+      if (this.chapter.invalid) {
+        this.notificationService.showMessage(
+          'Please select a chapter',
+          Severity.error,
+          '',
+          'bc'
+        );
+      }
+      if (this.selectBookForm.invalid) {
+        this.selectBookForm.markAsDirty();
+        return;
+      }
+    }
+    if (!this.formData.words || this.formData.words.length === 0) {
+      this.notificationService.showMessage(
+        'You should at least add a word',
+        Severity.error,
+        '',
+        'bc'
+      );
+      return;
+    }
+
+    let isWordFormValid = true;
+    this.formData.words.forEach((word: WordToAddModel) => {
+      if (!word.base.value) {
+        word.base.isValid = false;
+        isWordFormValid = false;
+      }
+
+      word.targets.forEach((target: SourceTargetModel) => {
+        if (!target.value) {
+          target.isValid = false;
+          isWordFormValid = false;
+        }
+      });
+    });
+
+    if (!isWordFormValid) {
+      this.notificationService.showMessage(
+        'You should fill all the required fields (red boxes)',
+        Severity.error,
+        '',
+        'bc'
+      );
+      return;
+    }
+
+    this.isPageLoading = true;
+    this.bookChapterService.submitForm(this.formData).subscribe(
+      (res: boolean) => {
+        this.isPageLoading = false;
+        localStorage.removeItem('lingua-add-word-draft');
+      },
+      (error: string) => {
+        this.isPageLoading = false;
+      }
+    );
   }
 
   saveToDraft(): void {
