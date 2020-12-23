@@ -1,0 +1,24 @@
+<div class='dialog-header-container'>
+  <div class='dialog-header-text'>Add a chapter</div>
+  <div class='dialog-header-close-icon'>
+    <span (click)='dialogRef.close()'>X</span>
+  </div>
+</div>
+<div class='dialog-body-container'>
+  <form [formGroup]='addChapterForm' (ngSubmit)='submitForm()'>
+    <div class='form-group'>
+      <label for='chapterName'>Chapter name</label>
+      <input
+        type='text'
+        class='form-control'
+        id='chapterName'
+        placeholder='Enter name'
+        aria-describedby='chapterHelp'
+        formControlName='chapterName'
+        [ngClass]="chapterName.invalid && addChapterForm.dirty ? 'field-not-valid' : ''"
+      >
+      <small id='chapterHelp' class='form-text text-muted'>This chapter will save to our database once you submit your word list</small>
+    </div>
+    <button type='submit' class='btn btn-success'>Save</button>
+  </form>
+</div>

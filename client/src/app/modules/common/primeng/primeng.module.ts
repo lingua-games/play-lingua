@@ -5,9 +5,20 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { NotificationService } from '../../../core/service/notification.service';
 import { DropdownModule } from 'primeng/dropdown';
+import { CheckboxModule } from 'primeng/checkbox';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 
 @NgModule({
-  exports: [ButtonModule, MultiSelectModule, ToastModule, DropdownModule],
+  exports: [
+    ButtonModule,
+    MultiSelectModule,
+    ToastModule,
+    DropdownModule,
+    CheckboxModule,
+    RadioButtonModule,
+    ToggleButtonModule,
+  ],
   providers: [MessageService, NotificationService],
 })
 export class PrimengModule {}

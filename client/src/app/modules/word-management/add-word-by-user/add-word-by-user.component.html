@@ -1,1 +1,170 @@
-<p>add-word-by-user works!</p>
+<p-toast position='bottom-center' key='bc'></p-toast>
+<p-toast></p-toast>
+
+<form [formGroup]='selectLanguageForm' class='select-language-container'>
+  <div class='row'>
+    <div class='col-sm-1'></div>
+    <div class='col-sm-1 pre-text-container'>
+      From
+    </div>
+    <div class='col-sm-4'>
+      <p-dropdown [options]='baseLanguages'
+                  placeholder='Base language'
+                  formControlName='baseLanguage'
+                  optionLabel='name'
+                  [showClear]='true'
+                  [styleClass]="baseLanguage.invalid && selectLanguageForm.dirty ? 'field-not-valid' : ''">
+      </p-dropdown>
+    </div>
+    <div class='col-sm-1 pre-text-container'>
+      <span>To</span>
+    </div>
+    <div class='col-sm-4'>
+      <p-dropdown [options]='targetLanguages'
+                  placeholder='Target language'
+                  optionLabel='name'
+                  formControlName='targetLanguage'
+                  [showClear]='true'
+                  [styleClass]="targetLanguage.invalid && selectLanguageForm.dirty ? 'field-not-valid' : ''">
+      </p-dropdown>
+    </div>
+    <div class='col-sm-1 text-right'>
+      <button class='btn ml-2' [ngClass]="isSelectedLanguageSubmit.value ? 'btn-primary' : 'btn-success'" type='submit'
+              [disabled]='isBookLoading'
+              (click)='submitSelectedLanguages()'>
+        {{isSelectedLanguageSubmit.value ? 'Edit' : 'Next'}}
+      </button>
+    </div>
+  </div>
+</form>
+
+<form *ngIf='isSelectedLanguageSubmit.value' [formGroup]='selectBookForm' class='select-language-container' appLoading [loadingFlag]='isBookLoading'>
+  <div class='row'>
+    <div class='col-sm-1 text-center form-check'>
+      <button pButton
+              pRipple
+              type='button'
+              [icon]="selectBookRandom.value === 'book' ? 'pi pi-check': 'pi'"
+              class='p-button-rounded'
+              (click)="selectBookRandom.setValue('book'); selectBookForm.enable()"></button>
+    </div>
+    <div class='col-sm-1 pre-text-container'>
+      Book
+    </div>
+    <div class='col-sm-4'>
+      <p-dropdown [options]='books'
+                  placeholder='Select a book'
+                  formControlName='book'
+                  optionLabel='name'
+                  (onChange)='bookSelectionChange($event)'
+                  [showClear]='true'
+                  [disabled]="selectBookRandom.value === 'random'"
+                  [styleClass]="book.invalid && selectLanguageForm.dirty ? 'field-not-valid' : ''">
+
+      </p-dropdown>
+    </div>
+    <div class='col-sm-1 pre-text-container'>
+      Chapter
+    </div>
+    <div class='col-sm-4'>
+      <p-dropdown [options]='chapters'
+                  placeholder='Select a chapter'
+                  formControlName='chapter'
+                  optionLabel='name'
+                  [disabled]="selectBookRandom.value === 'random'"
+                  (onChange)='chapterSelectionChange($event)'
+                  [showClear]='true'>
+
+      </p-dropdown>
+      <label style='background-color: lightgray; margin-top:3px;padding:4px; border-radius: 3px;color: gray'>Optional
+        field</label>
+    </div>
+    <div class='col-sm-1 text-right'>
+
+    </div>
+  </div>
+  <div class='row mt-2'>
+    <div class='col-sm-1 text-center'>
+      <button pButton
+              pRipple
+              type='button'
+
+              [icon]="selectBookRandom.value === 'random' ? 'pi pi-check': 'pi'"
+              class='p-button-rounded'
+              (click)="selectBookRandom.setValue('random'); selectBookForm.disable()"></button>
+    </div>
+    <div class='col-sm-6 random-word-text-container'>
+      I dont want to select any book, just want to add some words randomly.
+    </div>
+  </div>
+</form>
+
+<div *ngIf='isSelectedLanguageSubmit.value' class='fill-words-container words-container' appLoading [loadingFlag]='isBookLoading'>
+  <div class='row fill-word-header-container'>
+    <div class='col-sm-3 text-center word-header-container'>
+      Source word
+    </div>
+    <div class='col-sm-9 text-center word-header-container'>
+      Target word(s)
+    </div>
+  </div>
+  <div class='word-list-container' #container>
+    <button class='btn btn-success col-sm-12' (click)='addWordSeries(container)' *ngIf='formData.words.length === 0'>
+      Add first word
+    </button>
+    <div class='row' *ngFor='let word of formData.words;let index = index'>
+      <div class='col-sm-3 mt-2 form-row'>
+        <div class='col-sm-2'>
+          <button class='btn btn-danger' (click)='removeWordSeries(word)'>
+            -
+          </button>
+        </div>
+        <div class='col-sm-10'>
+          <input type='email' class='form-control' aria-describedby='emailHelp' placeholder='Base word'
+                 [(ngModel)]='word.base'>
+        </div>
+      </div>
+      <div class='col-sm-9'>
+        <div class='row mt-2'>
+          <div class='col-sm-3 mb-2' *ngFor='let target of word.targets'>
+            <input
+              type='text'
+              class='form-control'
+              aria-describedby='emailHelp'
+              placeholder='Target word'
+              [(ngModel)]='target.value'
+            >
+          </div>
+          <div class='col-sm-2'>
+            <button class='btn mr-1 btn-danger'
+                    [disabled]='disableRemoveTarget(word)'
+                    (click)='removeTargetWord(word)'>
+              {{'-'}}
+            </button>
+            <button class='btn btn-success'
+                    type='submit'
+                    [disabled]='disableAddTarget(word)'
+                    (click)='addTargetWord(word)'>
+              {{'+'}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class='word-list-action-container row pt-3'>
+    <div class='col-sm-6 text-left'>
+      <button class='btn btn-info' (click)='addWordSeries(container)' *ngIf='formData.words.length'>
+        More word
+      </button>
+    </div>
+    <div class='col-sm-6 text-right'>
+      <button class='btn btn-info mr-2' (click)='saveToDraft()'>
+        Save to draft
+      </button>
+      <button class='btn btn-success mr-4'>
+        Submit form
+      </button>
+    </div>
+  </div>
+</div>

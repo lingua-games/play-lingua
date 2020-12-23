@@ -5,12 +5,29 @@ import { MessageService } from 'primeng/api';
 export class NotificationService {
   constructor(public messageService: MessageService) {}
 
-  showMessage(message, severity: Severity, header: string = 'Error'): void {
-    this.messageService.add({
-      severity: severity.toString(),
-      summary: header,
-      detail: message,
-    });
+  showMessage(
+    message,
+    severity: Severity,
+    header: string = 'Error',
+    key: string = ''
+  ): void {
+    switch (key) {
+      case 'bc':
+        this.messageService.add({
+          key: 'bc',
+          severity: severity.toString(),
+          summary: header,
+          detail: message,
+        });
+        break;
+      default:
+        this.messageService.add({
+          severity: severity.toString(),
+          summary: header,
+          detail: message,
+        });
+        break;
+    }
   }
 }
 

@@ -47,8 +47,17 @@ describe('GameMenuComponent', () => {
     component = fixture.componentInstance;
   });
 
+  afterAll(() => {
+    localStorage.clear();
+  });
+
   it('should create', () => {
     component.selectedLanguages = { bas: [1] } as any;
+    localStorage.setItem(
+      'lingua-default-languages',
+      `{"defaultBaseLanguage":{"id":123,"code":"fa","name":"Persian","nativeName":"فارسی","fullName":"Persian - فارسی"},"defaultTargetLanguage":{"id":38,"code":"nl","name":"Dutch","nativeName":"Nederlands, Vlaams","fullName":"Dutch - Nederlands, Vlaams"}}`
+    );
+
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });

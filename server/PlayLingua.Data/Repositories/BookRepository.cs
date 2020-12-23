@@ -19,10 +19,13 @@ namespace PlayLingua.Data
             db = new SqlConnection(connectionString);
         }
 
-        public Book Add(Book book)
+        public Book Add(Book book, int userId)
         {
+            book.AddedBy = userId;
+            book.AddedDate = DateTime.Now;
+
             var sql =
-                "insert into dbo.Book (Name, TargetLanguage) VALUES(@Name, @TargetLanguage);" +
+                "insert into dbo.Book (Name, TargetLanguage,AddedBy, AddedDate) VALUES(@Name, @TargetLanguage, @AddedBy, @AddedDate);" +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var id = db.Query<int>(sql, book).Single();
@@ -42,6 +45,7 @@ namespace PlayLingua.Data
 
         public void Update(Book book)
         {
+            book.LastUpdateDate = DateTime.Now;
             db.Query("update dbo.Book SET Name = @Name WHERE Id = @Id", book);
         }
     }

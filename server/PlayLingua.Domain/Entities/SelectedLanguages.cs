@@ -1,9 +1,8 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace PlayLingua.Domain.Entities
 {
-    public class SelectedLanguages
+    public class SelectedLanguages: BaseModel
     {
         public int Id { get; set; }
         [Required]

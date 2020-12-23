@@ -31,7 +31,7 @@ namespace PlayLingua.Data
         public bool InquiryAboutSelectedLanguages(SelectedLanguageModel language)
         {
             var sql =
-                @"SELECT * FROM [DB_A6A40C_playlingua].[dbo].[Word] where BaseLanguageId = @Base and TargetLanguageId = @Target";
+                @"SELECT * FROM [dbo].[Word] where BaseLanguageId = @Base and TargetLanguageId = @Target";
 
             db.Close();
             var result = db.Query<LanguageInformation>(sql, language).Any();

@@ -1,4 +1,4 @@
-use [DB_A6A40C_playlingua]
+use [PlayLingua]
 
 CREATE TABLE [dbo].[Language] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
@@ -8,21 +8,54 @@ CREATE TABLE [dbo].[Language] (
 )
 GO
 
+CREATE TABLE [dbo].[Users] (
+    [Id] int IDENTITY(1,1) PRIMARY KEY,
+    [Email]   [varchar](100) NOT NULL,
+	[Password]   [varchar](200) NOT NULL,
+	[DefaultTargetLanguage]   int,
+	[DefaultBaseLanguage]   int,
+	[AddedDate] datetime NOT NULL,
+	[LastUpdateDate] datetime,
+)
+GO
+ALTER TABLE [dbo].[Users] ADD CONSTRAINT [FK_User_DefaultTargetLanguage]
+FOREIGN KEY ([DefaultTargetLanguage]) REFERENCES [dbo].[Language] ([Id])
+GO
+ALTER TABLE [dbo].[Users] ADD CONSTRAINT [FK_User_DefaultBaseLanguage]
+FOREIGN KEY ([DefaultBaseLanguage]) REFERENCES [dbo].[Language] ([Id])
+GO
+
 CREATE TABLE [dbo].[Book] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
     [Name]   [varchar](100) NOT NULL,
-	[TargetLanguage]   [varchar](100) NOT NULL,
+	[TargetLanguageId]   int NOT NULL,
+	[AddedBy]   int NOT NULL,
+	[AddedDate] datetime NOT NULL,
+	[LastUpdateDate] datetime,
 )
 GO
+ALTER TABLE [dbo].[Book] ADD CONSTRAINT [FK_Book_TargetLanguageId]
+FOREIGN KEY ([TargetLanguageId]) REFERENCES [dbo].[Language] ([Id])
+GO
+ALTER TABLE [dbo].[Book] ADD CONSTRAINT [FK_Book_AddedBy]
+FOREIGN KEY ([AddedBy]) REFERENCES [dbo].[Users] ([Id])
+GO
+
 
 CREATE TABLE [dbo].[Chapter] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
     [Name]        [varchar](50) NOT NULL,
     [Description] [varchar](200),
 	[BookId]        int NOT NULL,
+	[AddedBy]   int NOT NULL,
+	[AddedDate] datetime NOT NULL,
+	[LastUpdateDate] datetime,
 )
 ALTER TABLE [dbo].[Chapter] ADD CONSTRAINT [FK_Chapter_BookId]
 FOREIGN KEY ([BookId]) REFERENCES [dbo].[Book] ([Id])
+GO
+ALTER TABLE [dbo].[Chapter] ADD CONSTRAINT [FK_Chapter_AddedBy]
+FOREIGN KEY ([AddedBy]) REFERENCES [dbo].[Users] ([Id])
 GO
 
 CREATE TABLE [dbo].[Word] (
@@ -33,6 +66,9 @@ CREATE TABLE [dbo].[Word] (
     [Translate]        [varchar](100)     NOT NULL,
 	[BookId]           int			      NOT NULL,
 	[ChapterId]        int				  NOT NULL,
+	[AddedBy]   int NOT NULL,
+	[AddedDate] datetime NOT NULL,
+	[LastUpdateDate] datetime,
 )
 ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_BookId]
 FOREIGN KEY ([BookId]) REFERENCES [dbo].[Book] ([Id])
@@ -46,36 +82,26 @@ GO
 ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_TargetLanguageId]
 FOREIGN KEY ([TargetLanguageId]) REFERENCES [dbo].[Language] ([Id])
 GO
+ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_AddedBy]
+FOREIGN KEY ([AddedBy]) REFERENCES [dbo].[Users] ([Id])
+GO
 
 CREATE TABLE [dbo].[BaseLanguageToTargetLanguage] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
     [BaseLanguageId]   int                NOT NULL,
     [TargetLanguageId] int                NOT NULL,
+	[AddedDate] datetime NOT NULL,
+	[LastUpdateDate] datetime,
 )
 Go
-
-CREATE TABLE [dbo].[Users] (
-    [Id] int IDENTITY(1,1) PRIMARY KEY,
-    [Email]   [varchar](100) NOT NULL,
-	[Password]   [varchar](200) NOT NULL,
-	[DefaultTargetLanguage]   int,
-	[DefaultBaseLanguage]   int,
-)
-GO
-ALTER TABLE [dbo].[Users] ADD CONSTRAINT [FK_User_DefaultTargetLanguage]
-FOREIGN KEY ([DefaultTargetLanguage]) REFERENCES [dbo].[Language] ([Id])
-GO
-ALTER TABLE [dbo].[Users] ADD CONSTRAINT [FK_User_DefaultBaseLanguage]
-FOREIGN KEY ([DefaultBaseLanguage]) REFERENCES [dbo].[Language] ([Id])
-GO
-
-
 
 CREATE TABLE [dbo].[SelectedLanguages] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
     [BaseLanguages]   [nvarchar](500) NOT NULL,
 	[TargetLanguages]   [nvarchar](500) NOT NULL,
 	[UserId]   int NOT NULL,
+	[AddedDate] datetime NOT NULL,
+	[LastUpdateDate] datetime,
 )
 ALTER TABLE [dbo].[SelectedLanguages] ADD CONSTRAINT [FK_SelectedLanguages_UserId]
 FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([Id])

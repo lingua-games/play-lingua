@@ -19,6 +19,7 @@ namespace PlayLingua.Data
 
         public Language Add(Language language)
         {
+            db.Close();
             var sql =
                 "insert into [dbo].[Language] (Name, Code, NativeName) VALUES(@Name, @Code, @NativeName);" +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";

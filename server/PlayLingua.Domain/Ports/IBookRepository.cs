@@ -7,7 +7,7 @@ namespace PlayLingua.Domain.Ports
     public interface IBookRepository
     {
         List<Book> List();
-        Book Add(Book book);
+        Book Add(Book book, int userId);
         void Delete(string id);
         void Update(Book book);
     }

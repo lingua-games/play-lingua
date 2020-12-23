@@ -13,6 +13,7 @@ import { GameMenuComponent } from './game-menu/game-menu.component';
 import { PrepareAddWordsComponent } from './prepare-add-words/prepare-add-words.component';
 import { MaterialModule } from '../common/material/material.module';
 import { SelectDefaultLanguageDialogComponent } from '../../core/dialogs/select-default-language-dialog/select-default-language-dialog.component';
+import { DirectiveModule } from '../../core/directives/directive.module';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,6 @@ import { SelectDefaultLanguageDialogComponent } from '../../core/dialogs/select-
     RegisterComponent,
     ChooseLanguagesComponent,
     GameMenuComponent,
-    LoadingDirective,
     PrepareAddWordsComponent,
   ],
   imports: [
@@ -32,8 +32,8 @@ import { SelectDefaultLanguageDialogComponent } from '../../core/dialogs/select-
     PrimengModule,
     FormsModule,
     MaterialModule,
+    DirectiveModule,
   ],
   providers: [DeactivateWithDelay],
-  exports: [LoadingDirective],
 })
 export class HomeModule {}
