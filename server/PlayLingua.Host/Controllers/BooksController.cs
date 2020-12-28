@@ -23,7 +23,6 @@ namespace PlayLingua.Host.Controllers
             try
             {
                 return Ok(_bookRepository.List());
-
             }
             catch 
             {

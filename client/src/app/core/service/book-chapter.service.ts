@@ -3,26 +3,31 @@ import { Observable, of } from 'rxjs';
 import { BookModel } from '../models/book.model';
 import { AddWordFormModel } from '../models/add-word-form.model';
 import { delay } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BookChapterService {
-  constructor() {}
+  bookUrl = environment.apiUrl + 'books';
+
+  constructor(private http: HttpClient) {}
 
   submitForm(form: AddWordFormModel): Observable<boolean> {
     return of(true).pipe(delay(3000));
   }
 
-  getBooksByLanguages(languageIds: number): Observable<BookModel[]> {
-    return of([
-      { id: 1, name: 'book1', targetLanguageId: 367 },
-      { id: 1, name: 'book aaa', targetLanguageId: 398 },
-      { id: 1, name: 'book bbb', targetLanguageId: 367 },
-      { id: 1, name: 'book ccc', targetLanguageId: 398 },
-      { id: 1, name: 'book sss', targetLanguageId: 367 },
-      { id: 1, name: 'book zzz', targetLanguageId: 398 },
-    ]);
+  getBooksByLanguage(languageId: number): Observable<BookModel[]> {
+    return this.http.get<BookModel[]>(`${this.bookUrl}/${languageId}`);
+    // return of([
+    //   { id: 1, name: 'book1', targetLanguageId: 367 },
+    //   { id: 1, name: 'book aaa', targetLanguageId: 398 },
+    //   { id: 1, name: 'book bbb', targetLanguageId: 367 },
+    //   { id: 1, name: 'book ccc', targetLanguageId: 398 },
+    //   { id: 1, name: 'book sss', targetLanguageId: 367 },
+    //   { id: 1, name: 'book zzz', targetLanguageId: 398 },
+    // ]);
   }
 
   getChaptersByBookId(bookId: number): Observable<BookModel[]> {

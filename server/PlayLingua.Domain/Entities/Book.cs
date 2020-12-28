@@ -6,6 +6,6 @@ namespace PlayLingua.Domain.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string TargetLanguageId { get; set; }
+        public int TargetLanguageId { get; set; }
     }
 }

@@ -188,7 +188,7 @@ export class AddWordByUserComponent implements OnInit {
       id: -1,
     });
     this.bookChapterService
-      .getBooksByLanguages(this.targetLanguage.value.id)
+      .getBooksByLanguage(this.targetLanguage.value.id)
       .subscribe(
         (res: BookModel[]) => {
           if (res && res.length) {

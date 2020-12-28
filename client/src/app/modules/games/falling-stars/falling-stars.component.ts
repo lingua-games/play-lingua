@@ -5,7 +5,6 @@ import { Score } from '../../../core/models/score.interface';
 import { GamesService } from '../../../core/service/games.service';
 import { MatDialog } from '@angular/material/dialog';
 import { StartGameDialogComponent } from './start-game-dialog/start-game-dialog.component';
-import { Book } from '../../../core/models/book.interface';
 import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
 
 @Component({
