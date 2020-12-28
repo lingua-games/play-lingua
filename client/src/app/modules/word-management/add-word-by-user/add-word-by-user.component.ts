@@ -151,18 +151,24 @@ export class AddWordByUserComponent implements OnInit {
   }
 
   getChapters(bookId: number): void {
-    this.chapters = [
-      {
-        id: -1,
-        name: 'Add new chapter',
-      },
-    ];
     if (bookId <= 0) {
+      this.chapters = [
+        {
+          id: -1,
+          name: 'Add new chapter',
+        },
+      ];
       return;
     }
     this.bookChapterService
       .getChaptersByBookId(bookId)
       .subscribe((res: ChapterModel[]) => {
+        this.chapters = [
+          {
+            id: -1,
+            name: 'Add new chapter',
+          },
+        ];
         if (res && res.length) {
           res.forEach((chapter) => {
             this.chapters.push(chapter);
@@ -197,22 +203,22 @@ export class AddWordByUserComponent implements OnInit {
     this.selectBookForm.reset();
     this.selectBookRandom.setValue('book');
     this.isBookLoading = true;
-    this.books = [];
-    this.books.push({
-      targetLanguageId: 0,
-      name: 'Add new book',
-      id: -1,
-    });
     this.bookChapterService
       .getBooksByLanguage(this.targetLanguage.value.id)
       .subscribe(
         (res: BookModel[]) => {
+          this.books = [
+            {
+              targetLanguageId: 0,
+              name: 'Add new book',
+              id: -1,
+            },
+          ];
           if (res && res.length) {
             res.forEach((element) => {
               this.books.push(element);
             });
           }
-
           this.isBookLoading = false;
         },
         (error: string) => {
@@ -346,6 +352,7 @@ export class AddWordByUserComponent implements OnInit {
     }
 
     this.isPageLoading = true;
+    this.saveInformationInfoForm();
     this.bookChapterService.submitForm(this.formData).subscribe(
       (res: boolean) => {
         this.isPageLoading = false;
@@ -357,13 +364,16 @@ export class AddWordByUserComponent implements OnInit {
     );
   }
 
-  saveToDraft(): void {
+  saveInformationInfoForm(): void {
     this.formData.baseLanguage = this.baseLanguage.value;
     this.formData.targetLanguage = this.targetLanguage.value;
     this.formData.isRandom = this.selectBookRandom.value;
     this.formData.book = this.book.value;
     this.formData.chapter = this.chapter.value;
+  }
 
+  saveToDraft(): void {
+    this.saveInformationInfoForm();
     localStorage.setItem(
       'lingua-add-word-draft',
       JSON.stringify(this.formData)

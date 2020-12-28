@@ -8,7 +8,7 @@ namespace PlayLingua.Domain.Ports
     {
         List<Chapter> GetByBookId(int bookId);
         List<Chapter> List();
-        Chapter Add(Chapter book);
+        Chapter Add(Chapter book, int userId);
         void Delete(string id);
         void Update(Chapter book);
     }

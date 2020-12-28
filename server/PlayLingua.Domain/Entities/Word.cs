@@ -2,13 +2,15 @@
 
 namespace PlayLingua.Domain.Entities
 {
-    public class Word
+    public class Word: BaseModel
     {
-
-        public Guid WordId { get; set; }
-        public LangCodeEnum BaseLanguage { get; set; }
+        public int Id { get; set; }
+        public int BaseLanguageId { get; set; }
         public string BaseWord { get; set; }
-        public LangCodeEnum TargetLanguage { get; set; }
+        public int TargetLanguageId { get; set; }
         public string Translate { get; set; }
+        public int? BookId { get; set; }
+        public int? ChapterId { get; set; }
+
     }
 }

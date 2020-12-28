@@ -1,6 +1,6 @@
 import { BookModel } from './book.model';
-import { ChapterModel } from './chapter.model';
 import { WordToAddModel } from './word-to-add.model';
+import { ChapterModel } from './chapter.model';
 
 export class AddWordFormModel {
   public baseLanguage: number;

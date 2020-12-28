@@ -25,7 +25,7 @@ namespace PlayLingua.Data
             book.AddedDate = DateTime.Now;
 
             var sql =
-                "insert into dbo.Book (Name, TargetLanguage,AddedBy, AddedDate) VALUES(@Name, @TargetLanguage, @AddedBy, @AddedDate);" +
+                "insert into dbo.Book (Name, TargetLanguageId,AddedBy, AddedDate) VALUES(@Name, @TargetLanguageId, @AddedBy, @AddedDate);" +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var id = db.Query<int>(sql, book).Single();

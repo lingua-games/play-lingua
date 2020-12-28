@@ -18,9 +18,18 @@ namespace PlayLingua.Data
             db = new SqlConnection(connectionString);
         }
 
-        public Chapter Add(Chapter book)
+        public Chapter Add(Chapter chapter, int userId)
         {
-            throw new NotImplementedException();
+            chapter.AddedBy = userId;
+            chapter.AddedDate = DateTime.Now;
+
+            var sql =
+                "insert into dbo.Chapter (Name, Description, BookId,AddedBy, AddedDate) VALUES(@Name, @Description,@BookId, @AddedBy, @AddedDate);" +
+                "SELECT CAST(SCOPE_IDENTITY() as int)";
+
+            var id = db.Query<int>(sql, chapter).Single();
+            chapter.Id = id;
+            return chapter;
         }
 
         public void Delete(string id)
