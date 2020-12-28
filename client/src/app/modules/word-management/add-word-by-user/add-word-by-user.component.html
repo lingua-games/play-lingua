@@ -73,7 +73,7 @@
                     placeholder='Select a chapter'
                     formControlName='chapter'
                     optionLabel='name'
-                    [disabled]="selectBookRandom.value === 'random'"
+                    [disabled]="selectBookRandom.value === 'random' || book.invalid"
                     (onChange)='chapterSelectionChange($event)'
                     [showClear]='true'
                     [styleClass]="chapter.invalid && selectBookForm.dirty ? 'field-not-valid' : ''">

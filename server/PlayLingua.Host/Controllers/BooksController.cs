@@ -20,15 +20,14 @@ namespace PlayLingua.Host.Controllers
         [HttpGet]
         public ActionResult<List<Book>> List()
         {
-            try
-            {
-                return Ok(_bookRepository.List());
-            }
-            catch 
-            {
-                return Ok(_bookRepository.List());
-            }                
+            return Ok(_bookRepository.List());
 
+        }
+
+        [HttpGet("by-language/{id}")]
+        public ActionResult<List<Book>> GetByLanguageId(int id)
+        {
+            return Ok(_bookRepository.GetByLanguage(id));
         }
 
         [HttpPost]

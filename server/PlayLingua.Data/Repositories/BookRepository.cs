@@ -43,6 +43,11 @@ namespace PlayLingua.Data
             return db.Query<Book>("select * from dbo.Book").ToList();
         }
 
+        public List<Book> GetByLanguage(int languageId)
+        {
+            return db.Query<Book>("select * from dbo.Book where TargetLanguageId = @languageId", new {languageId}).ToList();
+        }
+
         public void Update(Book book)
         {
             book.LastUpdateDate = DateTime.Now;

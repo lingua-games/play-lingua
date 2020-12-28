@@ -8,14 +8,14 @@ import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { BookChapterService } from '../../../core/service/book-chapter.service';
 import { BookModel } from '../../../core/models/book.model';
 import { MatDialog } from '@angular/material/dialog';
-import { AddBookDialogComponent } from '../add-book-dialog/add-book-dialog.component';
-import { ChapterModel } from '../../../core/models/chapter.model';
-import { AddChapterDialogComponent } from '../add-chapter-dialog/add-chapter-dialog.component';
 import { AddWordFormModel } from '../../../core/models/add-word-form.model';
 import {
   SourceTargetModel,
   WordToAddModel,
 } from '../../../core/models/word-to-add.model';
+import { ChapterModel } from '../../../core/models/chapter.model';
+import { AddBookDialogComponent } from '../add-book-dialog/add-book-dialog.component';
+import { AddChapterDialogComponent } from '../add-chapter-dialog/add-chapter-dialog.component';
 
 @Component({
   selector: 'app-add-word-by-user',
@@ -135,24 +135,40 @@ export class AddWordByUserComponent implements OnInit {
             };
             this.books = [...this.books, itemToAdd];
             this.book.setValue(itemToAdd);
+
+            this.chapters = [];
+            this.chapters.push({
+              id: -1,
+              name: 'Add new chapter',
+            });
           } else {
             this.book.setValue('');
           }
         });
     } else {
-      this.chapters = [];
-      this.bookChapterService
-        .getChaptersByBookId(event.value.id)
-        .subscribe((res: ChapterModel[]) => {
-          this.chapters.push({
-            id: -1,
-            name: 'Add new chapter',
-          });
+      this.getChapters(event.value.id);
+    }
+  }
+
+  getChapters(bookId: number): void {
+    this.chapters = [
+      {
+        id: -1,
+        name: 'Add new chapter',
+      },
+    ];
+    if (bookId <= 0) {
+      return;
+    }
+    this.bookChapterService
+      .getChaptersByBookId(bookId)
+      .subscribe((res: ChapterModel[]) => {
+        if (res && res.length) {
           res.forEach((chapter) => {
             this.chapters.push(chapter);
           });
-        });
-    }
+        }
+      });
   }
 
   chapterSelectionChange(event): void {

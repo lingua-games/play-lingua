@@ -1,9 +1,11 @@
-﻿using PlayLingua.Domain.Entities;
+﻿using Dapper;
+using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Ports;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace PlayLingua.Data
 {
@@ -26,7 +28,12 @@ namespace PlayLingua.Data
             throw new NotImplementedException();
         }
 
-        public List<Chapter> List(int bookId)
+        public List<Chapter> GetByBookId(int bookId)
+        {
+            return db.Query<Chapter>("select * from [dbo].[Chapter] where BookId = @bookId", new { bookId }).ToList();
+        }
+
+        public List<Chapter> List()
         {
             throw new NotImplementedException();
         }
