@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Book } from '../models/book.interface';
 import { environment } from '../../../environments/environment';
 import { LanguageModel } from '../models/language.model';
 import { GameMenu } from '../models/game.menu.model';
 import { EGame } from '../models/e-game';
 import { GameHint } from '../models/game-hint.interface';
+import { BookModel } from '../models/book.model';
 
 @Injectable({
   providedIn: 'root',
@@ -17,19 +17,19 @@ export class BasicInformationService {
 
   constructor(private http: HttpClient) {}
 
-  getBooks(): Observable<Book[]> {
-    return this.http.get<Book[]>(this.bookUrl);
+  getBooks(): Observable<BookModel[]> {
+    return this.http.get<BookModel[]>(this.bookUrl);
   }
 
-  addBook(book: Book): Observable<Book> {
-    return this.http.post<Book>(this.bookUrl, book);
+  addBook(book: BookModel): Observable<BookModel> {
+    return this.http.post<BookModel>(this.bookUrl, book);
   }
 
   deleteBook(bookId: number): Observable<{}> {
     return this.http.delete(`${this.bookUrl}/${bookId}`);
   }
 
-  editBook(book: Book): Observable<any> {
+  editBook(book: BookModel): Observable<any> {
     return this.http.put(`${this.bookUrl}/${book.id}`, book);
   }
 

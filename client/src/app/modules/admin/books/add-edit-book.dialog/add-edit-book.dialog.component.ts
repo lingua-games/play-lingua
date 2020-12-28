@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Book } from '../../../../core/models/book.interface';
+import { BookModel } from '../../../../core/models/book.model';
 
 @Component({
   selector: 'app-add-edit-book.dialog',
@@ -8,11 +8,11 @@ import { Book } from '../../../../core/models/book.interface';
   styleUrls: ['./add-edit-book.dialog.component.scss'],
 })
 export class AddEditBookDialogComponent implements OnInit {
-  book: Book = {} as Book;
+  book: BookModel = {} as BookModel;
 
   constructor(
     public dialogRef: MatDialogRef<AddEditBookDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Book
+    @Inject(MAT_DIALOG_DATA) public data: BookModel
   ) {}
 
   ngOnInit(): void {

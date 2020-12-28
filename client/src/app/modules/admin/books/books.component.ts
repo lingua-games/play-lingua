@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Book } from '../../../core/models/book.interface';
 import { BasicInformationService } from '../../../core/service/basic-information.service';
-import { analyticsPackageSafelist } from '@angular/cli/models/analytics';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEditBookDialogComponent } from './add-edit-book.dialog/add-edit-book.dialog.component';
+import { BookModel } from '../../../core/models/book.model';
 
 @Component({
   selector: 'app-books',
@@ -11,7 +10,7 @@ import { AddEditBookDialogComponent } from './add-edit-book.dialog/add-edit-book
   styleUrls: ['./books.component.scss'],
 })
 export class BooksComponent implements OnInit {
-  books: Book[] = [];
+  books: BookModel[] = [];
 
   constructor(
     private basicInformationService: BasicInformationService,
@@ -24,7 +23,7 @@ export class BooksComponent implements OnInit {
 
   getBooks(): void {
     this.basicInformationService.getBooks().subscribe(
-      (res: Book[]) => {
+      (res: BookModel[]) => {
         this.books = res;
       },
       (res: any) => {
@@ -33,12 +32,12 @@ export class BooksComponent implements OnInit {
     );
   }
 
-  openAddEditDialog(book?: Book): void {
+  openAddEditDialog(book?: BookModel): void {
     const dialogRef = this.dialog.open(AddEditBookDialogComponent, {
       data: book || null,
     });
 
-    dialogRef.afterClosed().subscribe((res: Book) => {
+    dialogRef.afterClosed().subscribe((res: BookModel) => {
       if (res) {
         if (res.id) {
           this.editBook(res);
@@ -49,9 +48,9 @@ export class BooksComponent implements OnInit {
     });
   }
 
-  addBook(book: Book): void {
+  addBook(book: BookModel): void {
     this.basicInformationService.addBook(book).subscribe(
-      (res: Book) => {
+      (res: BookModel) => {
         this.books.push(res);
       },
       (error: any) => {
@@ -60,9 +59,9 @@ export class BooksComponent implements OnInit {
     );
   }
 
-  editBook(book: Book): void {
+  editBook(book: BookModel): void {
     this.basicInformationService.editBook(book).subscribe(
-      (res: Book) => {
+      (res: BookModel) => {
         this.getBooks();
       },
       (error: any) => {
@@ -73,7 +72,7 @@ export class BooksComponent implements OnInit {
 
   deleteBook(id: number): void {
     this.basicInformationService.deleteBook(id).subscribe(
-      (res: Book) => {
+      (res: BookModel) => {
         this.books.splice(this.books.indexOf(res));
       },
       (error: any) => {

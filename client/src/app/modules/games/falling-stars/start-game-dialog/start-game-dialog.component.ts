@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Book } from '../../../../core/models/book.interface';
-import { BasicInformationService } from '../../../../core/service/basic-information.service';
-import { EGame } from '../../../../core/models/e-game';
-import { GameHint } from '../../../../core/models/game-hint.interface';
+import { BookModel } from '../../../../core/models/book.model';
 
 @Component({
   selector: 'app-start-game-dialog',
@@ -10,17 +7,17 @@ import { GameHint } from '../../../../core/models/game-hint.interface';
   styleUrls: ['./start-game-dialog.component.scss'],
 })
 export class StartGameDialogComponent implements OnInit {
-  books: Book[];
-  selectedBook: Book;
+  books: BookModel[];
+  selectedBook: BookModel;
 
   constructor() {}
 
   ngOnInit(): void {
     this.books = [
-      { id: 0, name: 'No book, just random', targetLanguage: 'nothing' },
-      { id: 1, name: 'book 1', targetLanguage: 'something' },
-      { id: 1, name: 'book 2', targetLanguage: 'something' },
-      { id: 1, name: 'book 3', targetLanguage: 'something' },
+      { id: 0, name: 'No book, just random', targetLanguageId: 1 },
+      { id: 1, name: 'book 1', targetLanguageId: 2 },
+      { id: 1, name: 'book 2', targetLanguageId: 4 },
+      { id: 1, name: 'book 3', targetLanguageId: 5 },
     ];
     this.selectedBook = this.books[0];
   }

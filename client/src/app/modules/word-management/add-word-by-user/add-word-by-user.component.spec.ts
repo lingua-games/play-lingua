@@ -5,6 +5,7 @@ import { NotificationService } from '../../../core/service/notification.service'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('AddWordByUserComponent', () => {
   let component: AddWordByUserComponent;
@@ -17,6 +18,7 @@ describe('AddWordByUserComponent', () => {
     mockMatDialog = jasmine.createSpyObj(['open']);
     TestBed.configureTestingModule({
       declarations: [AddWordByUserComponent],
+      imports: [HttpClientTestingModule],
       providers: [
         {
           provide: MatDialog,
