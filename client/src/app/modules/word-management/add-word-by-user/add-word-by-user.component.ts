@@ -8,14 +8,15 @@ import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { BookChapterService } from '../../../core/service/book-chapter.service';
 import { BookModel } from '../../../core/models/book.model';
 import { MatDialog } from '@angular/material/dialog';
-import { AddBookDialogComponent } from '../add-book-dialog/add-book-dialog.component';
-import { ChapterModel } from '../../../core/models/chapter.model';
-import { AddChapterDialogComponent } from '../add-chapter-dialog/add-chapter-dialog.component';
 import { AddWordFormModel } from '../../../core/models/add-word-form.model';
 import {
   SourceTargetModel,
   WordToAddModel,
 } from '../../../core/models/word-to-add.model';
+import { ChapterModel } from '../../../core/models/chapter.model';
+import { AddBookDialogComponent } from '../add-book-dialog/add-book-dialog.component';
+import { AddChapterDialogComponent } from '../add-chapter-dialog/add-chapter-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-word-by-user',
@@ -71,7 +72,8 @@ export class AddWordByUserComponent implements OnInit {
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
     private bookChapterService: BookChapterService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -131,28 +133,51 @@ export class AddWordByUserComponent implements OnInit {
             const itemToAdd = {
               id: 0,
               targetLanguageId: this.targetLanguage.value.id,
+              sourceLanguageId: this.baseLanguage.value.id,
               name: res.bookName,
             };
             this.books = [...this.books, itemToAdd];
             this.book.setValue(itemToAdd);
+
+            this.chapters = [];
+            this.chapters.push({
+              id: -1,
+              name: 'Add new chapter',
+            });
           } else {
             this.book.setValue('');
           }
         });
     } else {
-      this.chapters = [];
-      this.bookChapterService
-        .getChaptersByBookId(event.value.id)
-        .subscribe((res: ChapterModel[]) => {
-          this.chapters.push({
+      this.getChapters(event.value.id);
+    }
+  }
+
+  getChapters(bookId: number): void {
+    if (bookId <= 0) {
+      this.chapters = [
+        {
+          id: -1,
+          name: 'Add new chapter',
+        },
+      ];
+      return;
+    }
+    this.bookChapterService
+      .getChaptersByBookId(bookId)
+      .subscribe((res: ChapterModel[]) => {
+        this.chapters = [
+          {
             id: -1,
             name: 'Add new chapter',
-          });
+          },
+        ];
+        if (res && res.length) {
           res.forEach((chapter) => {
             this.chapters.push(chapter);
           });
-        });
-    }
+        }
+      });
   }
 
   chapterSelectionChange(event): void {
@@ -181,22 +206,23 @@ export class AddWordByUserComponent implements OnInit {
     this.selectBookForm.reset();
     this.selectBookRandom.setValue('book');
     this.isBookLoading = true;
-    this.books = [];
-    this.books.push({
-      targetLanguageId: 0,
-      name: 'Add new book',
-      id: -1,
-    });
     this.bookChapterService
       .getBooksByLanguage(this.targetLanguage.value.id)
       .subscribe(
         (res: BookModel[]) => {
+          this.books = [
+            {
+              targetLanguageId: 0,
+              name: 'Add new book',
+              sourceLanguageId: 0,
+              id: -1,
+            },
+          ];
           if (res && res.length) {
             res.forEach((element) => {
               this.books.push(element);
             });
           }
-
           this.isBookLoading = false;
         },
         (error: string) => {
@@ -330,10 +356,12 @@ export class AddWordByUserComponent implements OnInit {
     }
 
     this.isPageLoading = true;
+    this.saveInformationInfoForm();
     this.bookChapterService.submitForm(this.formData).subscribe(
       (res: boolean) => {
         this.isPageLoading = false;
         localStorage.removeItem('lingua-add-word-draft');
+        this.router.navigate(['/word-management/list']);
       },
       (error: string) => {
         this.isPageLoading = false;
@@ -341,13 +369,16 @@ export class AddWordByUserComponent implements OnInit {
     );
   }
 
-  saveToDraft(): void {
+  saveInformationInfoForm(): void {
     this.formData.baseLanguage = this.baseLanguage.value;
     this.formData.targetLanguage = this.targetLanguage.value;
     this.formData.isRandom = this.selectBookRandom.value;
     this.formData.book = this.book.value;
     this.formData.chapter = this.chapter.value;
+  }
 
+  saveToDraft(): void {
+    this.saveInformationInfoForm();
     localStorage.setItem(
       'lingua-add-word-draft',
       JSON.stringify(this.formData)

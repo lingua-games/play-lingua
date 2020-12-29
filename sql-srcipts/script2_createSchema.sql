@@ -29,6 +29,7 @@ CREATE TABLE [dbo].[Book] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
     [Name]   [varchar](100) NOT NULL,
 	[TargetLanguageId]   int NOT NULL,
+	[SourceLanguageId]   int NOT NULL,
 	[AddedBy]   int NOT NULL,
 	[AddedDate] datetime NOT NULL,
 	[LastUpdateDate] datetime,
@@ -36,6 +37,9 @@ CREATE TABLE [dbo].[Book] (
 GO
 ALTER TABLE [dbo].[Book] ADD CONSTRAINT [FK_Book_TargetLanguageId]
 FOREIGN KEY ([TargetLanguageId]) REFERENCES [dbo].[Language] ([Id])
+GO
+ALTER TABLE [dbo].[Book] ADD CONSTRAINT [FK_Book_SourceLanguageId]
+FOREIGN KEY ([SourceLanguageId]) REFERENCES [dbo].[Language] ([Id])
 GO
 ALTER TABLE [dbo].[Book] ADD CONSTRAINT [FK_Book_AddedBy]
 FOREIGN KEY ([AddedBy]) REFERENCES [dbo].[Users] ([Id])
@@ -64,8 +68,8 @@ CREATE TABLE [dbo].[Word] (
     [BaseWord]         [varchar](100)     NOT NULL,
     [TargetLanguageId] int                NOT NULL,
     [Translate]        [varchar](100)     NOT NULL,
-	[BookId]           int			      NOT NULL,
-	[ChapterId]        int				  NOT NULL,
+	[BookId]           int			          NULL,
+	[ChapterId]        int					  NULL,
 	[AddedBy]   int NOT NULL,
 	[AddedDate] datetime NOT NULL,
 	[LastUpdateDate] datetime,

@@ -32,14 +32,15 @@ export class FallingStarsComponent implements OnInit {
   }
 
   showStartDialog(): void {
-    const dialog = this.dialog.open(StartGameDialogComponent, {
-      disableClose: true,
-      width: '30%',
-    });
-
-    dialog.afterClosed().subscribe((res: any) => {
-      // this.startGame();
-    });
+    this.dialog
+      .open(StartGameDialogComponent, {
+        disableClose: true,
+        width: '30%',
+      })
+      .afterClosed()
+      .subscribe((res: any) => {
+        this.startGame();
+      });
   }
 
   getGameWords(): void {
@@ -108,7 +109,9 @@ export class FallingStarsComponent implements OnInit {
   }
 
   startGame(): void {
-    this.words[0].animating = true;
+    if (this.words[0]) {
+      this.words[0].animating = true;
+    }
   }
 
   boxAnimationDone(word: FallingStarsWord): void {
