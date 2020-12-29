@@ -26,6 +26,15 @@ export class BookChapterService {
     );
   }
 
+  getBooksBySourceAndTargetLanguageId(
+    sourceLanguageId: number,
+    targetLanguageId: number
+  ): Observable<BookModel[]> {
+    return this.http.get<BookModel[]>(
+      `${this.bookUrl}/by-source-and-target-language/${sourceLanguageId}/${targetLanguageId}`
+    );
+  }
+
   getChaptersByBookId(bookId: number): Observable<ChapterModel[]> {
     return this.http.get<ChapterModel[]>(
       `${this.chapterUrl}/by-book/${bookId}`

@@ -31,6 +31,7 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpPost("submit-word-series")]
+        [Authorize]
         public ActionResult SubmitWordSeries([FromBody] SubmitWordsModel model)
         {
             var userId = GetUser().Id;
@@ -38,11 +39,7 @@ namespace PlayLingua.Host.Controllers
             {
                 if (model.Book.Id == 0)
                 {
-                    model.Book = _bookRepository.Add(new Book
-                    {
-                        Name = model.Book.Name,
-                        TargetLanguageId = model.Book.TargetLanguageId,
-                    }, userId);
+                    model.Book = _bookRepository.Add(model.Book, userId);
 
                     if (model.Chapter != null)
                     {
@@ -57,35 +54,5 @@ namespace PlayLingua.Host.Controllers
             _wordRepository.SubmitWordSeries(model, userId);
             return Ok();
         }
-        //[HttpGet]
-        //public ActionResult<List<Word>> List()
-        //{
-        //    try
-        //    {
-        //        return Ok(_wordRepository.List());
-
-        //    }
-        //    catch 
-        //    {
-        //        return Ok(_bookRepository.List());
-        //    }                
-
-        //}
-
-
-        //[HttpDelete("{id}")]
-        //public ActionResult Delete(string id)
-        //{
-        //    _bookRepository.Delete(id);
-        //    return Ok();
-        //}
-
-        //[HttpPut("{id}")]
-        //public ActionResult Update(int id, Book book)
-        //{
-        //    book.Id = id;
-        //    _bookRepository.Update(book);
-        //    return Ok(book);
-        //}
     }
 }

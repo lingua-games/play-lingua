@@ -30,6 +30,12 @@ namespace PlayLingua.Host.Controllers
             return Ok(_bookRepository.GetByLanguage(id));
         }
 
+        [HttpGet("by-source-and-target-language/{sourceLanguageId}/{targetLanguageId}")]
+        public ActionResult<List<Book>> GetBySourceAndTargetLanguageId(int sourceLanguageId, int targetLanguageId)
+        {
+            return Ok(_bookRepository.GetBySourceAndTargetLanguageId(sourceLanguageId, targetLanguageId));
+        }
+
         [HttpPost]
         public ActionResult<Book> Add([FromBody] Book book)
         {

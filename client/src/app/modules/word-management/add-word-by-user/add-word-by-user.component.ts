@@ -16,6 +16,7 @@ import {
 import { ChapterModel } from '../../../core/models/chapter.model';
 import { AddBookDialogComponent } from '../add-book-dialog/add-book-dialog.component';
 import { AddChapterDialogComponent } from '../add-chapter-dialog/add-chapter-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-word-by-user',
@@ -71,7 +72,8 @@ export class AddWordByUserComponent implements OnInit {
     private notificationService: NotificationService,
     private formBuilder: FormBuilder,
     private bookChapterService: BookChapterService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -131,6 +133,7 @@ export class AddWordByUserComponent implements OnInit {
             const itemToAdd = {
               id: 0,
               targetLanguageId: this.targetLanguage.value.id,
+              sourceLanguageId: this.baseLanguage.value.id,
               name: res.bookName,
             };
             this.books = [...this.books, itemToAdd];
@@ -211,6 +214,7 @@ export class AddWordByUserComponent implements OnInit {
             {
               targetLanguageId: 0,
               name: 'Add new book',
+              sourceLanguageId: 0,
               id: -1,
             },
           ];
@@ -357,6 +361,7 @@ export class AddWordByUserComponent implements OnInit {
       (res: boolean) => {
         this.isPageLoading = false;
         localStorage.removeItem('lingua-add-word-draft');
+        this.router.navigate(['/word-management/list']);
       },
       (error: string) => {
         this.isPageLoading = false;
