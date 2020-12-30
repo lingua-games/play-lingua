@@ -1,31 +1,40 @@
 <div class="dialog-title-container">
   Falling stars
 </div>
-<div class="dialog-content">
-  <div class="best-score-container">
-    Your best score is 200 correct answers in 20 seconds.
+<div *ngIf='isPreparing' class='text-center p-5'>
+  <div class="spinner-grow text-success" style="width: 3rem; height: 3rem;" role="status">
+    <span class="sr-only">Loading...</span>
   </div>
   <hr>
-  <app-game-hint></app-game-hint>
-  <hr>
-  <mat-form-field appearance="fill" class="select-book-input">
-    <mat-label>Select a book</mat-label>
-    <mat-select [(ngModel)]="form.selectedBook" (ngModelChange)='getChapters($event)'>
-      <mat-option *ngFor="let book of books" [value]="book">
-        {{book.name}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field appearance="fill" class="select-book-input" *ngIf='chapters && chapters.length'>
-    <mat-label>Select a chapter</mat-label>
-    <mat-select [(ngModel)]="form.selectedChapter">
-      <mat-option *ngFor="let chapter of chapters" [value]="chapter">
-        {{chapter.name}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <h1>Preparing game data</h1>
 </div>
-<div class="dialog-actions">
-  <button class="btn btn-danger" (click)='backToMenu()'>Main menu</button>
-  <button class="btn btn-success" (click)='submit()'>Start!</button>
+<div *ngIf='!isPreparing'>
+  <div class="dialog-content">
+    <div class="best-score-container">
+      Your best score is 200 correct answers in 20 seconds.
+    </div>
+    <hr>
+    <app-game-hint></app-game-hint>
+    <hr>
+    <mat-form-field appearance="fill" class="select-book-input">
+      <mat-label>Select a book</mat-label>
+      <mat-select [(ngModel)]="form.selectedBook" (ngModelChange)='getChapters($event)'>
+        <mat-option *ngFor="let book of books" [value]="book">
+          {{book.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="select-book-input" *ngIf='chapters && chapters.length'>
+      <mat-label>Select a chapter</mat-label>
+      <mat-select [(ngModel)]="form.selectedChapter">
+        <mat-option *ngFor="let chapter of chapters" [value]="chapter">
+          {{chapter.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="dialog-actions">
+    <button class="btn btn-danger" (click)='backToMenu()'>Main menu</button>
+    <button class="btn btn-success" (click)='submit()'>Start!</button>
+  </div>
 </div>
