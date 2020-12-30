@@ -21,12 +21,5 @@ export class GamesService {
       `${this.gameUrl}/get-words-for-game`,
       getGameWordsRequestModel
     );
-    // return of([
-    //   { key: 'Apple', value: ['appel'] },
-    //   { key: 'Banana', value: ['banaan'] },
-    //   { key: 'Orange', value: ['oranje'] },
-    //   { key: 'Pineapple', value: ['ananas'] },
-    //   { key: 'Cherry', value: ['kers'] },
-    // ]);
   }
 }

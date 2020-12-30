@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { FallingStarsWord } from '../../../core/models/falling-stars-word.interface';
 import { Score } from '../../../core/models/score.interface';
@@ -23,6 +23,31 @@ import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
 export class FallingStarsComponent implements OnInit {
   words: FallingStarsWord[] = [];
   scoreBoard: Score = {} as Score;
+
+  @HostListener('document:keydown ', ['$event'])
+  keyDownEvent(event: KeyboardEvent): void {
+    if (!this.words || !this.words.length) {
+      return;
+    }
+    if (event.code === 'Digit1' || event.code === 'Numpad1') {
+      this.checkSelectedAnswer(this.getAnswers()[0]);
+    }
+
+    if (event.code === 'Digit2' || event.code === 'Numpad2') {
+      this.checkSelectedAnswer(this.getAnswers()[1]);
+    }
+
+    if (event.code === 'Digit3' || event.code === 'Numpad3') {
+      this.checkSelectedAnswer(this.getAnswers()[2]);
+    }
+
+    if (event.code === 'Digit4' || event.code === 'Numpad4') {
+      this.checkSelectedAnswer(this.getAnswers()[3]);
+    }
+
+    if (event.code === 'Escape') {
+    }
+  }
 
   constructor(private gamesService: GamesService, private dialog: MatDialog) {}
 
@@ -77,6 +102,9 @@ export class FallingStarsComponent implements OnInit {
       JSON.stringify(allWords.filter((x) => x.key !== targetWord.key))
     );
 
+    if (!targetWord || !targetWord.values || !targetWord.key) {
+      return;
+    }
     // Filling the correct option
     const answerPlace = Math.round(Math.random() * (3 - 0));
     const answersLength = targetWord.values.length;
