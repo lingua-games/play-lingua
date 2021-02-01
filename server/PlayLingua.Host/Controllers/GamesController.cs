@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.models;
 using PlayLingua.Domain.Ports;
@@ -18,6 +19,7 @@ namespace PlayLingua.Host.Controllers
             _gameRepository = gameRepository;
         }
 
+        [Authorize]
         [HttpPost("get-words-for-game")]
         public ActionResult<List<GetWordsForGameResponseModel>> GetWordsForGame([FromBody] GetWordsForGameInputModel getWordsForGameInputModel)
         {
