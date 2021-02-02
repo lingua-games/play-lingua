@@ -11,7 +11,9 @@ describe('StartGameDialogComponent', () => {
   let component: StartGameDialogComponent;
   let fixture: ComponentFixture<StartGameDialogComponent>;
   let mockMatDialogRef;
+  let mockNotificationService;
   beforeEach(async(() => {
+    mockNotificationService = jasmine.createSpyObj(['showMessage']);
     mockMatDialogRef = jasmine.createSpyObj(['close']);
     localStorage.setItem(
       'lingua-default-languages',
@@ -25,6 +27,10 @@ describe('StartGameDialogComponent', () => {
         {
           provide: MatDialogRef,
           useValue: mockMatDialogRef,
+        },
+        {
+          provide: NotificationService,
+          useValue: mockNotificationService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],

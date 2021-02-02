@@ -76,7 +76,7 @@ export class SuperMarioComponent implements OnInit {
 
   getWords(): void {
     this.enemies = [];
-    this.gamesService.getGameWords().subscribe(
+    this.gamesService.getGameWords({} as any).subscribe(
       (res: WordKeyValueModel<string[]>[]) => {
         res.forEach((element) => {
           this.enemies.push({

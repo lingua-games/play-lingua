@@ -5,11 +5,12 @@ import { GamesService } from 'src/app/core/service/games.service';
 import { FallingStarsWord } from '../../../core/models/falling-stars-word.interface';
 import { FallingStarsComponent } from './falling-stars.component';
 import { MatDialog } from '@angular/material/dialog';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('FallingStarsComponent', () => {
   let component: FallingStarsComponent;
   let fixture: ComponentFixture<FallingStarsComponent>;
-  let mockGamesService;
   let mockMatDialog;
 
   let sampleWords;
@@ -22,21 +23,17 @@ describe('FallingStarsComponent', () => {
       { key: 'Pineapple', value: ['ananas'] },
       { key: 'Cherry', value: ['kers'] },
     ];
-    mockGamesService = jasmine.createSpyObj(['getGameWords']);
     mockMatDialog = jasmine.createSpyObj('dialog', {
       open: {
         afterClosed: () => {
-          return of('result');
+          return of(sampleWords);
         },
       },
     });
     TestBed.configureTestingModule({
+      imports: [BrowserAnimationsModule, HttpClientTestingModule],
       declarations: [FallingStarsComponent],
       providers: [
-        {
-          provide: GamesService,
-          useValue: mockGamesService,
-        },
         {
           provide: MatDialog,
           useValue: mockMatDialog,
@@ -55,47 +52,16 @@ describe('FallingStarsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call getGameWords in OnInit', () => {
-    spyOn(component, 'getGameWords');
+  it('should call showStartDialog in OnInit', () => {
+    spyOn(component, 'showStartDialog');
 
     fixture.detectChanges();
 
-    expect(component.getGameWords).toHaveBeenCalled();
-  });
-
-  it('should set words correctly from the gameService', () => {
-    mockGamesService.getGameWords.and.returnValue(of(sampleWords));
-    spyOn(component, 'getRandomNumber');
-
-    fixture.detectChanges();
-
-    expect(component.scoreBoard.total).toBe(sampleWords.length);
-    expect(component.scoreBoard.correct).toBe(0);
-    expect(component.words.length).toBe(sampleWords.length);
-    expect(component.getRandomNumber).toHaveBeenCalledTimes(sampleWords.length);
-  });
-
-  it('should return true if no word is animating in showReadyBox method', () => {
-    component.words = [
-      {
-        animating: false,
-        style: {},
-        possibleAnswers: ['a'],
-        correctAnswers: [],
-        key: '',
-        selectedAnswer: '',
-      },
-    ];
-    mockGamesService.getGameWords.and.callFake(() => {
-      return of();
-    });
-
-    fixture.detectChanges();
-
-    expect(component.showReadyBox()).toBe(true);
+    expect(component.showStartDialog).toHaveBeenCalled();
   });
 
   it('should set animating of first word to true on startGame method', () => {
+    spyOn(component, 'setGameWords').withArgs(sampleWords);
     component.words = [{ animating: false, style: {} } as FallingStarsWord];
 
     component.startGame();

@@ -5,6 +5,13 @@ import { LanguageModel } from '../../../../core/models/language.model';
 import { ChapterModel } from '../../../../core/models/chapter.model';
 import { Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';
+import { GamesService } from '../../../../core/service/games.service';
+import { WordKeyValueModel } from '../../../../core/models/word-key-value.model';
+import { environment } from '../../../../../environments/environment';
+import {
+  NotificationService,
+  Severity,
+} from '../../../../core/service/notification.service';
 
 @Component({
   selector: 'app-start-game-dialog',
@@ -14,6 +21,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class StartGameDialogComponent implements OnInit {
   books: BookModel[] = [];
   chapters: ChapterModel[] = [];
+  isPreparing: boolean;
+
   form: {
     selectedBook: BookModel;
     selectedChapter: ChapterModel;
@@ -27,7 +36,9 @@ export class StartGameDialogComponent implements OnInit {
   constructor(
     private bookChapterService: BookChapterService,
     private router: Router,
-    public dialogRef: MatDialogRef<StartGameDialogComponent>
+    private dialogRef: MatDialogRef<StartGameDialogComponent>,
+    private gamesService: GamesService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -75,6 +86,24 @@ export class StartGameDialogComponent implements OnInit {
   }
 
   submit(): void {
-    this.dialogRef.close();
+    this.isPreparing = true;
+    this.gamesService
+      .getGameWords({
+        bookId: this.form.selectedBook ? this.form.selectedBook.id : 0,
+        chapterId: this.form.selectedChapter ? this.form.selectedChapter.id : 0,
+        count: environment.startGameCount,
+      })
+      .subscribe(
+        (res: WordKeyValueModel<string[]>[]) => {
+          this.dialogRef.close(res);
+        },
+        (error: any) => {
+          this.notificationService.showMessage(
+            'Unexpected error',
+            Severity.error
+          );
+          this.isPreparing = false;
+        }
+      );
   }
 }

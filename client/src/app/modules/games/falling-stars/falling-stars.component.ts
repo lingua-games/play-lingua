@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { FallingStarsWord } from '../../../core/models/falling-stars-word.interface';
 import { Score } from '../../../core/models/score.interface';
@@ -24,11 +24,35 @@ export class FallingStarsComponent implements OnInit {
   words: FallingStarsWord[] = [];
   scoreBoard: Score = {} as Score;
 
+  @HostListener('document:keydown ', ['$event'])
+  keyDownEvent(event: KeyboardEvent): void {
+    if (!this.words || !this.words.length) {
+      return;
+    }
+    if (event.code === 'Digit1' || event.code === 'Numpad1') {
+      this.checkSelectedAnswer(this.getAnswers()[0]);
+    }
+
+    if (event.code === 'Digit2' || event.code === 'Numpad2') {
+      this.checkSelectedAnswer(this.getAnswers()[1]);
+    }
+
+    if (event.code === 'Digit3' || event.code === 'Numpad3') {
+      this.checkSelectedAnswer(this.getAnswers()[2]);
+    }
+
+    if (event.code === 'Digit4' || event.code === 'Numpad4') {
+      this.checkSelectedAnswer(this.getAnswers()[3]);
+    }
+
+    if (event.code === 'Escape') {
+    }
+  }
+
   constructor(private gamesService: GamesService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.showStartDialog();
-    this.getGameWords();
   }
 
   showStartDialog(): void {
@@ -38,30 +62,29 @@ export class FallingStarsComponent implements OnInit {
         width: '30%',
       })
       .afterClosed()
-      .subscribe((res: any) => {
-        this.startGame();
+      .subscribe((res: WordKeyValueModel<string[]>[]) => {
+        if (res && res.length) {
+          this.setGameWords(res);
+          this.startGame();
+        }
       });
   }
 
-  getGameWords(): void {
+  setGameWords(res): void {
     this.words = [];
-    this.gamesService
-      .getGameWords()
-      .subscribe((res: WordKeyValueModel<string[]>[]) => {
-        this.scoreBoard.total = res.length;
-        this.scoreBoard.correct = 0;
-        this.scoreBoard.inCorrect = 0;
-        res.forEach((element) => {
-          this.words.push({
-            key: element.key,
-            correctAnswers: element.value,
-            style: { left: `${this.getRandomNumber()}%` },
-            selectedAnswer: '',
-            animating: false,
-            possibleAnswers: this.generateRandomOptions(element, res),
-          });
-        });
+    this.scoreBoard.total = res.length;
+    this.scoreBoard.correct = 0;
+    this.scoreBoard.inCorrect = 0;
+    res.forEach((element: WordKeyValueModel<string[]>) => {
+      this.words.push({
+        key: element.key,
+        correctAnswers: element.values,
+        style: { left: `${this.getRandomNumber()}%` },
+        selectedAnswer: '',
+        animating: false,
+        possibleAnswers: this.generateRandomOptions(element, res),
       });
+    });
   }
 
   getAnswers(): string[] {
@@ -75,19 +98,22 @@ export class FallingStarsComponent implements OnInit {
     allWords: WordKeyValueModel<string[]>[]
   ): string[] {
     const result: string[] = [];
-    const copyOfAllWords = JSON.parse(
+    const copyOfAllWords: WordKeyValueModel<string[]>[] = JSON.parse(
       JSON.stringify(allWords.filter((x) => x.key !== targetWord.key))
     );
 
+    if (!targetWord || !targetWord.values || !targetWord.key) {
+      return;
+    }
     // Filling the correct option
     const answerPlace = Math.round(Math.random() * (3 - 0));
-    const answersLength = targetWord.value.length;
+    const answersLength = targetWord.values.length;
     if (answersLength === 1) {
-      result[answerPlace] = targetWord.value[0];
+      result[answerPlace] = targetWord.values[0];
     } else {
       // if the word has more than 1 answers, get one randomly
       result[answerPlace] =
-        targetWord.value[Math.round(Math.random() * (answersLength - 1))];
+        targetWord.values[Math.round(Math.random() * (answersLength - 1))];
     }
 
     // Filling the rest of options
@@ -96,7 +122,7 @@ export class FallingStarsComponent implements OnInit {
         const randomIndex = Math.round(
           Math.random() * (copyOfAllWords.length - 1)
         );
-        result[i] = copyOfAllWords[randomIndex].value[0];
+        result[i] = copyOfAllWords[randomIndex].values[0];
         copyOfAllWords.splice(randomIndex, 1);
       }
     }
