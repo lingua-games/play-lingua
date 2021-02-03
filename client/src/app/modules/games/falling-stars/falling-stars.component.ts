@@ -1,5 +1,11 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { animate, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { FallingStarsWord } from '../../../core/models/falling-stars-word.interface';
 import { Score } from '../../../core/models/score.interface';
 import { GamesService } from '../../../core/service/games.service';
@@ -18,19 +24,38 @@ import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
         animate(5000, style({ top: '100%' })),
       ]),
     ]),
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('500ms', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        style({ opacity: 1 }),
+        animate('100ms', style({ opacity: 0 })),
+      ]),
+    ]),
   ],
 })
 export class FallingStarsComponent implements OnInit {
   words: FallingStarsWord[] = [];
-  scoreBoard: Score = {} as Score;
+  currentWord: FallingStarsWord = new FallingStarsWord();
+  guidBoxShowing: boolean;
 
   @HostListener('document:keydown ', ['$event'])
   keyDownEvent(event: KeyboardEvent): void {
+    console.log(event);
     if (!this.words || !this.words.length) {
       return;
     }
     if (event.code === 'Digit1' || event.code === 'Numpad1') {
       this.checkSelectedAnswer(this.getAnswers()[0]);
+    }
+
+    if (
+      (event.code === 'Enter' || event.code === 'NumpadEnter') &&
+      this.guidBoxShowing
+    ) {
+      this.playNextStar();
     }
 
     if (event.code === 'Digit2' || event.code === 'Numpad2') {
@@ -72,15 +97,13 @@ export class FallingStarsComponent implements OnInit {
 
   setGameWords(res): void {
     this.words = [];
-    this.scoreBoard.total = res.length;
-    this.scoreBoard.correct = 0;
-    this.scoreBoard.inCorrect = 0;
     res.forEach((element: WordKeyValueModel<string[]>) => {
       this.words.push({
         key: element.key,
         correctAnswers: element.values,
         style: { left: `${this.getRandomNumber()}%` },
         selectedAnswer: '',
+        correctShowingAnswer: '',
         animating: false,
         possibleAnswers: this.generateRandomOptions(element, res),
       });
@@ -140,14 +163,36 @@ export class FallingStarsComponent implements OnInit {
     }
   }
 
-  boxAnimationDone(word: FallingStarsWord): void {
+  boxAnimationDone(
+    word: FallingStarsWord,
+    starHitFloor: boolean = false
+  ): void {
     word.animating = false;
-    const index = this.words.indexOf(word);
-    if (this.words.length === index + 1) {
-      // It means the game is finish
+    this.currentWord = word;
+
+    if (starHitFloor) {
     } else {
-      this.words[index + 1].animating = true;
+      if (word.correctAnswers.find((x) => x === word.selectedAnswer)) {
+        // TODO: Show BOOOOOOM HURAAAAA here
+        this.playNextStar();
+      } else {
+        this.showGuidBox();
+      }
     }
+  }
+
+  showGuidBox(): void {
+    this.guidBoxShowing = true;
+  }
+
+  playNextStar(): void {
+    if (this.words.length === this.words.indexOf(this.currentWord) + 1) {
+      // It means the game is finish
+      // TODO: Remove below line, it is just for develop a feature
+      this.words[0].animating = true;
+    }
+    this.guidBoxShowing = false;
+    this.words[this.words.indexOf(this.currentWord) + 1].animating = true;
   }
 
   getRandomNumber(): number {
@@ -159,15 +204,10 @@ export class FallingStarsComponent implements OnInit {
 
   checkSelectedAnswer(item: string): void {
     const activeWord = this.words.find((x) => x.animating);
-    if (
-      activeWord.correctAnswers.find(
-        (x) => x.toLowerCase() === item.toLowerCase()
-      )
-    ) {
-      this.scoreBoard.correct++;
-    } else {
-      this.scoreBoard.inCorrect++;
-    }
+    activeWord.selectedAnswer = item;
+    activeWord.correctShowingAnswer = activeWord.correctAnswers.filter((x) =>
+      this.getAnswers().find((y) => x === y)
+    )[0];
     this.boxAnimationDone(activeWord);
   }
 }

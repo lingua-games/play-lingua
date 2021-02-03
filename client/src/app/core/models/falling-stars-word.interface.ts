@@ -3,6 +3,7 @@ export class FallingStarsWord {
   key: string;
   style: {};
   selectedAnswer: string;
+  correctShowingAnswer: string;
   correctAnswers: string[];
   possibleAnswers: string[];
 }
