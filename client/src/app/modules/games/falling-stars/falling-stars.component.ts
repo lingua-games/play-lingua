@@ -41,10 +41,11 @@ export class FallingStarsComponent implements OnInit {
   words: FallingStarsWord[] = [];
   currentWord: FallingStarsWord = new FallingStarsWord();
   guidBoxShowing: boolean;
-  waitForBetweenEachWord = 1;
+  pressedNumber: number;
 
-  @HostListener('document:keydown ', ['$event'])
-  keyDownEvent(event: KeyboardEvent): void {
+  @HostListener('document:keyup ', ['$event'])
+  keyUpEvent(event: KeyboardEvent): void {
+    this.pressedNumber = 0;
     if (!this.words || !this.words.length) {
       return;
     }
@@ -80,6 +81,25 @@ export class FallingStarsComponent implements OnInit {
     }
   }
 
+  @HostListener('document:keydown ', ['$event'])
+  keyDownEvent(event: KeyboardEvent): void {
+    if (event.code === 'Digit1' || event.code === 'Numpad1') {
+      this.pressedNumber = 1;
+    }
+
+    if (event.code === 'Digit2' || event.code === 'Numpad2') {
+      this.pressedNumber = 2;
+    }
+
+    if (event.code === 'Digit3' || event.code === 'Numpad3') {
+      this.pressedNumber = 3;
+    }
+
+    if (event.code === 'Digit4' || event.code === 'Numpad4') {
+      this.pressedNumber = 4;
+    }
+  }
+
   constructor(private gamesService: GamesService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
@@ -112,6 +132,7 @@ export class FallingStarsComponent implements OnInit {
         correctShowingAnswer: '',
         animating: false,
         possibleAnswers: this.generateRandomOptions(element, res),
+        keyIsPressing: false,
       });
     });
   }
@@ -201,9 +222,7 @@ export class FallingStarsComponent implements OnInit {
       // TODO: Remove below line, it is just for develop a feature
       this.words[0].animating = true;
     } else {
-      setTimeout(() => {
-        this.words[this.words.indexOf(this.currentWord) + 1].animating = true;
-      }, this.waitForBetweenEachWord);
+      this.words[this.words.indexOf(this.currentWord) + 1].animating = true;
     }
   }
 
@@ -218,5 +237,17 @@ export class FallingStarsComponent implements OnInit {
     const activeWord = this.words.find((x) => x.animating);
     activeWord.selectedAnswer = item;
     this.boxAnimationDone(activeWord);
+  }
+
+  pressTheAnswer(item: string): void {
+    console.log(item);
+  }
+
+  isPressing(answer): boolean {
+    return (
+      this.words.find((x) => x.animating).possibleAnswers.indexOf(answer) +
+        1 ===
+      this.pressedNumber
+    );
   }
 }

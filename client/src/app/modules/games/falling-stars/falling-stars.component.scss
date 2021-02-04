@@ -114,3 +114,10 @@
   color: green;
   font-size: 1vw;
 }
+
+.answer-pressed {
+  cursor: pointer;
+  transition: 100ms;
+  border-color: rgba(0, 128, 0, .4);
+  color: rgba(0, 128, 0, .4);
+}

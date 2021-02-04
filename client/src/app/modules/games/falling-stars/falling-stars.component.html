@@ -28,7 +28,7 @@
   <div class='ground-container text-center' @fadeIn *ngIf='!guidBoxShowing'>
     <div class='answer-container'>
       <div class='answer-item-container mr-4' *ngFor='let answer of getAnswers();let index = index'
-           (click)='checkSelectedAnswer(answer)'>
+           (click)='checkSelectedAnswer(answer)' [ngClass]="{'answer-pressed': isPressing(answer)}">
         <div class='item-number-container'>
           <span class='number-index'>{{index + 1}}</span>
         </div>
