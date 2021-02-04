@@ -1,5 +1,11 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { animate, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { FallingStarsWord } from '../../../core/models/falling-stars-word.interface';
 import { Score } from '../../../core/models/score.interface';
 import { GamesService } from '../../../core/service/games.service';
@@ -14,21 +20,47 @@ import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
   animations: [
     trigger('fade', [
       transition('void => true', [
-        style({ top: '-10%' }),
+        style({ opacity: '0', top: '-20%' }),
+        animate(1000, style({ opacity: '1', top: '-20%' })),
         animate(5000, style({ top: '100%' })),
+      ]),
+    ]),
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('500ms', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        style({ opacity: 1 }),
+        animate('100ms', style({ opacity: 0 })),
       ]),
     ]),
   ],
 })
 export class FallingStarsComponent implements OnInit {
   words: FallingStarsWord[] = [];
-  scoreBoard: Score = {} as Score;
+  currentWord: FallingStarsWord = new FallingStarsWord();
+  guidBoxShowing: boolean;
+  pressedNumber: number;
 
-  @HostListener('document:keydown ', ['$event'])
-  keyDownEvent(event: KeyboardEvent): void {
+  @HostListener('document:keyup ', ['$event'])
+  keyUpEvent(event: KeyboardEvent): void {
+    this.pressedNumber = 0;
     if (!this.words || !this.words.length) {
       return;
     }
+    if (
+      (event.code === 'Enter' || event.code === 'NumpadEnter') &&
+      this.guidBoxShowing
+    ) {
+      this.playNextStar();
+      return;
+    }
+
+    if (this.guidBoxShowing) {
+      return;
+    }
+
     if (event.code === 'Digit1' || event.code === 'Numpad1') {
       this.checkSelectedAnswer(this.getAnswers()[0]);
     }
@@ -46,6 +78,25 @@ export class FallingStarsComponent implements OnInit {
     }
 
     if (event.code === 'Escape') {
+    }
+  }
+
+  @HostListener('document:keydown ', ['$event'])
+  keyDownEvent(event: KeyboardEvent): void {
+    if (event.code === 'Digit1' || event.code === 'Numpad1') {
+      this.pressedNumber = 1;
+    }
+
+    if (event.code === 'Digit2' || event.code === 'Numpad2') {
+      this.pressedNumber = 2;
+    }
+
+    if (event.code === 'Digit3' || event.code === 'Numpad3') {
+      this.pressedNumber = 3;
+    }
+
+    if (event.code === 'Digit4' || event.code === 'Numpad4') {
+      this.pressedNumber = 4;
     }
   }
 
@@ -72,17 +123,16 @@ export class FallingStarsComponent implements OnInit {
 
   setGameWords(res): void {
     this.words = [];
-    this.scoreBoard.total = res.length;
-    this.scoreBoard.correct = 0;
-    this.scoreBoard.inCorrect = 0;
     res.forEach((element: WordKeyValueModel<string[]>) => {
       this.words.push({
         key: element.key,
         correctAnswers: element.values,
         style: { left: `${this.getRandomNumber()}%` },
         selectedAnswer: '',
+        correctShowingAnswer: '',
         animating: false,
         possibleAnswers: this.generateRandomOptions(element, res),
+        keyIsPressing: false,
       });
     });
   }
@@ -141,12 +191,38 @@ export class FallingStarsComponent implements OnInit {
   }
 
   boxAnimationDone(word: FallingStarsWord): void {
+    this.currentWord = word;
+    if (!this.getAnswers()) {
+      return;
+    }
+    this.currentWord.correctShowingAnswer = this.currentWord.correctAnswers.filter(
+      (x) => this.getAnswers().find((y: string) => x === y)
+    )[0];
     word.animating = false;
-    const index = this.words.indexOf(word);
-    if (this.words.length === index + 1) {
-      // It means the game is finish
+    if (!word.selectedAnswer) {
+      this.showGuidBox();
     } else {
-      this.words[index + 1].animating = true;
+      if (word.correctAnswers.find((x) => x === word.selectedAnswer)) {
+        // TODO: Show BOOOOOOM HURAAAAA here
+        this.playNextStar();
+      } else {
+        this.showGuidBox();
+      }
+    }
+  }
+
+  showGuidBox(): void {
+    this.guidBoxShowing = true;
+  }
+
+  playNextStar(): void {
+    this.guidBoxShowing = false;
+    if (this.words.length === this.words.indexOf(this.currentWord) + 1) {
+      // It means the game is finish
+      // TODO: Remove below line, it is just for develop a feature
+      this.words[0].animating = true;
+    } else {
+      this.words[this.words.indexOf(this.currentWord) + 1].animating = true;
     }
   }
 
@@ -159,15 +235,15 @@ export class FallingStarsComponent implements OnInit {
 
   checkSelectedAnswer(item: string): void {
     const activeWord = this.words.find((x) => x.animating);
-    if (
-      activeWord.correctAnswers.find(
-        (x) => x.toLowerCase() === item.toLowerCase()
-      )
-    ) {
-      this.scoreBoard.correct++;
-    } else {
-      this.scoreBoard.inCorrect++;
-    }
+    activeWord.selectedAnswer = item;
     this.boxAnimationDone(activeWord);
+  }
+
+  isPressing(answer): boolean {
+    return (
+      this.words.find((x) => x.animating).possibleAnswers.indexOf(answer) +
+        1 ===
+      this.pressedNumber
+    );
   }
 }

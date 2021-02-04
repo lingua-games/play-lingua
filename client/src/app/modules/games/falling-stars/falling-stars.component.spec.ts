@@ -70,7 +70,19 @@ describe('FallingStarsComponent', () => {
   });
 
   it('should set word.animating to false on calling boxAnimationDone', () => {
-    const mockValue = { animating: true } as FallingStarsWord;
+    component.words = [
+      {
+        animating: true,
+        style: {},
+        correctAnswers: ['testValue'],
+        possibleAnswers: ['', ''],
+      } as FallingStarsWord,
+    ];
+
+    const mockValue = {
+      animating: true,
+      correctAnswers: ['testValue'],
+    } as FallingStarsWord;
 
     component.boxAnimationDone(mockValue);
 
