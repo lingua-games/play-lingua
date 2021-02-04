@@ -239,10 +239,6 @@ export class FallingStarsComponent implements OnInit {
     this.boxAnimationDone(activeWord);
   }
 
-  pressTheAnswer(item: string): void {
-    console.log(item);
-  }
-
   isPressing(answer): boolean {
     return (
       this.words.find((x) => x.animating).possibleAnswers.indexOf(answer) +
