@@ -43,19 +43,23 @@ export class FallingStarsComponent implements OnInit {
 
   @HostListener('document:keydown ', ['$event'])
   keyDownEvent(event: KeyboardEvent): void {
-    console.log(event);
     if (!this.words || !this.words.length) {
       return;
     }
-    if (event.code === 'Digit1' || event.code === 'Numpad1') {
-      this.checkSelectedAnswer(this.getAnswers()[0]);
-    }
-
     if (
       (event.code === 'Enter' || event.code === 'NumpadEnter') &&
       this.guidBoxShowing
     ) {
       this.playNextStar();
+      return;
+    }
+
+    if (this.guidBoxShowing) {
+      return;
+    }
+
+    if (event.code === 'Digit1' || event.code === 'Numpad1') {
+      this.checkSelectedAnswer(this.getAnswers()[0]);
     }
 
     if (event.code === 'Digit2' || event.code === 'Numpad2') {
@@ -163,14 +167,14 @@ export class FallingStarsComponent implements OnInit {
     }
   }
 
-  boxAnimationDone(
-    word: FallingStarsWord,
-    starHitFloor: boolean = false
-  ): void {
-    word.animating = false;
+  boxAnimationDone(word: FallingStarsWord): void {
     this.currentWord = word;
-
-    if (starHitFloor) {
+    this.currentWord.correctShowingAnswer = this.currentWord.correctAnswers.filter(
+      (x) => this.getAnswers().find((y) => x === y)
+    )[0];
+    word.animating = false;
+    if (!word.selectedAnswer) {
+      this.showGuidBox();
     } else {
       if (word.correctAnswers.find((x) => x === word.selectedAnswer)) {
         // TODO: Show BOOOOOOM HURAAAAA here
@@ -186,13 +190,14 @@ export class FallingStarsComponent implements OnInit {
   }
 
   playNextStar(): void {
+    this.guidBoxShowing = false;
     if (this.words.length === this.words.indexOf(this.currentWord) + 1) {
       // It means the game is finish
       // TODO: Remove below line, it is just for develop a feature
       this.words[0].animating = true;
+    } else {
+      this.words[this.words.indexOf(this.currentWord) + 1].animating = true;
     }
-    this.guidBoxShowing = false;
-    this.words[this.words.indexOf(this.currentWord) + 1].animating = true;
   }
 
   getRandomNumber(): number {
@@ -205,9 +210,6 @@ export class FallingStarsComponent implements OnInit {
   checkSelectedAnswer(item: string): void {
     const activeWord = this.words.find((x) => x.animating);
     activeWord.selectedAnswer = item;
-    activeWord.correctShowingAnswer = activeWord.correctAnswers.filter((x) =>
-      this.getAnswers().find((y) => x === y)
-    )[0];
     this.boxAnimationDone(activeWord);
   }
 }

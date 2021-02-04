@@ -12,8 +12,6 @@
   <div class='guid-box-action-container text-right'>
     <button class='btn btn-success' (click)='playNextStar()'>Continue [Enter]</button>
   </div>
-
-  <!--  {{currentWord | json}}-->
 </div>
 <div class='game-board-container'>
   <div class='falling-container'>
@@ -27,7 +25,7 @@
       </div>
     </span>
   </div>
-  <div class='ground-container text-center'>
+  <div class='ground-container text-center' @fadeIn *ngIf='!guidBoxShowing'>
     <div class='answer-container'>
       <div class='answer-item-container mr-4' *ngFor='let answer of getAnswers();let index = index'
            (click)='checkSelectedAnswer(answer)'>
