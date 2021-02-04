@@ -20,7 +20,8 @@ import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
   animations: [
     trigger('fade', [
       transition('void => true', [
-        style({ top: '-10%' }),
+        style({ opacity: '0', top: '-20%' }),
+        animate(1000, style({ opacity: '1', top: '-20%' })),
         animate(5000, style({ top: '100%' })),
       ]),
     ]),
@@ -40,6 +41,7 @@ export class FallingStarsComponent implements OnInit {
   words: FallingStarsWord[] = [];
   currentWord: FallingStarsWord = new FallingStarsWord();
   guidBoxShowing: boolean;
+  waitForBetweenEachWord = 1;
 
   @HostListener('document:keydown ', ['$event'])
   keyDownEvent(event: KeyboardEvent): void {
@@ -169,8 +171,11 @@ export class FallingStarsComponent implements OnInit {
 
   boxAnimationDone(word: FallingStarsWord): void {
     this.currentWord = word;
+    if (!this.getAnswers()) {
+      return;
+    }
     this.currentWord.correctShowingAnswer = this.currentWord.correctAnswers.filter(
-      (x) => this.getAnswers().find((y) => x === y)
+      (x) => this.getAnswers().find((y: string) => x === y)
     )[0];
     word.animating = false;
     if (!word.selectedAnswer) {
@@ -196,7 +201,9 @@ export class FallingStarsComponent implements OnInit {
       // TODO: Remove below line, it is just for develop a feature
       this.words[0].animating = true;
     } else {
-      this.words[this.words.indexOf(this.currentWord) + 1].animating = true;
+      setTimeout(() => {
+        this.words[this.words.indexOf(this.currentWord) + 1].animating = true;
+      }, this.waitForBetweenEachWord);
     }
   }
 
