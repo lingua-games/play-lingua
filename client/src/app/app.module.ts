@@ -15,9 +15,10 @@ import { ErrorIntercept } from './core/interceptors/error.interceptor';
 import { TokenIntercept } from './core/interceptors/token.interceptor';
 import { MessageService } from 'primeng/api';
 import { StoreModule } from '@ngrx/store';
+import { ScoreNotificationComponent } from './core/component/score-notification/score-notification.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, ScoreNotificationComponent],
   imports: [
     AppRoutingModule,
     FontAwesomeModule,
