@@ -16,6 +16,8 @@ import { TokenIntercept } from './core/interceptors/token.interceptor';
 import { MessageService } from 'primeng/api';
 import { StoreModule } from '@ngrx/store';
 import { ScoreNotificationComponent } from './core/component/score-notification/score-notification.component';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [AppComponent, ScoreNotificationComponent],
@@ -26,6 +28,7 @@ import { ScoreNotificationComponent } from './core/component/score-notification/
     BrowserModule,
     BrowserAnimationsModule,
     StoreModule.forRoot({}, {}),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
   ],
   providers: [
     MessageService,
