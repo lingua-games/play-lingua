@@ -14,6 +14,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ErrorIntercept } from './core/interceptors/error.interceptor';
 import { TokenIntercept } from './core/interceptors/token.interceptor';
 import { MessageService } from 'primeng/api';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,6 +24,7 @@ import { MessageService } from 'primeng/api';
     HttpClientModule,
     BrowserModule,
     BrowserAnimationsModule,
+    StoreModule.forRoot({}, {}),
   ],
   providers: [
     MessageService,
