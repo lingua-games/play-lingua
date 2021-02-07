@@ -20,7 +20,7 @@
            [@fade]='word?.animating'
            [ngStyle]='word.style'
            *ngIf='word?.animating'
-           (@fade.done)='boxAnimationDone(word)'>
+           (@fade.done)='boxAnimationDone(word, true)'>
         <span>{{word.key}}</span>
       </div>
     </span>

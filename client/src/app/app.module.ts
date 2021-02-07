@@ -28,7 +28,11 @@ import { environment } from '../environments/environment';
     BrowserModule,
     BrowserAnimationsModule,
     StoreModule.forRoot({}, {}),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    StoreDevtoolsModule.instrument({
+      name: 'Store dev tools',
+      maxAge: 25,
+      logOnly: environment.production,
+    }),
   ],
   providers: [
     MessageService,
