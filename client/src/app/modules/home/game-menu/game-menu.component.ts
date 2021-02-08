@@ -12,6 +12,9 @@ import { LanguageModel } from '../../../core/models/language.model';
 import { SecurityService } from '../../../core/service/security.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectDefaultLanguageDialogComponent } from '../../../core/dialogs/select-default-language-dialog/select-default-language-dialog.component';
+import { Store } from '@ngrx/store';
+import { toggleNotification } from '../../../core/component/score-notification/state/score-notification.actions';
+import { NotificationState } from '../../../core/component/score-notification/state/score-notification.reducer';
 
 @Component({
   selector: 'app-game-menu',

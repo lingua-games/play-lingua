@@ -1,11 +1,12 @@
 .score-container {
   position: absolute;
   width: 100%;
-  top: 30vh;
+  top: 60vh;
   z-index: 10;
-  span {
-    font-size: 2rem;
-    background-color: blue;
-    padding: 1vh;
-  }
+}
+
+.alert-success {
+  width: 20%;
+  left: 40%;
+  font-size: 1vw;
 }

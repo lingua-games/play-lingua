@@ -1,3 +1,5 @@
-<!--<div class='score-container text-center'>-->
-<!--  <span>+10</span>-->
-<!--</div>-->
+<div class='score-container text-center' *ngIf='showNotification' @fadeIn>
+  <div class="alert alert-success" role="alert">
+    Yay, +10
+  </div>
+</div>

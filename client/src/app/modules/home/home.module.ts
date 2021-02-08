@@ -14,6 +14,8 @@ import { PrepareAddWordsComponent } from './prepare-add-words/prepare-add-words.
 import { MaterialModule } from '../common/material/material.module';
 import { SelectDefaultLanguageDialogComponent } from '../../core/dialogs/select-default-language-dialog/select-default-language-dialog.component';
 import { DirectiveModule } from '../../core/directives/directive.module';
+import { StoreModule } from '@ngrx/store';
+import { scoreNotificationReducer } from '../../core/component/score-notification/state/score-notification.reducer';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,7 @@ import { DirectiveModule } from '../../core/directives/directive.module';
     FormsModule,
     MaterialModule,
     DirectiveModule,
+    StoreModule.forFeature('notifications', scoreNotificationReducer),
   ],
   providers: [DeactivateWithDelay],
 })
