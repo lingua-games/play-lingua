@@ -1,21 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { GamesService } from 'src/app/core/service/games.service';
 import { FallingStarsWord } from '../../../core/models/falling-stars-word.interface';
 import { FallingStarsComponent } from './falling-stars.component';
 import { MatDialog } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { Store } from '@ngrx/store';
 
 describe('FallingStarsComponent', () => {
   let component: FallingStarsComponent;
   let fixture: ComponentFixture<FallingStarsComponent>;
   let mockMatDialog;
-
+  let mockStore;
   let sampleWords;
 
   beforeEach(async(() => {
+    mockStore = jasmine.createSpyObj(['select']);
     sampleWords = [
       { key: 'Apple', value: ['appel'] },
       { key: 'Banana', value: ['banaan'] },
@@ -37,6 +38,10 @@ describe('FallingStarsComponent', () => {
         {
           provide: MatDialog,
           useValue: mockMatDialog,
+        },
+        {
+          provide: Store,
+          useValue: mockStore,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],

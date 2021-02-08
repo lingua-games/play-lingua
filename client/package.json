@@ -1,7 +1,6 @@
 {
   "name": "client",
   "version": "0.0.0",
-
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port=4000 -o",
@@ -36,6 +35,8 @@
     "@fortawesome/free-brands-svg-icons": "^5.13.0",
     "@fortawesome/free-regular-svg-icons": "^5.13.0",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
+    "@ngrx/store": "^10.1.2",
+    "@ngrx/store-devtools": "^10.1.2",
     "bootstrap": "^4.5.2",
     "install": "^0.13.0",
     "ngx-bootstrap": "^6.1.0",

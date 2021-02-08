@@ -12,6 +12,9 @@ import { GamesService } from '../../../core/service/games.service';
 import { MatDialog } from '@angular/material/dialog';
 import { StartGameDialogComponent } from './start-game-dialog/start-game-dialog.component';
 import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
+import { Store } from '@ngrx/store';
+import { toggleNotification } from '../../../core/component/score-notification/state/score-notification.actions';
+import { NotificationState } from '../../../core/component/score-notification/state/score-notification.reducer';
 
 @Component({
   selector: 'app-falling-stars',
@@ -100,7 +103,11 @@ export class FallingStarsComponent implements OnInit {
     }
   }
 
-  constructor(private gamesService: GamesService, private dialog: MatDialog) {}
+  constructor(
+    private gamesService: GamesService,
+    private dialog: MatDialog,
+    private store: Store<any>
+  ) {}
 
   ngOnInit(): void {
     this.showStartDialog();
@@ -190,7 +197,10 @@ export class FallingStarsComponent implements OnInit {
     }
   }
 
-  boxAnimationDone(word: FallingStarsWord): void {
+  boxAnimationDone(
+    word: FallingStarsWord,
+    isCalledFromView: boolean = false
+  ): void {
     this.currentWord = word;
     if (!this.getAnswers()) {
       return;
@@ -203,7 +213,15 @@ export class FallingStarsComponent implements OnInit {
       this.showGuidBox();
     } else {
       if (word.correctAnswers.find((x) => x === word.selectedAnswer)) {
-        // TODO: Show BOOOOOOM HURAAAAA here
+        if (!isCalledFromView) {
+          this.store.dispatch(
+            toggleNotification({
+              gameName: 'Falling stars',
+              message: 'I am the message',
+              score: 10,
+            } as NotificationState)
+          );
+        }
         this.playNextStar();
       } else {
         this.showGuidBox();

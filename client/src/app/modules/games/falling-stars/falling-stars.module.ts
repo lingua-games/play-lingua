@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { StartGameDialogComponent } from './start-game-dialog/start-game-dialog.component';
 import { MaterialModule } from '../../common/material/material.module';
 import { ComponentModule } from '../../../core/component/component.module';
+import { StoreModule } from '@ngrx/store';
+import { scoreNotificationReducer } from '../../../core/component/score-notification/state/score-notification.reducer';
 
 @NgModule({
   declarations: [FallingStarsComponent, StartGameDialogComponent],
@@ -15,6 +17,7 @@ import { ComponentModule } from '../../../core/component/component.module';
     FormsModule,
     MaterialModule,
     ComponentModule,
+    StoreModule.forFeature('notifications', scoreNotificationReducer),
   ],
 })
 export class FallingStarsModule {}
