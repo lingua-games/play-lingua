@@ -49,6 +49,7 @@ namespace PlayLingua.Host
             services.AddControllers();
             services.AddRouting(options => { options.LowercaseUrls = true; });
             services.AddRazorPages();
+            services.AddHttpContextAccessor();
 
             //services.AddInMemoryRepository();
             services.AddRepository(

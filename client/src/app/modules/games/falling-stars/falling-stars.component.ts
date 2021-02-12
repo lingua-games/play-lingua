@@ -111,6 +111,7 @@ export class FallingStarsComponent implements OnInit {
 
   showStartDialog(): void {
     this.words = [];
+    this.guidBoxShowing = false;
     this.dialog
       .open(StartGameDialogComponent, {
         disableClose: true,

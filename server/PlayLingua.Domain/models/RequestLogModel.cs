@@ -6,14 +6,14 @@ namespace PlayLingua.Domain.models
 	{
 		public long Id { get; set; }
 		public DateTime StartTime { get; set; }
-		public Guid? UserId { get; set; }
+		public int? UserId { get; set; }
 		public string Path { get; set; }
 		public string QueryString { get; set; }
 		public string Method { get; set; }
 		public string Body { get; set; }
 		public long? RequestSize { get; set; }
 		public string IpAddress { get; set; }
-		public string ProcessDuration { get; set; }
+		public double ProcessDuration { get; set; }
 		public bool Failed { get; set; }
 		public bool HadException { get; set; }
 		public string Response { get; set; }

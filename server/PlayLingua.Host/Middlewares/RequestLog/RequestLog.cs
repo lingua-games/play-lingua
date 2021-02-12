@@ -1,83 +1,136 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using PlayLingua.Domain.models;
+using PlayLingua.Domain.Ports;
+using PlayLingua.Host.Controllers;
 using System;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace PlayLingua.Host.Middlewares
 {
-    // You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
-    public class RequestLog
+    public class RequestLog : BaseController
     {
         private readonly RequestDelegate _next;
-		private Stopwatch _stopwatch = new Stopwatch();
+        private Stopwatch _stopwatch = new Stopwatch();
+        private readonly IRequeustLogRepository _requeustLogRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-		public RequestLog(RequestDelegate next)
+        public RequestLog(RequestDelegate next, IRequeustLogRepository requeustLogRepository, IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
+            _requeustLogRepository = requeustLogRepository;
             _next = next;
         }
 
         public async Task Invoke(HttpContext httpContext)
         {
+            var log = new RequestLogModel();
+            try
+            {
+                if (httpContext.Request.Path != "/")
+                {
+                    log = await RequestIndiactor(httpContext);
+                    using (var memStream = new MemoryStream())
+                    {
+                        var originalResponseBody = httpContext.Response.Body;
+                        httpContext.Response.Body = memStream;
+                        httpContext.Items.Add("RequestLog", log);
 
-            await _next(httpContext);
+                        await _next(httpContext);
+
+                        memStream.Position = 0;
+                        log.Response = new StreamReader(memStream).ReadToEnd();
+                        memStream.Position = 0;
+                        await memStream.CopyToAsync(originalResponseBody);
+                        httpContext.Response.Body = originalResponseBody;
+                    }
+                    ResponseIndiactor(httpContext, log);
+                }
+                else
+                {
+                    await _next(httpContext);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
         }
 
-		public async Task<RequestLogModel> RequestIndiactor(HttpContext httpContext)
-		{
-			// TODO. ASK HOW TO FILL BELOW FIELDS
-			// ActionTypeId - not now
-			// EntityChanges - not now
-			// QueryString - route parameter
-			var requestAddress = httpContext.Request.Path;
-			_stopwatch.Start();
-			var request = new RequestLogModel
-			{
-				IpAddress = httpContext.Connection.RemoteIpAddress.ToString(),
-				Path = requestAddress,
-				Method = httpContext.Request.Method,
-				StartTime = DateTime.Now,
-			};
+        public void ResponseIndiactor(HttpContext httpContext, RequestLogModel requestLog)
+        {
+            if (_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier) != null)
+            {
+                requestLog.UserId = int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            }
+            requestLog.ResponseStatusCode = httpContext.Response.StatusCode;
+            requestLog.ResponseSize = httpContext.Response.ContentLength;
+            if (requestLog.ResponseSize > 5000)
+            {
+                requestLog.Response = "Too long";
+            }
+            requestLog.Failed = httpContext.Response.StatusCode == 200 ? false : true;
+            _stopwatch.Stop();
+            requestLog.ProcessDuration = _stopwatch.Elapsed.TotalSeconds;
+            _requeustLogRepository.Update(requestLog);
+        }
 
-			if (httpContext.Request?.Body != null && !string.IsNullOrWhiteSpace(httpContext.Request.ContentType) &&
-							!httpContext.Request.ContentType.StartsWith("multipart/form-data", StringComparison.InvariantCultureIgnoreCase))
-			{
-				#region Get Request Body
-				request.Body = await new StreamReader(httpContext.Request.Body).ReadToEndAsync();
-				var injectedRequestStream = new MemoryStream();
-				var bytesToWrite = Encoding.UTF8.GetBytes(request.Body);
-				injectedRequestStream.Write(bytesToWrite, 0, bytesToWrite.Length);
-				injectedRequestStream.Seek(0, SeekOrigin.Begin);
-				httpContext.Request.Body = injectedRequestStream;
-				#endregion
-			}
+        public async Task<RequestLogModel> RequestIndiactor(HttpContext httpContext)
+        {
+            _stopwatch.Start();
+            var request = new RequestLogModel
+            {
+                IpAddress = httpContext.Connection.RemoteIpAddress.ToString(),
+                Path = httpContext.Request.Path,
+                Method = httpContext.Request.Method,
+                StartTime = DateTime.Now,
+            };
 
-			request.RequestSize = httpContext.Request.ContentLength;
-			if (!IgnoreRequest(requestAddress))
-			{
-				_dbContext.RequestLogs.Add(request);
-				await _dbContext.SaveChangesAsync();
-			}
-			return new RequestLogModel
-			{
-				Id = request.Id,
-				Body = request.Body,
-				IpAddress = request.IpAddress,
-				Method = request.Method,
-				Path = request.Path,
-				StartTime = request.StartTime,
-				UserId = request.UserId,
-				SavedLog = request,
-			};
-		}
+            if (httpContext.Request?.Body != null && !string.IsNullOrWhiteSpace(httpContext.Request.ContentType) &&
+                            !httpContext.Request.ContentType.StartsWith("multipart/form-data", StringComparison.InvariantCultureIgnoreCase))
+            {
+                #region Get Request Body
+                // This condition is because I dont want to save usurs password into my database
 
-	}
+                request.Body = await new StreamReader(httpContext.Request.Body).ReadToEndAsync();
+                var injectedRequestStream = new MemoryStream();
+                var bytesToWrite = Encoding.UTF8.GetBytes(request.Body);
+                injectedRequestStream.Write(bytesToWrite, 0, bytesToWrite.Length);
+                injectedRequestStream.Seek(0, SeekOrigin.Begin);
+                httpContext.Request.Body = injectedRequestStream;
+
+                if (request.Body.Contains("password\":"))
+                {
+                    request.Body = "Not visible(password is in content)";
+                }
+                #endregion
+            }
+
+            request.RequestSize = httpContext.Request.ContentLength;
+            request.Id = _requeustLogRepository.Add(request).Id;
+            return new RequestLogModel
+            {
+                Id = request.Id,
+                Body = request.Body,
+                IpAddress = request.IpAddress,
+                Method = request.Method,
+                Path = request.Path,
+                StartTime = request.StartTime,
+                UserId = request.UserId,
+            };
+        }
+    }
 
 
 
-	// Extension method used to add the middleware to the HTTP request pipeline.
-	public static class RequestLogExtensions
+    public static class RequestLogExtensions
     {
         public static IApplicationBuilder UseRequestLog(this IApplicationBuilder builder)
         {

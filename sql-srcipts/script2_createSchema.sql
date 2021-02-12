@@ -114,21 +114,20 @@ GO
 CREATE TABLE [dbo].[RequestLogs] (
 		[Id] int IDENTITY(1,1) PRIMARY KEY,
 		[StartTime] datetime,
-		[UserId] int NOT NULL,
+		[UserId] int,
 		[Path] nvarchar(500) NOT NULL,
-		[QueryString] nvarchar(500) NOT NULL,
-		[Method] nvarchar(500) NOT NULL,
-		[Body] nvarchar(500) NOT NULL,
+		[Method] nvarchar(500),
+		[Body] nvarchar(500),
 		[RequestSize] int,
 		[IpAddress] nvarchar(50) NOT NULL,
-		[ProcessDuration] int,
+		[ProcessDuration] float,
 		[Failed] Bit,
 		[HadException] Bit,
-		[Response] nvarchar(500) NOT NULL,
+		[Response] nvarchar(Max),
 		[ResponseStatusCode] int,
 		[ResponseSize] int,
-		[ExceptionTitle] nvarchar(500) NOT NULL,
-		[ExceptionMessage] nvarchar(500) NOT NULL,
+		[ExceptionTitle] nvarchar(500),
+		[ExceptionMessage] nvarchar(500),
 )
 ALTER TABLE [dbo].[RequestLogs] ADD CONSTRAINT [FK_RequestLogs_UserId]
 FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([Id])
