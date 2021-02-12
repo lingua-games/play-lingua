@@ -4,6 +4,7 @@ import { LoginComponent } from './login.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -13,6 +14,12 @@ describe('LoginComponent', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule],
       declarations: [LoginComponent],
+      providers: [
+        {
+          provide: MatDialog,
+          useValue: { closeAll: () => {} },
+        },
+      ],
       schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   }));

@@ -18,6 +18,8 @@ import { StoreModule } from '@ngrx/store';
 import { ScoreNotificationComponent } from './core/component/score-notification/score-notification.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
+import { MatDialog } from '@angular/material/dialog';
+import { MaterialModule } from './modules/common/material/material.module';
 
 @NgModule({
   declarations: [AppComponent, ScoreNotificationComponent],
@@ -25,6 +27,7 @@ import { environment } from '../environments/environment';
     AppRoutingModule,
     FontAwesomeModule,
     HttpClientModule,
+    MaterialModule,
     BrowserModule,
     BrowserAnimationsModule,
     StoreModule.forRoot({}, {}),
