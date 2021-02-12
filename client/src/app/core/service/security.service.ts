@@ -6,6 +6,7 @@ import { LoginResultModel } from '../models/login-result.model';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
 import { NotificationService, Severity } from './notification.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,11 @@ import { NotificationService, Severity } from './notification.service';
 export class SecurityService {
   authUrl = environment.apiUrl + 'Auth';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private dialogRef: MatDialog
+  ) {}
 
   login(user: UserModel): Observable<LoginResultModel> {
     return this.http.post<LoginResultModel>(this.authUrl, user);
@@ -25,9 +30,10 @@ export class SecurityService {
   }
 
   logoutOn401(): void {
+    this.dialogRef.closeAll();
     localStorage.removeItem('lingua-token');
     localStorage.removeItem('lingua-email');
     localStorage.removeItem('lingua-selected-languages');
-    this.router.navigate(['../']);
+    this.router.navigate(['../login']);
   }
 }

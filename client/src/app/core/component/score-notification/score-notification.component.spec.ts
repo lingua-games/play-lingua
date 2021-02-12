@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ScoreNotificationComponent } from './score-notification.component';
-import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 
