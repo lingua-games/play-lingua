@@ -34,6 +34,6 @@ export class SecurityService {
     localStorage.removeItem('lingua-token');
     localStorage.removeItem('lingua-email');
     localStorage.removeItem('lingua-selected-languages');
-    this.router.navigate(['../login']);
+    this.router.navigate(['../login']).then();
   }
 }

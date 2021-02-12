@@ -1,20 +1,13 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { FallingStarsWord } from '../../../core/models/falling-stars-word.interface';
-import { Score } from '../../../core/models/score.interface';
 import { GamesService } from '../../../core/service/games.service';
 import { MatDialog } from '@angular/material/dialog';
 import { StartGameDialogComponent } from './start-game-dialog/start-game-dialog.component';
 import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
 import { Store } from '@ngrx/store';
-import { toggleNotification } from '../../../core/component/score-notification/state/score-notification.actions';
 import { NotificationState } from '../../../core/component/score-notification/state/score-notification.reducer';
+import { toggleNotification } from '../../../core/component/score-notification/state/score-notification.actions';
 
 @Component({
   selector: 'app-falling-stars',
@@ -79,9 +72,6 @@ export class FallingStarsComponent implements OnInit {
     if (event.code === 'Digit4' || event.code === 'Numpad4') {
       this.checkSelectedAnswer(this.getAnswers()[3]);
     }
-
-    if (event.code === 'Escape') {
-    }
   }
 
   @HostListener('document:keydown ', ['$event'])
@@ -101,6 +91,12 @@ export class FallingStarsComponent implements OnInit {
     if (event.code === 'Digit4' || event.code === 'Numpad4') {
       this.pressedNumber = 4;
     }
+
+    if (event.code === 'Escape') {
+      if (this.words.length) {
+        this.showStartDialog();
+      }
+    }
   }
 
   constructor(
@@ -114,6 +110,7 @@ export class FallingStarsComponent implements OnInit {
   }
 
   showStartDialog(): void {
+    this.words = [];
     this.dialog
       .open(StartGameDialogComponent, {
         disableClose: true,
