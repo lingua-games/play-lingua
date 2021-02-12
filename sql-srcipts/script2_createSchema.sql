@@ -2,16 +2,16 @@ use [PlayLingua]
 
 CREATE TABLE [dbo].[Language] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
-    [Code]   [varchar](10) NOT NULL,
-	[Name]   [varchar](200) NOT NULL,
-	[NativeName]   [nvarchar](200) NOT NULL,
+    [Code]   varchar(10) NOT NULL,
+	[Name]   varchar(200) NOT NULL,
+	[NativeName]   nvarchar(200) NOT NULL,
 )
 GO
 
 CREATE TABLE [dbo].[Users] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
-    [Email]   [varchar](100) NOT NULL,
-	[Password]   [varchar](200) NOT NULL,
+    [Email]   varchar(100) NOT NULL,
+	[Password]   varchar(200) NOT NULL,
 	[DefaultTargetLanguage]   int,
 	[DefaultBaseLanguage]   int,
 	[AddedDate] datetime NOT NULL,
@@ -27,7 +27,7 @@ GO
 
 CREATE TABLE [dbo].[Book] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
-    [Name]   [varchar](100) NOT NULL,
+    [Name]   varchar(100) NOT NULL,
 	[TargetLanguageId]   int NOT NULL,
 	[SourceLanguageId]   int NOT NULL,
 	[AddedBy]   int NOT NULL,
@@ -48,8 +48,8 @@ GO
 
 CREATE TABLE [dbo].[Chapter] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
-    [Name]        [varchar](50) NOT NULL,
-    [Description] [varchar](200),
+    [Name]        varchar(50) NOT NULL,
+    [Description] varchar(200),
 	[BookId]        int NOT NULL,
 	[AddedBy]   int NOT NULL,
 	[AddedDate] datetime NOT NULL,
@@ -65,9 +65,9 @@ GO
 CREATE TABLE [dbo].[Word] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
     [BaseLanguageId]   int                NOT NULL,
-    [BaseWord]         [varchar](100)     NOT NULL,
+    [BaseWord]         varchar(100)     NOT NULL,
     [TargetLanguageId] int                NOT NULL,
-    [Translate]        [varchar](100)     NOT NULL,
+    [Translate]        varchar(100)     NOT NULL,
 	[BookId]           int			          NULL,
 	[ChapterId]        int					  NULL,
 	[AddedBy]   int NOT NULL,
@@ -101,13 +101,36 @@ Go
 
 CREATE TABLE [dbo].[SelectedLanguages] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
-    [BaseLanguages]   [nvarchar](500) NOT NULL,
-	[TargetLanguages]   [nvarchar](500) NOT NULL,
+    [BaseLanguages]   nvarchar(500) NOT NULL,
+	[TargetLanguages]   nvarchar(500) NOT NULL,
 	[UserId]   int NOT NULL,
 	[AddedDate] datetime NOT NULL,
 	[LastUpdateDate] datetime,
 )
 ALTER TABLE [dbo].[SelectedLanguages] ADD CONSTRAINT [FK_SelectedLanguages_UserId]
+FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([Id])
+GO
+
+CREATE TABLE [dbo].[RequestLogs] (
+		[Id] int IDENTITY(1,1) PRIMARY KEY,
+		[StartTime] datetime,
+		[UserId] int NOT NULL,
+		[Path] nvarchar(500) NOT NULL,
+		[QueryString] nvarchar(500) NOT NULL,
+		[Method] nvarchar(500) NOT NULL,
+		[Body] nvarchar(500) NOT NULL,
+		[RequestSize] int,
+		[IpAddress] nvarchar(50) NOT NULL,
+		[ProcessDuration] int,
+		[Failed] Bit,
+		[HadException] Bit,
+		[Response] nvarchar(500) NOT NULL,
+		[ResponseStatusCode] int,
+		[ResponseSize] int,
+		[ExceptionTitle] nvarchar(500) NOT NULL,
+		[ExceptionMessage] nvarchar(500) NOT NULL,
+)
+ALTER TABLE [dbo].[RequestLogs] ADD CONSTRAINT [FK_RequestLogs_UserId]
 FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([Id])
 GO
 
