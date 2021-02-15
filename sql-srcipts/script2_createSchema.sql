@@ -141,7 +141,9 @@ CREATE TABLE [dbo].[GameScores] (
 		[GameNamme] nvarchar(100),
 		[Bookid] int,
 		[ChapterId] int,
-		[GenerateDate] datetime,
+		[AddedDate] datetime,
+		[LastUpdateDate] datetime,
+		[Score] float,
 )
 ALTER TABLE [dbo].[GameScores] ADD CONSTRAINT [FK_GameScores_UserId]
 FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([Id])

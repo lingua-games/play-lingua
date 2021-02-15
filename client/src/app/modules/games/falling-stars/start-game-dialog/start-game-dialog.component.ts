@@ -12,6 +12,7 @@ import {
   NotificationService,
   Severity,
 } from '../../../../core/service/notification.service';
+import { GameStartInformation } from '../../../../core/models/game-start-information';
 
 @Component({
   selector: 'app-start-game-dialog',
@@ -87,15 +88,22 @@ export class StartGameDialogComponent implements OnInit {
 
   submit(): void {
     this.isPreparing = true;
+    const result: GameStartInformation<WordKeyValueModel<string[]>[]> = {
+      bookId: this.form.selectedBook ? this.form.selectedBook.id : 0,
+      chapterId: this.form.selectedChapter ? this.form.selectedChapter.id : 0,
+      words: [],
+    };
+
     this.gamesService
       .getGameWords({
-        bookId: this.form.selectedBook ? this.form.selectedBook.id : 0,
-        chapterId: this.form.selectedChapter ? this.form.selectedChapter.id : 0,
+        bookId: result.bookId,
+        chapterId: result.chapterId,
         count: environment.startGameCount,
       })
       .subscribe(
         (res: WordKeyValueModel<string[]>[]) => {
-          this.dialogRef.close(res);
+          result.words = res;
+          this.dialogRef.close(result);
         },
         (error: any) => {
           this.notificationService.showMessage(
