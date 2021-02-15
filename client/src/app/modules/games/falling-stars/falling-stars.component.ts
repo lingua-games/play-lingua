@@ -8,7 +8,10 @@ import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
 import { Store } from '@ngrx/store';
 import { NotificationState } from '../../../core/component/score-notification/state/score-notification.reducer';
 import { toggleNotification } from '../../../core/component/score-notification/state/score-notification.actions';
+import { ScoreStorageService } from '../../../core/service/score-storage.service';
 
+const secondsForTraver = 5000;
+const bufferBeforeStart = 1000;
 @Component({
   selector: 'app-falling-stars',
   templateUrl: './falling-stars.component.html',
@@ -17,8 +20,8 @@ import { toggleNotification } from '../../../core/component/score-notification/s
     trigger('fade', [
       transition('void => true', [
         style({ opacity: '0', top: '-20%' }),
-        animate(1000, style({ opacity: '1', top: '-20%' })),
-        animate(5000, style({ top: '100%' })),
+        animate(bufferBeforeStart, style({ opacity: '1', top: '-20%' })),
+        animate(secondsForTraver, style({ top: '100%' })),
       ]),
     ]),
     trigger('fadeIn', [
@@ -38,6 +41,7 @@ export class FallingStarsComponent implements OnInit {
   currentWord: FallingStarsWord = new FallingStarsWord();
   guidBoxShowing: boolean;
   pressedNumber: number;
+  startTime: number;
 
   @HostListener('document:keyup ', ['$event'])
   keyUpEvent(event: KeyboardEvent): void {
@@ -102,7 +106,8 @@ export class FallingStarsComponent implements OnInit {
   constructor(
     private gamesService: GamesService,
     private dialog: MatDialog,
-    private store: Store<any>
+    private store: Store<any>,
+    private scoreStorageService: ScoreStorageService
   ) {}
 
   ngOnInit(): void {
@@ -190,6 +195,7 @@ export class FallingStarsComponent implements OnInit {
   }
 
   startGame(): void {
+    this.startTime = Date.now();
     if (this.words[0]) {
       this.words[0].animating = true;
     }
@@ -212,11 +218,12 @@ export class FallingStarsComponent implements OnInit {
     } else {
       if (word.correctAnswers.find((x) => x === word.selectedAnswer)) {
         if (!isCalledFromView) {
+          this.calculateScore();
           this.store.dispatch(
             toggleNotification({
               gameName: 'Falling stars',
               message: 'I am the message',
-              score: 10,
+              score: this.calculateScore(),
             } as NotificationState)
           );
         }
@@ -227,11 +234,26 @@ export class FallingStarsComponent implements OnInit {
     }
   }
 
+  calculateScore(): number {
+    // It is the travelled time of the object before user hit the correct Answer.
+    console.log(Date.now() - this.startTime);
+    const travelledBeforeHit =
+      (secondsForTraver + bufferBeforeStart - (Date.now() - this.startTime)) /
+      1000;
+
+    // Below line `/ 1000` is converting Milli seconds to seconds
+    const result = travelledBeforeHit * (10 / (secondsForTraver / 1000));
+
+    // To show only one decimal number after decimal point
+    return Math.round(result * 10) / 10;
+  }
+
   showGuidBox(): void {
     this.guidBoxShowing = true;
   }
 
   playNextStar(): void {
+    this.startTime = Date.now();
     this.guidBoxShowing = false;
     if (this.words.length === this.words.indexOf(this.currentWord) + 1) {
       // It means the game is finish

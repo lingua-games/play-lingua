@@ -275,7 +275,6 @@ export class AddWordByUserComponent implements OnInit {
       base: { value: '', isValid: true },
       targets: [{ value: '', isValid: true }],
     });
-    console.log(el);
     setTimeout(() => {
       el.scrollTo({ left: 0, top: el.scrollHeight, behavior: 'smooth' });
     }, 1);
