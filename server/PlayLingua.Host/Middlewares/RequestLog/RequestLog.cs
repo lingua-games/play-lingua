@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using PlayLingua.Domain.models;
 using PlayLingua.Domain.Ports;
 using PlayLingua.Host.Controllers;
+using PlayLingua.Host.Helpers;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -32,7 +33,7 @@ namespace PlayLingua.Host.Middlewares
             var log = new RequestLogModel();
             try
             {
-                if (httpContext.Request.Path != "/")
+                if (httpContext.Request.Path != "/" && !httpContext.Request.Path.ToString().Contains(".js"))
                 {
                     log = await RequestIndiactor(httpContext);
                     using (var memStream = new MemoryStream())
@@ -55,13 +56,30 @@ namespace PlayLingua.Host.Middlewares
                 {
                     await _next(httpContext);
                 }
-
             }
             catch (Exception ex)
             {
-                throw;
+                ExceptionIndiactor(httpContext, log, ex);
             }
+        }
 
+        public void ExceptionIndiactor(HttpContext httpContext, RequestLogModel requestLog, Exception ex)
+        {
+            try
+            {
+                requestLog.ResponseStatusCode = httpContext.Response.StatusCode;
+                requestLog.ExceptionMessage = ex.GetFullMessage();
+                requestLog.ExceptionTitle = ex.Message;
+                requestLog.HadException = true;
+                requestLog.Failed = true;
+                _stopwatch.Stop();
+                requestLog.ProcessDuration = _stopwatch.Elapsed.TotalSeconds;
+                _requeustLogRepository.Update(requestLog);
+            }
+            catch (Exception loggingException)
+            {
+                // STORE THE LOG ON DISC
+            }
         }
 
         public void ResponseIndiactor(HttpContext httpContext, RequestLogModel requestLog)
@@ -78,7 +96,7 @@ namespace PlayLingua.Host.Middlewares
             }
             requestLog.Failed = httpContext.Response.StatusCode == 200 ? false : true;
             _stopwatch.Stop();
-            requestLog.ProcessDuration = _stopwatch.Elapsed.TotalSeconds;
+            requestLog.ProcessDuration = _stopwatch.Elapsed.TotalMilliseconds;
             _requeustLogRepository.Update(requestLog);
         }
 
