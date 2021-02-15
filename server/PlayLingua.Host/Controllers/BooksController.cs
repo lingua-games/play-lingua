@@ -34,7 +34,6 @@ namespace PlayLingua.Host.Controllers
         [HttpGet("by-source-and-target-language/{sourceLanguageId}/{targetLanguageId}")]
         public ActionResult<List<Book>> GetBySourceAndTargetLanguageId(int sourceLanguageId, int targetLanguageId)
         {
-            throw new NotImplementedException();
             return Ok(_bookRepository.GetBySourceAndTargetLanguageId(sourceLanguageId, targetLanguageId));
         }
 

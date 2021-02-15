@@ -134,3 +134,21 @@ FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([Id])
 GO
 
 
+CREATE TABLE [dbo].[GameScores] (
+		[Id] int IDENTITY(1,1) PRIMARY KEY,
+		[UserId] int,
+		[GuestCode] nvarchar(100),
+		[GameNamme] nvarchar(100),
+		[Bookid] int,
+		[ChapterId] int,
+		[GenerateDate] datetime,
+)
+ALTER TABLE [dbo].[GameScores] ADD CONSTRAINT [FK_GameScores_UserId]
+FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([Id])
+GO
+ALTER TABLE [dbo].[GameScores] ADD CONSTRAINT [FK_GameScores_Bookid]
+FOREIGN KEY ([BookId]) REFERENCES [dbo].[Book] ([Id])
+GO
+ALTER TABLE [dbo].[GameScores] ADD CONSTRAINT [FK_GameScores_ChapterId]
+FOREIGN KEY ([ChapterId]) REFERENCES [dbo].[Chapter] ([Id])
+GO
