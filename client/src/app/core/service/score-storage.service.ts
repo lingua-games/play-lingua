@@ -22,4 +22,8 @@ export class ScoreStorageService {
       this.cachedScore += score;
     }
   }
+
+  getCachedScores(): number {
+    return this.cachedScore;
+  }
 }
