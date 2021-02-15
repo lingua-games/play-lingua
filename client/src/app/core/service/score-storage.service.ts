@@ -8,15 +8,16 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root',
 })
 export class ScoreStorageService {
-  storeScoreApi = environment.apiUrl + 'storeScore';
+  storeScoreApi = environment.apiUrl + 'ScoreStore';
   cachedScore = 0;
   constructor(private http: HttpClient) {}
 
   storeScore(score: ScoreStoreInterface): Observable<boolean> {
+    score.score = Math.round(this.cachedScore * 10) / 10;
     return this.http.post<boolean>(this.storeScoreApi, score);
   }
 
-  catchScores(score): void {
+  catchScores(score: number): void {
     if (score) {
       this.cachedScore += score;
     }

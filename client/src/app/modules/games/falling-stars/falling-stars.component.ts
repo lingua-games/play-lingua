@@ -9,6 +9,8 @@ import { Store } from '@ngrx/store';
 import { NotificationState } from '../../../core/component/score-notification/state/score-notification.reducer';
 import { toggleNotification } from '../../../core/component/score-notification/state/score-notification.actions';
 import { ScoreStorageService } from '../../../core/service/score-storage.service';
+import { ScoreStoreInterface } from '../../../core/models/score-store.interface';
+import { GameStartInformation } from '../../../core/models/game-start-information';
 
 const secondsForTraver = 5000;
 const bufferBeforeStart = 1000;
@@ -42,7 +44,8 @@ export class FallingStarsComponent implements OnInit {
   guidBoxShowing: boolean;
   pressedNumber: number;
   startTime: number;
-
+  bookId: number;
+  chapterId: number;
   @HostListener('document:keyup ', ['$event'])
   keyUpEvent(event: KeyboardEvent): void {
     this.pressedNumber = 0;
@@ -57,7 +60,7 @@ export class FallingStarsComponent implements OnInit {
       return;
     }
 
-    if (this.guidBoxShowing) {
+    if (this.guidBoxShowing || !this.words.find((x) => x.animating)) {
       return;
     }
 
@@ -123,9 +126,11 @@ export class FallingStarsComponent implements OnInit {
         width: '30%',
       })
       .afterClosed()
-      .subscribe((res: WordKeyValueModel<string[]>[]) => {
-        if (res && res.length) {
-          this.setGameWords(res);
+      .subscribe((res: GameStartInformation<WordKeyValueModel<string[]>[]>) => {
+        if (res && res.words && res.words.length) {
+          this.bookId = res.bookId;
+          this.chapterId = res.chapterId;
+          this.setGameWords(res.words);
           this.startGame();
         }
       });
@@ -226,6 +231,14 @@ export class FallingStarsComponent implements OnInit {
               score: this.calculateScore(),
             } as NotificationState)
           );
+          this.scoreStorageService
+            .storeScore({
+              bookId: this.bookId,
+              chapterId: this.chapterId,
+              gameName: 'falling-stars',
+            } as ScoreStoreInterface)
+            .subscribe();
+          this.scoreStorageService.catchScores(this.calculateScore());
         }
         this.playNextStar();
       } else {
@@ -236,7 +249,6 @@ export class FallingStarsComponent implements OnInit {
 
   calculateScore(): number {
     // It is the travelled time of the object before user hit the correct Answer.
-    console.log(Date.now() - this.startTime);
     const travelledBeforeHit =
       (secondsForTraver + bufferBeforeStart - (Date.now() - this.startTime)) /
       1000;
@@ -258,6 +270,11 @@ export class FallingStarsComponent implements OnInit {
     if (this.words.length === this.words.indexOf(this.currentWord) + 1) {
       // It means the game is finish
       // TODO: Remove below line, it is just for develop a feature
+      this.scoreStorageService.storeScore({
+        bookId: this.bookId,
+        chapterId: this.chapterId,
+        gameName: 'falling-stars',
+      } as ScoreStoreInterface);
       this.words[0].animating = true;
     } else {
       this.words[this.words.indexOf(this.currentWord) + 1].animating = true;

@@ -3,4 +3,5 @@ export interface ScoreStoreInterface {
   gameName: string;
   bookId: number;
   chapterId: number;
+  score: number;
 }

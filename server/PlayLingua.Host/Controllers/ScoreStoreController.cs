@@ -22,6 +22,7 @@ namespace PlayLingua.Host.Controllers
         [HttpPost]
         public ActionResult<Score> Add([FromBody] Score score)
         {
+            score.UserId = GetUser().Id;
             var addedScore = _scoreRepository.Add(score, GetUser().Id);
             return Ok(addedScore);
         }
