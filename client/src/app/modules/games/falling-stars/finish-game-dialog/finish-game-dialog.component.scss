@@ -10,37 +10,53 @@
 
 .col-container {
   display: inline-block;
+  padding: .1rem;
 }
 
+.col-badge {
+  width: 2%;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
 .col-index {
   width: 15%;
+  padding-left: 1%;
+  background-color: white;
 }
 
 .col-name {
-  width: 45%;
+  width: 42%;
+  background-color: white;
 }
 
 .col-rank {
   width: 40%;
-}
-
-.rank-container {
-  border: #1E8449 1px solid;
-  border-radius: 10px;
-  padding: 5px;
-  margin-bottom: 1vh;
   background-color: white;
 }
 
+.rank-container:not(.col-badge) {
+  //border: #1E8449 1px solid;
+  margin-bottom: 1vh;
+}
+
 .rank-gold {
+  .col-badge {
+    background-color: #F1C40F;
+  }
   font-size: 1vw;
 }
 
 .rank-silver {
+  .col-badge {
+    background-color: #99A3A4;
+  }
   font-size: .9vw;
 }
 
 .rank-bronze {
+  .col-badge {
+    background-color: #EC7063;
+  }
   font-size: .8vw;
 }
 
