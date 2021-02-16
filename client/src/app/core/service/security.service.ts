@@ -22,6 +22,9 @@ export class SecurityService {
   ) {}
 
   getTokenInformation(): SecurityTokenInterface {
+    if (!localStorage.getItem('lingua-token')) {
+      return {} as SecurityTokenInterface;
+    }
     return jwt_decode(
       localStorage.getItem('lingua-token')
     ) as SecurityTokenInterface;
