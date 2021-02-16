@@ -14,6 +14,7 @@ export class ScoreStorageService {
 
   storeScore(score: ScoreStoreInterface): Observable<boolean> {
     score.score = Math.round(this.cachedScore * 10) / 10;
+    this.cachedScore = 0;
     return this.http.post<boolean>(this.storeScoreApi, score);
   }
 

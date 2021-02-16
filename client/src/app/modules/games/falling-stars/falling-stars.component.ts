@@ -11,6 +11,7 @@ import { toggleNotification } from '../../../core/component/score-notification/s
 import { ScoreStorageService } from '../../../core/service/score-storage.service';
 import { ScoreStoreInterface } from '../../../core/models/score-store.interface';
 import { GameStartInformation } from '../../../core/models/game-start-information';
+import { FinishGameDialogComponent } from './finish-game-dialog/finish-game-dialog.component';
 
 const secondsForTraver = 5000;
 const bufferBeforeStart = 1000;
@@ -231,13 +232,13 @@ export class FallingStarsComponent implements OnInit {
               score: this.calculateScore(),
             } as NotificationState)
           );
-          this.scoreStorageService
-            .storeScore({
-              bookId: this.bookId,
-              chapterId: this.chapterId,
-              gameName: 'falling-stars',
-            } as ScoreStoreInterface)
-            .subscribe();
+          // this.scoreStorageService
+          //   .storeScore({
+          //     bookId: this.bookId,
+          //     chapterId: this.chapterId,
+          //     gameName: 'falling-stars',
+          //   } as ScoreStoreInterface)
+          //   .subscribe();
           this.scoreStorageService.catchScores(this.calculateScore());
         }
         this.playNextStar();
@@ -270,15 +271,23 @@ export class FallingStarsComponent implements OnInit {
     if (this.words.length === this.words.indexOf(this.currentWord) + 1) {
       // It means the game is finish
       // TODO: Remove below line, it is just for develop a feature
-      this.scoreStorageService.storeScore({
-        bookId: this.bookId,
-        chapterId: this.chapterId,
-        gameName: 'falling-stars',
-      } as ScoreStoreInterface);
-      this.words[0].animating = true;
+      // this.words[0].animating = true;
+      this.showEndGameDialog();
     } else {
       this.words[this.words.indexOf(this.currentWord) + 1].animating = true;
     }
+  }
+
+  showEndGameDialog(): void {
+    const dialog = this.dialog.open(FinishGameDialogComponent, {
+      data: {
+        bookId: this.bookId,
+        chapterId: this.chapterId,
+        gameName: 'falling-stars',
+      } as ScoreStoreInterface,
+    });
+
+    dialog.afterClosed().subscribe();
   }
 
   getRandomNumber(): number {
