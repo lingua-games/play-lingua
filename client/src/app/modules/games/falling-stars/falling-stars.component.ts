@@ -115,7 +115,8 @@ export class FallingStarsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.showStartDialog();
+    // this.showStartDialog();
+    this.showEndGameDialog();
   }
 
   showStartDialog(): void {
@@ -280,6 +281,8 @@ export class FallingStarsComponent implements OnInit {
 
   showEndGameDialog(): void {
     const dialog = this.dialog.open(FinishGameDialogComponent, {
+      disableClose: true,
+      width: '30%',
       data: {
         bookId: this.bookId,
         chapterId: this.chapterId,

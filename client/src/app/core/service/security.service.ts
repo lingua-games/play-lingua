@@ -5,8 +5,9 @@ import { Observable } from 'rxjs';
 import { LoginResultModel } from '../models/login-result.model';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
-import { NotificationService, Severity } from './notification.service';
+import jwt_decode from 'jwt-decode';
 import { MatDialog } from '@angular/material/dialog';
+import { SecurityTokenInterface } from '../models/security-token.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +20,12 @@ export class SecurityService {
     private router: Router,
     private dialogRef: MatDialog
   ) {}
+
+  getTokenInformation(): SecurityTokenInterface {
+    return jwt_decode(
+      localStorage.getItem('lingua-token')
+    ) as SecurityTokenInterface;
+  }
 
   login(user: UserModel): Observable<LoginResultModel> {
     return this.http.post<LoginResultModel>(this.authUrl, user);

@@ -1,0 +1,49 @@
+.main-container {
+ background-color: #ABEBC6;
+}
+
+.loop-container {
+  width: 90%;
+  margin-left: 5%;
+  padding: 1vh 0;
+}
+
+.col-container {
+  display: inline-block;
+}
+
+.col-index {
+  width: 15%;
+}
+
+.col-name {
+  width: 45%;
+}
+
+.col-rank {
+  width: 40%;
+}
+
+.rank-container {
+  border: #1E8449 1px solid;
+  border-radius: 10px;
+  padding: 5px;
+  margin-bottom: 1vh;
+  background-color: white;
+}
+
+.rank-gold {
+  font-size: 1vw;
+}
+
+.rank-silver {
+  font-size: .9vw;
+}
+
+.rank-bronze {
+  font-size: .8vw;
+}
+
+.rank-normal {
+  font-size: .7vw;
+}
