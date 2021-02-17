@@ -138,7 +138,7 @@ CREATE TABLE [dbo].[GameScores] (
 		[Id] int IDENTITY(1,1) PRIMARY KEY,
 		[UserId] int,
 		[GuestCode] nvarchar(100),
-		[GameNamme] nvarchar(100),
+		[GameName] nvarchar(100),
 		[Bookid] int,
 		[ChapterId] int,
 		[AddedDate] datetime,

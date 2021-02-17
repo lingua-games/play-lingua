@@ -6,6 +6,7 @@ import { RanksResultInterface } from '../../../../core/models/ranks-result.inter
 import { SecurityService } from '../../../../core/service/security.service';
 import { Router } from '@angular/router';
 import { FinishGameActionEnum } from '../../../../core/models/finish-game-action.enum';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-finish-game-dialog',
@@ -41,14 +42,19 @@ export class FinishGameDialogComponent implements OnInit {
         bookId: this.data.bookId,
         chapterId: this.data.chapterId,
         gameName: 'falling-stars',
+        count: environment.recordCount,
       } as ScoreStoreInterface)
       .subscribe(
         (res: RanksResultInterface[]) => {
-          this.ranks.push({
-            score: this.data.score,
-            name: this.securityService.getTokenInformation().email,
-          });
           this.ranks.push(...res);
+          for (let i = 0; i < environment.recordCount; i++) {
+            if (!this.ranks[i]) {
+              this.ranks[i] = {
+                name: '-',
+                score: 0,
+              };
+            }
+          }
           this.ranks.sort((a, b) => {
             return b.score - a.score;
           });

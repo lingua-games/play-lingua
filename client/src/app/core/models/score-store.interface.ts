@@ -4,4 +4,5 @@ export interface ScoreStoreInterface {
   bookId: number;
   chapterId: number;
   score: number;
+  count: number;
 }
