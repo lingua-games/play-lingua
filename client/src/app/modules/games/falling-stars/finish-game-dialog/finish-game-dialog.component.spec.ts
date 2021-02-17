@@ -2,7 +2,11 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FinishGameDialogComponent } from './finish-game-dialog.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
 
 describe('FinishGameDialogComponent', () => {
@@ -20,6 +24,10 @@ describe('FinishGameDialogComponent', () => {
         },
         {
           provide: MatDialog,
+          useValue: {},
+        },
+        {
+          provide: MatDialogRef,
           useValue: {},
         },
       ],

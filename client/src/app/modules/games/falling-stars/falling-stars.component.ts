@@ -117,8 +117,8 @@ export class FallingStarsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this.showStartDialog();
-    this.showEndGameDialog();
+    this.showStartDialog();
+    // this.showEndGameDialog();
   }
 
   showEndGameDialog(): void {
