@@ -1,0 +1,76 @@
+.main-container {
+ background-color: #ABEBC6;
+}
+
+.loop-container {
+  width: 90%;
+  margin-left: 5%;
+  padding: 1vh 0;
+}
+
+.col-container {
+  display: inline-block;
+  padding: .1rem;
+}
+
+.col-badge {
+  width: 2%;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.col-index {
+  width: 15%;
+  padding-left: 1%;
+  background-color: white;
+}
+
+.col-name {
+  width: 42%;
+  background-color: white;
+}
+
+.col-rank {
+  width: 40%;
+  background-color: white;
+}
+
+.rank-container:not(.col-badge) {
+  //border: #1E8449 1px solid;
+  margin-bottom: 1vh;
+}
+
+.rank-gold {
+  .col-badge {
+    background-color: #F1C40F;
+  }
+  font-size: 1vw;
+}
+
+.rank-silver {
+  .col-badge {
+    background-color: #99A3A4;
+  }
+  font-size: .9vw;
+}
+
+.rank-bronze {
+  .col-badge {
+    background-color: #EC7063;
+  }
+  font-size: .8vw;
+}
+
+.rank-normal {
+  font-size: .7vw;
+}
+
+.dialog-actions {
+  border-top: solid 1px gray;
+}
+
+.current-user {
+  .col-name, .col-index, .col-rank {
+    background-color: #922B21;
+    color: #F5EEF8;
+  }
+}

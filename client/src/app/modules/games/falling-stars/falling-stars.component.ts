@@ -11,6 +11,8 @@ import { toggleNotification } from '../../../core/component/score-notification/s
 import { ScoreStorageService } from '../../../core/service/score-storage.service';
 import { ScoreStoreInterface } from '../../../core/models/score-store.interface';
 import { GameStartInformation } from '../../../core/models/game-start-information';
+import { FinishGameDialogComponent } from './finish-game-dialog/finish-game-dialog.component';
+import { FinishGameActionEnum } from '../../../core/models/finish-game-action.enum';
 
 const secondsForTraver = 5000;
 const bufferBeforeStart = 1000;
@@ -40,6 +42,7 @@ const bufferBeforeStart = 1000;
 })
 export class FallingStarsComponent implements OnInit {
   words: FallingStarsWord[] = [];
+  copyOfWords: FallingStarsWord[] = [];
   currentWord: FallingStarsWord = new FallingStarsWord();
   guidBoxShowing: boolean;
   pressedNumber: number;
@@ -115,6 +118,32 @@ export class FallingStarsComponent implements OnInit {
 
   ngOnInit(): void {
     this.showStartDialog();
+    // this.showEndGameDialog();
+  }
+
+  showEndGameDialog(): void {
+    const dialog = this.dialog.open(FinishGameDialogComponent, {
+      disableClose: true,
+      width: '30%',
+      autoFocus: false,
+      data: {
+        bookId: this.bookId,
+        chapterId: this.chapterId,
+        gameName: 'falling-stars',
+        score: this.scoreStorageService.getCachedScores(),
+      } as ScoreStoreInterface,
+    });
+
+    dialog.afterClosed().subscribe((res: FinishGameActionEnum) => {
+      if (res) {
+        if (res === FinishGameActionEnum.retry) {
+          this.setGameWords(this.copyOfWords);
+          this.startGame();
+        } else if (res === FinishGameActionEnum.changeMode) {
+          this.showStartDialog();
+        }
+      }
+    });
   }
 
   showStartDialog(): void {
@@ -128,6 +157,7 @@ export class FallingStarsComponent implements OnInit {
       .afterClosed()
       .subscribe((res: GameStartInformation<WordKeyValueModel<string[]>[]>) => {
         if (res && res.words && res.words.length) {
+          this.copyOfWords = JSON.parse(JSON.stringify(res.words));
           this.bookId = res.bookId;
           this.chapterId = res.chapterId;
           this.setGameWords(res.words);
@@ -231,13 +261,13 @@ export class FallingStarsComponent implements OnInit {
               score: this.calculateScore(),
             } as NotificationState)
           );
-          this.scoreStorageService
-            .storeScore({
-              bookId: this.bookId,
-              chapterId: this.chapterId,
-              gameName: 'falling-stars',
-            } as ScoreStoreInterface)
-            .subscribe();
+          // this.scoreStorageService
+          //   .storeScore({
+          //     bookId: this.bookId,
+          //     chapterId: this.chapterId,
+          //     gameName: 'falling-stars',
+          //   } as ScoreStoreInterface)
+          //   .subscribe();
           this.scoreStorageService.catchScores(this.calculateScore());
         }
         this.playNextStar();
@@ -270,12 +300,10 @@ export class FallingStarsComponent implements OnInit {
     if (this.words.length === this.words.indexOf(this.currentWord) + 1) {
       // It means the game is finish
       // TODO: Remove below line, it is just for develop a feature
-      this.scoreStorageService.storeScore({
-        bookId: this.bookId,
-        chapterId: this.chapterId,
-        gameName: 'falling-stars',
-      } as ScoreStoreInterface);
-      this.words[0].animating = true;
+      // this.words[0].animating = true;
+      setTimeout(() => {
+        this.showEndGameDialog();
+      }, 1000);
     } else {
       this.words[this.words.indexOf(this.currentWord) + 1].animating = true;
     }

@@ -8,9 +8,10 @@ import { MaterialModule } from '../../common/material/material.module';
 import { ComponentModule } from '../../../core/component/component.module';
 import { StoreModule } from '@ngrx/store';
 import { scoreNotificationReducer } from '../../../core/component/score-notification/state/score-notification.reducer';
+import { FinishGameDialogComponent } from './finish-game-dialog/finish-game-dialog.component';
 
 @NgModule({
-  declarations: [FallingStarsComponent, StartGameDialogComponent],
+  declarations: [FallingStarsComponent, StartGameDialogComponent, FinishGameDialogComponent],
   imports: [
     CommonModule,
     FallingStarsRoutingModule,
