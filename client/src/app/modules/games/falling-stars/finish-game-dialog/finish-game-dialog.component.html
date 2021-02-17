@@ -8,8 +8,8 @@
   <hr>
   <h1>Saving your score</h1>
 </div>
-<div class='main-container'>
-  <div *ngIf='!isLoading' class='loop-container'>
+<div class='main-container' *ngIf='!isLoading'>
+  <div class='loop-container'>
     <div *ngFor='let rank of ranks;let index = index' class='rank-container' [ngClass]='getWinnerStyles(rank)'>
       <div class='col-container col-badge'> </div>
       <div class='col-container col-index'>{{index + 1}} - </div>

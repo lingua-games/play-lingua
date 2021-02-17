@@ -16,30 +16,7 @@ export class ScoreStorageService {
   storeScore(score: ScoreStoreInterface): Observable<RanksResultInterface[]> {
     score.score = Math.round(this.cachedScore * 10) / 10;
     this.cachedScore = 0;
-    // return this.http.post<boolean>(this.storeScoreApi, score);
-    return of([
-      {
-        name: 'Ali',
-        score: 45,
-      },
-      {
-        name: 'Alex',
-        score: 35,
-      },
-      {
-        name: 'John',
-
-        score: 50,
-      },
-      {
-        name: 'Javad',
-        score: 40,
-      },
-      {
-        name: 'Mohammad',
-        score: 48,
-      },
-    ]);
+    return this.http.post<RanksResultInterface[]>(this.storeScoreApi, score);
   }
 
   catchScores(score: number): void {

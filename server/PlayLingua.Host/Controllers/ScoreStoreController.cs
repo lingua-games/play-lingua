@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PlayLingua.Domain.Entities;
+using PlayLingua.Domain.models;
 using PlayLingua.Domain.Ports;
 using System;
 using System.Collections.Generic;
@@ -20,11 +21,19 @@ namespace PlayLingua.Host.Controllers
 
 
         [HttpPost]
-        public ActionResult<Score> Add([FromBody] Score score)
+        public ActionResult<List<RankResultModel>> Add([FromBody] Score score)
         {
+            var result = new List<RankResultModel>();
             score.UserId = GetUser().Id;
             var addedScore = _scoreRepository.Add(score, GetUser().Id);
-            return Ok(addedScore);
+            result.Add(new RankResultModel
+            {
+                Name = GetUser().Email,
+                Score = score.score
+            });
+
+            result = _scoreRepository.GetTopRanks(addedScore);
+            return Ok(result);
         }
     }
 }
