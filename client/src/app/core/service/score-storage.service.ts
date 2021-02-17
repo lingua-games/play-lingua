@@ -49,6 +49,6 @@ export class ScoreStorageService {
   }
 
   getCachedScores(): number {
-    return this.cachedScore;
+    return Math.round(this.cachedScore * 10) / 10;
   }
 }

@@ -63,3 +63,14 @@
 .rank-normal {
   font-size: .7vw;
 }
+
+.dialog-actions {
+  border-top: solid 1px gray;
+}
+
+.current-user {
+  .col-name, .col-index, .col-rank {
+    background-color: #922B21;
+    color: #F5EEF8;
+  }
+}

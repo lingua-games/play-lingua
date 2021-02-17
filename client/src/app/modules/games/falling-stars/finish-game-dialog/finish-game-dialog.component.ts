@@ -1,9 +1,11 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, HostListener, Inject, OnInit } from '@angular/core';
 import { ScoreStoreInterface } from '../../../../core/models/score-store.interface';
 import { ScoreStorageService } from '../../../../core/service/score-storage.service';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { RanksResultInterface } from '../../../../core/models/ranks-result.interface';
 import { SecurityService } from '../../../../core/service/security.service';
+import { Router } from '@angular/router';
+import { FinishGameActionEnum } from '../../../../core/models/finish-game-action.enum';
 
 @Component({
   selector: 'app-finish-game-dialog',
@@ -13,10 +15,22 @@ import { SecurityService } from '../../../../core/service/security.service';
 export class FinishGameDialogComponent implements OnInit {
   isLoading: boolean;
   ranks: RanksResultInterface[];
+
+  @HostListener('document:keydown ', ['$event'])
+  keyDownEvent(event: KeyboardEvent): void {
+    if (event.code === 'Escape') {
+      this.changeMode();
+    }
+    if (event.code === 'Enter' || event.code === 'NumpadEnter') {
+      this.retry();
+    }
+  }
+
   constructor(
     private scoreStorageService: ScoreStorageService,
     @Inject(MAT_DIALOG_DATA) public data: ScoreStoreInterface,
-    private securityService: SecurityService
+    private securityService: SecurityService,
+    private dialogRef: MatDialogRef<FinishGameDialogComponent>
   ) {}
 
   ngOnInit(): void {
@@ -31,7 +45,7 @@ export class FinishGameDialogComponent implements OnInit {
       .subscribe(
         (res: RanksResultInterface[]) => {
           this.ranks.push({
-            score: this.scoreStorageService.getCachedScores(),
+            score: this.data.score,
             name: this.securityService.getTokenInformation().email,
           });
           this.ranks.push(...res);
@@ -47,23 +61,35 @@ export class FinishGameDialogComponent implements OnInit {
   }
 
   getWinnerStyles(rank: RanksResultInterface): string {
+    let result = '';
+    if (rank.name === this.securityService.getTokenInformation().email) {
+      result = 'current-user ';
+    }
     if (!rank) {
       return '';
     }
 
     switch (this.ranks.indexOf(rank)) {
       case 0:
-        return 'rank-gold';
+        return result + 'rank-gold';
         break;
       case 1:
-        return 'rank-silver';
+        return result + 'rank-silver';
         break;
       case 2:
-        return 'rank-bronze';
+        return result + 'rank-bronze';
         break;
       default:
-        return 'rank-normal';
+        return result + 'rank-normal';
         break;
     }
+  }
+
+  changeMode(): void {
+    this.dialogRef.close(FinishGameActionEnum.changeMode);
+  }
+
+  retry(): void {
+    this.dialogRef.close(FinishGameActionEnum.retry);
   }
 }
