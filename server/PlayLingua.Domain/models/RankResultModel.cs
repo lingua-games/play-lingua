@@ -6,7 +6,8 @@ namespace PlayLingua.Domain.models
 {
     public class RankResultModel
     {
-        public string Name { get; set; }
+        public string Email { get; set; }
+        public string DisplayName { get; set; }
         public float Score { get; set; }
     }
 }

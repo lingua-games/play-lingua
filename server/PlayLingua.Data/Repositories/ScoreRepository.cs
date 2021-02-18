@@ -53,16 +53,17 @@ VALUES(@UserId, @GuestCode, @GameName, @BookId, @ChapterId, @AddedDate, @Score);
         public List<RankResultModel> GetTopRanks(Score score)
         {
             var sql = @"
-SELECT top " + score.Count + @" Email as Name,  max(score) as Score FROM [dbo].[GameScores]
+SELECT top " + score.Count + @" Email as Email,  max(score) as Score, max(DisplayName) as DisplayName FROM [dbo].[GameScores]
 left join [dbo].[Users]
 on [GameScores].UserId = [Users].Id
 where GameName = @GameName AND " + 
 (score.BookId != null ? "Bookid = @BookId" : "Bookid is null ")
 + @" AND " +
 (score.ChapterId != null ? "ChapterId = @ChapterId" : "ChapterId is null ")
-+ @"group by GameScores.UserId, users.Email
++ @" group by GameScores.UserId, users.Email, users.DisplayName
 ";
-            return db.Query<RankResultModel>(sql, score).ToList();
+            var result = db.Query<RankResultModel>(sql, score).ToList();
+            return result;
         }
 
         public void Update(Score score)

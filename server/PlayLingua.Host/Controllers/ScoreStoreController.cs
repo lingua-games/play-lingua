@@ -28,7 +28,8 @@ namespace PlayLingua.Host.Controllers
             var addedScore = _scoreRepository.Add(score, GetUser().Id);
             result.Add(new RankResultModel
             {
-                Name = GetUser().Email,
+                Email = GetUser().Email,
+                DisplayName = GetUser().DisplayName,
                 Score = score.score
             });
 

@@ -50,8 +50,9 @@ export class FinishGameDialogComponent implements OnInit {
           for (let i = 0; i < environment.recordCount; i++) {
             if (!this.ranks[i]) {
               this.ranks[i] = {
-                name: '-',
+                displayName: '-',
                 score: 0,
+                email: '',
               };
             }
           }
@@ -68,7 +69,7 @@ export class FinishGameDialogComponent implements OnInit {
 
   getWinnerStyles(rank: RanksResultInterface): string {
     let result = '';
-    if (rank.name === this.securityService.getTokenInformation().email) {
+    if (rank.email === this.securityService.getTokenInformation().email) {
       result = 'current-user ';
     }
     if (!rank) {
