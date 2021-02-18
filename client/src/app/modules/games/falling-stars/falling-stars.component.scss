@@ -18,8 +18,7 @@
 
 .box {
   background-image: url("../../../../assets/images/background/star-bg.png");
-  height: 9rem;
-  width: 11rem;
+  height: 10rem;
   text-align: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -29,7 +28,8 @@
   font-size: 1vw;
   color: #800080;
   top: 50px;
-  line-height: 9rem;
+  line-height: 10rem;
+  padding: 0rem 4rem;
 }
 
 .ready-container {
