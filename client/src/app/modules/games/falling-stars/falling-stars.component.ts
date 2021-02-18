@@ -28,6 +28,14 @@ const bufferBeforeStart = 1000;
         animate(secondsForTraver, style({ top: '100%' })),
       ]),
     ]),
+    // BELOW TRIGGER IS FOR EDIT DESIGN OF THE STARS
+    // trigger('fade', [
+    //   transition('void => true', [
+    //     style({ opacity: '0', top: '-20%' }),
+    //     animate(0.1, style({ opacity: '1', top: '+20%' })),
+    //     animate(10000000000000, style({ top: '100%' })),
+    //   ]),
+    // ]),
     trigger('fadeIn', [
       transition(':enter', [
         style({ opacity: 0 }),
@@ -182,6 +190,13 @@ export class FallingStarsComponent implements OnInit {
     });
   }
 
+  getRandomNumber(): number {
+    const result = Math.floor(Math.random() * 90 + 10);
+    // If left of the object would be more than 95%,
+    // then the object overflow from right side of the screen
+    return result > 85 ? result - 10 : result;
+  }
+
   getAnswers(): string[] {
     return this.words
       .filter((x) => x.animating)
@@ -307,13 +322,6 @@ export class FallingStarsComponent implements OnInit {
     } else {
       this.words[this.words.indexOf(this.currentWord) + 1].animating = true;
     }
-  }
-
-  getRandomNumber(): number {
-    const result = Math.floor(Math.random() * 90 + 10);
-    // If left of the object would be more than 95%,
-    // then the object overflow from right side of the screen
-    return result > 95 ? result - 10 : result;
   }
 
   checkSelectedAnswer(item: string): void {
