@@ -88,8 +88,9 @@ export class GameMenuComponent implements OnInit {
   }
 
   getUsername(): string {
-    const email = localStorage.getItem('lingua-email');
-    return email ? `Welcome dear ${email}` : 'Welcome dear guest';
+    return this.securityService.isLoggedIn()
+      ? `Welcome dear ${this.securityService.getTokenInformation().displayName}`
+      : 'Welcome dear guest';
   }
 
   isLoggedIn(): boolean {

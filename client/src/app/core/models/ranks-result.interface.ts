@@ -1,4 +1,5 @@
 export interface RanksResultInterface {
-  name: string;
+  email: string;
+  displayName: string;
   score: number;
 }

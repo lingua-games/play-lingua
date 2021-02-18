@@ -11,6 +11,7 @@ GO
 CREATE TABLE [dbo].[Users] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
     [Email]   varchar(100) NOT NULL,
+	[DisplayName] varchar(200) NOT NULL,
 	[Password]   varchar(200) NOT NULL,
 	[DefaultTargetLanguage]   int,
 	[DefaultBaseLanguage]   int,

@@ -13,10 +13,11 @@
     <div *ngFor='let rank of ranks;let index = index' class='rank-container' [ngClass]='getWinnerStyles(rank)'>
       <div class='col-container col-badge'> </div>
       <div class='col-container col-index'>{{index + 1}} - </div>
-      <div class='col-container col-name'>{{rank.name}}</div>
+      <div class='col-container col-name'>{{rank.displayName}}</div>
       <div class='col-container col-rank'>{{rank.score}}</div>
     </div>
   </div>
+
 
   <div class="dialog-actions text-center p-2">
     <button class="btn btn-info mr-1" (click)='changeMode()'>Change mode [ESC]</button>

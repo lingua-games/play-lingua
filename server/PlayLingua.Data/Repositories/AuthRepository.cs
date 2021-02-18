@@ -53,6 +53,7 @@ namespace PlayLingua.Data
                     {
                         Email = selectedUser.Email,
                         Id = selectedUser.Id,
+                        DisplayName = selectedUser.DisplayName,
                         BaseLanguages = selectedUser.BaseLanguages,
                         TargetLanguages = selectedUser.TargetLanguages,
                         DefaultBaseLanguage = selectedUser.DefaultBaseLanguage,
@@ -85,6 +86,7 @@ namespace PlayLingua.Data
                     {
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                         new Claim(ClaimTypes.Email, user.Email.ToString()),
+                        new Claim("displayName", user.DisplayName.ToString()),
                         // Todo: Work on the roles
                         new Claim(ClaimTypes.Role, ""),
                     }

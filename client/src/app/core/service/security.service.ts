@@ -30,6 +30,10 @@ export class SecurityService {
     ) as SecurityTokenInterface;
   }
 
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('lingua-token');
+  }
+
   login(user: UserModel): Observable<LoginResultModel> {
     return this.http.post<LoginResultModel>(this.authUrl, user);
   }
