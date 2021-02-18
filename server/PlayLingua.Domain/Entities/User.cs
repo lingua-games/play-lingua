@@ -13,6 +13,10 @@ namespace PlayLingua.Domain.Entities
         [Required]
         [MaxLength(200)]
         public string Password { get; set; }
+
+        [Required]
+        [MaxLength(200)]
+        public string DisplayName { get; set; }
         public string BaseLanguages { get; set; }
         public string TargetLanguages { get; set; }
         public bool IsSelectedLanguages { get; set; }

@@ -39,6 +39,11 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
+    if (!this.user.displayName || this.user.displayName === '') {
+      this.errors.displayName = 'Display name is a required field';
+      return;
+    }
+
     if (!/\S+@\S+\.\S+/.test(this.user.email)) {
       this.errors.email = 'Email is not in correct format';
       return;
