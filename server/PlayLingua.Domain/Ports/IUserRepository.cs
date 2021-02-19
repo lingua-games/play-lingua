@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using PlayLingua.Domain.Entities;
+using PlayLingua.Domain.Models;
 
 namespace PlayLingua.Domain.Ports
 {
@@ -9,6 +10,6 @@ namespace PlayLingua.Domain.Ports
         List<User> List();
         User Add(User user);
         void Delete(string id);
-        void Update(User user);
+        void Update(EditUserModel user);
     }
 }

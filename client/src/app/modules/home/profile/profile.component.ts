@@ -8,6 +8,7 @@ import { UserService } from '../../../core/service/user.service';
 import { SecurityService } from '../../../core/service/security.service';
 import { EditUserModel } from '../../../core/models/edit-user.model';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { LoginResultModel } from '../../../core/models/login-result.model';
 
 @Component({
   selector: 'app-profile',
@@ -48,22 +49,42 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    // if (!this.user.) {
-    //   this.errors.password = 'Password is a required field';
-    //   return;
-    // }
-    //
-    // if (this.user.password !== this.user.rePassword) {
-    //   this.errors.password = 'Password and Re-Password should be the same';
-    //   return;
-    // }
-    // this.isLoading = true;
-    // this.userService.add(this.user).subscribe(
-    //   (res: UserModel) => {},
-    //   (error: string) => {
-    //     this.notificationService.showMessage(error, Severity.error);
-    //     this.isLoading = false;
-    //   }
-    // );
+    if (this.user.isChangingPassword) {
+      if (!this.user.currentPassword) {
+        this.errors.currentPassword = 'Current password is empty';
+        return;
+      }
+
+      if (!this.user.newPassword) {
+        this.errors.newPassword = 'New password is empty';
+        return;
+      }
+
+      if (this.user.reNewPassword !== this.user.newPassword) {
+        this.errors.newPassword =
+          'New password and Re-new password are not match';
+        return;
+      }
+    }
+
+    this.isLoading = true;
+    this.userService.editUser(this.user).subscribe(
+      (user: LoginResultModel) => {
+        this.notificationService.showMessage('Profile saved', Severity.success);
+        this.securityService.setToken(user.token);
+
+        this.user.newPassword = '';
+        this.user.reNewPassword = '';
+        this.user.currentPassword = '';
+        this.user.isChangingPassword = false;
+      },
+      (error: string) => {
+        this.notificationService.showMessage(error, Severity.error);
+        this.isLoading = false;
+      },
+      () => {
+        this.isLoading = false;
+      }
+    );
   }
 }

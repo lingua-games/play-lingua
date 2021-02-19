@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using PlayLingua.Domain.Entities;
+using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
 using System;
 using System.Collections.Generic;
@@ -41,9 +42,14 @@ namespace PlayLingua.Data
             return db.Query<User>("select * from dbo.Users").ToList();
         }
 
-        public void Update(User user)
+        public void Update(EditUserModel user)
         {
-            throw new NotImplementedException();
+            user.LastUpdateDate = DateTime.Now;
+            var sql = @"
+update dbo.Users SET DisplayName = @DisplayName " +
+(user.IsChangingPassword ? @", Password = @newPassword " : "") +
+@" WHERE Id = @Id";
+            db.Query(sql, user);
         }
     }
 }
