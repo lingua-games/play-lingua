@@ -6,7 +6,6 @@ import { RegisterComponent } from './register/register.component';
 import { ChooseLanguagesComponent } from './choose-languages/choose-languages.component';
 import { PrimengModule } from '../common/primeng/primeng.module';
 import { FormsModule } from '@angular/forms';
-import { LoadingDirective } from '../../core/directives/loading.directive';
 import { DeactivateWithDelay, HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
 import { GameMenuComponent } from './game-menu/game-menu.component';
@@ -16,6 +15,7 @@ import { SelectDefaultLanguageDialogComponent } from '../../core/dialogs/select-
 import { DirectiveModule } from '../../core/directives/directive.module';
 import { StoreModule } from '@ngrx/store';
 import { scoreNotificationReducer } from '../../core/component/score-notification/state/score-notification.reducer';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +27,7 @@ import { scoreNotificationReducer } from '../../core/component/score-notificatio
     ChooseLanguagesComponent,
     GameMenuComponent,
     PrepareAddWordsComponent,
+    ProfileComponent,
   ],
   imports: [
     CommonModule,

@@ -21,6 +21,10 @@ export class SecurityService {
     private dialogRef: MatDialog
   ) {}
 
+  setToken(token: string): void {
+    localStorage.setItem('lingua-token', token);
+  }
+
   getTokenInformation(): SecurityTokenInterface {
     if (!localStorage.getItem('lingua-token')) {
       return {} as SecurityTokenInterface;

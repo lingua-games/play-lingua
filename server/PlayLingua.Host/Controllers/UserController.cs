@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PlayLingua.Domain.Entities;
+using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,13 @@ namespace PlayLingua.Host.Controllers
     public class UserController : BaseController
     {
         private readonly IUserRepository _userRepository;
+        private readonly IAuthRepository _authRepository;
         // private readonly IChapterRepository _chapterRepository;
 
-        public UserController(IUserRepository userRepository)
+        public UserController(IUserRepository userRepository, IAuthRepository authRepository)
         {
             _userRepository = userRepository;
+            _authRepository = authRepository;
         }
 
         [HttpGet]
@@ -50,11 +53,30 @@ namespace PlayLingua.Host.Controllers
             return Ok();
         }
 
-        [HttpPut("{id}")]
-        public ActionResult Update(int id, User user)
+        [HttpPut("update")]
+        public ActionResult<string>Update(EditUserModel user)
         {
-            user.Id = id;
+            user.Id = GetUser().Id;
+
+            if (user.IsChangingPassword)
+            {
+                var loginResult = _authRepository.Login(new Domain.Entities.User
+                {
+                    Email = GetUser().Email,
+                    Password = user.CurrentPassword
+                });
+                if (!loginResult.IsLogin)
+                {
+                    return StatusCode(406, "The entered current password is not correct.");
+                }
+            }
             _userRepository.Update(user);
+            user.Token = _authRepository.GenerateToken(new User()
+            {
+                Email = GetUser().Email,
+                Id = GetUser().Id,
+                DisplayName = user.DisplayName,
+            });
             return Ok(user);
         }
     }
