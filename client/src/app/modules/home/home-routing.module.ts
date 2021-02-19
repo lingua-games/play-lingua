@@ -14,8 +14,7 @@ import { environment } from '../../../environments/environment';
 import { HomeComponent } from './home.component';
 import { GameMenuComponent } from './game-menu/game-menu.component';
 import { PrepareAddWordsComponent } from './prepare-add-words/prepare-add-words.component';
-import { FallingStarsComponent } from '../games/falling-stars/falling-stars.component';
-
+import { ProfileComponent } from './profile/profile.component';
 export interface CanComponentDeactivate {
   canDeactivate: () => Promise<boolean>;
 }
@@ -42,6 +41,11 @@ const routes: Routes = [
       {
         path: '',
         component: GreetingComponent,
+        canDeactivate: [DeactivateWithDelay],
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
         canDeactivate: [DeactivateWithDelay],
       },
       {
