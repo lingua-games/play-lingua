@@ -1,30 +1,44 @@
-<form  class="welcome-inner-main-container">
-  <button pButton pRipple type="button" icon="pi pi-arrow-left" routerLink="../game-menu"
-          class="btn-back p-button-rounded p-button-info p-button-outlined"></button>
-  <div class="form-group">
-    <label for="inputDisplayName">Display name</label>
-    <input type="text" class="form-control" id="inputDisplayName" name="inputDisplayName" aria-describedby="displayNameHelp" placeholder="Display name"
-           [(ngModel)]="user.displayName">
-    <small id="displayNameHelp" class="form-text text-danger" *ngIf="errors.displayName">{{errors.displayName}}</small>
+<form class='welcome-inner-main-container'>
+  <button pButton pRipple type='button' icon='pi pi-arrow-left' routerLink='../game-menu'
+          class='btn-back p-button-rounded p-button-info p-button-outlined'></button>
+  <div class='form-group'>
+    <label for='inputDisplayName'>Display name</label>
+    <input type='text' class='form-control' id='inputDisplayName' name='inputDisplayName'
+           aria-describedby='displayNameHelp' placeholder='Display name'
+           [(ngModel)]='user.displayName'>
+    <small id='displayNameHelp' class='form-text text-danger' *ngIf='errors.displayName'>{{errors.displayName}}</small>
   </div>
-  <div class="form-group">
-    <label for="currentPassword">Current password</label>
-    <input type="password" class="form-control" id="currentPassword" name="inputPassword" placeholder="Current password" [(ngModel)]="user.currentPassword">
-    <small id="currentPasswordHelp" class="form-text text-danger" *ngIf="errors.currentPassword">{{errors.currentPassword}}</small>
-  </div>
-  <div class="form-group">
-    <label for="inputNewPassword">New password</label>
-    <input type="password" class="form-control" id="inputNewPassword" name="inputNewPassword" placeholder="New password" [(ngModel)]="user.newPassword">
-    <small id="newPasswordHelp" class="form-text text-danger" *ngIf="errors.newPassword">{{errors.newPassword}}</small>
-  </div>
-  <div class="form-group">
-    <label for="inputReNewPassword">Re-enter new password</label>
-    <input type="password" class="form-control" id="inputReNewPassword" name="inputReNewPassword" placeholder="Re-enter new password" [(ngModel)]="user.reNewPassword">
+  <div class='form-check'>
+    <input type='checkbox' class='form-check-input' id='isChangingPassword' name='isChangingPassword'
+           [(ngModel)]='user.isChangingPassword'>
+    <label class='form-check-label' for='isChangingPassword'>Change password</label>
   </div>
   <hr>
-  <div class="mt-2 text-center">
-    <button class="btn btn-success" type="submit" [disabled]="isLoading" (click)="submit()">
-      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="isLoading"></span>
+  <div *ngIf='user.isChangingPassword' @fadePasswords style='overflow: hidden !important;'>
+    <div class='form-group'>
+      <label for='currentPassword'>Current password</label>
+      <input type='password' class='form-control' id='currentPassword' name='inputPassword'
+             placeholder='Current password' [(ngModel)]='user.currentPassword'>
+      <small id='currentPasswordHelp' class='form-text text-danger'
+             *ngIf='errors.currentPassword'>{{errors.currentPassword}}</small>
+    </div>
+    <div class='form-group'>
+      <label for='inputNewPassword'>New password</label>
+      <input type='password' class='form-control' id='inputNewPassword' name='inputNewPassword'
+             placeholder='New password' [(ngModel)]='user.newPassword'>
+      <small id='newPasswordHelp' class='form-text text-danger'
+             *ngIf='errors.newPassword'>{{errors.newPassword}}</small>
+    </div>
+    <div class='form-group'>
+      <label for='inputReNewPassword'>Re-enter new password</label>
+      <input type='password' class='form-control' id='inputReNewPassword' name='inputReNewPassword'
+             placeholder='Re-enter new password' [(ngModel)]='user.reNewPassword'>
+    </div>
+    <hr>
+  </div>
+  <div class='mt-2 text-center'>
+    <button class='btn btn-success' type='submit' [disabled]='isLoading' (click)='submit()'>
+      <span class='spinner-border spinner-border-sm' role='status' aria-hidden='true' *ngIf='isLoading'></span>
       {{isLoading ? 'Loading...' : 'Save'}}
     </button>
   </div>

@@ -5,4 +5,5 @@ export class EditUserModel {
   public currentPassword: string;
   public newPassword: string;
   public reNewPassword: string;
+  public isChangingPassword: boolean;
 }

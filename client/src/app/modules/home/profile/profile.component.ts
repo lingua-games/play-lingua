@@ -7,11 +7,24 @@ import {
 import { UserService } from '../../../core/service/user.service';
 import { SecurityService } from '../../../core/service/security.service';
 import { EditUserModel } from '../../../core/models/edit-user.model';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
+  animations: [
+    trigger('fadePasswords', [
+      transition(':enter', [
+        style({ height: '0vh' }),
+        animate('400ms', style({ height: '25vh' })),
+      ]),
+      transition(':leave', [
+        style({ height: '25vh' }),
+        animate('400ms', style({ height: '0vh' })),
+      ]),
+    ]),
+  ],
 })
 export class ProfileComponent implements OnInit {
   public user: EditUserModel = new EditUserModel();
