@@ -17,6 +17,7 @@ CREATE TABLE [dbo].[Users] (
 	[DefaultBaseLanguage]   int,
 	[AddedDate] datetime NOT NULL,
 	[LastUpdateDate] datetime,
+	[TotalScore] float,
 )
 GO
 ALTER TABLE [dbo].[Users] ADD CONSTRAINT [FK_User_DefaultTargetLanguage]
