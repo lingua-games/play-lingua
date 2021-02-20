@@ -12,5 +12,6 @@ namespace PlayLingua.Domain.Ports
         Score Add(Score score, int userId);
         void Delete(int id);
         void Update(Score score);
+        void IncreaseScore(float score, int userId);
     }
 }
