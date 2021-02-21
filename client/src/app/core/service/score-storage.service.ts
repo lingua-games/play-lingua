@@ -17,6 +17,28 @@ export class ScoreStorageService {
     score.score = Math.round(this.cachedScore * 10) / 10;
     this.cachedScore = 0;
     return this.http.post<RanksResultInterface[]>(this.storeScoreApi, score);
+    // return of([
+    //   {
+    //     email: 'aaa',
+    //     displayName: 'bbb',
+    //     score: 100,
+    //   },
+    //   {
+    //     email: 'vbhost.ir@gmail.com',
+    //     displayName: 'arash bahreini',
+    //     score: 50,
+    //   },
+    //   {
+    //     email: 'vbhost.ir@gmail.com123',
+    //     displayName: 'arash bahreini',
+    //     score: 40,
+    //   },
+    //   {
+    //     email: 'vbhost.ir@gmail.com 444',
+    //     displayName: 'arash bahreini',
+    //     score: 60,
+    //   },
+    // ]);
   }
 
   catchScores(score: number): void {

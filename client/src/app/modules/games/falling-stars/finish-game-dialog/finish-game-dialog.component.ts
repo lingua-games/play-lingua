@@ -4,7 +4,6 @@ import { ScoreStorageService } from '../../../../core/service/score-storage.serv
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { RanksResultInterface } from '../../../../core/models/ranks-result.interface';
 import { SecurityService } from '../../../../core/service/security.service';
-import { Router } from '@angular/router';
 import { FinishGameActionEnum } from '../../../../core/models/finish-game-action.enum';
 import { environment } from '../../../../../environments/environment';
 
@@ -98,5 +97,9 @@ export class FinishGameDialogComponent implements OnInit {
 
   retry(): void {
     this.dialogRef.close(FinishGameActionEnum.retry);
+  }
+
+  getRankWidth(rank: RanksResultInterface): string {
+    return this.ranks.indexOf(rank) < 3 ? '41%' : '43%';
   }
 }
