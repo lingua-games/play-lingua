@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserModel } from '../models/user.model';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { LoginResultModel } from '../models/login-result.model';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
@@ -14,6 +14,7 @@ import { SecurityTokenInterface } from '../models/security-token.interface';
 })
 export class SecurityService {
   authUrl = environment.apiUrl + 'Auth';
+  private storageSub = new Subject<number>();
 
   constructor(
     private http: HttpClient,
@@ -25,8 +26,17 @@ export class SecurityService {
     localStorage.setItem('lingua-token', token);
   }
 
-  getTotalScore(): string {
-    return localStorage.getItem('lingua-total-score');
+  getTotalScore(): Observable<number> {
+    return this.storageSub.asObservable();
+  }
+
+  setTotalScore(newScore: number): void {
+    // TODO: THIS PART SHOULD BE IMPLEMENT AS NGRX INSTEAD OF RXJS
+    let totalScore = +localStorage.getItem('lingua-total-score');
+    totalScore += newScore;
+    totalScore = Math.round(totalScore * 10) / 10;
+    localStorage.setItem('lingua-total-score', totalScore.toString());
+    this.storageSub.next(totalScore);
   }
 
   getTokenInformation(): SecurityTokenInterface {
