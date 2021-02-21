@@ -87,12 +87,6 @@ export class GameMenuComponent implements OnInit {
     });
   }
 
-  getUsername(): string {
-    return this.securityService.isLoggedIn()
-      ? `Welcome dear ${this.securityService.getTokenInformation().displayName}`
-      : 'Welcome dear guest';
-  }
-
   isLoggedIn(): boolean {
     return !!localStorage.getItem('lingua-token');
   }

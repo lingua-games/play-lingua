@@ -1,4 +1,5 @@
 <p-toast></p-toast>
+<app-top-navbar *ngIf='isLoggedIn()'></app-top-navbar>
 <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
 <div class="parent-container">
   <div class="main-container" [ngStyle]="style">

@@ -58,6 +58,7 @@ namespace PlayLingua.Data
                         TargetLanguages = selectedUser.TargetLanguages,
                         DefaultBaseLanguage = selectedUser.DefaultBaseLanguage,
                         DefaultTargetLanguage = selectedUser.DefaultTargetLanguage,
+                        TotalScore = selectedUser.TotalScore,
                         IsSelectedLanguages =
                             (!string.IsNullOrWhiteSpace(selectedUser.TargetLanguages) && !string.IsNullOrWhiteSpace(selectedUser.BaseLanguages)) ? true : false
 

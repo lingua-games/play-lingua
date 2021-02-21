@@ -25,6 +25,10 @@ export class SecurityService {
     localStorage.setItem('lingua-token', token);
   }
 
+  getTotalScore(): string {
+    return localStorage.getItem('lingua-total-score');
+  }
+
   getTokenInformation(): SecurityTokenInterface {
     if (!localStorage.getItem('lingua-token')) {
       return {} as SecurityTokenInterface;

@@ -9,4 +9,5 @@ export class UserModel {
   public isSelectedLanguages: boolean;
   public defaultBaseLanguage: number;
   public defaultTargetLanguage: number;
+  public totalScore: number;
 }
