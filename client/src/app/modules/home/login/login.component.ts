@@ -44,7 +44,10 @@ export class LoginComponent implements OnInit {
       (res: LoginResultModel) => {
         if (res.isLogin) {
           localStorage.setItem('lingua-token', res.token);
-
+          localStorage.setItem(
+            'lingua-total-score',
+            res.user.totalScore.toString()
+          );
           const defaultBaseLanguageFromAPI = JSON.parse(
             res.user.baseLanguages
           ).find((x) => x.id === res.user.defaultBaseLanguage);

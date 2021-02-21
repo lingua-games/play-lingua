@@ -1,0 +1,18 @@
+<div class='full-size-main-container' *ngIf='showFullSize'>
+  <div class='greeting-container'>
+    {{getUsername()}}
+  </div>
+  <div class='total-score-container'>
+    Total score <span>{{totalScore}}</span>
+  </div>
+  <div class='log-out-container'>
+    Log out
+  </div>
+</div>
+
+<div class='half-size-main-container' *ngIf='!showFullSize'>
+  <div class='total-score-container'>
+    Total score <span>{{totalScore}}</span>
+  </div>
+</div>
+

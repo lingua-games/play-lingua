@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { SecurityService } from '../../core/service/security.service';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +12,10 @@ export class HomeComponent implements OnInit {
   style: any = {};
   isLoading: boolean;
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private securityService: SecurityService
+  ) {
     router.events.subscribe((val) => {
       if (val instanceof NavigationStart) {
         if (
@@ -41,7 +45,9 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  isLoggedIn(): boolean {
+    return this.securityService.isLoggedIn();
+  }
 
-  rotate(): void {}
+  ngOnInit(): void {}
 }

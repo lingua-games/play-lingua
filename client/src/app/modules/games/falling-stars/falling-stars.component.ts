@@ -57,6 +57,7 @@ export class FallingStarsComponent implements OnInit {
   startTime: number;
   bookId: number;
   chapterId: number;
+  isGameFinished = false;
   @HostListener('document:keyup ', ['$event'])
   keyUpEvent(event: KeyboardEvent): void {
     this.pressedNumber = 0;
@@ -130,6 +131,7 @@ export class FallingStarsComponent implements OnInit {
   }
 
   showEndGameDialog(): void {
+    this.isGameFinished = true;
     const dialog = this.dialog.open(FinishGameDialogComponent, {
       disableClose: true,
       width: '30%',
@@ -245,6 +247,7 @@ export class FallingStarsComponent implements OnInit {
   }
 
   startGame(): void {
+    this.isGameFinished = false;
     this.startTime = Date.now();
     if (this.words[0]) {
       this.words[0].animating = true;

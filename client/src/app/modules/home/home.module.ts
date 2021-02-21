@@ -16,6 +16,8 @@ import { DirectiveModule } from '../../core/directives/directive.module';
 import { StoreModule } from '@ngrx/store';
 import { scoreNotificationReducer } from '../../core/component/score-notification/state/score-notification.reducer';
 import { ProfileComponent } from './profile/profile.component';
+import { TopNavbarComponent } from './top-navbar/top-navbar.component';
+import { ComponentModule } from '../../core/component/component.module';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,7 @@ import { ProfileComponent } from './profile/profile.component';
     FormsModule,
     MaterialModule,
     DirectiveModule,
+    ComponentModule,
     StoreModule.forFeature('notifications', scoreNotificationReducer),
   ],
   providers: [DeactivateWithDelay],
