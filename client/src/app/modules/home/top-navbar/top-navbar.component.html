@@ -3,7 +3,10 @@
     {{getUsername()}}
   </div>
   <div class='total-score-container'>
-    Total score <span>{{totalScore}}</span>
+    Total score <span *ngIf="totalScore !== 'loading'">{{totalScore}}</span>
+    <div *ngIf="totalScore === 'loading'" class="spinner-border text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
   </div>
   <div class='log-out-container'>
     Log out
@@ -12,7 +15,11 @@
 
 <div class='half-size-main-container' *ngIf='!showFullSize'>
   <div class='total-score-container'>
-    Total score <span>{{totalScore}}</span>
+    Total score
+    <span *ngIf="totalScore !== 'loading'">{{totalScore}}</span>
+    <div *ngIf="totalScore === 'loading'" class="spinner-border text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
   </div>
 </div>
 

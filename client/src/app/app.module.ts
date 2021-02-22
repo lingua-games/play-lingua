@@ -20,10 +20,13 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { MaterialModule } from './modules/common/material/material.module';
+import { PrimengModule } from './modules/common/primeng/primeng.module';
+import { NotificationService } from './core/service/notification.service';
 
 @NgModule({
   declarations: [AppComponent, ScoreNotificationComponent],
   imports: [
+    PrimengModule,
     AppRoutingModule,
     FontAwesomeModule,
     HttpClientModule,

@@ -1,10 +1,40 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { SecurityService } from './core/service/security.service';
+import { UserService } from './core/service/user.service';
+import { UserModel } from './core/models/user.model';
+import {
+  NotificationService,
+  Severity,
+} from './core/service/notification.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'client';
+
+  constructor(
+    private securityService: SecurityService,
+    private userService: UserService
+  ) {}
+
+  ngOnInit(): void {
+    if (this.securityService.isLoggedIn()) {
+      this.getUserInformation();
+    }
+  }
+
+  getUserInformation(): void {
+    this.securityService.initialTotalScore('loading');
+    this.userService.getUserInformation().subscribe(
+      (res: UserModel) => {
+        this.securityService.initialTotalScore(res.totalScore.toString());
+      },
+      (error: any) => {
+        this.securityService.initialTotalScore('0');
+      }
+    );
+  }
 }
