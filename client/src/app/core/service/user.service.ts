@@ -21,4 +21,8 @@ export class UserService {
   public editUser(user: EditUserModel): Observable<LoginResultModel> {
     return this.http.put<LoginResultModel>(this.userUrl + 'update', user);
   }
+
+  public getUserInformation(): Observable<UserModel> {
+    return this.http.get<UserModel>(this.userUrl + 'get-user-information');
+  }
 }

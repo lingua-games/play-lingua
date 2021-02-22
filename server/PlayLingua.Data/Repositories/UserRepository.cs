@@ -32,9 +32,19 @@ namespace PlayLingua.Data
             return user;
         }
 
+        
+
         public void Delete(string id)
         {
             throw new NotImplementedException();
+        }
+
+        public User GetUserInformation(int userId)
+        {
+            return db.Query<User>("select top 1 * from dbo.Users").Select(x => new User
+            {
+                TotalScore = x.TotalScore,
+            }).FirstOrDefault();
         }
 
         public List<User> List()

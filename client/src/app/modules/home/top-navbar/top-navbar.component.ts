@@ -16,15 +16,19 @@ export class TopNavbarComponent implements OnInit {
   }
 
   showFullSize = true;
-  totalScore = 0;
+  totalScore: string;
   ngOnInit(): void {
     this.securityService.getTotalScore().subscribe(
-      (res: number) => {
-        this.totalScore = res;
+      (res: string) => {
+        if (res !== 'loading') {
+          this.totalScore = (Math.round(+res * 10) / 10).toString();
+        } else {
+          this.totalScore = res;
+        }
       },
       () => {}
     );
-    this.securityService.setTotalScore(0);
+    this.securityService.setTotalScore('0');
   }
 
   getUsername(): string {

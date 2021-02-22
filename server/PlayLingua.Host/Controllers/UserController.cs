@@ -35,6 +35,13 @@ namespace PlayLingua.Host.Controllers
             }
         }
 
+
+        [HttpGet("get-user-information")]
+        public ActionResult<User> GetUserInformation()
+        {
+            return Ok(_userRepository.GetUserInformation(GetUser().Id));
+        }
+
         [HttpPost]
         public ActionResult<User> Add([FromBody] User user)
         {

@@ -10,17 +10,18 @@ namespace PlayLingua.Data
 {
     public class RequestLogRepository : IRequeustLogRepository
     {
-        private IDbConnection db;
+        private IDbConnection _db;
+        private string _connectionString;
+
         public RequestLogRepository(string connectionString)
         {
-            db = new SqlConnection(connectionString);
+            _connectionString = connectionString;
         }
 
         public RequestLogModel Add(RequestLogModel requestLog)
         {
-            db.Close();
             var sql =
-				@"
+                @"
 				insert into [dbo].[RequestLogs] 
 				(
 					[StartTime],
@@ -57,27 +58,34 @@ namespace PlayLingua.Data
 					@ExceptionMessage
 				);" + "SELECT CAST(SCOPE_IDENTITY() as int)";
 
-            var id = db.Query<int>(sql, requestLog).Single();
-            requestLog.Id = id;
-            return requestLog;
-
+            using (var db = new SqlConnection(_connectionString))
+            {
+                var id = db.Query<int>(sql, requestLog).Single();
+                requestLog.Id = id;
+                return requestLog;
+            }
         }
 
         public void Update(RequestLogModel requestLog)
         {
-			db.Query(@"
-update [dbo].[RequestLogs] 
-SET [ProcessDuration] = @ProcessDuration,
-	[Failed] = @Failed,
-	[HadException] = @HadException,
-	[Response] = @Response,
-	[ResponseStatusCode] = @ResponseStatusCode,
-	[ResponseSize] = @ResponseSize,
-	[ExceptionTitle] = @ExceptionTitle,
-	[ExceptionMessage] = @ExceptionMessage,
-	[UserId] = @UserId
-WHERE Id = @Id
-", requestLog);
-		}
-	}
+            using (var db = new SqlConnection(_connectionString))
+            {
+                db.Query(@"
+							update [dbo].[RequestLogs] 
+							SET [ProcessDuration] = @ProcessDuration,
+								[Failed] = @Failed,
+								[HadException] = @HadException,
+								[Response] = @Response,
+								[ResponseStatusCode] = @ResponseStatusCode,
+								[ResponseSize] = @ResponseSize,
+								[ExceptionTitle] = @ExceptionTitle,
+								[ExceptionMessage] = @ExceptionMessage,
+								[UserId] = @UserId
+							WHERE Id = @Id
+							", 
+				requestLog);
+            }
+        }
+
+    }
 }
