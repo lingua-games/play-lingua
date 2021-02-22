@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using PlayLingua.Data;
+using PlayLingua.Domain.models;
 using PlayLingua.Host.Middlewares;
 using System.Text;
 
@@ -55,7 +56,12 @@ namespace PlayLingua.Host
             services.AddRepository(
                 Configuration.GetConnectionString("playLinguaConnection"),
                 Configuration.GetSection("secret").Value,
-                Configuration.GetSection("hashKey").Value);
+                Configuration.GetSection("hashKey").Value,
+                new EmailModel
+                {
+                    Username= Configuration.GetSection("email:username").Value,
+                    Password = Configuration.GetSection("email:password").Value
+                });
 
             // TODO: Below line should be disabled in production mode or at release time because we are going to
             // Release both backend and front-end in a package and with a common origin. 
