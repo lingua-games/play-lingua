@@ -53,7 +53,9 @@ namespace PlayLingua.Host
 
             //services.AddInMemoryRepository();
             services.AddRepository(
-                Configuration.GetConnectionString("playLinguaConnection"), Configuration.GetSection("secret").Value);
+                Configuration.GetConnectionString("playLinguaConnection"),
+                Configuration.GetSection("secret").Value,
+                Configuration.GetSection("hashKey").Value);
 
             // TODO: Below line should be disabled in production mode or at release time because we are going to
             // Release both backend and front-end in a package and with a common origin. 

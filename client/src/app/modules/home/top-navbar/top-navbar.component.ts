@@ -36,4 +36,8 @@ export class TopNavbarComponent implements OnInit {
       ? `Welcome, ${this.securityService.getTokenInformation().displayName}`
       : 'Welcome, guest';
   }
+
+  logout(): void {
+    this.securityService.logout();
+  }
 }
