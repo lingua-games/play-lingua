@@ -49,6 +49,9 @@ export class SecurityService {
   }
 
   getTokenInformation(): SecurityTokenInterface {
+    if (localStorage.getItem('lingua-token') === 'null') {
+      this.logoutOn401();
+    }
     if (!localStorage.getItem('lingua-token')) {
       return {} as SecurityTokenInterface;
     }

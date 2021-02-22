@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.IdentityModel.Tokens;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.models;
@@ -19,17 +20,20 @@ namespace PlayLingua.Data
     {
         private readonly IDbConnection db;
 
-        public string Secret { get; }
+        public string _secret;
+        public string _hashKey;
 
-        public AuthRepository(string connectionString, string secret)
+        public AuthRepository(string connectionString, string secret, string hashKey)
         {
             db = new SqlConnection(connectionString);
-            Secret = secret;
+            _secret = secret;
+            _hashKey = hashKey;
         }
 
         public LoginResult Login(User user)
         {
             var result = new LoginResult();
+            user.Password = CreateHashPassword(user.Password, _hashKey);
             string query = @"
                               SELECT * FROM [dbo].[Users] 
                               left join [dbo].[SelectedLanguages]
@@ -75,9 +79,21 @@ namespace PlayLingua.Data
             }
         }
 
+        public static string CreateHashPassword(string value, string salt)
+        {
+            var valueBytes = KeyDerivation.Pbkdf2(
+                                password: value,
+                                salt: Encoding.UTF8.GetBytes(salt),
+                                prf: KeyDerivationPrf.HMACSHA512,
+                                iterationCount: 10000,
+                                numBytesRequested: 256 / 8);
+
+            return Convert.ToBase64String(valueBytes);
+        }
+
         public string GenerateToken(User user)
         {
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Secret));
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secret));
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor

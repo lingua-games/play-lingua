@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
@@ -8,20 +9,23 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net.WebSockets;
+using System.Text;
 
 namespace PlayLingua.Data
 {
     public class UserRepository : IUserRepository
     {
         private readonly IDbConnection db;
-
-        public UserRepository(string connectionString)
+        public string _hashKey;
+        public UserRepository(string connectionString, string hashKey)
         {
             db = new SqlConnection(connectionString);
+            _hashKey = hashKey;
         }
 
         public User Add(User user)
         {
+            user.Password = CreateHashPassword(user.Password, _hashKey);
             user.AddedDate = DateTime.Now;
             var sql =
                 "insert into dbo.Users (Email, Password, AddedDate, DisplayName) VALUES(@Email, @Password, @AddedDate, @DisplayName);" +
@@ -32,7 +36,19 @@ namespace PlayLingua.Data
             return user;
         }
 
-        
+        public static string CreateHashPassword(string value, string salt)
+        {
+            var valueBytes = KeyDerivation.Pbkdf2(
+                                password: value,
+                                salt: Encoding.UTF8.GetBytes(salt),
+                                prf: KeyDerivationPrf.HMACSHA512,
+                                iterationCount: 10000,
+                                numBytesRequested: 256 / 8);
+
+            return Convert.ToBase64String(valueBytes);
+        }
+
+
 
         public void Delete(string id)
         {
@@ -54,6 +70,7 @@ namespace PlayLingua.Data
 
         public void Update(EditUserModel user)
         {
+            user.newPassword = user.IsChangingPassword ? CreateHashPassword(user.newPassword, _hashKey) : "";
             user.LastUpdateDate = DateTime.Now;
             var sql = @"
 update dbo.Users SET DisplayName = @DisplayName " +
