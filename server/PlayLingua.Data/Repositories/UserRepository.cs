@@ -1,6 +1,9 @@
 ﻿using Dapper;
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using MimeKit;
 using PlayLingua.Domain.Entities;
+using PlayLingua.Domain.models;
 using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
 using System;
@@ -8,7 +11,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Net.WebSockets;
 using System.Text;
 
 namespace PlayLingua.Data
@@ -17,18 +19,22 @@ namespace PlayLingua.Data
     {
         private readonly IDbConnection db;
         public string _hashKey;
-        public UserRepository(string connectionString, string hashKey)
+        public readonly EmailModel _email;
+        public UserRepository(string connectionString, string hashKey, EmailModel email)
         {
             db = new SqlConnection(connectionString);
             _hashKey = hashKey;
+            _email = email;
         }
 
         public User Add(User user)
         {
+            user.EmailVerificationCode = Guid.NewGuid().ToString();
+            sendVerificationCode(user);
             user.Password = CreateHashPassword(user.Password, _hashKey);
             user.AddedDate = DateTime.Now;
             var sql =
-                "insert into dbo.Users (Email, Password, AddedDate, DisplayName) VALUES(@Email, @Password, @AddedDate, @DisplayName);" +
+                "insert into dbo.Users (Email, Password, AddedDate, DisplayName, EmailVerificationCode) VALUES(@Email, @Password, @AddedDate, @DisplayName, @EmailVerificationCode);" +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var id = db.Query<int>(sql, user).Single();
@@ -48,6 +54,25 @@ namespace PlayLingua.Data
             return Convert.ToBase64String(valueBytes);
         }
 
+        public void sendVerificationCode(User user)
+        {
+            //var mailMessage = new MimeMessage();
+            //mailMessage.From.Add(new MailboxAddress("Ghobad", _email.Username));
+            //mailMessage.To.Add(new MailboxAddress("Arash", "vbhost.ir@gmail.com"));
+            //mailMessage.Subject = "subject";
+            //mailMessage.Body = new TextPart("plain")
+            //{
+            //    Text = "Hello"
+            //};
+
+            //using (var smtpClient = new SmtpClient())
+            //{
+            //    smtpClient.Connect("smtp.gmail.com", 587, false);
+            //    smtpClient.Authenticate(_email.Username, _email.Password);
+            //    smtpClient.Send(mailMessage);
+            //    smtpClient.Disconnect(true);
+            //}
+        }
 
 
         public void Delete(string id)

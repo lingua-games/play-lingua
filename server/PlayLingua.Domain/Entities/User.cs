@@ -1,9 +1,10 @@
 ﻿using PlayLingua.Domain.models;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace PlayLingua.Domain.Entities
 {
-    public class User: SelectDefaultLanguageModel
+    public class User : SelectDefaultLanguageModel
     {
         public int Id { get; set; }
         [Required]
@@ -18,5 +19,9 @@ namespace PlayLingua.Domain.Entities
         public bool IsSelectedLanguages { get; set; }
         public bool IsChangingPassword { get; set; }
         public float TotalScore { get; set; }
+        public string EmailVerificationCode { get; set; }
+        public bool IsEmailVerified { get; set; }
+        public DateTime EmailVerifiedDate { get; set; }
     }
 }
+
