@@ -188,6 +188,7 @@ export class FallingStarsComponent implements OnInit {
         animating: false,
         possibleAnswers: this.generateRandomOptions(element, res),
         keyIsPressing: false,
+        wrongCount: 0,
       });
     });
   }
@@ -268,34 +269,32 @@ export class FallingStarsComponent implements OnInit {
     word.animating = false;
     if (!word.selectedAnswer) {
       this.showGuidBox();
+      word.wrongCount++;
+      this.words.push(JSON.parse(JSON.stringify(word)));
     } else {
       if (word.correctAnswers.find((x) => x === word.selectedAnswer)) {
         if (!isCalledFromView) {
-          this.calculateScore();
           this.store.dispatch(
             toggleNotification({
               gameName: 'Falling stars',
               message: 'I am the message',
-              score: this.calculateScore(),
+              score: this.calculateScore(word.wrongCount),
             } as NotificationState)
           );
-          // this.scoreStorageService
-          //   .storeScore({
-          //     bookId: this.bookId,
-          //     chapterId: this.chapterId,
-          //     gameName: 'falling-stars',
-          //   } as ScoreStoreInterface)
-          //   .subscribe();
-          this.scoreStorageService.catchScores(this.calculateScore());
+          this.scoreStorageService.catchScores(
+            this.calculateScore(word.wrongCount)
+          );
         }
         this.playNextStar();
       } else {
         this.showGuidBox();
+        word.wrongCount++;
+        this.words.push(JSON.parse(JSON.stringify(word)));
       }
     }
   }
 
-  calculateScore(): number {
+  calculateScore(wrongCount: number): number {
     // It is the travelled time of the object before user hit the correct Answer.
     const travelledBeforeHit =
       (secondsForTraver + bufferBeforeStart - (Date.now() - this.startTime)) /
@@ -305,6 +304,11 @@ export class FallingStarsComponent implements OnInit {
     const result = travelledBeforeHit * (10 / (secondsForTraver / 1000));
 
     // To show only one decimal number after decimal point
+
+    if (wrongCount && wrongCount > 0) {
+      // The final result should divide by wrong count
+      return Math.round((result / (wrongCount + 1)) * 10) / 10;
+    }
     return Math.round(result * 10) / 10;
   }
 
