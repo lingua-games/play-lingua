@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { BookModel } from '../../../../core/models/book.model';
 import { BookChapterService } from '../../../../core/service/book-chapter.service';
 import { LanguageModel } from '../../../../core/models/language.model';
 import { ChapterModel } from '../../../../core/models/chapter.model';
 import { Router } from '@angular/router';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GamesService } from '../../../../core/service/games.service';
 import { WordKeyValueModel } from '../../../../core/models/word-key-value.model';
 import { environment } from '../../../../../environments/environment';
@@ -13,6 +13,8 @@ import {
   Severity,
 } from '../../../../core/service/notification.service';
 import { GameStartInformation } from '../../../../core/models/game-start-information';
+import { ScoreStoreInterface } from '../../../../core/models/score-store.interface';
+import { GameInformationInterface } from '../../../../core/models/game-information.interface';
 
 @Component({
   selector: 'app-start-game-dialog',
@@ -39,7 +41,8 @@ export class StartGameDialogComponent implements OnInit {
     private router: Router,
     private dialogRef: MatDialogRef<StartGameDialogComponent>,
     private gamesService: GamesService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    @Inject(MAT_DIALOG_DATA) public data: GameInformationInterface
   ) {}
 
   ngOnInit(): void {

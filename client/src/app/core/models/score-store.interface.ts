@@ -5,4 +5,5 @@ export interface ScoreStoreInterface {
   chapterId: number;
   score: number;
   count: number;
+  gameDisplayName: string;
 }

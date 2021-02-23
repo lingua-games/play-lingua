@@ -3,7 +3,6 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { FallingStarsWord } from '../../../core/models/falling-stars-word.interface';
 import { GamesService } from '../../../core/service/games.service';
 import { MatDialog } from '@angular/material/dialog';
-import { StartGameDialogComponent } from './start-game-dialog/start-game-dialog.component';
 import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
 import { Store } from '@ngrx/store';
 import { NotificationState } from '../../../core/component/score-notification/state/score-notification.reducer';
@@ -11,8 +10,10 @@ import { toggleNotification } from '../../../core/component/score-notification/s
 import { ScoreStorageService } from '../../../core/service/score-storage.service';
 import { ScoreStoreInterface } from '../../../core/models/score-store.interface';
 import { GameStartInformation } from '../../../core/models/game-start-information';
-import { FinishGameDialogComponent } from './finish-game-dialog/finish-game-dialog.component';
 import { FinishGameActionEnum } from '../../../core/models/finish-game-action.enum';
+import { FinishGameDialogComponent } from '../common-in-game/finish-game-dialog/finish-game-dialog.component';
+import { StartGameDialogComponent } from '../common-in-game/start-game-dialog/start-game-dialog.component';
+import { GameInformationInterface } from '../../../core/models/game-information.interface';
 
 const secondsForTraver = 5000;
 const bufferBeforeStart = 1000;
@@ -141,6 +142,7 @@ export class FallingStarsComponent implements OnInit {
         chapterId: this.chapterId,
         gameName: 'falling-stars',
         score: this.scoreStorageService.getCachedScores(),
+        gameDisplayName: 'Falling stars',
       } as ScoreStoreInterface,
     });
 
@@ -161,6 +163,9 @@ export class FallingStarsComponent implements OnInit {
     this.guidBoxShowing = false;
     this.dialog
       .open(StartGameDialogComponent, {
+        data: {
+          name: 'Falling stars',
+        } as GameInformationInterface,
         disableClose: true,
         width: '30%',
       })
