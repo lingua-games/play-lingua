@@ -7,4 +7,5 @@ export class FallingStarsWord {
   correctAnswers: string[];
   possibleAnswers: string[];
   keyIsPressing: boolean;
+  wrongCount: number;
 }
