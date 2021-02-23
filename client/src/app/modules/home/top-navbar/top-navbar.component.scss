@@ -20,6 +20,25 @@
 
   .log-out-container {
     text-align: right;
+    position: relative;
+  }
+
+  .log-out-item {
+    width: 15%;
+    position: absolute;
+    top: -2vh;
+    color: lightgray;
+    padding: .2vh;
+    margin-left: 85%;
+    text-align: center;
+    transition: 500ms;
+  }
+
+  .log-out-item:hover {
+    cursor: pointer;
+    color: #273746;
+    background-color: lightgray;
+    border-radius: 10px;
   }
 }
 
