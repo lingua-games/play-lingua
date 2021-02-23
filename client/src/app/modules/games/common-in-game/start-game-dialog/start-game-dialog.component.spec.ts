@@ -4,7 +4,7 @@ import { StartGameDialogComponent } from './start-game-dialog.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NotificationService } from '../../../../core/service/notification.service';
 
 describe('StartGameDialogComponent', () => {
@@ -27,6 +27,10 @@ describe('StartGameDialogComponent', () => {
         {
           provide: MatDialogRef,
           useValue: mockMatDialogRef,
+        },
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {},
         },
         {
           provide: NotificationService,
