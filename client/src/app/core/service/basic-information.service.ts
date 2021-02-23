@@ -49,7 +49,7 @@ export class BasicInformationService {
       route: 'super-mario',
       id: 'super-mario',
       isDesigned: true,
-      gifUrl: './../../../../assets/GIFs/coming-soon.gif',
+      gifUrl: './../../../../assets/GIFs/super-mario.gif',
     });
     menus.push({
       name: 'Game',
