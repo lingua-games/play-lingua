@@ -36,28 +36,26 @@ export class BasicInformationService {
   getGameMenus(): GameMenu[] {
     const menus: GameMenu[] = [];
     menus.push({
-      name: 'Super Mario',
-      image: './../../../../assets/images/GameMenu/super-mario.png',
-      route: 'super-mario',
-      id: 'super-mario',
-      isDesigned: true,
-    });
-    menus.push({
       name: 'Falling Stars',
       image: './../../../../assets/images/GameMenu/falling-star.png',
       route: '../games/falling-stars',
       id: 'falling-stars',
       isDesigned: true,
+      gifUrl: './../../../../assets/GIFs/falling-stars-demo.gif',
+    });
+    menus.push({
+      name: 'Super Mario',
+      image: './../../../../assets/images/GameMenu/super-mario.png',
+      route: 'super-mario',
+      id: 'super-mario',
+      isDesigned: true,
+      gifUrl: './../../../../assets/GIFs/coming-soon.gif',
     });
     menus.push({
       name: 'Game',
       image: './../../../../assets/images/GameMenu/game.jpg',
       isDesigned: false,
-    });
-    menus.push({
-      name: 'Game',
-      image: './../../../../assets/images/GameMenu/game.jpg',
-      isDesigned: false,
+      gifUrl: './../../../../assets/GIFs/coming-soon.gif',
     });
     return menus;
   }

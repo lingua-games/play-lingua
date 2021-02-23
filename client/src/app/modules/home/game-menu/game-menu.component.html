@@ -1,69 +1,71 @@
-<div class="welcome-inner-main-container" appLoading [loadingFlag]="loadingFullPage">
-  <div class="row">
-    <div class="menu-container col-sm-2 ml-5 mr-5">
-      <div class="greeting-container">
+<div class='welcome-inner-main-container' appLoading [loadingFlag]='loadingFullPage'>
+  <div class='row'>
+    <div class='menu-container col-sm-2 ml-5 mr-5'>
+      <div class='greeting-container'>
 
-        <div class="action-menu-container mt-2" routerLink="../profile">Manage profile</div>
+        <div class='action-menu-container mt-2' routerLink='../profile'>Manage profile</div>
         <hr>
-        <div class="action-menu-container" (click)="navigateToEditLanguages()" *ngIf="isLoggedIn()">Change languages
+        <div class='action-menu-container' (click)='navigateToEditLanguages()' *ngIf='isLoggedIn()'>Change languages
         </div>
-        <div class="action-menu-container mt-2" routerLink="../login" *ngIf="!isLoggedIn()">Login</div>
-        <div class="action-menu-container mt-2" routerLink="../register" *ngIf="!isLoggedIn()">Register</div>
-        <div class="action-menu-container mt-2" *ngIf="isLoggedIn()">Scores</div>
-        <div class="action-menu-container mt-2">Score board</div>
-        <div class="action-menu-container mt-2" routerLink="../word-management" *ngIf="isLoggedIn()">Manage your words</div>
-        <div class="action-menu-container mt-2" *ngIf="isLoggedIn()" (click)="logout()">Log out</div>
+        <div class='action-menu-container mt-2' routerLink='../login' *ngIf='!isLoggedIn()'>Login</div>
+        <div class='action-menu-container mt-2' routerLink='../register' *ngIf='!isLoggedIn()'>Register</div>
+        <div class='action-menu-container mt-2' *ngIf='isLoggedIn()'>Scores</div>
+        <div class='action-menu-container mt-2'>Score board</div>
+        <div class='action-menu-container mt-2' routerLink='../word-management' *ngIf='isLoggedIn()'>Manage your words
+        </div>
+        <div class='action-menu-container mt-2' *ngIf='isLoggedIn()' (click)='logout()'>Log out</div>
         <hr>
-        <div class="description-menu-container mt-2"
-             *ngIf="defaultSelectedLanguages.defaultTargetLanguage && defaultSelectedLanguages.defaultBaseLanguage">
+        <div class='description-menu-container mt-2'
+             *ngIf='defaultSelectedLanguages.defaultTargetLanguage && defaultSelectedLanguages.defaultBaseLanguage'>
           I know
           <strong>{{defaultSelectedLanguages.defaultBaseLanguage.name}}</strong>
           and I want to learn
           <strong>{{defaultSelectedLanguages.defaultTargetLanguage.name}}</strong>
           . This is my default learning path, but I can always
-          <strong class="change-default-action">change this default</strong>
+          <strong class='change-default-action'>change this default</strong>
         </div>
       </div>
     </div>
-    <div class="col-sm-9" appLoading [loadingFlag]="inquiryResult.isLoading">
-      <div class="row">
-        <div class="col-sm-12 alert alert-warning" *ngIf="!inquiryResult.hasError && !inquiryResult.data">
-          <span class="mr-2">Oops, You selected</span>
-          <span *ngFor="let selectedLanguage of selectedLanguages?.base;let index = index">
-            <strong *ngIf="selectedLanguages.base.length - 1 === index">{{selectedLanguage.name}}</strong>
-            <strong *ngIf="selectedLanguages.base.length - 1 !==  index">{{selectedLanguage.name + ', '}}</strong>
+    <div class='col-sm-9' appLoading [loadingFlag]='inquiryResult.isLoading'>
+      <div class='row' *ngIf='!inquiryResult.hasError && !inquiryResult.data'>
+        <div class='col-sm-12 alert alert-warning'>
+          <span class='mr-2'>Oops, You selected</span>
+          <span *ngFor='let selectedLanguage of selectedLanguages?.base;let index = index'>
+            <strong *ngIf='selectedLanguages.base.length - 1 === index'>{{selectedLanguage.name}}</strong>
+            <strong *ngIf='selectedLanguages.base.length - 1 !==  index'>{{selectedLanguage.name + ', '}}</strong>
           </span>
-          <span class="ml-2">as your base languages, but unfortunately we dont have any information with any of the selected
+          <span class='ml-2'>as your base languages, but unfortunately we dont have any information with any of the selected
           languages. The good news is, you can be the first one who is adding words.</span>
-          <span *ngIf="isLoggedIn()">
+          <span *ngIf='isLoggedIn()'>
             <span> For adding your custom words </span>
-            <button class="m-2 btn btn-info" routerLink="../prepare-adding-words">Click here</button>
+            <button class='m-2 btn btn-info' routerLink='../prepare-adding-words'>Click here</button>
           </span>
-          <span *ngIf="!isLoggedIn()">
+          <span *ngIf='!isLoggedIn()'>
             <span>For adding your custom words you should </span>
-            <button class="m-2 btn btn-info">Login</button>
+            <button class='m-2 btn btn-info'>Login</button>
             or
-            <button class="m-2 btn btn-info">Register</button>
+            <button class='m-2 btn btn-info'>Register</button>
           </span>
         </div>
       </div>
-      <div *ngFor="let gameMenu of gameMenus" [id]="gameMenu.id">
-        <div class="header-container row">
-          <div class="col-sm-12">
-            {{gameMenu.name}}
-          </div>
-        </div>
-        <div class="row body-container">
-          <div class="col-sm-1 logo-container" [ngStyle]="setBackgroundImage(gameMenu.image)"></div>
-          <div class="col-sm-9 gif-container">GIF WILL BE HERE</div>
-          <div class="col-sm-2 play-button-error-container" *ngIf="!inquiryResult.isLoading && inquiryResult.hasError">
-            <span>Could not get data from server!</span>
-          </div>
-          <div class="col-sm-2 play-button-container" *ngIf="gameMenu.isDesigned && !inquiryResult.hasError" [routerLink]="gameMenu.route">
-            <span class="lets-go-text">Lets go!</span>
-          </div>
-          <div class="col-sm-2 coming-soon-button-container" *ngIf="!gameMenu.isDesigned && !inquiryResult.hasError">
-            <span class="lets-go-text">Coming soon!</span>
+      <div class='row'>
+        <div *ngFor='let gameMenu of gameMenus' [id]='gameMenu.id' class='col-sm-6'>
+          <div class='game-container'>
+            <div class='header-container'>
+              <div class='header-text-container'>
+                <img class='logo-container' [src]='gameMenu.image'>
+                {{gameMenu.name}}
+              </div>
+
+              <div class='header-action-container'>
+                Lets Play!
+              </div>
+            </div>
+            <div class='animation-container'>
+              <div class='gif-container'>
+                <img class='gif-item' [src]='gameMenu.gifUrl'>
+              </div>
+            </div>
           </div>
         </div>
       </div>
