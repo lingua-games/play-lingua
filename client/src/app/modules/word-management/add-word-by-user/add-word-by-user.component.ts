@@ -17,6 +17,7 @@ import { ChapterModel } from '../../../core/models/chapter.model';
 import { AddBookDialogComponent } from '../add-book-dialog/add-book-dialog.component';
 import { AddChapterDialogComponent } from '../add-chapter-dialog/add-chapter-dialog.component';
 import { Router } from '@angular/router';
+import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 
 @Component({
   selector: 'app-add-word-by-user',
@@ -92,12 +93,12 @@ export class AddWordByUserComponent implements OnInit {
   }
 
   checkDraft(): void {
-    if (!localStorage.getItem('lingua-add-word-draft')) {
+    if (!localStorage.getItem(LocalStorageHelper.addWordDraft)) {
       return;
     }
 
     const draft = JSON.parse(
-      localStorage.getItem('lingua-add-word-draft')
+      localStorage.getItem(LocalStorageHelper.addWordDraft)
     ) as AddWordFormModel;
 
     this.baseLanguage.setValue(draft.baseLanguage);
@@ -233,7 +234,7 @@ export class AddWordByUserComponent implements OnInit {
 
   getBaseAndTargetLanguages(): void {
     const selectedLanguages = JSON.parse(
-      localStorage.getItem('lingua-selected-languages')
+      localStorage.getItem(LocalStorageHelper.selectedLanguages)
     );
     this.baseLanguages = selectedLanguages.base;
     this.targetLanguages = selectedLanguages.target;
@@ -359,7 +360,7 @@ export class AddWordByUserComponent implements OnInit {
     this.bookChapterService.submitForm(this.formData).subscribe(
       (res: boolean) => {
         this.isPageLoading = false;
-        localStorage.removeItem('lingua-add-word-draft');
+        localStorage.removeItem(LocalStorageHelper.addWordDraft);
         this.router.navigate(['/word-management/list']);
       },
       (error: string) => {
@@ -379,7 +380,7 @@ export class AddWordByUserComponent implements OnInit {
   saveToDraft(): void {
     this.saveInformationInfoForm();
     localStorage.setItem(
-      'lingua-add-word-draft',
+      LocalStorageHelper.addWordDraft,
       JSON.stringify(this.formData)
     );
     this.notificationService.showMessage(

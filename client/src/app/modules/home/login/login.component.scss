@@ -3,3 +3,11 @@
   max-height: 50vh;
   width: 30%;
 }
+
+.btn-back-container {
+  display: inline-block;
+
+  button {
+    float: left;
+  }
+}

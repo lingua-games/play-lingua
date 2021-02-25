@@ -15,6 +15,7 @@ import {
 import { GameStartInformation } from '../../../../core/models/game-start-information';
 import { ScoreStoreInterface } from '../../../../core/models/score-store.interface';
 import { GameInformationInterface } from '../../../../core/models/game-information.interface';
+import { LocalStorageHelper } from '../../../../core/models/local-storage.enum';
 
 @Component({
   selector: 'app-start-game-dialog',
@@ -34,7 +35,7 @@ export class StartGameDialogComponent implements OnInit {
   defaultLanguages: {
     defaultBaseLanguage: LanguageModel;
     defaultTargetLanguage: LanguageModel;
-  } = JSON.parse(localStorage.getItem('lingua-default-languages'));
+  } = JSON.parse(localStorage.getItem(LocalStorageHelper.defaultLanguages));
 
   constructor(
     private bookChapterService: BookChapterService,

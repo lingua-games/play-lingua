@@ -39,7 +39,6 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpPost("setDefaultSelection")]
-        [Authorize]
         public ActionResult<SelectedLanguages> SetDefaultSelection([FromBody] SelectDefaultLanguageModel selectDefaultLanguageModel)
         {
             var userId = GetUser().Id;

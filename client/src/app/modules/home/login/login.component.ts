@@ -3,7 +3,8 @@ import { SecurityService } from '../../../core/service/security.service';
 import { UserModel } from '../../../core/models/user.model';
 import { LoginResultModel } from '../../../core/models/login-result.model';
 import { Router } from '@angular/router';
-import { LanguageModel } from '../../../core/models/language.model';
+import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
+import { Local } from 'protractor/built/driverProviders';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,7 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (localStorage.getItem('lingua-token')) {
+    if (localStorage.getItem(LocalStorageHelper.token)) {
       this.router.navigate(['game-menu']);
     }
   }
@@ -43,9 +44,9 @@ export class LoginComponent implements OnInit {
     this.securityService.login(this.user).subscribe(
       (res: LoginResultModel) => {
         if (res.isLogin) {
-          localStorage.setItem('lingua-token', res.token);
+          this.securityService.setToken(res.token);
           localStorage.setItem(
-            'lingua-total-score',
+            LocalStorageHelper.totalScore,
             res.user.totalScore.toString()
           );
           const defaultBaseLanguageFromAPI = JSON.parse(
@@ -56,7 +57,7 @@ export class LoginComponent implements OnInit {
           ).find((x) => x.id === res.user.defaultTargetLanguage);
 
           localStorage.setItem(
-            'lingua-default-languages',
+            LocalStorageHelper.defaultLanguages,
             JSON.stringify({
               defaultBaseLanguage: defaultBaseLanguageFromAPI,
               defaultTargetLanguage: defaultTargetLanguageFromAPI,
@@ -64,7 +65,7 @@ export class LoginComponent implements OnInit {
           );
           if (res.user.isSelectedLanguages) {
             localStorage.setItem(
-              'lingua-selected-languages',
+              LocalStorageHelper.selectedLanguages,
               `{ "base": ${res.user.baseLanguages}, "target": ${res.user.targetLanguages} }`
             );
           }

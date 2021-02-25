@@ -6,6 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NotificationService } from '../../../../core/service/notification.service';
+import { LocalStorageHelper } from '../../../../core/models/local-storage.enum';
 
 describe('StartGameDialogComponent', () => {
   let component: StartGameDialogComponent;
@@ -16,7 +17,7 @@ describe('StartGameDialogComponent', () => {
     mockNotificationService = jasmine.createSpyObj(['showMessage']);
     mockMatDialogRef = jasmine.createSpyObj(['close']);
     localStorage.setItem(
-      'lingua-default-languages',
+      LocalStorageHelper.defaultLanguages,
       `{"defaultBaseLanguage":{"id":123,"code":"fa","name":"Persian","nativeName":"فارسی","fullName":"Persian - فارسی"},"defaultTargetLanguage":{"id":38,"code":"nl","name":"Dutch","nativeName":"Nederlands, Vlaams","fullName":"Dutch - Nederlands, Vlaams"}}`
     );
 

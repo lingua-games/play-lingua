@@ -7,6 +7,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 
 describe('AddWordByUserComponent', () => {
   let component: AddWordByUserComponent;
@@ -40,7 +41,7 @@ describe('AddWordByUserComponent', () => {
     component = fixture.componentInstance;
 
     localStorage.setItem(
-      'lingua-selected-languages',
+      LocalStorageHelper.selectedLanguages,
       `{ "base": [], "target": [] }`
     );
 

@@ -8,6 +8,8 @@ import {
 import { Router } from '@angular/router';
 import { SecurityService } from '../../../core/service/security.service';
 import { LoginResultModel } from '../../../core/models/login-result.model';
+import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-register',
@@ -23,13 +25,18 @@ export class RegisterComponent implements OnInit {
     private userService: UserService,
     private notificationService: NotificationService,
     private router: Router,
-    private securityService: SecurityService
+    private securityService: SecurityService,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
-    if (localStorage.getItem('lingua-token')) {
+    if (localStorage.getItem(LocalStorageHelper.token)) {
       this.router.navigate(['game-menu']);
     }
+  }
+
+  back(): void {
+    this.location.back();
   }
 
   submit(): void {
@@ -78,11 +85,11 @@ export class RegisterComponent implements OnInit {
           Severity.success,
           'Success'
         );
-        localStorage.setItem('lingua-token', res.token);
-        localStorage.setItem('lingua-email', res.user.email);
+        this.securityService.setToken(res.token);
+        localStorage.setItem(LocalStorageHelper.email, res.user.email);
         if (res.user.defaultBaseLanguage && res.user.defaultTargetLanguage) {
           localStorage.setItem(
-            'lingua-default-languages',
+            LocalStorageHelper.defaultLanguages,
             `{defaultBaseLanguage: ${res.user.defaultBaseLanguage}, defaultBaseLanguage: ${res.user.defaultTargetLanguage} }`
           );
         }

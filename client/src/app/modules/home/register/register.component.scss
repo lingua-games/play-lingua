@@ -1,5 +1,16 @@
 .welcome-inner-main-container {
-  margin: -25vh auto 0 auto;
+  position: absolute;
+  top: -25vh;
+  left: 35%;
+  z-index: 1;
   max-height: 50vh;
   width: 30%;
+}
+
+.btn-back-container {
+  display: inline-block;
+
+  button {
+    float: left;
+  }
 }

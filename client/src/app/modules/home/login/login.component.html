@@ -1,4 +1,8 @@
 <form class="welcome-inner-main-container">
+  <div class='btn-back-container'>
+    <button pButton pRipple type="button" icon="pi pi-arrow-left" routerLink='../'
+            class="btn-back p-button-rounded p-button-info p-button-outlined"></button>
+  </div>
   <div class="form-group">
     <label for="inputEmail">Email address</label>
     <input type="email" class="form-control" id="inputEmail" name="inputEmail" aria-describedby="emailHelp" [(ngModel)]="user.email"
