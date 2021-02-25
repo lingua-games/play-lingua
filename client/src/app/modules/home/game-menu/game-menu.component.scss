@@ -1,10 +1,12 @@
 .welcome-inner-main-container {
-  margin-top: -45vh;
-  max-height: 80vh;
+  max-height: 102vh;
   overflow-y: auto;
   padding-top: 0;
   border-radius: 0;
   background-color: unset;
+  position: absolute;
+  top: -45vh;
+  z-index: 1;
 }
 
 .menu-container {
@@ -31,7 +33,6 @@
   text-align: center;
   vertical-align: middle;
   padding: 10px;
-  text-align: left;
 }
 
 .change-default-action {
@@ -55,79 +56,68 @@
 }
 
 .header-container {
-  text-align: center;
-  background-color: rgba(0, 0, 0, .2);
+  text-align: left;
+  background-color: rgba(0, 0, 0, .4);
   color: #FAF9F9;
+  display: flow-root;
 }
 
-.body-container {
-  height: 10vh;
-  background-color: white;
-  border-bottom-right-radius: 10px;
-  margin-bottom: 1rem;
-}
-
-.logo-container {
-  background-color: red;
-  height: 10vh;
-}
-
-.play-button-container {
-  height: 10vh;
-  position: relative;
-
-  transition: 1s;
+.header-action-container {
+  float: right;
   background-color: #53ceb8;
   border-color: #53ceb8;
   color: #fff;
+  padding: 1vh;
+  font-size: .7vw;
+  width: 20%;
+  text-align: center;
+  transition: 100ms;
 }
 
-.play-button-error-container {
-  height: 10vh;
-  position: relative;
-
+.header-coming-soon-action-container {
+  float: right;
   background-color: #53ceb8;
-  color: #FF0000;
-  padding-top: 10px;
-
-  span {
-    font-size: 1vw;
-  }
-}
-
-.coming-soon-button-container {
-  height: 10vh;
-  position: relative;
-
-  transition: 1s;
-  background-color: rgba(83, 206, 184, .5);
   border-color: #53ceb8;
   color: #fff;
+  padding: 1vh;
+  font-size: .7vw;
+  width: 20%;
+  text-align: center;
+  transition: 100ms;
 }
 
-.play-button-container:hover {
+.header-action-container:hover {
   cursor: pointer;
   background-color: #bee27b;
   border-color: #bee27b;
-
-  .lets-go-text {
-    font-size: 1.5vw;
-  }
+  font-size: 1vw;
 }
 
-.lets-go-text {
-  position: absolute;
-  left: 0;
-  top: 40%;
+.header-text-container {
+  float: left;
+  padding: .9vh;
   font-size: 1vw;
-  transition: 1s;
-  width: 100%;
-  text-align: center;
+}
+
+.game-container {
+  background-color: rgba(0, 0, 0, .2);
+  margin-bottom: 5%;
+}
+
+.gif-item {
+  width: 30vw;
+  height: 15vw;
+  box-shadow: 0.5rem 0.3rem 2rem black;
 }
 
 .gif-container {
   text-align: center;
-  padding-top: 3vh;
+  padding: 1vh;
+}
+
+.logo-container {
+  height: 2vh;
+  border-radius: 50%;
 }
 
 ::ng-deep .select-language-dialog > mat-dialog-container {

@@ -4,4 +4,5 @@ export class GameMenu {
   route?: string;
   isDesigned: boolean;
   id?: string;
+  gifUrl: string;
 }
