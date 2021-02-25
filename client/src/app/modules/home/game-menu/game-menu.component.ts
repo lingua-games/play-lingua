@@ -70,6 +70,11 @@ export class GameMenuComponent implements OnInit {
     }
   }
 
+  changeDefaultLanguages(): void {
+    localStorage.removeItem('lingua-default-languages');
+    this.openSelectDefaultLanguageDialog();
+  }
+
   openSelectDefaultLanguageDialog(): void {
     const dialogRef = this.dialog.open(SelectDefaultLanguageDialogComponent, {
       disableClose: true,

@@ -74,6 +74,18 @@
   transition: 100ms;
 }
 
+.header-coming-soon-action-container {
+  float: right;
+  background-color: #53ceb8;
+  border-color: #53ceb8;
+  color: #fff;
+  padding: 1vh;
+  font-size: .7vw;
+  width: 20%;
+  text-align: center;
+  transition: 100ms;
+}
+
 .header-action-container:hover {
   cursor: pointer;
   background-color: #bee27b;
@@ -84,6 +96,7 @@
 .header-text-container {
   float: left;
   padding: .9vh;
+  font-size: 1vw;
 }
 
 .game-container {
