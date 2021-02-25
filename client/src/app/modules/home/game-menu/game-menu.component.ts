@@ -94,7 +94,7 @@ export class GameMenuComponent implements OnInit {
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem(LocalStorageHelper.token);
+    return this.securityService.isLoggedIn();
   }
 
   navigateToEditLanguages(): void {

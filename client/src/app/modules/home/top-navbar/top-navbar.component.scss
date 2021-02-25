@@ -1,3 +1,6 @@
+:host {
+  margin: 0;
+}
 .full-size-main-container {
   padding: 1vh;
   font-size: .8vw;
@@ -34,7 +37,19 @@
     transition: 500ms;
   }
 
-  .log-out-item:hover {
+  .log-in-register-container {
+    color: lightgray;
+
+    text-align: right;
+  }
+
+  .log-in-register-item {
+    display: inline-block;
+    transition: 500ms;
+    padding: 0.2vh;
+  }
+
+  .log-out-item:hover, .log-in-register-item:hover {
     cursor: pointer;
     color: #273746;
     background-color: lightgray;
