@@ -3,8 +3,8 @@
     <div class='menu-container col-sm-2 ml-5 mr-5'>
       <div class='greeting-container'>
 
-        <div class='action-menu-container mt-2' routerLink='../profile'>Manage profile</div>
-        <hr>
+        <div class='action-menu-container mt-2' routerLink='../profile'  *ngIf='isLoggedIn()'>Manage profile</div>
+        <hr  *ngIf='isLoggedIn()'>
         <div class='action-menu-container' (click)='navigateToEditLanguages()' *ngIf='isLoggedIn()'>Change languages
         </div>
         <div class='action-menu-container mt-2' routerLink='../login' *ngIf='!isLoggedIn()'>Login</div>
@@ -13,7 +13,6 @@
         <div class='action-menu-container mt-2'>Score board</div>
         <div class='action-menu-container mt-2' routerLink='../word-management' *ngIf='isLoggedIn()'>Manage your words
         </div>
-        <div class='action-menu-container mt-2' *ngIf='isLoggedIn()' (click)='logout()'>Log out</div>
         <hr>
         <div class='description-menu-container mt-2'
              *ngIf='defaultSelectedLanguages.defaultTargetLanguage && defaultSelectedLanguages.defaultBaseLanguage'>
@@ -42,9 +41,9 @@
           </span>
           <span *ngIf='!isLoggedIn()'>
             <span>For adding your custom words you should </span>
-            <button class='m-2 btn btn-info'>Login</button>
+            <button class='m-2 btn btn-info' routerLink='../login'>Login</button>
             or
-            <button class='m-2 btn btn-info'>Register</button>
+            <button class='m-2 btn btn-info' routerLink='../register'>Register</button>
           </span>
         </div>
       </div>

@@ -7,6 +7,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NotificationService } from '../../../core/service/notification.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 
 describe('GameMenuComponent', () => {
   let component: GameMenuComponent;
@@ -54,7 +55,7 @@ describe('GameMenuComponent', () => {
   it('should create', () => {
     component.selectedLanguages = { bas: [1] } as any;
     localStorage.setItem(
-      'lingua-default-languages',
+      LocalStorageHelper.defaultLanguages,
       `{"defaultBaseLanguage":{"id":123,"code":"fa","name":"Persian","nativeName":"فارسی","fullName":"Persian - فارسی"},"defaultTargetLanguage":{"id":38,"code":"nl","name":"Dutch","nativeName":"Nederlands, Vlaams","fullName":"Dutch - Nederlands, Vlaams"}}`
     );
 

@@ -10,6 +10,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { SelectedLanguageService } from '../../../core/service/selected-language.service';
 import { SelectedLanguageModel } from '../../../core/models/selected-language.model';
+import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 
 @Component({
   selector: 'app-choose-languages',
@@ -32,7 +33,7 @@ export class ChooseLanguagesComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.activatedRoute.snapshot.paramMap.get('mode')) {
-      if (localStorage.getItem('lingua-selected-languages')) {
+      if (localStorage.getItem(LocalStorageHelper.selectedLanguages)) {
         this.router.navigate(['./game-menu']);
         return;
       }
@@ -72,7 +73,7 @@ export class ChooseLanguagesComponent implements OnInit {
 
   fillDataInModels(): void {
     const storedData = JSON.parse(
-      localStorage.getItem('lingua-selected-languages')
+      localStorage.getItem(LocalStorageHelper.selectedLanguages)
     );
     if (storedData && storedData.base) {
       this.baseLanguages = [];
@@ -103,7 +104,7 @@ export class ChooseLanguagesComponent implements OnInit {
   }
 
   submit(): void {
-    localStorage.removeItem('lingua-selected-languages');
+    localStorage.removeItem(LocalStorageHelper.selectedLanguages);
     this.formValidation = [];
     if (this.baseLanguages.length === 0) {
       this.formValidation.push({
@@ -145,7 +146,7 @@ export class ChooseLanguagesComponent implements OnInit {
       return;
     }
 
-    if (localStorage.getItem('lingua-token')) {
+    if (localStorage.getItem(LocalStorageHelper.token)) {
       this.allLanguages.setLoading(true);
       this.saveToBackend();
     } else {
@@ -178,7 +179,7 @@ export class ChooseLanguagesComponent implements OnInit {
   saveToLocalStorage(): void {
     // TODO: USER SHOULD NOT BE ALLOWED TO CHANGE HIS DEFAULT LANGUAGE
     localStorage.setItem(
-      'lingua-selected-languages',
+      LocalStorageHelper.selectedLanguages,
       JSON.stringify({
         base: this.baseLanguages.map((x: LanguageModel) => {
           return {

@@ -7,6 +7,7 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { LocalStorageHelper } from '../models/local-storage.enum';
 
 @Injectable()
 export class TokenIntercept implements HttpInterceptor {
@@ -16,7 +17,9 @@ export class TokenIntercept implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     request = request.clone({
       setHeaders: {
-        Authorization: `Bearer ${localStorage.getItem('lingua-token')}`,
+        Authorization: `Bearer ${localStorage.getItem(
+          LocalStorageHelper.token
+        )}`,
       },
     });
     return next.handle(request);

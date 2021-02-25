@@ -6,6 +6,9 @@ import {
 } from '../../service/notification.service';
 import { SelectedLanguageService } from '../../service/selected-language.service';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Local } from 'protractor/built/driverProviders';
+import { LocalStorageHelper } from '../../models/local-storage.enum';
+import { SetDefaultLanguageModel } from '../../models/set-default-language.model';
 
 @Component({
   selector: 'app-select-default-language-dialog',
@@ -16,10 +19,7 @@ export class SelectDefaultLanguageDialogComponent implements OnInit {
   baseLanguages: LanguageModel[] = [];
   targetLanguages: LanguageModel[] = [];
   isLoading: boolean;
-  selectedItems: {
-    defaultBaseLanguage: LanguageModel;
-    defaultTargetLanguage: LanguageModel;
-  } = {} as any;
+  selectedItems: SetDefaultLanguageModel = new SetDefaultLanguageModel();
 
   constructor(
     private notificationService: NotificationService,
@@ -29,7 +29,7 @@ export class SelectDefaultLanguageDialogComponent implements OnInit {
 
   ngOnInit(): void {
     const selectedLanguages = JSON.parse(
-      localStorage.getItem('lingua-selected-languages')
+      localStorage.getItem(LocalStorageHelper.selectedLanguages)
     );
 
     if (selectedLanguages) {
@@ -58,10 +58,10 @@ export class SelectDefaultLanguageDialogComponent implements OnInit {
     this.languageService.setDefaultLanguage(this.selectedItems).subscribe(
       (red: any) => {
         localStorage.setItem(
-          'lingua-default-languages',
+          LocalStorageHelper.defaultLanguages,
           JSON.stringify(this.selectedItems)
         );
-        this.dialogRef.close();
+        this.dialogRef.close(this.selectedItems);
       },
       (error: any) => {
         this.isLoading = false;

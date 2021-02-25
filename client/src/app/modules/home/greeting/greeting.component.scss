@@ -3,13 +3,14 @@ div {
 }
 
 button {
-  width: 30%;
+  width: 60%;
 }
 
 .welcome-inner-main-container {
+  position: absolute;
   text-align: center;
-  margin-left: 25%;
-  margin-top: -20vh;
-  max-height: 50vh;
-  width: 50%;
+  left: 35%;
+  top: -20vh;
+  width: 30%;
+  z-index: 1;
 }

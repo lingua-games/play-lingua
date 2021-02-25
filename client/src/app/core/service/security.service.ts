@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
 import { MatDialog } from '@angular/material/dialog';
 import { SecurityTokenInterface } from '../models/security-token.interface';
+import { LocalStorageHelper } from '../models/local-storage.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +24,7 @@ export class SecurityService {
   ) {}
 
   setToken(token: string): void {
-    localStorage.setItem('lingua-token', token);
+    localStorage.setItem(LocalStorageHelper.token, token);
   }
 
   getTotalScore(): Observable<string> {
@@ -32,36 +33,36 @@ export class SecurityService {
 
   setTotalScore(newScore: string): void {
     if (newScore === '0') {
-      this.storageSub.next(localStorage.getItem('lingua-total-score'));
+      this.storageSub.next(localStorage.getItem(LocalStorageHelper.totalScore));
       return;
     }
     // TODO: THIS PART SHOULD BE IMPLEMENT AS NGRX INSTEAD OF RXJS
-    let totalScore = +localStorage.getItem('lingua-total-score');
+    let totalScore = +localStorage.getItem(LocalStorageHelper.totalScore);
     totalScore += +newScore;
     totalScore = Math.round(totalScore * 10) / 10;
-    localStorage.setItem('lingua-total-score', totalScore.toString());
+    localStorage.setItem(LocalStorageHelper.totalScore, totalScore.toString());
     this.storageSub.next(totalScore.toString());
   }
 
   initialTotalScore(score: string): void {
-    localStorage.setItem('lingua-total-score', score);
+    localStorage.setItem(LocalStorageHelper.totalScore, score);
     this.storageSub.next(score);
   }
 
   getTokenInformation(): SecurityTokenInterface {
-    if (localStorage.getItem('lingua-token') === 'null') {
+    if (localStorage.getItem(LocalStorageHelper.token) === 'null') {
       this.logoutOn401();
     }
-    if (!localStorage.getItem('lingua-token')) {
+    if (!localStorage.getItem(LocalStorageHelper.token)) {
       return {} as SecurityTokenInterface;
     }
     return jwt_decode(
-      localStorage.getItem('lingua-token')
+      localStorage.getItem(LocalStorageHelper.token)
     ) as SecurityTokenInterface;
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('lingua-token');
+    return !!localStorage.getItem(LocalStorageHelper.token);
   }
 
   login(user: UserModel): Observable<LoginResultModel> {
@@ -75,9 +76,9 @@ export class SecurityService {
 
   logoutOn401(): void {
     this.dialogRef.closeAll();
-    localStorage.removeItem('lingua-token');
-    localStorage.removeItem('lingua-email');
-    localStorage.removeItem('lingua-selected-languages');
+    localStorage.removeItem(LocalStorageHelper.token);
+    localStorage.removeItem(LocalStorageHelper.email);
+    localStorage.removeItem(LocalStorageHelper.selectedLanguages);
     this.router.navigate(['../login']).then();
   }
 }

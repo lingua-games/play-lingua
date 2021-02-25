@@ -15,6 +15,9 @@ import { SelectDefaultLanguageDialogComponent } from '../../../core/dialogs/sele
 import { Store } from '@ngrx/store';
 import { toggleNotification } from '../../../core/component/score-notification/state/score-notification.actions';
 import { NotificationState } from '../../../core/component/score-notification/state/score-notification.reducer';
+import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
+import { Local } from 'protractor/built/driverProviders';
+import { SetDefaultLanguageModel } from '../../../core/models/set-default-language.model';
 
 @Component({
   selector: 'app-game-menu',
@@ -27,10 +30,10 @@ export class GameMenuComponent implements OnInit {
     base: [],
     target: [],
   };
-  defaultSelectedLanguages: {
-    defaultBaseLanguage: LanguageModel;
-    defaultTargetLanguage: LanguageModel;
-  } = {} as any;
+  defaultSelectedLanguages: SetDefaultLanguageModel = {
+    defaultBaseLanguage: new LanguageModel(),
+    defaultTargetLanguage: new LanguageModel(),
+  };
   loadingFullPage: boolean;
   inquiryResult: ApiResult<boolean> = new ApiResult<boolean>();
 
@@ -45,33 +48,33 @@ export class GameMenuComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedLanguages = JSON.parse(
-      localStorage.getItem('lingua-selected-languages')
+      localStorage.getItem(LocalStorageHelper.selectedLanguages)
     );
     if (
       !this.selectedLanguages ||
       !this.selectedLanguages.base ||
       !this.selectedLanguages.target
     ) {
-      localStorage.removeItem('lingua-selected-languages');
+      localStorage.removeItem(LocalStorageHelper.selectedLanguages);
       this.router.navigate(['./choose-languages']);
       return;
     }
     this.getMenus();
 
-    if (!localStorage.getItem('lingua-default-languages')) {
+    if (!localStorage.getItem(LocalStorageHelper.defaultLanguages)) {
       this.loadingFullPage = true;
       this.openSelectDefaultLanguageDialog();
       return;
     } else {
       this.defaultSelectedLanguages = JSON.parse(
-        localStorage.getItem('lingua-default-languages')
+        localStorage.getItem(LocalStorageHelper.defaultLanguages)
       );
       this.getSelectedLanguagesInformation();
     }
   }
 
   changeDefaultLanguages(): void {
-    localStorage.removeItem('lingua-default-languages');
+    localStorage.removeItem(LocalStorageHelper.defaultLanguages);
     this.openSelectDefaultLanguageDialog();
   }
 
@@ -83,21 +86,19 @@ export class GameMenuComponent implements OnInit {
       panelClass: 'select-language-dialog',
     });
 
-    dialogRef.afterClosed().subscribe((res) => {
+    dialogRef.afterClosed().subscribe((res: SetDefaultLanguageModel) => {
       this.loadingFullPage = false;
-      this.defaultSelectedLanguages = JSON.parse(
-        localStorage.getItem('lingua-default-languages')
-      );
+      this.defaultSelectedLanguages = res;
       this.getSelectedLanguagesInformation();
     });
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('lingua-token');
+    return !!localStorage.getItem(LocalStorageHelper.token);
   }
 
   navigateToEditLanguages(): void {
-    this.router.navigate(['../choose-languages/edit']);
+    this.router.navigate(['../choose-languages/edit']).then();
   }
 
   logout(): void {
