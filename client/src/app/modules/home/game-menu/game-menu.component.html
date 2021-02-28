@@ -10,8 +10,7 @@
         <div class='action-menu-container' (click)='navigateToEditLanguages()' *ngIf='isLoggedIn()'>Change languages
         </div>
 
-        <div class='action-menu-container mt-2' *ngIf='isLoggedIn()'>Scores</div>
-        <div class='action-menu-container mt-2'>Score board</div>
+        <div class='action-menu-container mt-2' *ngIf='securityService.isGuest()'  (click)='navigateToChangeLanguage()'>Change language</div>
         <div class='action-menu-container mt-2' routerLink='../word-management' *ngIf='isLoggedIn()'>Manage your words
         </div>
         <hr>
