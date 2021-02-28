@@ -12,10 +12,10 @@
     <div class='log-out-item' (click)='logout()'>Log out</div>
   </div>
   <div class='log-out-container' *ngIf='!isLoggedIn()'>
-    <div class='log-in-register-container' (click)='logout()'>
-      <div class='log-in-register-item' (click)='logout()'>Register</div>
+    <div class='log-in-register-container'>
+      <div class='log-in-register-item' routerLink='../register'>Register</div>
       <span style='margin: 0 1vh'>OR</span>
-      <div class='log-in-register-item' (click)='logout()'>Login</div>
+      <div class='log-in-register-item' routerLink='../login'>Login</div>
     </div>
   </div>
 </div>

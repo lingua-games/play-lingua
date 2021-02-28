@@ -41,6 +41,10 @@ export class TopNavbarComponent implements OnInit {
     this.securityService.logout();
   }
 
+  navigateTo(url: string): void {
+    this.router.navigate([url]).then();
+  }
+
   isLoggedIn(): boolean {
     return this.securityService.isLoggedIn();
   }

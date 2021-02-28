@@ -56,8 +56,11 @@
                 <img class='logo-container' [src]='gameMenu.image'>
                 {{gameMenu.name}}
               </div>
-              <div *ngIf='gameMenu.isDesigned' class='header-action-container' [routerLink]='gameMenu.route'>
+              <div *ngIf='gameMenu.isDesigned && inquiryResult.data' class='header-action-container' [routerLink]='gameMenu.route'>
                 Lets Play!
+              </div>
+              <div *ngIf='!inquiryResult.data && gameMenu.isDesigned' class='header-coming-soon-action-container'>
+                No data!
               </div>
               <div *ngIf='!gameMenu.isDesigned' class='header-coming-soon-action-container'>
                 Coming soon!
