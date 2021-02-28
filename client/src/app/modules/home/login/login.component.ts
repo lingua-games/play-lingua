@@ -4,7 +4,7 @@ import { UserModel } from '../../../core/models/user.model';
 import { LoginResultModel } from '../../../core/models/login-result.model';
 import { Router } from '@angular/router';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
-import { Local } from 'protractor/built/driverProviders';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -19,13 +19,18 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private securityService: SecurityService,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
     if (localStorage.getItem(LocalStorageHelper.token)) {
-      this.router.navigate(['game-menu']);
+      this.router.navigate(['game-menu']).then();
     }
+  }
+
+  back(): void {
+    this.location.back();
   }
 
   login(): void {
@@ -69,13 +74,13 @@ export class LoginComponent implements OnInit {
               `{ "base": ${res.user.baseLanguages}, "target": ${res.user.targetLanguages} }`
             );
           }
-          this.router.navigate(['../game-menu']);
+          this.router.navigate(['../game-menu']).then();
         } else {
           this.errorMessage = res.message;
         }
         this.isLoading = false;
       },
-      (error: string) => {
+      () => {
         this.isLoading = false;
       }
     );

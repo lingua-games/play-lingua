@@ -35,7 +35,9 @@ describe('GameMenuComponent', () => {
           provide: Router,
           useValue: {
             url: 'choose-languages',
-            navigate: jasmine.createSpy('navigate'),
+            navigate: jasmine
+              .createSpy('navigate')
+              .and.returnValue(Promise.resolve()),
           },
         },
       ],

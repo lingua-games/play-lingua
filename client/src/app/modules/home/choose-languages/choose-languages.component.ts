@@ -11,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SelectedLanguageService } from '../../../core/service/selected-language.service';
 import { SelectedLanguageModel } from '../../../core/models/selected-language.model';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
+import { SecurityService } from '../../../core/service/security.service';
 
 @Component({
   selector: 'app-choose-languages',
@@ -28,7 +29,8 @@ export class ChooseLanguagesComponent implements OnInit {
     private notificationService: NotificationService,
     private router: Router,
     private selectedLanguageService: SelectedLanguageService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private securityService: SecurityService
   ) {}
 
   ngOnInit(): void {
@@ -39,6 +41,10 @@ export class ChooseLanguagesComponent implements OnInit {
       }
     }
     this.getLanguages();
+  }
+
+  isLoggedIn(): boolean {
+    return this.securityService.isLoggedIn();
   }
 
   navigateBack(): void {
@@ -146,7 +152,7 @@ export class ChooseLanguagesComponent implements OnInit {
       return;
     }
 
-    if (localStorage.getItem(LocalStorageHelper.token)) {
+    if (this.securityService.isLoggedIn()) {
       this.allLanguages.setLoading(true);
       this.saveToBackend();
     } else {
@@ -155,7 +161,7 @@ export class ChooseLanguagesComponent implements OnInit {
       // It also can save to backend with finding a uniq number/string from
       // user computer and fetch data with found id later for this user.
       this.saveToLocalStorage();
-      this.router.navigate(['./game-menu']);
+      this.router.navigate(['./game-menu']).then();
     }
   }
 
@@ -168,7 +174,7 @@ export class ChooseLanguagesComponent implements OnInit {
       (res: SelectedLanguageModel) => {
         this.saveToLocalStorage();
         this.allLanguages.setLoading(false);
-        this.router.navigate(['./game-menu']);
+        this.router.navigate(['./game-menu']).then();
       },
       (error: string) => {
         this.allLanguages.setLoading(false);
@@ -178,22 +184,32 @@ export class ChooseLanguagesComponent implements OnInit {
 
   saveToLocalStorage(): void {
     // TODO: USER SHOULD NOT BE ALLOWED TO CHANGE HIS DEFAULT LANGUAGE
-    localStorage.setItem(
-      LocalStorageHelper.selectedLanguages,
-      JSON.stringify({
-        base: this.baseLanguages.map((x: LanguageModel) => {
-          return {
-            id: x.id,
-            name: x.name,
-          };
-        }),
-        target: this.targetLanguages.map((x: LanguageModel) => {
-          return {
-            id: x.id,
-            name: x.name,
-          };
-        }),
-      })
-    );
+    if (this.securityService.isLoggedIn()) {
+      localStorage.setItem(
+        LocalStorageHelper.selectedLanguages,
+        JSON.stringify({
+          base: this.baseLanguages.map((x: LanguageModel) => {
+            return {
+              id: x.id,
+              name: x.name,
+            };
+          }),
+          target: this.targetLanguages.map((x: LanguageModel) => {
+            return {
+              id: x.id,
+              name: x.name,
+            };
+          }),
+        })
+      );
+    } else {
+      localStorage.setItem(
+        LocalStorageHelper.selectedLanguages,
+        JSON.stringify({
+          base: [this.baseLanguages],
+          target: [this.targetLanguages],
+        })
+      );
+    }
   }
 }

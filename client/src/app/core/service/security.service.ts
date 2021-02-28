@@ -65,6 +65,10 @@ export class SecurityService {
     return !!localStorage.getItem(LocalStorageHelper.token);
   }
 
+  isGuest(): boolean {
+    return !!localStorage.getItem(LocalStorageHelper.isGuest);
+  }
+
   login(user: UserModel): Observable<LoginResultModel> {
     return this.http.post<LoginResultModel>(this.authUrl, user);
   }

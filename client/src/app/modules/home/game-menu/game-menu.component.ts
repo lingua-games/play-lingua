@@ -42,7 +42,7 @@ export class GameMenuComponent implements OnInit {
     private basicInformationService: BasicInformationService,
     private wordService: WordService,
     private notificationService: NotificationService,
-    private securityService: SecurityService,
+    public securityService: SecurityService,
     private dialog: MatDialog
   ) {}
 
@@ -56,11 +56,24 @@ export class GameMenuComponent implements OnInit {
       !this.selectedLanguages.target
     ) {
       localStorage.removeItem(LocalStorageHelper.selectedLanguages);
-      this.router.navigate(['./choose-languages']);
+      this.router.navigate(['./choose-languages']).then();
       return;
     }
     this.getMenus();
 
+    if (
+      this.securityService.isGuest() &&
+      !localStorage.getItem(LocalStorageHelper.defaultLanguages)
+    ) {
+      const valueToSave = {
+        defaultBaseLanguage: this.selectedLanguages.base[0],
+        defaultTargetLanguage: this.selectedLanguages.target[0],
+      };
+      localStorage.setItem(
+        LocalStorageHelper.defaultLanguages,
+        JSON.stringify(valueToSave)
+      );
+    }
     if (!localStorage.getItem(LocalStorageHelper.defaultLanguages)) {
       this.loadingFullPage = true;
       this.openSelectDefaultLanguageDialog();
@@ -71,6 +84,12 @@ export class GameMenuComponent implements OnInit {
       );
       this.getSelectedLanguagesInformation();
     }
+  }
+
+  navigateToChangeLanguage(): void {
+    localStorage.removeItem(LocalStorageHelper.defaultLanguages);
+    localStorage.removeItem(LocalStorageHelper.selectedLanguages);
+    this.router.navigate(['../choose-languages']).then();
   }
 
   changeDefaultLanguages(): void {

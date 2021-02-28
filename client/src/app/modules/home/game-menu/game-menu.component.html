@@ -10,13 +10,12 @@
         <div class='action-menu-container' (click)='navigateToEditLanguages()' *ngIf='isLoggedIn()'>Change languages
         </div>
 
-        <div class='action-menu-container mt-2' *ngIf='isLoggedIn()'>Scores</div>
-        <div class='action-menu-container mt-2'>Score board</div>
+        <div class='action-menu-container mt-2' *ngIf='securityService.isGuest()'  (click)='navigateToChangeLanguage()'>Change language</div>
         <div class='action-menu-container mt-2' routerLink='../word-management' *ngIf='isLoggedIn()'>Manage your words
         </div>
-        <hr>
+        <hr *ngIf='securityService.isLoggedIn()'>
         <div class='description-menu-container mt-2'
-             *ngIf='defaultSelectedLanguages.defaultTargetLanguage && defaultSelectedLanguages.defaultBaseLanguage'>
+             *ngIf='defaultSelectedLanguages.defaultTargetLanguage && defaultSelectedLanguages.defaultBaseLanguage && securityService.isLoggedIn()'>
           I know
           <strong>{{defaultSelectedLanguages.defaultBaseLanguage.name}}</strong>
           and I want to learn
@@ -56,8 +55,11 @@
                 <img class='logo-container' [src]='gameMenu.image'>
                 {{gameMenu.name}}
               </div>
-              <div *ngIf='gameMenu.isDesigned' class='header-action-container' [routerLink]='gameMenu.route'>
+              <div *ngIf='gameMenu.isDesigned && inquiryResult.data' class='header-action-container' [routerLink]='gameMenu.route'>
                 Lets Play!
+              </div>
+              <div *ngIf='!inquiryResult.data && gameMenu.isDesigned' class='header-coming-soon-action-container'>
+                No data!
               </div>
               <div *ngIf='!gameMenu.isDesigned' class='header-coming-soon-action-container'>
                 Coming soon!
