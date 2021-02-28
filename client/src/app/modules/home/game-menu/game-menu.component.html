@@ -13,9 +13,9 @@
         <div class='action-menu-container mt-2' *ngIf='securityService.isGuest()'  (click)='navigateToChangeLanguage()'>Change language</div>
         <div class='action-menu-container mt-2' routerLink='../word-management' *ngIf='isLoggedIn()'>Manage your words
         </div>
-        <hr>
+        <hr *ngIf='securityService.isLoggedIn()'>
         <div class='description-menu-container mt-2'
-             *ngIf='defaultSelectedLanguages.defaultTargetLanguage && defaultSelectedLanguages.defaultBaseLanguage'>
+             *ngIf='defaultSelectedLanguages.defaultTargetLanguage && defaultSelectedLanguages.defaultBaseLanguage && securityService.isLoggedIn()'>
           I know
           <strong>{{defaultSelectedLanguages.defaultBaseLanguage.name}}</strong>
           and I want to learn

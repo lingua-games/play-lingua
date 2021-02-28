@@ -42,7 +42,7 @@ export class GameMenuComponent implements OnInit {
     private basicInformationService: BasicInformationService,
     private wordService: WordService,
     private notificationService: NotificationService,
-    private securityService: SecurityService,
+    public securityService: SecurityService,
     private dialog: MatDialog
   ) {}
 
