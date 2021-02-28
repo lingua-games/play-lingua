@@ -18,6 +18,10 @@ export class TopNavbarComponent implements OnInit {
   showFullSize = true;
   totalScore: string;
   ngOnInit(): void {
+    if (this.securityService.isGuest()) {
+      this.totalScore = ' - ';
+      return;
+    }
     this.securityService.getTotalScore().subscribe(
       (res: string) => {
         if (res !== 'loading') {
@@ -35,17 +39,5 @@ export class TopNavbarComponent implements OnInit {
     return this.securityService.isLoggedIn()
       ? `Welcome, ${this.securityService.getTokenInformation().displayName}`
       : 'Welcome, guest';
-  }
-
-  logout(): void {
-    this.securityService.logout();
-  }
-
-  navigateTo(url: string): void {
-    this.router.navigate([url]).then();
-  }
-
-  isLoggedIn(): boolean {
-    return this.securityService.isLoggedIn();
   }
 }
