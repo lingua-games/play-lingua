@@ -19,6 +19,7 @@ export class GreetingComponent implements OnInit {
   playGuest(): void {
     localStorage.setItem(LocalStorageHelper.isGuest, 'true');
     localStorage.removeItem(LocalStorageHelper.selectedLanguages);
+    localStorage.removeItem(LocalStorageHelper.defaultLanguages);
     this.router.navigate(['choose-languages']).then();
   }
 }

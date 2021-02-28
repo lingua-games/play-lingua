@@ -1,4 +1,6 @@
-<div class='welcome-inner-main-container' appLoading [loadingFlag]='loadingFullPage'>
+<div class='welcome-inner-main-container-game-menu' appLoading [loadingFlag]='loadingFullPage'>
+  <app-top-navbar class='navbar-container'></app-top-navbar>
+  <br>
   <div class='row'>
     <div class='menu-container col-sm-2 ml-5 mr-5'>
       <div class='greeting-container'>
@@ -7,8 +9,7 @@
         <hr  *ngIf='isLoggedIn()'>
         <div class='action-menu-container' (click)='navigateToEditLanguages()' *ngIf='isLoggedIn()'>Change languages
         </div>
-        <div class='action-menu-container mt-2' routerLink='../login' *ngIf='!isLoggedIn()'>Login</div>
-        <div class='action-menu-container mt-2' routerLink='../register' *ngIf='!isLoggedIn()'>Register</div>
+
         <div class='action-menu-container mt-2' *ngIf='isLoggedIn()'>Scores</div>
         <div class='action-menu-container mt-2'>Score board</div>
         <div class='action-menu-container mt-2' routerLink='../word-management' *ngIf='isLoggedIn()'>Manage your words

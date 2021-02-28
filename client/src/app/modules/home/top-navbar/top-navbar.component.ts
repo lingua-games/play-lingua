@@ -40,4 +40,8 @@ export class TopNavbarComponent implements OnInit {
   logout(): void {
     this.securityService.logout();
   }
+
+  isLoggedIn(): boolean {
+    return this.securityService.isLoggedIn();
+  }
 }

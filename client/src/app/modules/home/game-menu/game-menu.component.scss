@@ -1,12 +1,15 @@
-.welcome-inner-main-container {
+.welcome-inner-main-container-game-menu {
   max-height: 102vh;
-  overflow-y: auto;
   padding-top: 0;
+
   border-radius: 0;
   background-color: unset;
   position: absolute;
-  top: -45vh;
+  top: -50vh;
+  left: 15px;
+  right: 0;
   z-index: 1;
+  overflow-x: hidden;
 }
 
 .menu-container {

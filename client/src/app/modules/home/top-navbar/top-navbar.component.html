@@ -4,12 +4,19 @@
   </div>
   <div class='total-score-container'>
     Total score <span *ngIf="totalScore !== 'loading'">{{totalScore}}</span>
-    <div *ngIf="totalScore === 'loading'" class="spinner-border text-primary" role="status">
-      <span class="sr-only">Loading...</span>
+    <div *ngIf="totalScore === 'loading'" class='spinner-border text-primary' role='status'>
+      <span class='sr-only'>Loading...</span>
     </div>
   </div>
-  <div class='log-out-container' >
+  <div class='log-out-container' *ngIf='isLoggedIn()'>
     <div class='log-out-item' (click)='logout()'>Log out</div>
+  </div>
+  <div class='log-out-container' *ngIf='!isLoggedIn()'>
+    <div class='log-in-register-container' (click)='logout()'>
+      <span class='log-in-register-item' (click)='logout()'>Register</span>
+      <span style='margin: 0 1vh'>OR</span>
+      <span class='log-in-register-item' (click)='logout()'>Login</span>
+    </div>
   </div>
 </div>
 
@@ -17,8 +24,8 @@
   <div class='total-score-container'>
     Total score
     <span *ngIf="totalScore !== 'loading'">{{totalScore}}</span>
-    <div *ngIf="totalScore === 'loading'" class="spinner-border text-primary" role="status">
-      <span class="sr-only">Loading...</span>
+    <div *ngIf="totalScore === 'loading'" class='spinner-border text-primary' role='status'>
+      <span class='sr-only'>Loading...</span>
     </div>
   </div>
 </div>
