@@ -8,10 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./top-navbar.component.scss'],
 })
 export class TopNavbarComponent implements OnInit {
-  constructor(
-    private securityService: SecurityService,
-    private router: Router
-  ) {
+  constructor(public securityService: SecurityService, private router: Router) {
     this.showFullSize = this.router.url.indexOf('games') < 0;
   }
 

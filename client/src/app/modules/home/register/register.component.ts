@@ -31,7 +31,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     if (localStorage.getItem(LocalStorageHelper.token)) {
-      this.router.navigate(['game-menu']);
+      this.router.navigate(['game-menu']).then();
     }
   }
 
@@ -67,7 +67,7 @@ export class RegisterComponent implements OnInit {
     }
     this.isLoading = true;
     this.userService.add(this.user).subscribe(
-      (res: UserModel) => {
+      () => {
         this.login();
       },
       (error: string) => {
@@ -94,9 +94,9 @@ export class RegisterComponent implements OnInit {
             `{defaultBaseLanguage: ${res.user.defaultBaseLanguage}, defaultBaseLanguage: ${res.user.defaultTargetLanguage} }`
           );
         }
-        this.router.navigate(['../game-menu']);
+        this.router.navigate(['../game-menu']).then();
       },
-      (error: string) => {}
+      () => {}
     );
   }
 }
