@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
+import { LocalStorageService } from '../../../core/service/local-storage.service';
 
 @Component({
   selector: 'app-greeting',
@@ -8,18 +9,21 @@ import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
   styleUrls: ['./greeting.component.scss'],
 })
 export class GreetingComponent implements OnInit {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private localStorageService: LocalStorageService
+  ) {}
 
   ngOnInit(): void {
-    if (localStorage.getItem(LocalStorageHelper.token)) {
+    if (this.localStorageService.load(LocalStorageHelper.token)) {
       this.router.navigate(['game-menu']).then();
     }
   }
 
   playGuest(): void {
-    localStorage.setItem(LocalStorageHelper.isGuest, 'true');
-    localStorage.removeItem(LocalStorageHelper.selectedLanguages);
-    localStorage.removeItem(LocalStorageHelper.defaultLanguages);
+    this.localStorageService.save(LocalStorageHelper.isGuest, 'true');
+    this.localStorageService.delete(LocalStorageHelper.selectedLanguages);
+    this.localStorageService.delete(LocalStorageHelper.defaultLanguages);
     this.router.navigate(['choose-languages']).then();
   }
 }

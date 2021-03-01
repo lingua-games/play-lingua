@@ -8,16 +8,18 @@ import {
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { LocalStorageHelper } from '../models/local-storage.enum';
+import { LocalStorageService } from '../service/local-storage.service';
 
 @Injectable()
 export class TokenIntercept implements HttpInterceptor {
+  constructor(private localStorageService: LocalStorageService) {}
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     request = request.clone({
       setHeaders: {
-        Authorization: `Bearer ${localStorage.getItem(
+        Authorization: `Bearer ${this.localStorageService.load(
           LocalStorageHelper.token
         )}`,
       },

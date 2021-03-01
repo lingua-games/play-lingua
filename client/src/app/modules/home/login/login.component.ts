@@ -5,6 +5,7 @@ import { LoginResultModel } from '../../../core/models/login-result.model';
 import { Router } from '@angular/router';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { Location } from '@angular/common';
+import { LocalStorageService } from '../../../core/service/local-storage.service';
 
 @Component({
   selector: 'app-login',
@@ -20,11 +21,12 @@ export class LoginComponent implements OnInit {
   constructor(
     private securityService: SecurityService,
     private router: Router,
-    private location: Location
+    private location: Location,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit(): void {
-    if (localStorage.getItem(LocalStorageHelper.token)) {
+    if (this.localStorageService.load(LocalStorageHelper.token)) {
       this.router.navigate(['game-menu']).then();
     }
   }
@@ -50,7 +52,7 @@ export class LoginComponent implements OnInit {
       (res: LoginResultModel) => {
         if (res.isLogin) {
           this.securityService.setToken(res.token);
-          localStorage.setItem(
+          this.localStorageService.save(
             LocalStorageHelper.totalScore,
             res.user.totalScore.toString()
           );
@@ -61,7 +63,8 @@ export class LoginComponent implements OnInit {
             res.user.targetLanguages
           ).find((x) => x.id === res.user.defaultTargetLanguage);
 
-          localStorage.setItem(
+          this.localStorageService.delete(LocalStorageHelper.isGuest);
+          this.localStorageService.save(
             LocalStorageHelper.defaultLanguages,
             JSON.stringify({
               defaultBaseLanguage: defaultBaseLanguageFromAPI,
@@ -69,7 +72,7 @@ export class LoginComponent implements OnInit {
             })
           );
           if (res.user.isSelectedLanguages) {
-            localStorage.setItem(
+            this.localStorageService.save(
               LocalStorageHelper.selectedLanguages,
               `{ "base": ${res.user.baseLanguages}, "target": ${res.user.targetLanguages} }`
             );

@@ -9,6 +9,7 @@ import jwt_decode from 'jwt-decode';
 import { MatDialog } from '@angular/material/dialog';
 import { SecurityTokenInterface } from '../models/security-token.interface';
 import { LocalStorageHelper } from '../models/local-storage.enum';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,11 +21,12 @@ export class SecurityService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private dialogRef: MatDialog
+    private dialogRef: MatDialog,
+    private localStorageService: LocalStorageService
   ) {}
 
   setToken(token: string): void {
-    localStorage.setItem(LocalStorageHelper.token, token);
+    this.localStorageService.save(LocalStorageHelper.token, token);
   }
 
   getTotalScore(): Observable<string> {
@@ -32,41 +34,51 @@ export class SecurityService {
   }
 
   setTotalScore(newScore: string): void {
+    if (this.localStorageService.load(LocalStorageHelper.isGuest)) {
+      return;
+    }
     if (newScore === '0') {
-      this.storageSub.next(localStorage.getItem(LocalStorageHelper.totalScore));
+      this.storageSub.next(
+        this.localStorageService.load(LocalStorageHelper.totalScore)
+      );
       return;
     }
     // TODO: THIS PART SHOULD BE IMPLEMENT AS NGRX INSTEAD OF RXJS
-    let totalScore = +localStorage.getItem(LocalStorageHelper.totalScore);
+    let totalScore = +this.localStorageService.load(
+      LocalStorageHelper.totalScore
+    );
     totalScore += +newScore;
     totalScore = Math.round(totalScore * 10) / 10;
-    localStorage.setItem(LocalStorageHelper.totalScore, totalScore.toString());
+    this.localStorageService.save(
+      LocalStorageHelper.totalScore,
+      totalScore.toString()
+    );
     this.storageSub.next(totalScore.toString());
   }
 
   initialTotalScore(score: string): void {
-    localStorage.setItem(LocalStorageHelper.totalScore, score);
+    this.localStorageService.save(LocalStorageHelper.totalScore, score);
     this.storageSub.next(score);
   }
 
   getTokenInformation(): SecurityTokenInterface {
-    if (localStorage.getItem(LocalStorageHelper.token) === 'null') {
+    if (this.localStorageService.load(LocalStorageHelper.token) === 'null') {
       this.logoutOn401();
     }
-    if (!localStorage.getItem(LocalStorageHelper.token)) {
+    if (!this.localStorageService.load(LocalStorageHelper.token)) {
       return {} as SecurityTokenInterface;
     }
     return jwt_decode(
-      localStorage.getItem(LocalStorageHelper.token)
+      this.localStorageService.load(LocalStorageHelper.token)
     ) as SecurityTokenInterface;
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem(LocalStorageHelper.token);
+    return !!this.localStorageService.load(LocalStorageHelper.token);
   }
 
   isGuest(): boolean {
-    return !!localStorage.getItem(LocalStorageHelper.isGuest);
+    return !!this.localStorageService.load(LocalStorageHelper.isGuest);
   }
 
   login(user: UserModel): Observable<LoginResultModel> {
@@ -74,15 +86,15 @@ export class SecurityService {
   }
 
   logout(): void {
-    localStorage.clear();
-    this.router.navigate(['../']);
+    this.localStorageService.clear();
+    this.router.navigate(['../']).then();
   }
 
   logoutOn401(): void {
     this.dialogRef.closeAll();
-    localStorage.removeItem(LocalStorageHelper.token);
-    localStorage.removeItem(LocalStorageHelper.email);
-    localStorage.removeItem(LocalStorageHelper.selectedLanguages);
+    this.localStorageService.delete(LocalStorageHelper.token);
+    this.localStorageService.delete(LocalStorageHelper.email);
+    this.localStorageService.delete(LocalStorageHelper.selectedLanguages);
     this.router.navigate(['../login']).then();
   }
 }

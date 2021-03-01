@@ -4,6 +4,7 @@ using PlayLingua.Domain.models;
 using PlayLingua.Domain.Ports;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PlayLingua.Host.Controllers
 {
@@ -25,17 +26,22 @@ namespace PlayLingua.Host.Controllers
         {
             var result = new List<RankResultModel>();
             score.UserId = GetUser().Id;
-            var addedScore = _scoreRepository.Add(score, GetUser().Id);
-            _scoreRepository.IncreaseScore(score.score, score.UserId);
+
+            if (score.UserId != 0)
+            {
+                var addedScore = _scoreRepository.Add(score, GetUser().Id);
+                _scoreRepository.IncreaseScore(score.score, score.UserId);
+            }
+
             result.Add(new RankResultModel
             {
-                Email = GetUser().Email,
-                DisplayName = GetUser().DisplayName,
+                Email = score.UserId != 0 ? GetUser().Email : "You",
+                DisplayName = score.UserId != 0 ? GetUser().DisplayName : "You",
                 Score = score.score
             });
 
-            result = _scoreRepository.GetTopRanks(addedScore);
-            return Ok(result);
+            result.AddRange(_scoreRepository.GetTopRanks(score));
+            return Ok(result.Take(5));
         }
     }
 }

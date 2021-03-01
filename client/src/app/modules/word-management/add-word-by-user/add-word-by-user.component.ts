@@ -18,6 +18,7 @@ import { AddBookDialogComponent } from '../add-book-dialog/add-book-dialog.compo
 import { AddChapterDialogComponent } from '../add-chapter-dialog/add-chapter-dialog.component';
 import { Router } from '@angular/router';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
+import { LocalStorageService } from '../../../core/service/local-storage.service';
 
 @Component({
   selector: 'app-add-word-by-user',
@@ -74,7 +75,8 @@ export class AddWordByUserComponent implements OnInit {
     private formBuilder: FormBuilder,
     private bookChapterService: BookChapterService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit(): void {
@@ -93,12 +95,12 @@ export class AddWordByUserComponent implements OnInit {
   }
 
   checkDraft(): void {
-    if (!localStorage.getItem(LocalStorageHelper.addWordDraft)) {
+    if (!this.localStorageService.load(LocalStorageHelper.addWordDraft)) {
       return;
     }
 
     const draft = JSON.parse(
-      localStorage.getItem(LocalStorageHelper.addWordDraft)
+      this.localStorageService.load(LocalStorageHelper.addWordDraft)
     ) as AddWordFormModel;
 
     this.baseLanguage.setValue(draft.baseLanguage);
@@ -226,7 +228,7 @@ export class AddWordByUserComponent implements OnInit {
           }
           this.isBookLoading = false;
         },
-        (error: string) => {
+        () => {
           this.isBookLoading = false;
         }
       );
@@ -234,7 +236,7 @@ export class AddWordByUserComponent implements OnInit {
 
   getBaseAndTargetLanguages(): void {
     const selectedLanguages = JSON.parse(
-      localStorage.getItem(LocalStorageHelper.selectedLanguages)
+      this.localStorageService.load(LocalStorageHelper.selectedLanguages)
     );
     this.baseLanguages = selectedLanguages.base;
     this.targetLanguages = selectedLanguages.target;
@@ -358,12 +360,12 @@ export class AddWordByUserComponent implements OnInit {
     this.isPageLoading = true;
     this.saveInformationInfoForm();
     this.bookChapterService.submitForm(this.formData).subscribe(
-      (res: boolean) => {
+      () => {
         this.isPageLoading = false;
-        localStorage.removeItem(LocalStorageHelper.addWordDraft);
-        this.router.navigate(['/word-management/list']);
+        this.localStorageService.delete(LocalStorageHelper.addWordDraft);
+        this.router.navigate(['/word-management/list']).then();
       },
-      (error: string) => {
+      () => {
         this.isPageLoading = false;
       }
     );
@@ -379,7 +381,7 @@ export class AddWordByUserComponent implements OnInit {
 
   saveToDraft(): void {
     this.saveInformationInfoForm();
-    localStorage.setItem(
+    this.localStorageService.save(
       LocalStorageHelper.addWordDraft,
       JSON.stringify(this.formData)
     );

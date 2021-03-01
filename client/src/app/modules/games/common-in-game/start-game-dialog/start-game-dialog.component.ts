@@ -16,6 +16,8 @@ import { GameStartInformation } from '../../../../core/models/game-start-informa
 import { ScoreStoreInterface } from '../../../../core/models/score-store.interface';
 import { GameInformationInterface } from '../../../../core/models/game-information.interface';
 import { LocalStorageHelper } from '../../../../core/models/local-storage.enum';
+import { GetGameWordsRequestModel } from '../../../../core/models/get-game-words-request.model';
+import { LocalStorageService } from '../../../../core/service/local-storage.service';
 
 @Component({
   selector: 'app-start-game-dialog',
@@ -35,7 +37,9 @@ export class StartGameDialogComponent implements OnInit {
   defaultLanguages: {
     defaultBaseLanguage: LanguageModel;
     defaultTargetLanguage: LanguageModel;
-  } = JSON.parse(localStorage.getItem(LocalStorageHelper.defaultLanguages));
+  } = JSON.parse(
+    this.localStorageService.load(LocalStorageHelper.defaultLanguages)
+  );
 
   constructor(
     private bookChapterService: BookChapterService,
@@ -43,6 +47,7 @@ export class StartGameDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<StartGameDialogComponent>,
     private gamesService: GamesService,
     private notificationService: NotificationService,
+    private localStorageService: LocalStorageService,
     @Inject(MAT_DIALOG_DATA) public data: GameInformationInterface
   ) {}
 
@@ -86,7 +91,7 @@ export class StartGameDialogComponent implements OnInit {
   }
 
   backToMenu(): void {
-    this.router.navigate(['../game-menu']);
+    this.router.navigate(['../game-menu']).then();
     this.dialogRef.close();
   }
 
@@ -103,7 +108,13 @@ export class StartGameDialogComponent implements OnInit {
         bookId: result.bookId,
         chapterId: result.chapterId,
         count: environment.startGameCount,
-      })
+        defaultTargetLanguage: JSON.parse(
+          this.localStorageService.load(LocalStorageHelper.defaultLanguages)
+        ).defaultTargetLanguage.id,
+        defaultBaseLanguage: JSON.parse(
+          this.localStorageService.load(LocalStorageHelper.defaultLanguages)
+        ).defaultBaseLanguage.id,
+      } as GetGameWordsRequestModel)
       .subscribe(
         (res: WordKeyValueModel<string[]>[]) => {
           result.words = res;

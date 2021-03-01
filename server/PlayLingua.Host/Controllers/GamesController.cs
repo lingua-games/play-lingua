@@ -19,11 +19,10 @@ namespace PlayLingua.Host.Controllers
             _gameRepository = gameRepository;
         }
 
-        [Authorize]
         [HttpPost("get-words-for-game")]
         public ActionResult<List<GetWordsForGameResponseModel>> GetWordsForGame([FromBody] GetWordsForGameInputModel getWordsForGameInputModel)
         {
-            return Ok(_gameRepository.GetWordsForGame(getWordsForGameInputModel, GetUser()));
+            return Ok(_gameRepository.GetWordsForGame(getWordsForGameInputModel));
         }
     }
 }
