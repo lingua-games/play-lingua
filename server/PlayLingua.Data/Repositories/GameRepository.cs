@@ -20,18 +20,16 @@ namespace PlayLingua.Data
             db = new SqlConnection(connectionString);
         }
 
-        public List<GetWordsForGameResponseModel> GetWordsForGame(GetWordsForGameInputModel model, User user)
+        public List<GetWordsForGameResponseModel> GetWordsForGame(GetWordsForGameInputModel model)
         {
             var result = new List<GetWordsForGameResponseModel>();
-            user = db.Query<User>("select * from [dbo].[Users] WHERE id = @id", user).SingleOrDefault();
-
 
             if (model.BookId == 0)
             {
                 var words = db.Query<Word>(@"select top " + model.Count + @" * from [dbo].[Word] 
                                             WHERE 
                                             TargetLanguageId = @DefaultTargetLanguage AND
-                                            BaseLanguageId = @DefaultBaseLanguage", user).ToList();
+                                            BaseLanguageId = @DefaultBaseLanguage", model).ToList();
 
                 
                 foreach (var word in words.GroupBy(x => x.BaseWord))
@@ -50,7 +48,7 @@ namespace PlayLingua.Data
                                             TargetLanguageId = @DefaultTargetLanguage AND
                                             BaseLanguageId = @DefaultBaseLanguage" +
                             (model.BookId != 0 ? " AND BookId = " + model.BookId : "") +
-                            (model.ChapterId != 0 ? " AND ChapterId = " + model.ChapterId : ""), user).ToList();
+                            (model.ChapterId != 0 ? " AND ChapterId = " + model.ChapterId : ""), model).ToList();
 
 
                 foreach (var word in words.GroupBy(x => x.BaseWord))
@@ -63,8 +61,6 @@ namespace PlayLingua.Data
                 }
                 return result;
             }
-
-            return result;
         }
     }
 }

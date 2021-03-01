@@ -16,6 +16,7 @@ import { GameStartInformation } from '../../../../core/models/game-start-informa
 import { ScoreStoreInterface } from '../../../../core/models/score-store.interface';
 import { GameInformationInterface } from '../../../../core/models/game-information.interface';
 import { LocalStorageHelper } from '../../../../core/models/local-storage.enum';
+import { GetGameWordsRequestModel } from '../../../../core/models/get-game-words-request.model';
 
 @Component({
   selector: 'app-start-game-dialog',
@@ -103,7 +104,13 @@ export class StartGameDialogComponent implements OnInit {
         bookId: result.bookId,
         chapterId: result.chapterId,
         count: environment.startGameCount,
-      })
+        defaultTargetLanguage: JSON.parse(
+          localStorage.getItem(LocalStorageHelper.defaultLanguages)
+        ).defaultTargetLanguage.id,
+        defaultBaseLanguage: JSON.parse(
+          localStorage.getItem(LocalStorageHelper.defaultLanguages)
+        ).defaultBaseLanguage.id,
+      } as GetGameWordsRequestModel)
       .subscribe(
         (res: WordKeyValueModel<string[]>[]) => {
           result.words = res;
