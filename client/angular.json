@@ -38,6 +38,12 @@
             "scripts": []
           },
           "configurations": {
+            "test": {
+              "fileReplacements": [{
+                "replace": "src/environments/secret.ts",
+                "with": "src/environments/secret.prod.ts"
+              }]
+            },
             "production": {
               "fileReplacements": [
                 {
