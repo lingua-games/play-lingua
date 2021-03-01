@@ -18,6 +18,7 @@ import { NotificationState } from '../../../core/component/score-notification/st
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { Local } from 'protractor/built/driverProviders';
 import { SetDefaultLanguageModel } from '../../../core/models/set-default-language.model';
+import { LocalStorageService } from '../../../core/service/local-storage.service';
 
 @Component({
   selector: 'app-game-menu',
@@ -43,19 +44,20 @@ export class GameMenuComponent implements OnInit {
     private wordService: WordService,
     private notificationService: NotificationService,
     public securityService: SecurityService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit(): void {
     this.selectedLanguages = JSON.parse(
-      localStorage.getItem(LocalStorageHelper.selectedLanguages)
+      this.localStorageService.load(LocalStorageHelper.selectedLanguages)
     );
     if (
       !this.selectedLanguages ||
       !this.selectedLanguages.base ||
       !this.selectedLanguages.target
     ) {
-      localStorage.removeItem(LocalStorageHelper.selectedLanguages);
+      this.localStorageService.delete(LocalStorageHelper.selectedLanguages);
       this.router.navigate(['./choose-languages']).then();
       return;
     }
@@ -63,37 +65,37 @@ export class GameMenuComponent implements OnInit {
 
     if (
       this.securityService.isGuest() &&
-      !localStorage.getItem(LocalStorageHelper.defaultLanguages)
+      !this.localStorageService.load(LocalStorageHelper.defaultLanguages)
     ) {
       const valueToSave = {
         defaultBaseLanguage: this.selectedLanguages.base[0],
         defaultTargetLanguage: this.selectedLanguages.target[0],
       };
-      localStorage.setItem(
+      this.localStorageService.save(
         LocalStorageHelper.defaultLanguages,
         JSON.stringify(valueToSave)
       );
     }
-    if (!localStorage.getItem(LocalStorageHelper.defaultLanguages)) {
+    if (!this.localStorageService.load(LocalStorageHelper.defaultLanguages)) {
       this.loadingFullPage = true;
       this.openSelectDefaultLanguageDialog();
       return;
     } else {
       this.defaultSelectedLanguages = JSON.parse(
-        localStorage.getItem(LocalStorageHelper.defaultLanguages)
+        this.localStorageService.load(LocalStorageHelper.defaultLanguages)
       );
       this.getSelectedLanguagesInformation();
     }
   }
 
   navigateToChangeLanguage(): void {
-    localStorage.removeItem(LocalStorageHelper.defaultLanguages);
-    localStorage.removeItem(LocalStorageHelper.selectedLanguages);
+    this.localStorageService.delete(LocalStorageHelper.defaultLanguages);
+    this.localStorageService.delete(LocalStorageHelper.selectedLanguages);
     this.router.navigate(['../choose-languages']).then();
   }
 
   changeDefaultLanguages(): void {
-    localStorage.removeItem(LocalStorageHelper.defaultLanguages);
+    this.localStorageService.delete(LocalStorageHelper.defaultLanguages);
     this.openSelectDefaultLanguageDialog();
   }
 

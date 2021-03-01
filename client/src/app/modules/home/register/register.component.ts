@@ -10,6 +10,7 @@ import { SecurityService } from '../../../core/service/security.service';
 import { LoginResultModel } from '../../../core/models/login-result.model';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { Location } from '@angular/common';
+import { LocalStorageService } from '../../../core/service/local-storage.service';
 
 @Component({
   selector: 'app-register',
@@ -26,11 +27,12 @@ export class RegisterComponent implements OnInit {
     private notificationService: NotificationService,
     private router: Router,
     private securityService: SecurityService,
-    private location: Location
+    private location: Location,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit(): void {
-    if (localStorage.getItem(LocalStorageHelper.token)) {
+    if (this.localStorageService.load(LocalStorageHelper.token)) {
       this.router.navigate(['game-menu']).then();
     }
   }
@@ -86,10 +88,10 @@ export class RegisterComponent implements OnInit {
           'Success'
         );
         this.securityService.setToken(res.token);
-        localStorage.removeItem(LocalStorageHelper.isGuest);
-        localStorage.setItem(LocalStorageHelper.email, res.user.email);
+        this.localStorageService.delete(LocalStorageHelper.isGuest);
+        this.localStorageService.save(LocalStorageHelper.email, res.user.email);
         if (res.user.defaultBaseLanguage && res.user.defaultTargetLanguage) {
-          localStorage.setItem(
+          this.localStorageService.save(
             LocalStorageHelper.defaultLanguages,
             `{defaultBaseLanguage: ${res.user.defaultBaseLanguage}, defaultBaseLanguage: ${res.user.defaultTargetLanguage} }`
           );

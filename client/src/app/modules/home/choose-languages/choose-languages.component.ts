@@ -12,6 +12,7 @@ import { SelectedLanguageService } from '../../../core/service/selected-language
 import { SelectedLanguageModel } from '../../../core/models/selected-language.model';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { SecurityService } from '../../../core/service/security.service';
+import { LocalStorageService } from '../../../core/service/local-storage.service';
 
 @Component({
   selector: 'app-choose-languages',
@@ -30,13 +31,14 @@ export class ChooseLanguagesComponent implements OnInit {
     private router: Router,
     private selectedLanguageService: SelectedLanguageService,
     private activatedRoute: ActivatedRoute,
-    private securityService: SecurityService
+    private securityService: SecurityService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit(): void {
     if (!this.activatedRoute.snapshot.paramMap.get('mode')) {
-      if (localStorage.getItem(LocalStorageHelper.selectedLanguages)) {
-        this.router.navigate(['./game-menu']);
+      if (this.localStorageService.load(LocalStorageHelper.selectedLanguages)) {
+        this.router.navigate(['./game-menu']).then();
         return;
       }
     }
@@ -49,9 +51,9 @@ export class ChooseLanguagesComponent implements OnInit {
 
   navigateBack(): void {
     if (this.activatedRoute.snapshot.paramMap.get('mode')) {
-      this.router.navigate(['./game-menu']);
+      this.router.navigate(['./game-menu']).then();
     } else {
-      this.router.navigate(['../']);
+      this.router.navigate(['../']).then();
     }
   }
 
@@ -67,7 +69,7 @@ export class ChooseLanguagesComponent implements OnInit {
           this.fillDataInModels();
         }
       },
-      (error: any) => {
+      () => {
         this.notificationService.showMessage(
           'Failed to load languages',
           Severity.error
@@ -79,7 +81,7 @@ export class ChooseLanguagesComponent implements OnInit {
 
   fillDataInModels(): void {
     const storedData = JSON.parse(
-      localStorage.getItem(LocalStorageHelper.selectedLanguages)
+      this.localStorageService.load(LocalStorageHelper.selectedLanguages)
     );
     if (storedData && storedData.base) {
       this.baseLanguages = [];
@@ -110,7 +112,7 @@ export class ChooseLanguagesComponent implements OnInit {
   }
 
   submit(): void {
-    localStorage.removeItem(LocalStorageHelper.selectedLanguages);
+    this.localStorageService.delete(LocalStorageHelper.selectedLanguages);
     this.formValidation = [];
     if (this.baseLanguages.length === 0) {
       this.formValidation.push({
@@ -171,12 +173,12 @@ export class ChooseLanguagesComponent implements OnInit {
       targetLanguages: JSON.stringify(this.targetLanguages),
     } as SelectedLanguageModel;
     this.selectedLanguageService.add(apiData).subscribe(
-      (res: SelectedLanguageModel) => {
+      () => {
         this.saveToLocalStorage();
         this.allLanguages.setLoading(false);
         this.router.navigate(['./game-menu']).then();
       },
-      (error: string) => {
+      () => {
         this.allLanguages.setLoading(false);
       }
     );
@@ -185,7 +187,7 @@ export class ChooseLanguagesComponent implements OnInit {
   saveToLocalStorage(): void {
     // TODO: USER SHOULD NOT BE ALLOWED TO CHANGE HIS DEFAULT LANGUAGE
     if (this.securityService.isLoggedIn()) {
-      localStorage.setItem(
+      this.localStorageService.save(
         LocalStorageHelper.selectedLanguages,
         JSON.stringify({
           base: this.baseLanguages.map((x: LanguageModel) => {
@@ -203,7 +205,7 @@ export class ChooseLanguagesComponent implements OnInit {
         })
       );
     } else {
-      localStorage.setItem(
+      this.localStorageService.save(
         LocalStorageHelper.selectedLanguages,
         JSON.stringify({
           base: [this.baseLanguages],
