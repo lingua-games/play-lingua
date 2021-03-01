@@ -86,6 +86,7 @@ export class RegisterComponent implements OnInit {
           'Success'
         );
         this.securityService.setToken(res.token);
+        localStorage.removeItem(LocalStorageHelper.isGuest);
         localStorage.setItem(LocalStorageHelper.email, res.user.email);
         if (res.user.defaultBaseLanguage && res.user.defaultTargetLanguage) {
           localStorage.setItem(

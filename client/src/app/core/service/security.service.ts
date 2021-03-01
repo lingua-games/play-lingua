@@ -32,6 +32,9 @@ export class SecurityService {
   }
 
   setTotalScore(newScore: string): void {
+    if (localStorage.getItem(LocalStorageHelper.isGuest)) {
+      return;
+    }
     if (newScore === '0') {
       this.storageSub.next(localStorage.getItem(LocalStorageHelper.totalScore));
       return;

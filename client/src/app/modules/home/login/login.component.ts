@@ -5,6 +5,7 @@ import { LoginResultModel } from '../../../core/models/login-result.model';
 import { Router } from '@angular/router';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { Location } from '@angular/common';
+import { Local } from 'protractor/built/driverProviders';
 
 @Component({
   selector: 'app-login',
@@ -61,6 +62,7 @@ export class LoginComponent implements OnInit {
             res.user.targetLanguages
           ).find((x) => x.id === res.user.defaultTargetLanguage);
 
+          localStorage.removeItem(LocalStorageHelper.isGuest);
           localStorage.setItem(
             LocalStorageHelper.defaultLanguages,
             JSON.stringify({

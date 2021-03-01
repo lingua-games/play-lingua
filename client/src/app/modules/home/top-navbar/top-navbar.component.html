@@ -20,7 +20,7 @@
   </div>
 </div>
 
-<div class='half-size-main-container' *ngIf='!showFullSize'>
+<div class='half-size-main-container' *ngIf='!showFullSize && securityService.isLoggedIn()'>
   <div class='total-score-container'>
     Total score
     <span *ngIf="totalScore !== 'loading'">{{totalScore}}</span>

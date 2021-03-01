@@ -87,7 +87,7 @@ export class StartGameDialogComponent implements OnInit {
   }
 
   backToMenu(): void {
-    this.router.navigate(['../game-menu']);
+    this.router.navigate(['../game-menu']).then();
     this.dialogRef.close();
   }
 
