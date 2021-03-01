@@ -45,6 +45,7 @@ export class FinishGameDialogComponent implements OnInit {
       } as ScoreStoreInterface)
       .subscribe(
         (res: RanksResultInterface[]) => {
+          debugger;
           this.securityService.setTotalScore(this.data.score.toString());
           this.ranks.push(...res);
           for (let i = 0; i < environment.recordCount; i++) {

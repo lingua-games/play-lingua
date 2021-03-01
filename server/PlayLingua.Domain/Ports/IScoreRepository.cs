@@ -9,7 +9,7 @@ namespace PlayLingua.Domain.Ports
     {
         List<Score> GetByUserId(int userId);
         List<RankResultModel> GetTopRanks(Score score);
-        Score Add(Score score, int? userId);
+        Score Add(Score score, int userId);
         void Delete(int id);
         void Update(Score score);
         void IncreaseScore(float score, int userId);

@@ -21,7 +21,7 @@ namespace PlayLingua.Data
             db = new SqlConnection(connectionString);
         }
 
-        public Score Add(Score score, int? userId)
+        public Score Add(Score score, int userId)
         {
             score.AddedBy = userId;
             score.AddedDate = DateTime.Now;
