@@ -24,7 +24,7 @@ jobs:
         run: npm ci
         working-directory: client
       - name: Check lint
-        run: ng lint
+        run: npm run lint
         working-directory: client
       - name: Run unit tests
         run: npm run test:ci
