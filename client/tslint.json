@@ -137,9 +137,12 @@
         "check-typecast"
       ]
     },
+    "no-invalid-template-strings": true,
     "restrict-plus-operands": true,
     "no-sparse-arrays": true,
+    "no-boolean-literal-compare": true,
     "no-conditional-assignment": true,
+    "cyclomatic-complexity": true,
     "no-any": true,
     "no-unused-variable": true,
     "no-conflicting-lifecycle": true,
