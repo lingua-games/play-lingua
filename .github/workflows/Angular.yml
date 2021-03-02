@@ -29,9 +29,6 @@ jobs:
       - name: Run unit tests
         run: npm run test:ci
         working-directory: client
-#      - name: Run end to end tests
-#        run: npm run e2e:ci
-#        working-directory: client
       - name: Build code
         run: npm run build:prod
         working-directory: client
