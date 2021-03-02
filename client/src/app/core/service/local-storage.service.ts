@@ -36,22 +36,32 @@ export class LocalStorageService {
         secretKeys.localStoragePrivateKey
       ).toString();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   }
 
   decryptData(data): any {
     try {
+      // const bytes = CryptoJS.AES.decrypt(
+      //   data,
+      //   secretKeys.localStoragePrivateKey
+      // );
+      //
+      // if (bytes.toString()) {
+      //   return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+      //   console.log(JSON.parse(bytes.toString(CryptoJS.enc.Utf8)));
+      // }
+      // return data;
+
       const bytes = CryptoJS.AES.decrypt(
         data,
         secretKeys.localStoragePrivateKey
       );
-      if (bytes.toString()) {
-        return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-      }
-      return data;
+      const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+      return decryptedData;
+      // console.log(decryptedData);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   }
 }

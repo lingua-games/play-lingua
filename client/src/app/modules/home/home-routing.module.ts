@@ -15,6 +15,8 @@ import { HomeComponent } from './home.component';
 import { GameMenuComponent } from './game-menu/game-menu.component';
 import { PrepareAddWordsComponent } from './prepare-add-words/prepare-add-words.component';
 import { ProfileComponent } from './profile/profile.component';
+import { UserAndGuestAllowService } from '../../core/service/guards/user-and-guest-allow.service';
+import { OnlyUserAllowService } from '../../core/service/guards/only-user-allow.service';
 export interface CanComponentDeactivate {
   canDeactivate: () => Promise<boolean>;
 }
@@ -47,6 +49,7 @@ const routes: Routes = [
         path: 'profile',
         component: ProfileComponent,
         canDeactivate: [DeactivateWithDelay],
+        canActivate: [OnlyUserAllowService],
       },
       {
         path: 'login',
@@ -67,16 +70,19 @@ const routes: Routes = [
         path: 'choose-languages/:mode',
         component: ChooseLanguagesComponent,
         canDeactivate: [DeactivateWithDelay],
+        canActivate: [OnlyUserAllowService],
       },
       {
         path: 'game-menu',
         component: GameMenuComponent,
         canDeactivate: [DeactivateWithDelay],
+        canActivate: [UserAndGuestAllowService],
       },
       {
         path: 'prepare-adding-words',
         component: PrepareAddWordsComponent,
         canDeactivate: [DeactivateWithDelay],
+        canActivate: [OnlyUserAllowService],
       },
     ],
   },

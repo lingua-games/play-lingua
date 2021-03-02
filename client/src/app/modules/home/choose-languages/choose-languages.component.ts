@@ -163,7 +163,9 @@ export class ChooseLanguagesComponent implements OnInit {
       // It also can save to backend with finding a uniq number/string from
       // user computer and fetch data with found id later for this user.
       this.saveToLocalStorage();
-      this.router.navigate(['./game-menu']).then();
+      setTimeout(() => {
+        this.router.navigate(['./game-menu']).then();
+      }, 100);
     }
   }
 

@@ -49,8 +49,13 @@ export class GameMenuComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(
+      this.localStorageService.load(LocalStorageHelper.selectedLanguages)
+    );
     this.selectedLanguages = JSON.parse(
       this.localStorageService.load(LocalStorageHelper.selectedLanguages)
+        ? this.localStorageService.load(LocalStorageHelper.selectedLanguages)
+        : '[]'
     );
     if (
       !this.selectedLanguages ||

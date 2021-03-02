@@ -8,9 +8,6 @@
 }
 
 .btn-back-container {
-  display: inline-block;
-
-  button {
-    float: left;
-  }
+  position: absolute;
+  left: -10%;
 }
