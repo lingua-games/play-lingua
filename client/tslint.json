@@ -79,6 +79,7 @@
       true,
       "as-needed"
     ],
+    "no-string-literal": false,
     "quotemark": [
       true,
       "single"
@@ -136,6 +137,7 @@
         "check-typecast"
       ]
     },
+    "no-any": true,
     "no-conflicting-lifecycle": true,
     "no-host-metadata-property": true,
     "no-input-rename": true,

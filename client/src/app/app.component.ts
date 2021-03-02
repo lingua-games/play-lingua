@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
       (res: UserModel) => {
         this.securityService.initialTotalScore(res.totalScore.toString());
       },
-      (error: any) => {
+      () => {
         this.securityService.initialTotalScore('0');
       }
     );

@@ -29,7 +29,7 @@ import { LoginResultModel } from '../../../core/models/login-result.model';
 })
 export class ProfileComponent implements OnInit {
   public user: EditUserModel = new EditUserModel();
-  public errors: any = {};
+  public errors = {};
   public isLoading: boolean;
   constructor(
     private userService: UserService,
@@ -45,23 +45,23 @@ export class ProfileComponent implements OnInit {
     this.errors = {};
 
     if (!this.user.displayName || this.user.displayName === '') {
-      this.errors.displayName = 'Display name is a required field';
+      this.errors['displayName'] = 'Display name is a required field';
       return;
     }
 
     if (this.user.isChangingPassword) {
       if (!this.user.currentPassword) {
-        this.errors.currentPassword = 'Current password is empty';
+        this.errors['currentPassword'] = 'Current password is empty';
         return;
       }
 
       if (!this.user.newPassword) {
-        this.errors.newPassword = 'New password is empty';
+        this.errors['newPassword'] = 'New password is empty';
         return;
       }
 
       if (this.user.reNewPassword !== this.user.newPassword) {
-        this.errors.newPassword =
+        this.errors['newPassword'] =
           'New password and Re-new password are not match';
         return;
       }

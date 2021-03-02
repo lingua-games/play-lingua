@@ -142,7 +142,7 @@ export class GameMenuComponent implements OnInit {
         (res: boolean) => {
           this.inquiryResult.setData(res);
         },
-        (error: any) => {
+        (error: string) => {
           this.notificationService.showMessage(
             'Unable to get language information',
             Severity.error

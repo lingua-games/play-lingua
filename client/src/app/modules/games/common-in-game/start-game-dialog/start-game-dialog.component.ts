@@ -120,7 +120,7 @@ export class StartGameDialogComponent implements OnInit {
           result.words = res;
           this.dialogRef.close(result);
         },
-        (error: any) => {
+        () => {
           this.notificationService.showMessage(
             'Unexpected error',
             Severity.error

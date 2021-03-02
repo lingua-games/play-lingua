@@ -13,6 +13,7 @@ import { SelectedLanguageModel } from '../../../core/models/selected-language.mo
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { SecurityService } from '../../../core/service/security.service';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 @Component({
   selector: 'app-choose-languages',

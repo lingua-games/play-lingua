@@ -58,14 +58,14 @@ export class SelectDefaultLanguageDialogComponent implements OnInit {
     }
     this.isLoading = true;
     this.languageService.setDefaultLanguage(this.selectedItems).subscribe(
-      (red: any) => {
+      () => {
         this.localStorageService.save(
           LocalStorageHelper.defaultLanguages,
           JSON.stringify(this.selectedItems)
         );
         this.dialogRef.close(this.selectedItems);
       },
-      (error: any) => {
+      () => {
         this.isLoading = false;
       }
     );
