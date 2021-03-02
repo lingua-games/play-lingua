@@ -15,7 +15,7 @@ export class MarioModel {
     distance = distance || 1;
     const left = parseInt(this.style.left, null);
     if (left >= distance) {
-      this.style.left = left - distance + '%';
+      this.style.left = (left - distance).toString() + '%';
     } else {
       this.style.left = '0%';
     }
@@ -25,9 +25,10 @@ export class MarioModel {
     distance = distance || 1;
     const right = parseInt(this.style.left, null);
     if (right + parseInt(this.style.width, null) + distance < 100) {
-      this.style.left = right + distance + '%';
+      this.style.left = (right + distance).toString() + '%';
     } else {
-      this.style.left = 100 - parseInt(this.style.width, null) + '%';
+      this.style.left =
+        (100 - parseInt(this.style.width, null)).toString() + '%';
     }
   }
 
@@ -39,7 +40,8 @@ export class MarioModel {
     this.originalBottom = this.style.bottom;
     this.isJumping = true;
     const interval = setInterval(() => {
-      this.style.bottom = parseInt(this.style.bottom, null) + 1 + '%';
+      this.style.bottom =
+        (parseInt(this.style.bottom, null) + 1).toString() + '%';
       if (
         parseInt(this.style.bottom, null) >=
         height + parseInt(this.originalBottom, null)
@@ -59,7 +61,8 @@ export class MarioModel {
         this.isJumping = false;
         return;
       }
-      this.style.bottom = parseInt(this.style.bottom, null) - 1 + '%';
+      this.style.bottom =
+        (parseInt(this.style.bottom, null) - 1).toString() + '%';
     }, 10);
   }
 }

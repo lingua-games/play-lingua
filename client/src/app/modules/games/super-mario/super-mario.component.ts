@@ -87,11 +87,11 @@ export class SuperMarioComponent implements OnInit {
               position: 'absolute',
               // random number between floor and max top of the Mario
               bottom:
-                Math.floor(
-                  Math.random() * (this.jumpHeight + Math.abs(1) + 1)
-                ) +
-                10 +
-                '%',
+                (
+                  Math.floor(
+                    Math.random() * (this.jumpHeight + Math.abs(1) + 1)
+                  ) + 10
+                ).toString() + '%',
               left: '100%',
               border: 'solid 1px gray',
               borderRadius: '10%',
@@ -113,11 +113,8 @@ export class SuperMarioComponent implements OnInit {
     enemy.status = MarioEnemyStatus.Start;
     const animateInterval = setInterval(() => {
       enemy.style.transition = '100ms';
-      enemy.style.left = (
-        parseInt(enemy.style.left, null) -
-        1 +
-        '%'
-      ).toString();
+      enemy.style.left =
+        (parseInt(enemy.style.left, null) - 1).toString() + '%';
 
       // Managing left-right hit
       const enemyLeft = parseInt(enemy.style.left, null);
