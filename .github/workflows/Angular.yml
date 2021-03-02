@@ -22,6 +22,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
         working-directory: client
+      - name: Check lint
+        run: ng lint
+        working-directory: client
       - name: Run unit tests
         run: npm run test:ci
         working-directory: client
