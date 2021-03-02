@@ -156,7 +156,7 @@ export class GameMenuComponent implements OnInit {
     this.gameMenus = this.basicInformationService.getGameMenus();
   }
 
-  setBackgroundImage(image: string): any {
+  setBackgroundImage(image: string): {} {
     return {
       background: `url("${image}") no-repeat center`,
       backgroundSize: '4vw',

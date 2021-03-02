@@ -61,7 +61,7 @@ export class BooksComponent implements OnInit {
 
   editBook(book: BookModel): void {
     this.basicInformationService.editBook(book).subscribe(
-      (res: BookModel) => {
+      () => {
         this.getBooks();
       },
       () => {

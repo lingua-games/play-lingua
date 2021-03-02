@@ -16,8 +16,8 @@ export class BookChapterService {
 
   constructor(private http: HttpClient) {}
 
-  submitForm(form: AddWordFormModel): Observable<any> {
-    return this.http.post<any>(`${this.wordUrl}/submit-word-series`, form);
+  submitForm(form: AddWordFormModel): Observable<{}> {
+    return this.http.post<{}>(`${this.wordUrl}/submit-word-series`, form);
   }
 
   getBooksByLanguage(languageId: number): Observable<BookModel[]> {

@@ -29,7 +29,7 @@ export class LocalStorageService {
     localStorage.clear();
   }
 
-  encryptData(data): any {
+  encryptData(data): string {
     try {
       return CryptoJS.AES.encrypt(
         JSON.stringify(data),
@@ -40,26 +40,14 @@ export class LocalStorageService {
     }
   }
 
-  decryptData(data): any {
+  decryptData(data): string {
     try {
-      // const bytes = CryptoJS.AES.decrypt(
-      //   data,
-      //   secretKeys.localStoragePrivateKey
-      // );
-      //
-      // if (bytes.toString()) {
-      //   return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-      //   console.log(JSON.parse(bytes.toString(CryptoJS.enc.Utf8)));
-      // }
-      // return data;
-
       const bytes = CryptoJS.AES.decrypt(
         data,
         secretKeys.localStoragePrivateKey
       );
       const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
       return decryptedData;
-      // console.log(decryptedData);
     } catch (e) {
       console.error(e);
     }

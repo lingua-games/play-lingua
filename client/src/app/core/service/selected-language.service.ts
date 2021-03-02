@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SelectedLanguageModel } from '../models/selected-language.model';
 import { environment } from '../../../environments/environment';
+import { SetDefaultLanguageModel } from '../models/set-default-language.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,9 @@ export class SelectedLanguageService {
     );
   }
 
-  public setDefaultLanguage(selectedItems: any): Observable<any> {
+  public setDefaultLanguage(
+    selectedItems: SetDefaultLanguageModel
+  ): Observable<SelectedLanguageModel> {
     return this.http.post<SelectedLanguageModel>(
       this.selectionLanguageUrl + '/setDefaultSelection',
       {

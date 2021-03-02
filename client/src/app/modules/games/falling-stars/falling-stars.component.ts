@@ -122,7 +122,7 @@ export class FallingStarsComponent implements OnInit {
   constructor(
     private gamesService: GamesService,
     private dialog: MatDialog,
-    private store: Store<any>,
+    private store: Store<{}>,
     private scoreStorageService: ScoreStorageService
   ) {}
 

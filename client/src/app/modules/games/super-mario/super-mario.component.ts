@@ -7,6 +7,7 @@ import {
 } from '../../../core/models/mario-enemy.model';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
+import { GetGameWordsRequestModel } from '../../../core/models/get-game-words-request.model';
 
 @Component({
   selector: 'app-super-mario',
@@ -76,7 +77,7 @@ export class SuperMarioComponent implements OnInit {
 
   getWords(): void {
     this.enemies = [];
-    this.gamesService.getGameWords({} as any).subscribe(
+    this.gamesService.getGameWords(new GetGameWordsRequestModel()).subscribe(
       (res: WordKeyValueModel<string[]>[]) => {
         res.forEach((element) => {
           this.enemies.push({

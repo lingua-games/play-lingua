@@ -14,9 +14,9 @@ import { LocalStorageService } from '../service/local-storage.service';
 export class TokenIntercept implements HttpInterceptor {
   constructor(private localStorageService: LocalStorageService) {}
   intercept(
-    request: HttpRequest<any>,
+    request: HttpRequest<{}>,
     next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  ): Observable<HttpEvent<{}>> {
     request = request.clone({
       setHeaders: {
         Authorization: `Bearer ${this.localStorageService.load(

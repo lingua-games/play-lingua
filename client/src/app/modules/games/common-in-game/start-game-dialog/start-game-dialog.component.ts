@@ -29,10 +29,10 @@ export class StartGameDialogComponent implements OnInit {
   chapters: ChapterModel[] = [];
   isPreparing: boolean;
 
-  form: {
-    selectedBook: BookModel;
-    selectedChapter: ChapterModel;
-  } = {} as any;
+  form = {
+    selectedBook: new BookModel(),
+    selectedChapter: new ChapterModel(),
+  };
 
   defaultLanguages: {
     defaultBaseLanguage: LanguageModel;
@@ -62,7 +62,7 @@ export class StartGameDialogComponent implements OnInit {
         this.defaultLanguages.defaultTargetLanguage.id
       )
       .subscribe(
-        (res: any) => {
+        (res: BookModel[]) => {
           this.books.push({
             id: 0,
             name: 'No book, just random',

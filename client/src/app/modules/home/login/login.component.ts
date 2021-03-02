@@ -15,7 +15,7 @@ import { LocalStorageService } from '../../../core/service/local-storage.service
 export class LoginComponent implements OnInit {
   user: UserModel = new UserModel();
   errorMessage: string;
-  formError: any = {};
+  formError = {};
   isLoading: boolean;
 
   constructor(
@@ -37,12 +37,12 @@ export class LoginComponent implements OnInit {
 
   login(): void {
     if (!this.user.email) {
-      this.formError.email = 'Email field is empty';
+      this.formError['email'] = 'Email field is empty';
       return;
     }
 
     if (!this.user.password) {
-      this.formError.password = 'Password field is empty';
+      this.formError['password'] = 'Password field is empty';
       return;
     }
 
