@@ -1,9 +1,10 @@
 <div class='welcome-inner-main-container'>
-  <div>
+  <div class='btn-back-container'>
     <button pButton pRipple type='button' icon='pi pi-arrow-left' (click)='navigateBack()'
             class='btn-back p-button-rounded p-button-info p-button-outlined'></button>
-    <h3>Choose base and target languages</h3>
+
   </div>
+  <h3>Choose base and target languages</h3>
   <div appLoading [loadingFlag]='allLanguages.isLoading' class='body-container'>
     <div class='text-container'>
       <span>I am speaking</span>
