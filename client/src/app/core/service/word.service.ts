@@ -14,8 +14,8 @@ export class WordService {
   getSelectedLanguagesInformation(data: {
     base: number;
     target: number;
-  }): Observable<any> {
-    return this.http.post<any>(
+  }): Observable<boolean> {
+    return this.http.post<boolean>(
       this.wordUrl + '/inquiry-about-selected-language',
       data
     );

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { WordKeyValueModel } from '../models/word-key-value.model';
-import { BookModel } from '../models/book.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { GetGameWordsRequestModel } from '../models/get-game-words-request.model';

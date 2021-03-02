@@ -26,7 +26,7 @@ export class BooksComponent implements OnInit {
       (res: BookModel[]) => {
         this.books = res;
       },
-      (res: any) => {
+      () => {
         // Todo: handle error
       }
     );
@@ -53,7 +53,7 @@ export class BooksComponent implements OnInit {
       (res: BookModel) => {
         this.books.push(res);
       },
-      (error: any) => {
+      () => {
         // Todo: handle error
       }
     );
@@ -61,10 +61,10 @@ export class BooksComponent implements OnInit {
 
   editBook(book: BookModel): void {
     this.basicInformationService.editBook(book).subscribe(
-      (res: BookModel) => {
+      () => {
         this.getBooks();
       },
-      (error: any) => {
+      () => {
         // Todo: handle error
       }
     );
@@ -75,7 +75,7 @@ export class BooksComponent implements OnInit {
       (res: BookModel) => {
         this.books.splice(this.books.indexOf(res));
       },
-      (error: any) => {
+      () => {
         // Todo: handle error
       }
     );

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { BookModel } from '../models/book.model';
 import { AddWordFormModel } from '../models/add-word-form.model';
 import { environment } from '../../../environments/environment';
@@ -16,8 +16,8 @@ export class BookChapterService {
 
   constructor(private http: HttpClient) {}
 
-  submitForm(form: AddWordFormModel): Observable<any> {
-    return this.http.post<any>(`${this.wordUrl}/submit-word-series`, form);
+  submitForm(form: AddWordFormModel): Observable<{}> {
+    return this.http.post<{}>(`${this.wordUrl}/submit-word-series`, form);
   }
 
   getBooksByLanguage(languageId: number): Observable<BookModel[]> {

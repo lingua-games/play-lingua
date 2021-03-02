@@ -17,6 +17,7 @@ import { PrepareAddWordsComponent } from './prepare-add-words/prepare-add-words.
 import { ProfileComponent } from './profile/profile.component';
 import { UserAndGuestAllowService } from '../../core/service/guards/user-and-guest-allow.service';
 import { OnlyUserAllowService } from '../../core/service/guards/only-user-allow.service';
+
 export interface CanComponentDeactivate {
   canDeactivate: () => Promise<boolean>;
 }
@@ -28,9 +29,11 @@ export class DeactivateWithDelay
     component: CanComponentDeactivate,
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): any {
+  ): Promise<true> {
     return new Promise((resolve) => {
-      setTimeout(() => resolve(true), environment.intervalForRoundMainPage / 4);
+      setTimeout(() => {
+        resolve(true);
+      }, environment.intervalForRoundMainPage / 4);
     });
   }
 }

@@ -29,8 +29,8 @@ export class BasicInformationService {
     return this.http.delete(`${this.bookUrl}/${bookId}`);
   }
 
-  editBook(book: BookModel): Observable<any> {
-    return this.http.put(`${this.bookUrl}/${book.id}`, book);
+  editBook(book: BookModel): Observable<BookModel> {
+    return this.http.put<BookModel>(`${this.bookUrl}/${book.id}`, book);
   }
 
   getGameMenus(): GameMenu[] {

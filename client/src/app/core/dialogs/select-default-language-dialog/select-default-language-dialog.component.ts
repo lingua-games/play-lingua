@@ -6,7 +6,6 @@ import {
 } from '../../service/notification.service';
 import { SelectedLanguageService } from '../../service/selected-language.service';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Local } from 'protractor/built/driverProviders';
 import { LocalStorageHelper } from '../../models/local-storage.enum';
 import { SetDefaultLanguageModel } from '../../models/set-default-language.model';
 import { LocalStorageService } from '../../service/local-storage.service';
@@ -58,14 +57,14 @@ export class SelectDefaultLanguageDialogComponent implements OnInit {
     }
     this.isLoading = true;
     this.languageService.setDefaultLanguage(this.selectedItems).subscribe(
-      (red: any) => {
+      () => {
         this.localStorageService.save(
           LocalStorageHelper.defaultLanguages,
           JSON.stringify(this.selectedItems)
         );
         this.dialogRef.close(this.selectedItems);
       },
-      (error: any) => {
+      () => {
         this.isLoading = false;
       }
     );

@@ -1,7 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { FallingStarsWord } from '../../../core/models/falling-stars-word.interface';
-import { GamesService } from '../../../core/service/games.service';
 import { MatDialog } from '@angular/material/dialog';
 import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
 import { Store } from '@ngrx/store';
@@ -120,9 +119,8 @@ export class FallingStarsComponent implements OnInit {
   }
 
   constructor(
-    private gamesService: GamesService,
     private dialog: MatDialog,
-    private store: Store<any>,
+    private store: Store<{}>,
     private scoreStorageService: ScoreStorageService
   ) {}
 

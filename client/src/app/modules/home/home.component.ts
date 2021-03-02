@@ -9,13 +9,10 @@ import { SecurityService } from '../../core/service/security.service';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  style: any = {};
+  style = {};
   isLoading: boolean;
 
-  constructor(
-    private router: Router,
-    private securityService: SecurityService
-  ) {
+  constructor(router: Router, private securityService: SecurityService) {
     router.events.subscribe((val) => {
       if (val instanceof NavigationStart) {
         if (
@@ -25,15 +22,16 @@ export class HomeComponent implements OnInit {
           this.isLoading = true;
           return;
         }
-        if (!this.style.transform) {
-          this.style.transform = `rotate(0deg)`;
+        if (!this.style['transform']) {
+          this.style['transform'] = `rotate(0deg)`;
         }
 
-        const rotateValue = this.style.transform;
+        const rotateValue = this.style['transform'];
         let newRouteValue = +parseInt(rotateValue.substr(7, 3), null);
         newRouteValue = newRouteValue === 0 ? 360 : 0;
-        this.style.transition = environment.intervalForRoundMainPage + 'ms';
-        this.style.transform = `rotate(${newRouteValue}deg)`;
+        this.style['transition'] =
+          environment.intervalForRoundMainPage.toString() + 'ms';
+        this.style['transition'] = `rotate(${newRouteValue}deg)`;
       }
 
       if (val instanceof NavigationEnd) {

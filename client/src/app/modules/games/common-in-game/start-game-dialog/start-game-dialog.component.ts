@@ -13,7 +13,6 @@ import {
   Severity,
 } from '../../../../core/service/notification.service';
 import { GameStartInformation } from '../../../../core/models/game-start-information';
-import { ScoreStoreInterface } from '../../../../core/models/score-store.interface';
 import { GameInformationInterface } from '../../../../core/models/game-information.interface';
 import { LocalStorageHelper } from '../../../../core/models/local-storage.enum';
 import { GetGameWordsRequestModel } from '../../../../core/models/get-game-words-request.model';
@@ -29,10 +28,10 @@ export class StartGameDialogComponent implements OnInit {
   chapters: ChapterModel[] = [];
   isPreparing: boolean;
 
-  form: {
-    selectedBook: BookModel;
-    selectedChapter: ChapterModel;
-  } = {} as any;
+  form = {
+    selectedBook: new BookModel(),
+    selectedChapter: new ChapterModel(),
+  };
 
   defaultLanguages: {
     defaultBaseLanguage: LanguageModel;
@@ -62,7 +61,7 @@ export class StartGameDialogComponent implements OnInit {
         this.defaultLanguages.defaultTargetLanguage.id
       )
       .subscribe(
-        (res: any) => {
+        (res: BookModel[]) => {
           this.books.push({
             id: 0,
             name: 'No book, just random',
@@ -120,7 +119,7 @@ export class StartGameDialogComponent implements OnInit {
           result.words = res;
           this.dialogRef.close(result);
         },
-        (error: any) => {
+        () => {
           this.notificationService.showMessage(
             'Unexpected error',
             Severity.error

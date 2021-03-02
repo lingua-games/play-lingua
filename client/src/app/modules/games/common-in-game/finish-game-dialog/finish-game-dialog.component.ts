@@ -61,7 +61,7 @@ export class FinishGameDialogComponent implements OnInit {
           });
           this.isLoading = false;
         },
-        (error: any) => {
+        () => {
           this.isLoading = false;
         }
       );

@@ -12,11 +12,7 @@ import { LanguageModel } from '../../../core/models/language.model';
 import { SecurityService } from '../../../core/service/security.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectDefaultLanguageDialogComponent } from '../../../core/dialogs/select-default-language-dialog/select-default-language-dialog.component';
-import { Store } from '@ngrx/store';
-import { toggleNotification } from '../../../core/component/score-notification/state/score-notification.actions';
-import { NotificationState } from '../../../core/component/score-notification/state/score-notification.reducer';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
-import { Local } from 'protractor/built/driverProviders';
 import { SetDefaultLanguageModel } from '../../../core/models/set-default-language.model';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
 
@@ -142,7 +138,7 @@ export class GameMenuComponent implements OnInit {
         (res: boolean) => {
           this.inquiryResult.setData(res);
         },
-        (error: any) => {
+        (error: string) => {
           this.notificationService.showMessage(
             'Unable to get language information',
             Severity.error
@@ -156,7 +152,7 @@ export class GameMenuComponent implements OnInit {
     this.gameMenus = this.basicInformationService.getGameMenus();
   }
 
-  setBackgroundImage(image: string): any {
+  setBackgroundImage(image: string): {} {
     return {
       background: `url("${image}") no-repeat center`,
       backgroundSize: '4vw',

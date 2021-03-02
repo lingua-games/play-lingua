@@ -79,6 +79,7 @@
       true,
       "as-needed"
     ],
+    "no-string-literal": false,
     "quotemark": [
       true,
       "single"
@@ -136,6 +137,14 @@
         "check-typecast"
       ]
     },
+    "no-invalid-template-strings": true,
+    "restrict-plus-operands": true,
+    "no-sparse-arrays": true,
+    "no-boolean-literal-compare": true,
+    "no-conditional-assignment": true,
+    "cyclomatic-complexity": true,
+    "no-any": true,
+    "no-unused-variable": true,
     "no-conflicting-lifecycle": true,
     "no-host-metadata-property": true,
     "no-input-rename": true,

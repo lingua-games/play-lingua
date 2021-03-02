@@ -15,9 +15,9 @@ export class ErrorIntercept implements HttpInterceptor {
   constructor(private securityService: SecurityService) {}
 
   intercept(
-    request: HttpRequest<any>,
+    request: HttpRequest<{}>,
     next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  ): Observable<HttpEvent<{}>> {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {

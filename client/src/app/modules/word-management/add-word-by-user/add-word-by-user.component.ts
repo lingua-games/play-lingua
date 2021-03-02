@@ -131,7 +131,7 @@ export class AddWordByUserComponent implements OnInit {
           width: '40%',
         })
         .afterClosed()
-        .subscribe((res: any) => {
+        .subscribe((res: { bookName: string }) => {
           if (res) {
             const itemToAdd = {
               id: 0,
@@ -190,7 +190,7 @@ export class AddWordByUserComponent implements OnInit {
           width: '40%',
         })
         .afterClosed()
-        .subscribe((res: any) => {
+        .subscribe((res: { chapterName: string }) => {
           if (res) {
             const itemToAdd = {
               id: 0,
