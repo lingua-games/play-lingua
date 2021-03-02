@@ -13,7 +13,6 @@ import {
   Severity,
 } from '../../../../core/service/notification.service';
 import { GameStartInformation } from '../../../../core/models/game-start-information';
-import { ScoreStoreInterface } from '../../../../core/models/score-store.interface';
 import { GameInformationInterface } from '../../../../core/models/game-information.interface';
 import { LocalStorageHelper } from '../../../../core/models/local-storage.enum';
 import { GetGameWordsRequestModel } from '../../../../core/models/get-game-words-request.model';

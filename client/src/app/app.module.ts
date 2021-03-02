@@ -18,10 +18,8 @@ import { StoreModule } from '@ngrx/store';
 import { ScoreNotificationComponent } from './core/component/score-notification/score-notification.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-import { MatDialog } from '@angular/material/dialog';
 import { MaterialModule } from './modules/common/material/material.module';
 import { PrimengModule } from './modules/common/primeng/primeng.module';
-import { NotificationService } from './core/service/notification.service';
 
 @NgModule({
   declarations: [AppComponent, ScoreNotificationComponent],
@@ -56,7 +54,7 @@ import { NotificationService } from './core/service/notification.service';
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor(private library: FaIconLibrary) {
+  constructor(library: FaIconLibrary) {
     library.addIcons(faPlus, faEdit, faTrash);
   }
 }

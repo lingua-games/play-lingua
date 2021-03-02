@@ -12,10 +12,7 @@ export class HomeComponent implements OnInit {
   style = {};
   isLoading: boolean;
 
-  constructor(
-    private router: Router,
-    private securityService: SecurityService
-  ) {
+  constructor(router: Router, private securityService: SecurityService) {
     router.events.subscribe((val) => {
       if (val instanceof NavigationStart) {
         if (
@@ -32,7 +29,8 @@ export class HomeComponent implements OnInit {
         const rotateValue = this.style['transform'];
         let newRouteValue = +parseInt(rotateValue.substr(7, 3), null);
         newRouteValue = newRouteValue === 0 ? 360 : 0;
-        this.style['transition'] = environment.intervalForRoundMainPage + 'ms';
+        this.style['transition'] =
+          environment.intervalForRoundMainPage.toString() + 'ms';
         this.style['transition'] = `rotate(${newRouteValue}deg)`;
       }
 

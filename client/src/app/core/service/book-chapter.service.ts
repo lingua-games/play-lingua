@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { BookModel } from '../models/book.model';
 import { AddWordFormModel } from '../models/add-word-form.model';
 import { environment } from '../../../environments/environment';

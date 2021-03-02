@@ -12,11 +12,7 @@ import { LanguageModel } from '../../../core/models/language.model';
 import { SecurityService } from '../../../core/service/security.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectDefaultLanguageDialogComponent } from '../../../core/dialogs/select-default-language-dialog/select-default-language-dialog.component';
-import { Store } from '@ngrx/store';
-import { toggleNotification } from '../../../core/component/score-notification/state/score-notification.actions';
-import { NotificationState } from '../../../core/component/score-notification/state/score-notification.reducer';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
-import { Local } from 'protractor/built/driverProviders';
 import { SetDefaultLanguageModel } from '../../../core/models/set-default-language.model';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
 

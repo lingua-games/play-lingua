@@ -137,7 +137,11 @@
         "check-typecast"
       ]
     },
+    "restrict-plus-operands": true,
+    "no-sparse-arrays": true,
+    "no-conditional-assignment": true,
     "no-any": true,
+    "no-unused-variable": true,
     "no-conflicting-lifecycle": true,
     "no-host-metadata-property": true,
     "no-input-rename": true,
