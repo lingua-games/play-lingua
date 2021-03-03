@@ -65,7 +65,6 @@ export class SelectDefaultLanguageDialogComponent implements OnInit {
         this.dialogRef.close(this.selectedItems);
       },
       () => {
-        console.log('false');
         this.isLoading = false;
       }
     );
