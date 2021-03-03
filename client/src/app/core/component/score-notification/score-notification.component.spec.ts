@@ -59,5 +59,6 @@ describe('ScoreNotificationComponent', () => {
     jasmine.clock().tick(1100);
 
     expect(component.showNotification).toBe(false);
+    jasmine.clock().uninstall();
   });
 });
