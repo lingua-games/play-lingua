@@ -32,6 +32,14 @@ describe('SuperMarioComponent', () => {
     mockServiceResultValue = ['foo', 'bar'];
   });
 
+  beforeEach(() => {
+    jasmine.clock().uninstall();
+    jasmine.clock().install();
+  });
+
+  afterEach(() => {
+    jasmine.clock().uninstall();
+  });
   it('should create', () => {
     expect(component).toBeTruthy();
   });
@@ -66,13 +74,13 @@ describe('SuperMarioComponent', () => {
   });
 
   describe('Key up events', () => {
-    it('startMovingLeft should be called on pressing arrow left', () => {
-      const mockEvent = { code: 'ArrowLeft' } as KeyboardEvent;
-      spyOn(component, 'startMovingLeft');
+    beforeEach(() => {
+      jasmine.clock().uninstall();
+      jasmine.clock().install();
+    });
 
-      component.keyDownEvent(mockEvent);
-
-      expect(component.startMovingLeft).toHaveBeenCalled();
+    afterEach(() => {
+      jasmine.clock().uninstall();
     });
 
     it('startMovingRight should be called on pressing arrow right', () => {
@@ -144,7 +152,6 @@ describe('SuperMarioComponent', () => {
 
   it('startMovingLeft should call moveLeft after a period', () => {
     spyOn(component.mario, 'moveLeft');
-    jasmine.clock().install();
 
     component.startMovingLeft();
     jasmine.clock().tick(100);
@@ -155,13 +162,11 @@ describe('SuperMarioComponent', () => {
 
   it('startMovingRight should call moveRight after a period', () => {
     spyOn(component.mario, 'moveRight');
-    jasmine.clock().install();
 
     component.startMovingRight();
     jasmine.clock().tick(100);
 
     expect(component.mario.moveRight).toHaveBeenCalledWith(1);
-    jasmine.clock().uninstall();
   });
 
   it('jump should call mario.jump method', () => {

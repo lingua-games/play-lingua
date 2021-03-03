@@ -20,7 +20,6 @@ class TestComponent {
 
   triggerFlag(): void {
     this.flag = !this.flag;
-    console.log(this.flag);
   }
 }
 

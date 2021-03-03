@@ -28,8 +28,14 @@ describe('ScoreNotificationComponent', () => {
   }));
 
   beforeEach(() => {
+    jasmine.clock().uninstall();
+    jasmine.clock().install();
     fixture = TestBed.createComponent(ScoreNotificationComponent);
     component = fixture.componentInstance;
+  });
+
+  afterEach(() => {
+    jasmine.clock().uninstall();
   });
 
   it('should create', () => {
@@ -53,12 +59,10 @@ describe('ScoreNotificationComponent', () => {
       return of({ gameName: 'something' } as NotificationState);
     });
     component.showNotification = true;
-    jasmine.clock().install();
 
     fixture.detectChanges();
     jasmine.clock().tick(1100);
 
     expect(component.showNotification).toBe(false);
-    jasmine.clock().uninstall();
   });
 });

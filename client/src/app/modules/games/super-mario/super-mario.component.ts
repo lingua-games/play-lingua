@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { MarioModel } from '../../../core/models/Mario.model';
+import { MarioModel } from '../../../core/models/mario.model';
 import { GamesService } from '../../../core/service/games.service';
 import {
   MarioEnemy,
