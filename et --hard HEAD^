@@ -1,0 +1,274 @@
+[33mcommit d237e93a6f727300e7b93051dae70f8636174427[m[33m ([m[1;36mHEAD -> [m[1;32mfeature/81-unit-test-for-front-end[m[33m)[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Fri Mar 5 14:59:08 2021 +0100
+
+    worked on unit testings
+
+[33mcommit 19ec93fb71b59f6524a2bad0e49ca6966a5066bf[m[33m ([m[1;31morigin/feature/81-unit-test-for-front-end[m[33m)[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Fri Mar 5 14:17:04 2021 +0100
+
+    fix lint issues
+
+[33mcommit 8c418797e66ee29d4f1a34711c4a402ced2ff612[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Fri Mar 5 14:15:15 2021 +0100
+
+    unit test for notification.service.ts
+
+[33mcommit 4034930ed16fd780211a371290af6df818261f0b[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Fri Mar 5 12:52:23 2021 +0100
+
+    unit test for local-storage.service.ts
+
+[33mcommit 50a64401384226eac4a6d683dd0476d02312796e[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Fri Mar 5 12:19:20 2021 +0100
+
+    unit test for book-chapter.service.ts
+
+[33mcommit d47839ab6feae43ef31784c5e791d7cfee42db82[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Fri Mar 5 12:10:56 2021 +0100
+
+    unit test for book-chapter.service.ts
+
+[33mcommit 020e102ed117ebaf1422b8f149f80ef64d216f8c[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Fri Mar 5 11:59:26 2021 +0100
+
+    unit test for basic-information.service.ts
+
+[33mcommit 0fd9657eab15456235c84f27a5e09b93503d3c61[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Wed Mar 3 16:35:54 2021 +0100
+
+    Unit test for api-result.model.ts
+
+[33mcommit a3bcaeea0e75b3eea163882ef2e8561550d7d4fa[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Wed Mar 3 16:29:43 2021 +0100
+
+    Unit test for mario.model.ts
+
+[33mcommit 5b23ad625547f5646048105925a79ace60a2ce0d[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Wed Mar 3 12:38:21 2021 +0100
+
+    Unit test for loading.directive.ts
+
+[33mcommit f5cbc789f47e42589270631e7eefc5dfa067c2ae[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Wed Mar 3 11:54:20 2021 +0100
+
+    Fixed lint issues
+
+[33mcommit e039bbca04c9a648960f0d154d322167b7fe8926[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Wed Mar 3 11:29:21 2021 +0100
+
+    Unit test for select-default-language-dialog.component.ts
+
+[33mcommit 73217448e988455ab7dae1e618ccb1310c39c264[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Wed Mar 3 10:06:53 2021 +0100
+
+    Unit test for notification service
+
+[33mcommit 6455e7ff08ad400ada1a2caab91dd57369bc53cf[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Wed Mar 3 09:35:57 2021 +0100
+
+    Unit test for appcomponent
+
+[33mcommit 7d5764daa7629172ce5697bff1c921762b82d9cd[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Merge: 7452156 228e3e0
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Tue Mar 2 16:08:06 2021 +0100
+
+    Merge pull request #126 from lingua-games/feature/118-strong-lint-and-remove-any-types
+    
+    Feature/118 strong lint and remove any types
+
+[33mcommit 228e3e0c372fa4382ff46cb1688e4c50f2c134a1[m[33m ([m[1;31morigin/feature/118-strong-lint-and-remove-any-types[m[33m)[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Tue Mar 2 15:31:59 2021 +0100
+
+    test commit
+
+[33mcommit e352b76682a04d0fe141119179b897c96b758477[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Tue Mar 2 15:26:50 2021 +0100
+
+    improve lint
+
+[33mcommit 8e0e831ccf20f51e49595d1420e81eab34ea812d[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Tue Mar 2 15:26:38 2021 +0100
+
+    improve lint
+
+[33mcommit 8eeaf94b70243947c717cbd44a5a5106a21ce014[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Tue Mar 2 15:24:55 2021 +0100
+
+    foo
+
+[33mcommit 8232ff593fa4d4c0ba68358bbdfb33c4514d670d[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Tue Mar 2 15:23:08 2021 +0100
+
+    Added lint check in front-end pipeline
+
+[33mcommit d90f21a6eceac4e2c35dbe13636f1311a28d3ec9[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Tue Mar 2 15:16:48 2021 +0100
+
+    Added lint check in front-end pipeline
+
+[33mcommit f2dc2a1f50040b24eb40dd3c86f431f10b9e8939[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Tue Mar 2 15:15:42 2021 +0100
+
+    improved pipeline script
+
+[33mcommit ce3eff09fb4a7781be1a5e73d4616c7b4320d05c[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Tue Mar 2 15:14:08 2021 +0100
+
+    Added lint check in front-end pipeline
+
+[33mcommit 8560ec43b7dc19318ad412d7991ce835f1b02faa[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Tue Mar 2 14:48:02 2021 +0100
+
+    Strongify the tslint
+
+[33mcommit 36e18af8d083ed704b05e79ae8691aabd69edb7d[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Tue Mar 2 14:46:38 2021 +0100
+
+    restrict plus in tslint
+
+[33mcommit 61ed541d098de53088433449f4dc2cf6b31c23dd[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Tue Mar 2 14:43:10 2021 +0100
+
+    Removed useless imports and variables
+
+[33mcommit 7a6450e6bb42a48fada2c312598f85b2e0fb2f17[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Tue Mar 2 14:25:32 2021 +0100
+
+    Removed all the any types
+
+[33mcommit fdf4997c4009c42510522f7178a1f5f602b41863[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Tue Mar 2 14:06:00 2021 +0100
+
+    Removing any types
+
+[33mcommit 7452156bb8295ea447139bc93ed17cc705c317d9[m
+Merge: fd43670 1ef1a2b
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Tue Mar 2 12:57:03 2021 +0100
+
+    Merge pull request #125 from lingua-games/feature/122-Implement-route-guard
+    
+    Feature/122 implement route guard
+
+[33mcommit 1ef1a2b12e6acd57666c6cb6edd0f0a52d932bdf[m[33m ([m[1;31morigin/feature/122-Implement-route-guard[m[33m)[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Tue Mar 2 12:39:30 2021 +0100
+
+    Fixed failover unit tests for guards
+
+[33mcommit d6c5c916990e93efc43d2c6c09dcc6e56ed584be[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Tue Mar 2 12:35:35 2021 +0100
+
+    Implemented route guards
+
+[33mcommit fd436708f8f1cfc343661df57657d956b3d37dd0[m
+Merge: d0e87d0 5389550
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Mon Mar 1 19:09:57 2021 +0100
+
+    Merge pull request #123 from lingua-games/feature/107-Test-workflow-and-fix-errors
+    
+    Feature/107 test workflow and fix errors
+
+[33mcommit 53895501c56124906ac3f7a5bcd627a334d3bb7f[m[33m ([m[1;31morigin/feature/107-Test-workflow-and-fix-errors[m[33m)[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Mon Mar 1 17:52:37 2021 +0100
+
+    Fixed failover unit tests
+
+[33mcommit 73adefc7c8d8fde24be492b347f8fa82cbcd7ba0[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Mon Mar 1 17:33:12 2021 +0100
+
+    trying to fix broken unit tests
+
+[33mcommit bea8062cfe6dc9780792c4e7e83cfd8d00f4ecfc[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Mon Mar 1 17:16:16 2021 +0100
+
+    Fixed failover unit tests
+
+[33mcommit 162dc14423e3090c6a86d283b261a97281aad68b[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Mon Mar 1 16:35:47 2021 +0100
+
+    Improved security
+
+[33mcommit ec9de0b004c4979c1dacba5061c6ad162db2858e[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Mon Mar 1 16:31:49 2021 +0100
+
+    Edit gitIgnore
+
+[33mcommit 6e7f1b043c15cd13ca769f81024e84f6b5daf607[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Mon Mar 1 16:23:30 2021 +0100
+
+    added secret key for encoding/decoding the localstorage
+
+[33mcommit 9556279f431ec38ee5be88708a2150be6e04b0b4[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Mon Mar 1 15:25:18 2021 +0100
+
+    Moved all localstorage commands in one integrated service
+
+[33mcommit 5ea53ced54fe7dcf98e83456499c52569056520d[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Mon Mar 1 15:00:39 2021 +0100
+
+    fixed build issue
+
+[33mcommit d7bd3bebf9695a7f9024a7a12d52367210c94405[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Mon Mar 1 14:51:54 2021 +0100
+
+    Fix workflow of start and finish a falling star game with guest
+
+[33mcommit 3019cb76994ffc3f7f27030b1395b2e27e442d71[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Mon Mar 1 14:39:55 2021 +0100
+
+    Improve the score board when user is guest!
+
+[33mcommit 715d892ee7f1e063ee956e3284d10fa75ad1566d[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Mon Mar 1 14:07:10 2021 +0100
+
+    Refactore get words API
+
+[33mcommit 28120b5bc9f876e87e0c2a2408c0260f5c6d8054[m
+Author: Arash <vbhost.ir@gmail.com>
+Date:   Mon Mar 1 13:30:20 2021 +0100
+
+    removed root files
+
+[33mcommit 544c1793b12d24ba1
