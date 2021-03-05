@@ -2,8 +2,6 @@ import { TestBed } from '@angular/core/testing';
 
 import { ScoreStorageService } from './score-storage.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { BasicInformationService } from './basic-information.service';
-import { BookModel } from '../models/book.model';
 import { ScoreStoreInterface } from '../models/score-store.interface';
 
 describe('ScoreStorageService', () => {
