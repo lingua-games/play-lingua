@@ -3,10 +3,6 @@ import { TestBed } from '@angular/core/testing';
 import { GamesService } from './games.service';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { BookChapterService } from './book-chapter.service';
-import { AddWordFormModel } from '../models/add-word-form.model';
-import { BookModel } from '../models/book.model';
-import { ChapterModel } from '../models/chapter.model';
 import { GetGameWordsRequestModel } from '../models/get-game-words-request.model';
 
 describe('GamesService', () => {

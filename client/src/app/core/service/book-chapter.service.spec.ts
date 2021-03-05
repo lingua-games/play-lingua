@@ -1,8 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-
 import { BookChapterService } from './book-chapter.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { BasicInformationService } from './basic-information.service';
 import { BookModel } from '../models/book.model';
 import { AddWordFormModel } from '../models/add-word-form.model';
 import { ChapterModel } from '../models/chapter.model';

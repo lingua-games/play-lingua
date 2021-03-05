@@ -34,10 +34,6 @@ describe('BasicInformationService', () => {
   });
 
   it('should call submitForm API when submitForm() method hit', () => {
-    const expectedBooks: BookModel[] = [
-      { id: 1, sourceLanguageId: 1, targetLanguageId: 1, name: '' },
-    ];
-
     service.getBooks();
 
     expect(httpClientSpy.get).toHaveBeenCalled();

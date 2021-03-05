@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { LocalStorageHelper } from '../models/local-storage.enum';
 import * as CryptoJS from 'crypto-js';
 import { secretKeys } from '../../../environments/secret';
-import { by } from 'protractor';
 
 @Injectable({
   providedIn: 'root',
