@@ -64,6 +64,7 @@ export class SecurityService {
   getTokenInformation(): SecurityTokenInterface {
     if (this.localStorageService.load(LocalStorageHelper.token) === 'null') {
       this.logoutOn401();
+      return;
     }
     if (!this.localStorageService.load(LocalStorageHelper.token)) {
       return {} as SecurityTokenInterface;

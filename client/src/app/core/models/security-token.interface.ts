@@ -8,4 +8,6 @@ export interface SecurityTokenInterface {
   nameid: string;
   nbf: number;
   role: string;
+  sub: string;
+  name: string;
 }
