@@ -6,7 +6,6 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LocalStorageService } from './local-storage.service';
 import { LocalStorageHelper } from '../models/local-storage.enum';
-import jwt_decode from 'jwt-decode';
 import { SecurityTokenInterface } from '../models/security-token.interface';
 import { UserModel } from '../models/user.model';
 import { Router } from '@angular/router';
