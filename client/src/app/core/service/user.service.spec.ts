@@ -3,8 +3,6 @@ import { TestBed } from '@angular/core/testing';
 import { UserService } from './user.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { SelectedLanguageService } from './selected-language.service';
-import { SelectedLanguageModel } from '../models/selected-language.model';
 import { UserModel } from '../models/user.model';
 import { EditUserModel } from '../models/edit-user.model';
 
