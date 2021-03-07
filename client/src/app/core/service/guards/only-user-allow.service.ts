@@ -11,7 +11,10 @@ export class OnlyUserAllowService {
     if (this.securityService.isLoggedIn()) {
       return true;
     } else {
-      this.router.navigate(['./']).then();
+      console.log(this.router.navigate);
+      if (this.router.navigate(['./'])) {
+        this.router.navigate(['./']).then();
+      }
       return false;
     }
   }
