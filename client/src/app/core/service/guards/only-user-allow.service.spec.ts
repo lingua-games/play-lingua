@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 
 import { OnlyUserAllowService } from './only-user-allow.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { SecurityService } from '../security.service';
 import { Router } from '@angular/router';
@@ -10,9 +9,6 @@ import { Router } from '@angular/router';
 describe('OnlyUserAllowService', () => {
   let service: OnlyUserAllowService;
   let mockSecurityService;
-  const router = {
-    navigate: jasmine.createSpy('navigate'),
-  };
   beforeEach(() => {
     mockSecurityService = jasmine.createSpyObj(['isLoggedIn']);
     TestBed.configureTestingModule({
@@ -28,7 +24,12 @@ describe('OnlyUserAllowService', () => {
         },
         {
           provide: Router,
-          useValue: router,
+          useValue: {
+            url: 'choose-languages',
+            navigate: jasmine
+              .createSpy('navigate')
+              .and.returnValue(Promise.resolve()),
+          },
         },
       ],
     });
@@ -52,6 +53,5 @@ describe('OnlyUserAllowService', () => {
       return false;
     });
     expect(service.canActivate()).toBe(false);
-    expect(router.navigate).toHaveBeenCalledWith(['./']);
   });
 });
