@@ -48,7 +48,7 @@ describe('OnlyUserAllowService', () => {
     expect(service.canActivate()).toBe(true);
   });
 
-  it('should call router navigate if user is NOT logged in', () => {
+  it('should return false if user is NOT logged in', () => {
     mockSecurityService.isLoggedIn.and.callFake(() => {
       return false;
     });
