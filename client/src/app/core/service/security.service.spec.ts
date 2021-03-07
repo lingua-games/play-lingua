@@ -8,28 +8,40 @@ import { LocalStorageService } from './local-storage.service';
 import { LocalStorageHelper } from '../models/local-storage.enum';
 import jwt_decode from 'jwt-decode';
 import { SecurityTokenInterface } from '../models/security-token.interface';
+import { UserModel } from '../models/user.model';
+import { Router } from '@angular/router';
 
 describe('SecurityService', () => {
   let service: SecurityService;
+  let mockRouter;
   let httpClientSpy: {
     post: jasmine.Spy;
   };
   let mockLocalStorageService;
-
+  let mockDialog;
   beforeEach(() => {
-    mockLocalStorageService = jasmine.createSpyObj(['save', 'load']);
+    mockLocalStorageService = jasmine.createSpyObj([
+      'save',
+      'load',
+      'clear',
+      'delete',
+    ]);
+    mockRouter = jasmine.createSpyObj('router', ['navigate']);
+    mockDialog = jasmine.createSpyObj('dialogRef', ['closeAll']);
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [
         {
           provide: MatDialog,
-          useValue: {
-            closeAll: () => {},
-          },
+          useValue: mockDialog,
         },
         {
           provide: LocalStorageService,
           useValue: mockLocalStorageService,
+        },
+        {
+          provide: Router,
+          useValue: mockRouter,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
@@ -44,6 +56,7 @@ describe('SecurityService', () => {
       // tslint:disable-next-line:no-any
       {
         closeAll: () => {},
+        // tslint:disable-next-line:no-any
       } as any,
       mockLocalStorageService
     );
@@ -122,5 +135,20 @@ describe('SecurityService', () => {
       name: 'John Doe',
       iat: 1516239022,
     } as SecurityTokenInterface);
+  });
+
+  it('should call authUrl when login hits', () => {
+    service.login({} as UserModel);
+    expect(httpClientSpy.post).toHaveBeenCalled();
+  });
+
+  it('should clear localStorage on logout', () => {
+    service.logout();
+    expect(mockLocalStorageService.clear).toHaveBeenCalled();
+  });
+
+  it('should delete localStorages on logoutOn401', () => {
+    service.logoutOn401();
+    expect(mockLocalStorageService.delete).toHaveBeenCalled();
   });
 });

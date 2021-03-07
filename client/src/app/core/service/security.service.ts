@@ -87,15 +87,19 @@ export class SecurityService {
   }
 
   logout(): void {
-    this.localStorageService.clear();
-    this.router.navigate(['../']).then();
+    try {
+      this.localStorageService.clear();
+      this.router.navigate(['../']).then();
+    } catch (error) {}
   }
 
   logoutOn401(): void {
-    this.dialogRef.closeAll();
-    this.localStorageService.delete(LocalStorageHelper.token);
-    this.localStorageService.delete(LocalStorageHelper.email);
-    this.localStorageService.delete(LocalStorageHelper.selectedLanguages);
-    this.router.navigate(['../login']).then();
+    try {
+      this.dialogRef.closeAll();
+      this.localStorageService.delete(LocalStorageHelper.token);
+      this.localStorageService.delete(LocalStorageHelper.email);
+      this.localStorageService.delete(LocalStorageHelper.selectedLanguages);
+      this.router.navigate(['../login']).then();
+    } catch (e) {}
   }
 }
