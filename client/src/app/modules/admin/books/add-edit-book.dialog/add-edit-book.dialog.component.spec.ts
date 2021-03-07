@@ -20,7 +20,7 @@ describe('AddEditBook.DialogComponent', () => {
         },
         {
           provide: MAT_DIALOG_DATA,
-          useValue: {},
+          useValue: { id: 100 },
         },
       ],
       schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
@@ -35,5 +35,9 @@ describe('AddEditBook.DialogComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should copy data into component.book', () => {
+    expect(component.book.id).toBe(100);
   });
 });

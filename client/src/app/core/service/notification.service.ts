@@ -5,7 +5,7 @@ import { MessageService } from 'primeng/api';
 export class NotificationService {
   constructor(public messageService: MessageService) {}
 
-  showMessage(
+  public showMessage(
     message,
     severity: Severity,
     header: string = 'Error',

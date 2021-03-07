@@ -46,9 +46,10 @@ describe('GameMenuComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(GameMenuComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create', () => {
-    expect(2).toBe(2);
+    expect(component).toBeTruthy();
   });
 });

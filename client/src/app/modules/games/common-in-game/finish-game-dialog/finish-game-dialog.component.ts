@@ -69,26 +69,23 @@ export class FinishGameDialogComponent implements OnInit {
 
   getWinnerStyles(rank: RanksResultInterface): string {
     let result = '';
-    if (rank.email === this.securityService.getTokenInformation().email) {
-      result = 'current-user ';
-    }
     if (!rank) {
       return '';
+    }
+
+    if (rank.email === this.securityService.getTokenInformation().email) {
+      result = 'current-user ';
     }
 
     switch (this.ranks.indexOf(rank)) {
       case 0:
         return result + 'rank-gold';
-        break;
       case 1:
         return result + 'rank-silver';
-        break;
       case 2:
         return result + 'rank-bronze';
-        break;
       default:
         return result + 'rank-normal';
-        break;
     }
   }
 

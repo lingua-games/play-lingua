@@ -18,9 +18,9 @@ const initialState: NotificationState = {
   message: '',
 };
 
-const getNotificationFeatureState = createFeatureSelector<NotificationState>(
-  'notifications'
-);
+export const getNotificationFeatureState = createFeatureSelector<
+  NotificationState
+>('notifications');
 
 export const getShowNotification = createSelector(
   getNotificationFeatureState,
