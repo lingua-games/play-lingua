@@ -246,10 +246,6 @@ export class FallingStarsComponent implements OnInit {
     return result;
   }
 
-  showReadyBox(): boolean {
-    return !this.words.find((x) => x.animating);
-  }
-
   startGame(): void {
     this.isGameFinished = false;
     this.startTime = Date.now();
@@ -340,7 +336,7 @@ export class FallingStarsComponent implements OnInit {
     this.boxAnimationDone(activeWord);
   }
 
-  isPressing(answer): boolean {
+  isPressing(answer: string): boolean {
     return (
       this.words.find((x) => x.animating).possibleAnswers.indexOf(answer) +
         1 ===

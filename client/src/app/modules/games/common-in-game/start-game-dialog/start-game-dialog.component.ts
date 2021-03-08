@@ -117,7 +117,6 @@ export class StartGameDialogComponent implements OnInit {
       .subscribe(
         (res: WordKeyValueModel<string[]>[]) => {
           result.words = res;
-          console.log('11');
           this.dialogRef.close(result);
         },
         () => {
