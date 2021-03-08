@@ -12,8 +12,17 @@ export class HomeComponent implements OnInit {
   style = {};
   isLoading: boolean;
 
-  constructor(router: Router, private securityService: SecurityService) {
-    router.events.subscribe((val) => {
+  constructor(
+    private router: Router,
+    private securityService: SecurityService
+  ) {}
+
+  isLoggedIn(): boolean {
+    return this.securityService.isLoggedIn();
+  }
+
+  ngOnInit(): void {
+    this.router.events.subscribe((val) => {
       if (val instanceof NavigationStart) {
         if (
           val.url.indexOf('games/') > -1 ||
@@ -42,10 +51,4 @@ export class HomeComponent implements OnInit {
       }
     });
   }
-
-  isLoggedIn(): boolean {
-    return this.securityService.isLoggedIn();
-  }
-
-  ngOnInit(): void {}
 }
