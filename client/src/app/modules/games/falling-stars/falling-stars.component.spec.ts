@@ -10,7 +10,6 @@ import { Store } from '@ngrx/store';
 import { FinishGameActionEnum } from '../../../core/models/finish-game-action.enum';
 import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
 import { GameStartInformation } from '../../../core/models/game-start-information';
-import { workspaceRoot } from '@angular-devkit/build-angular/src/test-utils';
 
 describe('FallingStarsComponent', () => {
   let component: FallingStarsComponent;
