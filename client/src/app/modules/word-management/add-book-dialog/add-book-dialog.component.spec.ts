@@ -6,40 +6,39 @@ import { FormBuilder } from '@angular/forms';
 import { MaterialModule } from '../../common/material/material.module';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MessageService } from 'primeng/api';
-import { of } from 'rxjs';
+import {
+  NotificationService,
+  Severity,
+} from '../../../core/service/notification.service';
 
 describe('AddBookDialogComponent', () => {
   let component: AddBookDialogComponent;
   let fixture: ComponentFixture<AddBookDialogComponent>;
-  let mockFormBuilder;
   let mockMatDialogRef;
   let mockMessageService;
+  let mockNotificationService;
   beforeEach(async(() => {
     mockMessageService = jasmine.createSpyObj(['add']);
     mockMatDialogRef = jasmine.createSpyObj(['close']);
-    mockFormBuilder = jasmine.createSpyObj('formBuilder', {
-      group: {
-        get: (value: string) => {
-          return of('result');
-        },
-      },
-    });
+    mockNotificationService = jasmine.createSpyObj(['showMessage']);
+
     TestBed.configureTestingModule({
       imports: [MaterialModule],
       declarations: [AddBookDialogComponent],
       providers: [
         {
-          provide: MessageService,
-          useValue: mockMessageService,
+          provide: NotificationService,
+          useValue: mockNotificationService,
         },
         {
-          provide: FormBuilder,
-          useValue: mockFormBuilder,
+          provide: MessageService,
+          useValue: mockMessageService,
         },
         {
           provide: MatDialogRef,
           useValue: mockMatDialogRef,
         },
+        FormBuilder,
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
@@ -53,5 +52,29 @@ describe('AddBookDialogComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should show notification if chapterName is valid and submitForm hits', () => {
+    component.bookName.setErrors([]);
+
+    component.submitForm();
+
+    expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+      'Book name field is empty',
+      Severity.error
+    );
+  });
+
+  it('should close dialog if form controllers are valid and submitForm hits', () => {
+    component.bookName.setValue('');
+    component.addBookForm.setValue({
+      bookName: 'fake chapter name',
+    });
+
+    component.submitForm();
+
+    expect(mockMatDialogRef.close).toHaveBeenCalledWith(
+      component.addBookForm.value
+    );
   });
 });

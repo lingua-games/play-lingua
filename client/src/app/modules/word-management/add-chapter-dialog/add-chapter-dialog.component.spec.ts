@@ -3,23 +3,17 @@ import { AddChapterDialogComponent } from './add-chapter-dialog.component';
 import { FormBuilder } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { NotificationService } from '../../../core/service/notification.service';
-import { of } from 'rxjs';
+import {
+  NotificationService,
+  Severity,
+} from '../../../core/service/notification.service';
 
 describe('AddChapterDialogComponent', () => {
   let component: AddChapterDialogComponent;
   let fixture: ComponentFixture<AddChapterDialogComponent>;
-  let mockFormBuilder;
   let mockMatDialogRef;
   let mockNotificationService;
   beforeEach(async(() => {
-    mockFormBuilder = jasmine.createSpyObj('formBuilder', {
-      group: {
-        get: (value: string) => {
-          return of('result');
-        },
-      },
-    });
     mockMatDialogRef = jasmine.createSpyObj(['close']);
     mockNotificationService = jasmine.createSpyObj(['showMessage']);
 
@@ -34,10 +28,7 @@ describe('AddChapterDialogComponent', () => {
           provide: NotificationService,
           useValue: mockNotificationService,
         },
-        {
-          provide: FormBuilder,
-          useValue: mockFormBuilder,
-        },
+        FormBuilder,
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
@@ -51,5 +42,29 @@ describe('AddChapterDialogComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should show notification if chapterName is valid and submitForm hits', () => {
+    component.chapterName.setErrors([]);
+
+    component.submitForm();
+
+    expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+      'Chapter name is empty',
+      Severity.error
+    );
+  });
+
+  it('should close dialog if form controllers are valid and submitForm hits', () => {
+    component.chapterName.setValue('');
+    component.addChapterForm.setValue({
+      chapterName: 'fake chapter name',
+    });
+
+    component.submitForm();
+
+    expect(mockMatDialogRef.close).toHaveBeenCalledWith(
+      component.addChapterForm.value
+    );
   });
 });
