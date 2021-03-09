@@ -1,7 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AddWordByUserComponent } from './add-word-by-user.component';
-import { NotificationService } from '../../../core/service/notification.service';
+import {
+  NotificationService,
+  Severity,
+} from '../../../core/service/notification.service';
 import { FormBuilder } from '@angular/forms';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,6 +15,9 @@ import { of, throwError } from 'rxjs';
 import { ChapterModel } from '../../../core/models/chapter.model';
 import { BookChapterService } from '../../../core/service/book-chapter.service';
 import { BookModel } from '../../../core/models/book.model';
+import { WordToAddModel } from '../../../core/models/word-to-add.model';
+import { AddWordFormModel } from '../../../core/models/add-word-form.model';
+import { Router } from '@angular/router';
 
 describe('AddWordByUserComponent', () => {
   let component: AddWordByUserComponent;
@@ -26,6 +32,7 @@ describe('AddWordByUserComponent', () => {
     mockBookChapterService = jasmine.createSpyObj([
       'getChaptersByBookId',
       'getBooksByLanguage',
+      'submitForm',
     ]);
     mockMatDialog = jasmine.createSpyObj('dialog', {
       open: {
@@ -34,11 +41,19 @@ describe('AddWordByUserComponent', () => {
         },
       },
     });
-    mockLocalStorageService = jasmine.createSpyObj(['load']);
+    mockLocalStorageService = jasmine.createSpyObj(['load', 'delete', 'save']);
     TestBed.configureTestingModule({
       declarations: [AddWordByUserComponent],
       imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [
+        {
+          provide: Router,
+          useValue: {
+            navigate: jasmine
+              .createSpy('navigate')
+              .and.returnValue(Promise.resolve()),
+          },
+        },
         {
           provide: BookChapterService,
           useValue: mockBookChapterService,
@@ -254,6 +269,208 @@ describe('AddWordByUserComponent', () => {
     });
   });
 
+  describe('submitSelectedBooks', () => {
+    it('should show error if book is invalid', () => {
+      component.selectBookRandom.setValue('book');
+      component.book.setErrors([]);
+
+      component.submitSelectedBooks();
+
+      expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+        'Please select a book',
+        Severity.error,
+        '',
+        'bc'
+      );
+    });
+
+    it('should show error if chapter is invalid', () => {
+      component.selectBookRandom.setValue('book');
+      component.book.setValue('fake book');
+      component.chapter.setErrors([]);
+
+      component.submitSelectedBooks();
+
+      expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+        'Please select a chapter',
+        Severity.error,
+        '',
+        'bc'
+      );
+    });
+  });
+
+  describe('submitForm', () => {
+    it('should show error if book is invalid', () => {
+      component.book.setErrors([]);
+      component.selectBookRandom.setValue('book');
+
+      component.submitForm();
+
+      expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+        'Please select a book',
+        Severity.error,
+        '',
+        'bc'
+      );
+    });
+
+    it('should show error if chapter is invalid', () => {
+      component.chapter.setErrors([]);
+      component.selectBookRandom.setValue('book');
+
+      component.submitForm();
+
+      expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+        'Please select a chapter',
+        Severity.error,
+        '',
+        'bc'
+      );
+    });
+
+    it('should show error if no word selected in the form', () => {
+      component.selectBookRandom.setValue('something else');
+
+      component.submitForm();
+
+      expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+        'You should at least add a word',
+        Severity.error,
+        '',
+        'bc'
+      );
+    });
+
+    it('should set all the words invalid in the form if target.value is null', () => {
+      component.selectBookRandom.setValue('something else');
+      component.formData = {
+        words: [
+          {
+            base: {},
+            targets: [{}],
+          } as WordToAddModel,
+        ],
+      } as AddWordFormModel;
+
+      component.submitForm();
+
+      expect(component.formData.words[0].base.isValid).toBe(false);
+      expect(component.formData.words[0].targets[0].isValid).toBe(false);
+    });
+
+    it('should call saveInformationInfoForm', () => {
+      component.selectBookRandom.setValue('something else');
+      component.formData = {
+        words: [
+          {
+            base: { value: 'fakeBase', isValid: true },
+            targets: [{ value: 'fakeTarget', isValid: true }],
+          } as WordToAddModel,
+        ],
+      } as AddWordFormModel;
+      spyOn(component, 'saveInformationInfoForm');
+      mockBookChapterService.submitForm.and.callFake(() => {
+        return of();
+      });
+
+      component.submitForm();
+
+      expect(component.saveInformationInfoForm).toHaveBeenCalled();
+    });
+
+    it('should delete draft if API can store data into backend', () => {
+      component.selectBookRandom.setValue('something else');
+      component.formData = {
+        words: [
+          {
+            base: { value: 'fakeBase', isValid: true },
+            targets: [{ value: 'fakeTarget', isValid: true }],
+          } as WordToAddModel,
+        ],
+      } as AddWordFormModel;
+      spyOn(component, 'saveInformationInfoForm');
+      mockBookChapterService.submitForm.and.callFake(() => {
+        return of({});
+      });
+
+      component.submitForm();
+
+      expect(mockLocalStorageService.delete).toHaveBeenCalled();
+    });
+
+    it('should stop page loading ig API fail', () => {
+      component.selectBookRandom.setValue('something else');
+      component.formData = {
+        words: [
+          {
+            base: { value: 'fakeBase', isValid: true },
+            targets: [{ value: 'fakeTarget', isValid: true }],
+          } as WordToAddModel,
+        ],
+      } as AddWordFormModel;
+      spyOn(component, 'saveInformationInfoForm');
+      mockBookChapterService.submitForm.and.callFake(() => {
+        return throwError('some errors');
+      });
+
+      component.submitForm();
+
+      expect(component.isPageLoading).toBeFalse();
+    });
+  });
+
+  it('should remove word from the form', () => {
+    const words: WordToAddModel[] = [
+      {
+        targets: [{ value: 'a' }, { value: 'b' }, { value: 'c' }],
+        base: { value: 'z' },
+      },
+      {
+        targets: [{ value: 'v' }, { value: 'n' }, { value: 'm' }],
+        base: { value: 't' },
+      },
+    ];
+
+    component.formData.words = words;
+    component.removeWordSeries(words[1]);
+
+    expect(component.formData.words.indexOf(words[1])).toBe(-1);
+  });
+
+  it('should series of words and scroll down', () => {
+    jasmine.clock().uninstall();
+    jasmine.clock().install();
+
+    const el = { scrollTo: () => {} } as Element;
+    component.addWordSeries(el);
+    jasmine.clock().tick(2);
+
+    expect(
+      component.formData.words[component.formData.words.length - 1].base.value
+    ).toBe('');
+
+    jasmine.clock().uninstall();
+  });
+
+  it('should disable add target if target values is empty', () => {
+    const word: WordToAddModel = {
+      base: { value: 'fake base', isValid: true },
+      targets: [{ value: '' }],
+    };
+
+    expect(component.disableAddTarget(word)).toBeTrue();
+  });
+
+  it('should disable remove target if there is not target left', () => {
+    const word: WordToAddModel = {
+      base: { value: 'fake base', isValid: true },
+      targets: [],
+    };
+
+    expect(component.disableRemoveTarget(word)).toBeTrue();
+  });
+
   it('should return form value for selectBookRandom', () => {
     component.selectBookForm.controls['selectBookRandom'].setValue('testValue');
     expect(component.selectBookRandom.value).toEqual('testValue');
@@ -267,5 +484,92 @@ describe('AddWordByUserComponent', () => {
   it('should return form value for chapter', () => {
     component.selectBookForm.controls['chapter'].setValue('testValue');
     expect(component.chapter.value).toEqual('testValue');
+  });
+
+  it('should remove last target of the word', () => {
+    const fakeWord: WordToAddModel = {
+      targets: [{ value: 'a' }, { value: 'b' }],
+      base: { value: 'z' },
+    };
+
+    component.removeTargetWord(fakeWord);
+
+    expect(fakeWord.targets.length).toBe(1);
+  });
+
+  it('should add empty target word', () => {
+    const fakeWord: WordToAddModel = {
+      targets: [{ value: 'a' }, { value: 'b' }],
+      base: { value: 'z' },
+    };
+
+    component.addTargetWord(fakeWord);
+
+    expect(fakeWord.targets.length).toBe(3);
+  });
+
+  it('should save information into formData when saveInformationInfoForm hits', () => {
+    component.saveInformationInfoForm();
+
+    expect(component.formData.baseLanguage).toBe(component.baseLanguage.value);
+    expect(component.formData.targetLanguage).toBe(
+      component.targetLanguage.value
+    );
+    expect(component.formData.isRandom).toBe(component.selectBookRandom.value);
+    expect(component.formData.book).toBe(component.book.value);
+    expect(component.formData.chapter).toBe(component.chapter.value);
+  });
+
+  it('should save form information in localStorage when saveToDraft hits', () => {
+    component.saveToDraft();
+
+    expect(mockLocalStorageService.save).toHaveBeenCalled();
+  });
+
+  it('should show success notification when saveToDraft hits', () => {
+    component.saveToDraft();
+
+    expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+      'Saved to draft',
+      Severity.success,
+      '',
+      'bc'
+    );
+  });
+
+  describe('submitSelectedLanguages', () => {
+    it('should check isSelectedLanguageSubmit', () => {
+      component.isSelectedLanguageSubmit.setValue(true);
+
+      component.submitSelectedLanguages();
+
+      expect(component.isSelectedLanguageSubmit.value).toBe(false);
+    });
+
+    it('should show notification if selectedLanguageForm is invalid', () => {
+      component.selectLanguageForm.setErrors([]);
+
+      component.submitSelectedLanguages();
+
+      expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+        'Base language has not selected yet',
+        Severity.error,
+        '',
+        'bc'
+      );
+    });
+
+    it('should getBooks if selectLanguageForm is valid', () => {
+      component.selectLanguageForm.setValue({
+        baseLanguage: 1,
+        targetLanguage: 1,
+        isSelectedLanguageSubmit: false,
+      });
+      spyOn(component, 'getBooks');
+
+      component.submitSelectedLanguages();
+
+      expect(component.getBooks).toHaveBeenCalled();
+    });
   });
 });
