@@ -1,13 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { WordManagementComponent } from './word-management.component';
-import { RouterTestingModule } from '@angular/router/testing';
-import {
-  NavigationEnd,
-  NavigationStart,
-  Router,
-  RouterEvent,
-} from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
