@@ -9,13 +9,13 @@ import { NavigationEnd, Router, RouterEvent } from '@angular/router';
 export class WordManagementComponent implements OnInit {
   currentRoute: string;
 
-  constructor(router: Router) {
-    router.events.subscribe((event: RouterEvent) => {
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    this.router.events.subscribe((event: RouterEvent) => {
       if (event instanceof NavigationEnd) {
         this.currentRoute = event.url;
       }
     });
   }
-
-  ngOnInit(): void {}
 }
