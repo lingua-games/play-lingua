@@ -116,14 +116,6 @@ export class GameMenuComponent implements OnInit {
     return this.securityService.isLoggedIn();
   }
 
-  navigateToEditLanguages(): void {
-    this.router.navigate(['../choose-languages/edit']).then();
-  }
-
-  logout(): void {
-    this.securityService.logout();
-  }
-
   getSelectedLanguagesInformation(): void {
     this.inquiryResult.setLoading(true);
     this.wordService
