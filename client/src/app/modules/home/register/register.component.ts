@@ -32,7 +32,7 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.localStorageService.load(LocalStorageHelper.token)) {
+    if (this.securityService.isLoggedIn()) {
       this.router.navigate(['game-menu']).then();
     }
   }
@@ -98,7 +98,13 @@ export class RegisterComponent implements OnInit {
         }
         this.router.navigate(['../game-menu']).then();
       },
-      () => {}
+      () => {
+        this.notificationService.showMessage(
+          'Failed to log in after register',
+          Severity.error,
+          'Error'
+        );
+      }
     );
   }
 }

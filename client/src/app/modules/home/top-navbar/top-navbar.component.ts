@@ -15,7 +15,6 @@ export class TopNavbarComponent implements OnInit {
   showFullSize = true;
   totalScore: string;
   ngOnInit(): void {
-    console.log(this.securityService.isGuest());
     if (this.securityService.isGuest()) {
       this.totalScore = ' - ';
       return;
