@@ -13,6 +13,7 @@ import { SelectedLanguageModel } from '../../../core/models/selected-language.mo
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { SecurityService } from '../../../core/service/security.service';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-choose-languages',
@@ -32,7 +33,8 @@ export class ChooseLanguagesComponent implements OnInit {
     private selectedLanguageService: SelectedLanguageService,
     private activatedRoute: ActivatedRoute,
     private securityService: SecurityService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -49,12 +51,8 @@ export class ChooseLanguagesComponent implements OnInit {
     return this.securityService.isLoggedIn();
   }
 
-  navigateBack(): void {
-    if (this.activatedRoute.snapshot.paramMap.get('mode')) {
-      this.router.navigate(['./game-menu']).then();
-    } else {
-      this.router.navigate(['../']).then();
-    }
+  back(): void {
+    this.location.back();
   }
 
   getLanguages(): void {
@@ -129,7 +127,6 @@ export class ChooseLanguagesComponent implements OnInit {
         field: 'targetLanguages',
       });
     }
-
     if (this.targetLanguages.length > 5) {
       this.formValidation.push({
         isValid: false,

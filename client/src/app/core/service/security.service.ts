@@ -16,7 +16,7 @@ import { LocalStorageService } from './local-storage.service';
 })
 export class SecurityService {
   authUrl = environment.apiUrl + 'Auth';
-  private storageSub = new Subject<string>();
+  public storageSub = new Subject<string>();
 
   constructor(
     private http: HttpClient,

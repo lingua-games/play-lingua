@@ -71,6 +71,12 @@ describe('BasicInformationService', () => {
     expect(httpClientSpy.put).toHaveBeenCalled();
   });
 
+  it('should call getAllLanguages API when getAllLanguages() method hit', () => {
+    service.getAllLanguages();
+
+    expect(httpClientSpy.get).toHaveBeenCalled();
+  });
+
   it('should return array of menus when calling getGameMenus', () => {
     expect(service.getGameMenus().length).toBeGreaterThan(0);
   });

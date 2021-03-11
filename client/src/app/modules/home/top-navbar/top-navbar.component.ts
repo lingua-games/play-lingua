@@ -19,16 +19,13 @@ export class TopNavbarComponent implements OnInit {
       this.totalScore = ' - ';
       return;
     }
-    this.securityService.getTotalScore().subscribe(
-      (res: string) => {
-        if (res !== 'loading') {
-          this.totalScore = (Math.round(+res * 10) / 10).toString();
-        } else {
-          this.totalScore = res;
-        }
-      },
-      () => {}
-    );
+    this.securityService.getTotalScore().subscribe((res: string) => {
+      if (res !== 'loading') {
+        this.totalScore = (Math.round(+res * 10) / 10).toString();
+      } else {
+        this.totalScore = res;
+      }
+    });
     this.securityService.setTotalScore('0');
   }
 

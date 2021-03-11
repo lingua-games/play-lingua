@@ -47,6 +47,12 @@ describe('LocalStorageService', () => {
     expect(service.decryptData).toHaveBeenCalledWith('something');
   });
 
+  it('should return empty string if there is nothing in storage', () => {
+    spyOn(localStorage, 'getItem').and.returnValue(null);
+
+    expect(service.load(LocalStorageHelper.isGuest)).toBe('');
+  });
+
   it('should call decryptData when load() hits', () => {
     const expectedValue = 'expectedValue';
     spyOn(localStorage, 'getItem').and.returnValue('something');

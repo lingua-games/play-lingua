@@ -7,7 +7,7 @@
 
         <div class='action-menu-container mt-2' routerLink='../profile'  *ngIf='isLoggedIn()'>Manage profile</div>
         <hr  *ngIf='isLoggedIn()'>
-        <div class='action-menu-container' (click)='navigateToEditLanguages()' *ngIf='isLoggedIn()'>Change languages
+        <div class='action-menu-container' routerLink='../choose-languages/edit' *ngIf='isLoggedIn()'>Change languages
         </div>
 
         <div class='action-menu-container mt-2' *ngIf='securityService.isGuest()'  (click)='navigateToChangeLanguage()'>Change language</div>
