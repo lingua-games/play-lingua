@@ -1,9 +1,4 @@
-import {
-  async,
-  ComponentFixture,
-  getTestBed,
-  TestBed,
-} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ChooseLanguagesComponent } from './choose-languages.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
