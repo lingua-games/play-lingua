@@ -5,8 +5,6 @@ import { SuperMarioComponent } from './super-mario.component';
 import { GamesService } from '../../../core/service/games.service';
 import { of, throwError } from 'rxjs';
 import { global } from '@angular/compiler/src/util';
-import { MarioEnemy } from '../../../core/models/mario-enemy.model';
-import { ElementStyle } from '../../../core/models/element-style.model';
 
 describe('SuperMarioComponent', () => {
   let component: SuperMarioComponent;
