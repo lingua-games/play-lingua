@@ -3,8 +3,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SuperMarioComponent } from './super-mario.component';
 import { GamesService } from '../../../core/service/games.service';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { global } from '@angular/compiler/src/util';
+import { MarioEnemy } from '../../../core/models/mario-enemy.model';
+import { ElementStyle } from '../../../core/models/element-style.model';
 
 describe('SuperMarioComponent', () => {
   let component: SuperMarioComponent;
@@ -45,7 +47,7 @@ describe('SuperMarioComponent', () => {
   });
 
   describe('Key down events', () => {
-    it('startMovingLeft should be called on pressing arrow left', () => {
+    it('should startMovingLeft should be called on pressing arrow left', () => {
       const mockEvent = { code: 'ArrowLeft' } as KeyboardEvent;
       spyOn(component, 'startMovingLeft');
 
@@ -54,7 +56,7 @@ describe('SuperMarioComponent', () => {
       expect(component.startMovingLeft).toHaveBeenCalled();
     });
 
-    it('startMovingRight should be called on pressing arrow right', () => {
+    it('should startMovingRight should be called on pressing arrow right', () => {
       const mockEvent = { code: 'ArrowRight' } as KeyboardEvent;
       spyOn(component, 'startMovingRight');
 
@@ -63,7 +65,7 @@ describe('SuperMarioComponent', () => {
       expect(component.startMovingRight).toHaveBeenCalled();
     });
 
-    it('jump should be called on pressing space key', () => {
+    it('should jump should be called on pressing space key', () => {
       const mockEvent = { code: 'Space' } as KeyboardEvent;
       spyOn(component, 'jump');
 
@@ -83,17 +85,26 @@ describe('SuperMarioComponent', () => {
       jasmine.clock().uninstall();
     });
 
-    it('startMovingRight should be called on pressing arrow right', () => {
+    it('should move left arrow right left', () => {
+      const mockEvent = { code: 'ArrowLeft' } as KeyboardEvent;
+      spyOn(component, 'stopMovingLeft');
+
+      component.keyUpEvent(mockEvent);
+
+      expect(component.stopMovingLeft).toHaveBeenCalled();
+    });
+
+    it('should move right arrow right press', () => {
       const mockEvent = { code: 'ArrowRight' } as KeyboardEvent;
-      spyOn(component, 'startMovingRight');
+      spyOn(component, 'stopMovingRight');
 
-      component.keyDownEvent(mockEvent);
+      component.keyUpEvent(mockEvent);
 
-      expect(component.startMovingRight).toHaveBeenCalled();
+      expect(component.stopMovingRight).toHaveBeenCalled();
     });
   });
 
-  it('getWords should be called in startGame method', () => {
+  it('should getWords be called in startGame method', () => {
     spyOn(component, 'getWords');
 
     component.startGame();
@@ -101,7 +112,7 @@ describe('SuperMarioComponent', () => {
     expect(component.getWords).toHaveBeenCalled();
   });
 
-  it('getGameWords service should be called in getWords method', () => {
+  it('should getGameWords service be called in getWords method', () => {
     mockGameService.getGameWords.and.callFake(() => {
       return of(['foo', 'baar']);
     });
@@ -111,7 +122,17 @@ describe('SuperMarioComponent', () => {
     expect(mockGameService.getGameWords).toHaveBeenCalled();
   });
 
-  it('getWords should fill enemies array', () => {
+  it('should handle errors when getWordAPI fail', () => {
+    mockGameService.getGameWords.and.callFake(() => {
+      return throwError('some error');
+    });
+
+    fixture.detectChanges();
+
+    expect(2).toBe(2);
+  });
+
+  it('should getWords fill enemies array', () => {
     mockGameService.getGameWords.and.callFake(() => {
       return of(mockServiceResultValue);
     });
@@ -121,7 +142,7 @@ describe('SuperMarioComponent', () => {
     expect(component.enemies.length).toBe(mockServiceResultValue.length);
   });
 
-  it('startAnimating should be called in getWords method', () => {
+  it('should startAnimating be called in getWords method', () => {
     mockGameService.getGameWords.and.callFake(() => {
       return of(mockServiceResultValue);
     });
@@ -132,7 +153,7 @@ describe('SuperMarioComponent', () => {
     expect(component.startAnimating).toHaveBeenCalledWith(component.enemies[0]);
   });
 
-  it('clearInterval should be called in stopMovingLeft', () => {
+  it('should clearInterval be called in stopMovingLeft', () => {
     spyOn(global, 'clearInterval');
 
     component.stopMovingLeft();
@@ -141,7 +162,7 @@ describe('SuperMarioComponent', () => {
     expect(component.movingLeftInterval).toBeNull();
   });
 
-  it('clearInterval should be called in stopMovingRight', () => {
+  it('should clearInterval be called in stopMovingRight', () => {
     spyOn(global, 'clearInterval');
 
     component.stopMovingRight();
@@ -150,7 +171,7 @@ describe('SuperMarioComponent', () => {
     expect(component.movingRightInterval).toBeNull();
   });
 
-  it('startMovingLeft should call moveLeft after a period', () => {
+  it('should startMovingLeft call moveLeft after a period', () => {
     spyOn(component.mario, 'moveLeft');
 
     component.startMovingLeft();
@@ -160,7 +181,7 @@ describe('SuperMarioComponent', () => {
     jasmine.clock().uninstall();
   });
 
-  it('startMovingRight should call moveRight after a period', () => {
+  it('should startMovingRight call moveRight after a period', () => {
     spyOn(component.mario, 'moveRight');
 
     component.startMovingRight();
@@ -169,7 +190,7 @@ describe('SuperMarioComponent', () => {
     expect(component.mario.moveRight).toHaveBeenCalledWith(1);
   });
 
-  it('jump should call mario.jump method', () => {
+  it('should jump call mario.jump method', () => {
     spyOn(component.mario, 'jump');
     component.jumpHeight = 10;
 

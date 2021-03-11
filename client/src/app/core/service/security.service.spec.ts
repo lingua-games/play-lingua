@@ -9,6 +9,7 @@ import { LocalStorageHelper } from '../models/local-storage.enum';
 import { SecurityTokenInterface } from '../models/security-token.interface';
 import { UserModel } from '../models/user.model';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
 describe('SecurityService', () => {
   let service: SecurityService;
@@ -99,6 +100,27 @@ describe('SecurityService', () => {
     );
   });
 
+  it('should return observable when calling getTotalScore', () => {
+    service.storageSub = new Subject<string>();
+    spyOn(service.storageSub, 'asObservable');
+
+    service.getTotalScore();
+
+    expect(service.storageSub.asObservable).toHaveBeenCalled();
+  });
+
+  it('should break if new score is zero and setTotalScore calls', () => {
+    mockLocalStorageService.load.and.callFake(() => {
+      return false;
+    });
+
+    service.setTotalScore('0');
+
+    expect(mockLocalStorageService.load).toHaveBeenCalledWith(
+      LocalStorageHelper.totalScore
+    );
+  });
+
   it('should log out when there is not token and getTokenInformation hits', () => {
     mockLocalStorageService.load.and.callFake(() => {
       return 'null';
@@ -149,5 +171,19 @@ describe('SecurityService', () => {
   it('should delete localStorages on logoutOn401', () => {
     service.logoutOn401();
     expect(mockLocalStorageService.delete).toHaveBeenCalled();
+  });
+
+  it('should check isLoggedIn with token', () => {
+    service.isLoggedIn();
+    expect(mockLocalStorageService.load).toHaveBeenCalledWith(
+      LocalStorageHelper.token
+    );
+  });
+
+  it('should check isGuest with isGuest flag', () => {
+    service.isGuest();
+    expect(mockLocalStorageService.load).toHaveBeenCalledWith(
+      LocalStorageHelper.isGuest
+    );
   });
 });

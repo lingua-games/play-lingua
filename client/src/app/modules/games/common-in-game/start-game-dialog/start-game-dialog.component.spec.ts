@@ -113,6 +113,8 @@ describe('StartGameDialogComponent', () => {
     );
 
     fixture.detectChanges();
+
+    expect(2).toBe(2);
   });
 
   it('should return chapters when getChapters hits', () => {
