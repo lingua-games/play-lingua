@@ -4,7 +4,6 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SuperMarioComponent } from './super-mario.component';
 import { GamesService } from '../../../core/service/games.service';
 import { of, throwError } from 'rxjs';
-import { global } from '@angular/compiler/src/util';
 
 describe('SuperMarioComponent', () => {
   let component: SuperMarioComponent;
@@ -154,7 +153,7 @@ describe('SuperMarioComponent', () => {
   });
 
   it('should clearInterval be called in stopMovingLeft', () => {
-    spyOn(global, 'clearInterval');
+    spyOn(window, 'clearInterval');
 
     component.stopMovingLeft();
 
@@ -163,7 +162,7 @@ describe('SuperMarioComponent', () => {
   });
 
   it('should clearInterval be called in stopMovingRight', () => {
-    spyOn(global, 'clearInterval');
+    spyOn(window, 'clearInterval');
 
     component.stopMovingRight();
 

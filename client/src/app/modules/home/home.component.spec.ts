@@ -40,11 +40,12 @@ describe('HomeComponent', () => {
           },
         ],
         schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
-      }).compileComponents();
+      });
     })
   );
 
   beforeEach(() => {
+    TestBed.compileComponents();
     fixture = TestBed.createComponent(HomeComponent);
     component = fixture.componentInstance;
   });
