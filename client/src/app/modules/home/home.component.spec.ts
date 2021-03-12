@@ -44,13 +44,13 @@ describe('HomeComponent', () => {
     })
   );
 
-  beforeEach(() => {
+  beforeEach(() => {});
+
+  it('should create', () => {
     TestBed.compileComponents();
     fixture = TestBed.createComponent(HomeComponent);
     component = fixture.componentInstance;
-  });
 
-  it('should create', () => {
     fixture.detectChanges();
 
     expect(component).toBeTruthy();
@@ -60,12 +60,20 @@ describe('HomeComponent', () => {
     mockSecurityService.isLoggedIn.and.callFake(() => {
       return true;
     });
+    TestBed.compileComponents();
+    fixture = TestBed.createComponent(HomeComponent);
+    component = fixture.componentInstance;
 
     expect(component.isLoggedIn()).toBeTrue();
   });
 
   it('should set loading true if url is games/', () => {
+    TestBed.compileComponents();
+    fixture = TestBed.createComponent(HomeComponent);
+    component = fixture.componentInstance;
+
     fixture.detectChanges();
+
     expect(component.isLoading).toBeTrue();
   });
 
@@ -74,6 +82,9 @@ describe('HomeComponent', () => {
     TestBed.overrideProvider(Router, {
       useValue: mockRouter,
     });
+    TestBed.compileComponents();
+    fixture = TestBed.createComponent(HomeComponent);
+    component = fixture.componentInstance;
 
     fixture.detectChanges();
 
@@ -85,6 +96,9 @@ describe('HomeComponent', () => {
     TestBed.overrideProvider(Router, {
       useValue: mockRouter,
     });
+    TestBed.compileComponents();
+    fixture = TestBed.createComponent(HomeComponent);
+    component = fixture.componentInstance;
 
     fixture.detectChanges();
 
@@ -96,6 +110,9 @@ describe('HomeComponent', () => {
     TestBed.overrideProvider(Router, {
       useValue: mockRouter,
     });
+    TestBed.compileComponents();
+    fixture = TestBed.createComponent(HomeComponent);
+    component = fixture.componentInstance;
 
     fixture.detectChanges();
 
