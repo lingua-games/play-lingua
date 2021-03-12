@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ChooseLanguagesComponent } from './choose-languages.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -32,79 +32,85 @@ describe('ChooseLanguagesComponent', () => {
   let mockActivatedRouteWithGet;
   let mockSecurityService;
   let mockSelectedLanguageService;
-  beforeEach(async(() => {
-    mockSelectedLanguageService = jasmine.createSpyObj(['add']);
-    mockSecurityService = jasmine.createSpyObj(['isLoggedIn']);
-    mockActivatedRoute = {
-      snapshot: {
-        paramMap: {
-          get: () => {},
-        },
-      },
-    };
-
-    mockActivatedRouteWithGet = {
-      snapshot: {
-        paramMap: {
-          get: () => {
-            return 'edit';
+  beforeEach(
+    waitForAsync(() => {
+      mockSelectedLanguageService = jasmine.createSpyObj(['add']);
+      mockSecurityService = jasmine.createSpyObj(['isLoggedIn']);
+      mockActivatedRoute = {
+        snapshot: {
+          paramMap: {
+            get: () => {},
           },
         },
-      },
-    };
-    mockBasicInformationService = jasmine.createSpyObj(['getAllLanguages']);
-    mockLocation = jasmine.createSpyObj(['back']);
-    mockLocalStorageService = jasmine.createSpyObj(['load', 'delete', 'save']);
-    mockRouter = {
-      navigate: jasmine
-        .createSpy('navigate')
-        .and.returnValue(Promise.resolve()),
-    };
-    mockNotificationService = jasmine.createSpyObj(['showMessage']);
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
-      declarations: [ChooseLanguagesComponent],
-      providers: [
-        {
-          provide: SecurityService,
-          useValue: mockSecurityService,
+      };
+
+      mockActivatedRouteWithGet = {
+        snapshot: {
+          paramMap: {
+            get: () => {
+              return 'edit';
+            },
+          },
         },
-        {
-          provide: BasicInformationService,
-          useValue: mockBasicInformationService,
-        },
-        {
-          provide: SelectedLanguageService,
-          useValue: mockSelectedLanguageService,
-        },
-        {
-          provide: Location,
-          useValue: mockLocation,
-        },
-        {
-          provide: Router,
-          useValue: mockRouter,
-        },
-        {
-          provide: LocalStorageService,
-          useValue: mockLocalStorageService,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: mockActivatedRoute,
-        },
-        {
-          provide: NotificationService,
-          useValue: mockNotificationService,
-        },
-        {
-          provide: MatDialog,
-          useValue: {},
-        },
-      ],
-      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
-    });
-  }));
+      };
+      mockBasicInformationService = jasmine.createSpyObj(['getAllLanguages']);
+      mockLocation = jasmine.createSpyObj(['back']);
+      mockLocalStorageService = jasmine.createSpyObj([
+        'load',
+        'delete',
+        'save',
+      ]);
+      mockRouter = {
+        navigate: jasmine
+          .createSpy('navigate')
+          .and.returnValue(Promise.resolve()),
+      };
+      mockNotificationService = jasmine.createSpyObj(['showMessage']);
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule, RouterTestingModule],
+        declarations: [ChooseLanguagesComponent],
+        providers: [
+          {
+            provide: SecurityService,
+            useValue: mockSecurityService,
+          },
+          {
+            provide: BasicInformationService,
+            useValue: mockBasicInformationService,
+          },
+          {
+            provide: SelectedLanguageService,
+            useValue: mockSelectedLanguageService,
+          },
+          {
+            provide: Location,
+            useValue: mockLocation,
+          },
+          {
+            provide: Router,
+            useValue: mockRouter,
+          },
+          {
+            provide: LocalStorageService,
+            useValue: mockLocalStorageService,
+          },
+          {
+            provide: ActivatedRoute,
+            useValue: mockActivatedRoute,
+          },
+          {
+            provide: NotificationService,
+            useValue: mockNotificationService,
+          },
+          {
+            provide: MatDialog,
+            useValue: {},
+          },
+        ],
+        schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+      });
+    })
+  );
 
   describe('ngOnInit', () => {
     beforeEach(() => {

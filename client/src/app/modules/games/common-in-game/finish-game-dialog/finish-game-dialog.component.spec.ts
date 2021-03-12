@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FinishGameDialogComponent } from './finish-game-dialog.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -22,45 +22,47 @@ describe('FinishGameDialogComponent', () => {
   let mockScoreStorageService;
   let mockSecurityService;
   let mockDialogRef;
-  beforeEach(async(() => {
-    mockScoreStorageService = jasmine.createSpyObj(['storeScore']);
-    mockSecurityService = jasmine.createSpyObj('securityService', {
-      setTotalScore: () => {},
-      getTokenInformation: () => {
-        return {};
-      },
-    });
-    mockDialogRef = jasmine.createSpyObj('dialogRef', {
-      close: (item: FinishGameActionEnum) => {},
-    });
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
-      declarations: [FinishGameDialogComponent],
-      providers: [
-        {
-          provide: MAT_DIALOG_DATA,
-          useValue: {},
+  beforeEach(
+    waitForAsync(() => {
+      mockScoreStorageService = jasmine.createSpyObj(['storeScore']);
+      mockSecurityService = jasmine.createSpyObj('securityService', {
+        setTotalScore: () => {},
+        getTokenInformation: () => {
+          return {};
         },
-        {
-          provide: MatDialog,
-          useValue: {},
-        },
-        {
-          provide: MatDialogRef,
-          useValue: mockDialogRef,
-        },
-        {
-          provide: ScoreStorageService,
-          useValue: mockScoreStorageService,
-        },
-        {
-          provide: SecurityService,
-          useValue: mockSecurityService,
-        },
-      ],
-      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents();
-  }));
+      });
+      mockDialogRef = jasmine.createSpyObj('dialogRef', {
+        close: (item: FinishGameActionEnum) => {},
+      });
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule, RouterTestingModule],
+        declarations: [FinishGameDialogComponent],
+        providers: [
+          {
+            provide: MAT_DIALOG_DATA,
+            useValue: {},
+          },
+          {
+            provide: MatDialog,
+            useValue: {},
+          },
+          {
+            provide: MatDialogRef,
+            useValue: mockDialogRef,
+          },
+          {
+            provide: ScoreStorageService,
+            useValue: mockScoreStorageService,
+          },
+          {
+            provide: SecurityService,
+            useValue: mockSecurityService,
+          },
+        ],
+        schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FinishGameDialogComponent);

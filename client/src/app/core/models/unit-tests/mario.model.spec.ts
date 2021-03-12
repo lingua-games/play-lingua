@@ -1,5 +1,4 @@
 import { MarioModel } from '../mario.model';
-import { global } from '@angular/compiler/src/util';
 
 describe('MarioModel', () => {
   let model: MarioModel = new MarioModel();
@@ -45,7 +44,7 @@ describe('MarioModel', () => {
     });
 
     it('should call interval', () => {
-      spyOn(global, 'setInterval');
+      spyOn(window, 'setInterval');
 
       model.comeDown();
 
@@ -53,7 +52,7 @@ describe('MarioModel', () => {
     });
 
     it('should stop interval if bottom is less than original bottom', () => {
-      spyOn(global, 'clearInterval');
+      spyOn(window, 'clearInterval');
       model.style = { bottom: '10' };
       model.originalBottom = '11';
 
@@ -65,7 +64,7 @@ describe('MarioModel', () => {
     });
 
     it('should set style.bottom in the interval', () => {
-      spyOn(global, 'clearInterval');
+      spyOn(window, 'clearInterval');
       model.style = { bottom: '10' };
       model.originalBottom = '0';
 
@@ -107,7 +106,7 @@ describe('MarioModel', () => {
 
     it('should call clear interval and call comeDown at the end of jump', () => {
       model.style = { bottom: '5%' };
-      spyOn(global, 'clearInterval');
+      spyOn(window, 'clearInterval');
       spyOn(model, 'comeDown');
 
       model.jump(5);

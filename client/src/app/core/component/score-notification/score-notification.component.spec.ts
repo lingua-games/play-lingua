@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ScoreNotificationComponent } from './score-notification.component';
 import { Store } from '@ngrx/store';
@@ -11,21 +11,23 @@ describe('ScoreNotificationComponent', () => {
   let fixture: ComponentFixture<ScoreNotificationComponent>;
   let mockStore;
 
-  beforeEach(async(() => {
-    mockStore = jasmine.createSpyObj('store', {
-      select: of({}),
-    });
-    TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule],
-      declarations: [ScoreNotificationComponent],
-      providers: [
-        {
-          provide: Store,
-          useValue: mockStore,
-        },
-      ],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      mockStore = jasmine.createSpyObj('store', {
+        select: of({}),
+      });
+      TestBed.configureTestingModule({
+        imports: [BrowserAnimationsModule],
+        declarations: [ScoreNotificationComponent],
+        providers: [
+          {
+            provide: Store,
+            useValue: mockStore,
+          },
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     jasmine.clock().uninstall();

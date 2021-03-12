@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GreetingComponent } from './greeting.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
@@ -13,34 +13,36 @@ describe('GreetingComponent', () => {
   let mockSecurityService;
   let mockRouter;
   let mockLocalStorageService;
-  beforeEach(async(() => {
-    mockSecurityService = jasmine.createSpyObj(['isLoggedIn']);
-    mockLocalStorageService = jasmine.createSpyObj(['save', 'delete']);
-    mockRouter = {
-      navigate: jasmine
-        .createSpy('navigate')
-        .and.returnValue(Promise.resolve()),
-    };
-    TestBed.configureTestingModule({
-      imports: [],
-      declarations: [GreetingComponent],
-      providers: [
-        {
-          provide: LocalStorageService,
-          useValue: mockLocalStorageService,
-        },
-        {
-          provide: SecurityService,
-          useValue: mockSecurityService,
-        },
-        {
-          provide: Router,
-          useValue: mockRouter,
-        },
-      ],
-      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      mockSecurityService = jasmine.createSpyObj(['isLoggedIn']);
+      mockLocalStorageService = jasmine.createSpyObj(['save', 'delete']);
+      mockRouter = {
+        navigate: jasmine
+          .createSpy('navigate')
+          .and.returnValue(Promise.resolve()),
+      };
+      TestBed.configureTestingModule({
+        imports: [],
+        declarations: [GreetingComponent],
+        providers: [
+          {
+            provide: LocalStorageService,
+            useValue: mockLocalStorageService,
+          },
+          {
+            provide: SecurityService,
+            useValue: mockSecurityService,
+          },
+          {
+            provide: Router,
+            useValue: mockRouter,
+          },
+        ],
+        schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GreetingComponent);

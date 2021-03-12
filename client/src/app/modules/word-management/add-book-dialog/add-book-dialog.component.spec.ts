@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AddBookDialogComponent } from './add-book-dialog.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -17,32 +17,34 @@ describe('AddBookDialogComponent', () => {
   let mockMatDialogRef;
   let mockMessageService;
   let mockNotificationService;
-  beforeEach(async(() => {
-    mockMessageService = jasmine.createSpyObj(['add']);
-    mockMatDialogRef = jasmine.createSpyObj(['close']);
-    mockNotificationService = jasmine.createSpyObj(['showMessage']);
+  beforeEach(
+    waitForAsync(() => {
+      mockMessageService = jasmine.createSpyObj(['add']);
+      mockMatDialogRef = jasmine.createSpyObj(['close']);
+      mockNotificationService = jasmine.createSpyObj(['showMessage']);
 
-    TestBed.configureTestingModule({
-      imports: [MaterialModule],
-      declarations: [AddBookDialogComponent],
-      providers: [
-        {
-          provide: NotificationService,
-          useValue: mockNotificationService,
-        },
-        {
-          provide: MessageService,
-          useValue: mockMessageService,
-        },
-        {
-          provide: MatDialogRef,
-          useValue: mockMatDialogRef,
-        },
-        FormBuilder,
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [MaterialModule],
+        declarations: [AddBookDialogComponent],
+        providers: [
+          {
+            provide: NotificationService,
+            useValue: mockNotificationService,
+          },
+          {
+            provide: MessageService,
+            useValue: mockMessageService,
+          },
+          {
+            provide: MatDialogRef,
+            useValue: mockMatDialogRef,
+          },
+          FormBuilder,
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AddBookDialogComponent);

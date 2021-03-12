@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProfileComponent } from './profile.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import {
@@ -21,38 +21,40 @@ describe('ProfileComponent', () => {
   let mockNotificationService;
   let mockSecurityService;
   let mockUserService;
-  beforeEach(async(() => {
-    mockNotificationService = jasmine.createSpyObj(['showMessage']);
-    mockUserService = jasmine.createSpyObj(['editUser']);
-    mockSecurityService = jasmine.createSpyObj({
-      getTokenInformation: {} as SecurityTokenInterface,
-      setToken: () => {},
-    });
+  beforeEach(
+    waitForAsync(() => {
+      mockNotificationService = jasmine.createSpyObj(['showMessage']);
+      mockUserService = jasmine.createSpyObj(['editUser']);
+      mockSecurityService = jasmine.createSpyObj({
+        getTokenInformation: {} as SecurityTokenInterface,
+        setToken: () => {},
+      });
 
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
-      declarations: [ProfileComponent],
-      providers: [
-        {
-          provide: UserService,
-          useValue: mockUserService,
-        },
-        {
-          provide: NotificationService,
-          useValue: mockNotificationService,
-        },
-        {
-          provide: MatDialog,
-          useValue: {},
-        },
-        {
-          provide: SecurityService,
-          useValue: mockSecurityService,
-        },
-      ],
-      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule, RouterTestingModule],
+        declarations: [ProfileComponent],
+        providers: [
+          {
+            provide: UserService,
+            useValue: mockUserService,
+          },
+          {
+            provide: NotificationService,
+            useValue: mockNotificationService,
+          },
+          {
+            provide: MatDialog,
+            useValue: {},
+          },
+          {
+            provide: SecurityService,
+            useValue: mockSecurityService,
+          },
+        ],
+        schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ProfileComponent);

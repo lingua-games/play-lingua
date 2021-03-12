@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RegisterComponent } from './register.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -28,60 +28,62 @@ describe('RegisterComponent', () => {
   let mockLocation;
   let mockUserService;
   let mockLocalStorageService;
-  beforeEach(async(() => {
-    mockNotificationService = jasmine.createSpyObj(['showMessage']);
-    mockSecurityService = jasmine.createSpyObj([
-      'isLoggedIn',
-      'login',
-      'setToken',
-    ]);
-    mockLocation = jasmine.createSpyObj(['back']);
-    mockLocalStorageService = jasmine.createSpyObj(['save', 'delete']);
-    mockRouter = {
-      url: 'choose-languages',
-      navigate: jasmine
-        .createSpy('navigate')
-        .and.returnValue(Promise.resolve()),
-    };
-    mockUserService = jasmine.createSpyObj(['add']);
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
-      declarations: [RegisterComponent],
-      providers: [
-        {
-          provide: LocalStorageService,
-          useValue: mockLocalStorageService,
-        },
-        {
-          provide: UserService,
-          useValue: mockUserService,
-        },
-        {
-          provide: Location,
-          useValue: mockLocation,
-        },
-        {
-          provide: SecurityService,
-          useValue: mockSecurityService,
-        },
-        {
-          provide: Router,
-          useValue: mockRouter,
-        },
-        {
-          provide: NotificationService,
-          useValue: mockNotificationService,
-        },
-        {
-          provide: MatDialog,
-          useValue: {
-            closeAll: () => {},
+  beforeEach(
+    waitForAsync(() => {
+      mockNotificationService = jasmine.createSpyObj(['showMessage']);
+      mockSecurityService = jasmine.createSpyObj([
+        'isLoggedIn',
+        'login',
+        'setToken',
+      ]);
+      mockLocation = jasmine.createSpyObj(['back']);
+      mockLocalStorageService = jasmine.createSpyObj(['save', 'delete']);
+      mockRouter = {
+        url: 'choose-languages',
+        navigate: jasmine
+          .createSpy('navigate')
+          .and.returnValue(Promise.resolve()),
+      };
+      mockUserService = jasmine.createSpyObj(['add']);
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule, RouterTestingModule],
+        declarations: [RegisterComponent],
+        providers: [
+          {
+            provide: LocalStorageService,
+            useValue: mockLocalStorageService,
           },
-        },
-      ],
-      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents();
-  }));
+          {
+            provide: UserService,
+            useValue: mockUserService,
+          },
+          {
+            provide: Location,
+            useValue: mockLocation,
+          },
+          {
+            provide: SecurityService,
+            useValue: mockSecurityService,
+          },
+          {
+            provide: Router,
+            useValue: mockRouter,
+          },
+          {
+            provide: NotificationService,
+            useValue: mockNotificationService,
+          },
+          {
+            provide: MatDialog,
+            useValue: {
+              closeAll: () => {},
+            },
+          },
+        ],
+        schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RegisterComponent);
