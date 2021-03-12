@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RouterTestingModule } from '@angular/router/testing';
 import { HomeComponent } from './home.component';
@@ -14,33 +14,35 @@ describe('HomeComponent', () => {
   let fixture: ComponentFixture<HomeComponent>;
   let mockSecurityService;
   let mockRouter;
-  beforeEach(async(() => {
-    mockSecurityService = jasmine.createSpyObj(['isLoggedIn']);
-    mockRouter = {
-      url: '/non-pdp/phases/8',
-      events: of(new NavigationStart(0, 'games/')),
-      navigate: jasmine.createSpy('navigate'),
-    };
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
-      declarations: [HomeComponent],
-      providers: [
-        {
-          provide: Router,
-          useValue: mockRouter,
-        },
-        {
-          provide: MatDialog,
-          useValue: {},
-        },
-        {
-          provide: SecurityService,
-          useValue: mockSecurityService,
-        },
-      ],
-      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      mockSecurityService = jasmine.createSpyObj(['isLoggedIn']);
+      mockRouter = {
+        url: '/non-pdp/phases/8',
+        events: of(new NavigationStart(0, 'games/')),
+        navigate: jasmine.createSpy('navigate'),
+      };
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule, RouterTestingModule],
+        declarations: [HomeComponent],
+        providers: [
+          {
+            provide: Router,
+            useValue: mockRouter,
+          },
+          {
+            provide: MatDialog,
+            useValue: {},
+          },
+          {
+            provide: SecurityService,
+            useValue: mockSecurityService,
+          },
+        ],
+        schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HomeComponent);

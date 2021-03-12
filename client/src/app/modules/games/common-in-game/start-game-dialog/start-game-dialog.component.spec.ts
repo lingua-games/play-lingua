@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StartGameDialogComponent } from './start-game-dialog.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
@@ -22,57 +22,59 @@ describe('StartGameDialogComponent', () => {
   let mockLocalStorageService;
   let mockBookChapterService;
   let mockGameService;
-  beforeEach(async(() => {
-    mockNotificationService = jasmine.createSpyObj(['showMessage']);
-    mockMatDialogRef = jasmine.createSpyObj(['close']);
-    mockLocalStorageService = jasmine.createSpyObj('localStorageService', {
-      load: `{ "defaultBaseLanguage": {}, "defaultTargetLanguage": {} }`,
-    });
-    mockBookChapterService = jasmine.createSpyObj([
-      'getBooksBySourceAndTargetLanguageId',
-      'getChaptersByBookId',
-    ]);
-    mockGameService = jasmine.createSpyObj(['getGameWords']);
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      declarations: [StartGameDialogComponent],
-      providers: [
-        {
-          provide: Router,
-          useValue: {
-            navigate: jasmine
-              .createSpy('navigate')
-              .and.returnValue(Promise.resolve()),
+  beforeEach(
+    waitForAsync(() => {
+      mockNotificationService = jasmine.createSpyObj(['showMessage']);
+      mockMatDialogRef = jasmine.createSpyObj(['close']);
+      mockLocalStorageService = jasmine.createSpyObj('localStorageService', {
+        load: `{ "defaultBaseLanguage": {}, "defaultTargetLanguage": {} }`,
+      });
+      mockBookChapterService = jasmine.createSpyObj([
+        'getBooksBySourceAndTargetLanguageId',
+        'getChaptersByBookId',
+      ]);
+      mockGameService = jasmine.createSpyObj(['getGameWords']);
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule],
+        declarations: [StartGameDialogComponent],
+        providers: [
+          {
+            provide: Router,
+            useValue: {
+              navigate: jasmine
+                .createSpy('navigate')
+                .and.returnValue(Promise.resolve()),
+            },
           },
-        },
-        {
-          provide: MatDialogRef,
-          useValue: mockMatDialogRef,
-        },
-        {
-          provide: MAT_DIALOG_DATA,
-          useValue: { '': '' },
-        },
-        {
-          provide: NotificationService,
-          useValue: mockNotificationService,
-        },
-        {
-          provide: LocalStorageService,
-          useValue: mockLocalStorageService,
-        },
-        {
-          provide: BookChapterService,
-          useValue: mockBookChapterService,
-        },
-        {
-          provide: GamesService,
-          useValue: mockGameService,
-        },
-      ],
-      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents();
-  }));
+          {
+            provide: MatDialogRef,
+            useValue: mockMatDialogRef,
+          },
+          {
+            provide: MAT_DIALOG_DATA,
+            useValue: { '': '' },
+          },
+          {
+            provide: NotificationService,
+            useValue: mockNotificationService,
+          },
+          {
+            provide: LocalStorageService,
+            useValue: mockLocalStorageService,
+          },
+          {
+            provide: BookChapterService,
+            useValue: mockBookChapterService,
+          },
+          {
+            provide: GamesService,
+            useValue: mockGameService,
+          },
+        ],
+        schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(StartGameDialogComponent);

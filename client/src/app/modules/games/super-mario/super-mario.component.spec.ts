@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SuperMarioComponent } from './super-mario.component';
 import { GamesService } from '../../../core/service/games.service';
@@ -11,20 +11,22 @@ describe('SuperMarioComponent', () => {
   let fixture: ComponentFixture<SuperMarioComponent>;
   let mockGameService;
   let mockServiceResultValue;
-  beforeEach(async(() => {
-    mockGameService = jasmine.createSpyObj(['getGameWords']);
+  beforeEach(
+    waitForAsync(() => {
+      mockGameService = jasmine.createSpyObj(['getGameWords']);
 
-    TestBed.configureTestingModule({
-      declarations: [SuperMarioComponent],
-      providers: [
-        {
-          provide: GamesService,
-          useValue: mockGameService,
-        },
-      ],
-      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        declarations: [SuperMarioComponent],
+        providers: [
+          {
+            provide: GamesService,
+            useValue: mockGameService,
+          },
+        ],
+        schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SuperMarioComponent);

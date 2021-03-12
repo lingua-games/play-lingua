@@ -1,4 +1,4 @@
-import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { TestBed, ComponentFixture, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
@@ -14,36 +14,38 @@ describe('AppComponent', () => {
   let component: AppComponent;
   let mockSecurityService;
   let mockUserService;
-  beforeEach(async(() => {
-    mockSecurityService = jasmine.createSpyObj([
-      'isLoggedIn',
-      'initialTotalScore',
-    ]);
+  beforeEach(
+    waitForAsync(() => {
+      mockSecurityService = jasmine.createSpyObj([
+        'isLoggedIn',
+        'initialTotalScore',
+      ]);
 
-    mockUserService = jasmine.createSpyObj('userService', [
-      'getUserInformation',
-    ]);
+      mockUserService = jasmine.createSpyObj('userService', [
+        'getUserInformation',
+      ]);
 
-    TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientTestingModule],
-      declarations: [AppComponent],
-      providers: [
-        {
-          provide: MatDialog,
-          useValue: {},
-        },
-        {
-          provide: SecurityService,
-          useValue: mockSecurityService,
-        },
-        {
-          provide: UserService,
-          useValue: mockUserService,
-        },
-      ],
-      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [RouterTestingModule, HttpClientTestingModule],
+        declarations: [AppComponent],
+        providers: [
+          {
+            provide: MatDialog,
+            useValue: {},
+          },
+          {
+            provide: SecurityService,
+            useValue: mockSecurityService,
+          },
+          {
+            provide: UserService,
+            useValue: mockUserService,
+          },
+        ],
+        schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AppComponent);

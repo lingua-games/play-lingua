@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SelectDefaultLanguageDialogComponent } from './select-default-language-dialog.component';
 import { NotificationService } from '../../service/notification.service';
@@ -19,41 +19,43 @@ describe('SelectDefaultLanguageDialogComponent', () => {
   let mockLocalStorageService;
   let mockLanguageService;
 
-  beforeEach(async(() => {
-    mockNotificationService = jasmine.createSpyObj(['showMessage']);
-    mockMatDialogRef = jasmine.createSpyObj(['close']);
-    mockLocalStorageService = jasmine.createSpyObj('localStorageService', [
-      'load',
-      'save',
-    ]);
-    mockLanguageService = jasmine.createSpyObj('languageService', [
-      'setDefaultLanguage',
-    ]);
+  beforeEach(
+    waitForAsync(() => {
+      mockNotificationService = jasmine.createSpyObj(['showMessage']);
+      mockMatDialogRef = jasmine.createSpyObj(['close']);
+      mockLocalStorageService = jasmine.createSpyObj('localStorageService', [
+        'load',
+        'save',
+      ]);
+      mockLanguageService = jasmine.createSpyObj('languageService', [
+        'setDefaultLanguage',
+      ]);
 
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      declarations: [SelectDefaultLanguageDialogComponent],
-      providers: [
-        {
-          provide: MatDialogRef,
-          useValue: mockMatDialogRef,
-        },
-        {
-          provide: NotificationService,
-          useValue: mockNotificationService,
-        },
-        {
-          provide: LocalStorageService,
-          useValue: mockLocalStorageService,
-        },
-        {
-          provide: SelectedLanguageService,
-          useValue: mockLanguageService,
-        },
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule],
+        declarations: [SelectDefaultLanguageDialogComponent],
+        providers: [
+          {
+            provide: MatDialogRef,
+            useValue: mockMatDialogRef,
+          },
+          {
+            provide: NotificationService,
+            useValue: mockNotificationService,
+          },
+          {
+            provide: LocalStorageService,
+            useValue: mockLocalStorageService,
+          },
+          {
+            provide: SelectedLanguageService,
+            useValue: mockLanguageService,
+          },
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SelectDefaultLanguageDialogComponent);

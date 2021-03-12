@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AddWordByUserComponent } from './add-word-by-user.component';
 import {
@@ -27,54 +27,60 @@ describe('AddWordByUserComponent', () => {
   let mockLocalStorageService;
   let mockBookChapterService;
 
-  beforeEach(async(() => {
-    mockNotificationService = jasmine.createSpyObj(['showMessage']);
-    mockBookChapterService = jasmine.createSpyObj([
-      'getChaptersByBookId',
-      'getBooksByLanguage',
-      'submitForm',
-    ]);
-    mockMatDialog = jasmine.createSpyObj('dialog', {
-      open: {
-        afterClosed: () => {
-          return of();
-        },
-      },
-    });
-    mockLocalStorageService = jasmine.createSpyObj(['load', 'delete', 'save']);
-    TestBed.configureTestingModule({
-      declarations: [AddWordByUserComponent],
-      imports: [HttpClientTestingModule, RouterTestingModule],
-      providers: [
-        {
-          provide: Router,
-          useValue: {
-            navigate: jasmine
-              .createSpy('navigate')
-              .and.returnValue(Promise.resolve()),
+  beforeEach(
+    waitForAsync(() => {
+      mockNotificationService = jasmine.createSpyObj(['showMessage']);
+      mockBookChapterService = jasmine.createSpyObj([
+        'getChaptersByBookId',
+        'getBooksByLanguage',
+        'submitForm',
+      ]);
+      mockMatDialog = jasmine.createSpyObj('dialog', {
+        open: {
+          afterClosed: () => {
+            return of();
           },
         },
-        {
-          provide: BookChapterService,
-          useValue: mockBookChapterService,
-        },
-        {
-          provide: MatDialog,
-          useValue: mockMatDialog,
-        },
-        {
-          provide: NotificationService,
-          useValue: mockNotificationService,
-        },
-        {
-          provide: LocalStorageService,
-          useValue: mockLocalStorageService,
-        },
-        FormBuilder,
-      ],
-      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents();
-  }));
+      });
+      mockLocalStorageService = jasmine.createSpyObj([
+        'load',
+        'delete',
+        'save',
+      ]);
+      TestBed.configureTestingModule({
+        declarations: [AddWordByUserComponent],
+        imports: [HttpClientTestingModule, RouterTestingModule],
+        providers: [
+          {
+            provide: Router,
+            useValue: {
+              navigate: jasmine
+                .createSpy('navigate')
+                .and.returnValue(Promise.resolve()),
+            },
+          },
+          {
+            provide: BookChapterService,
+            useValue: mockBookChapterService,
+          },
+          {
+            provide: MatDialog,
+            useValue: mockMatDialog,
+          },
+          {
+            provide: NotificationService,
+            useValue: mockNotificationService,
+          },
+          {
+            provide: LocalStorageService,
+            useValue: mockLocalStorageService,
+          },
+          FormBuilder,
+        ],
+        schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AddWordByUserComponent);

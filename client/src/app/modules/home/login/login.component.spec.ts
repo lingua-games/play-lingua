@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LoginComponent } from './login.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -21,48 +21,50 @@ describe('LoginComponent', () => {
   let mockSecurityService;
   let mockRouter;
   let mockLocalStorageService;
-  beforeEach(async(() => {
-    mockRouter = {
-      url: 'choose-languages',
-      navigate: jasmine
-        .createSpy('navigate')
-        .and.returnValue(Promise.resolve()),
-    };
-    mockLocation = jasmine.createSpyObj(['back']);
-    mockLocalStorageService = jasmine.createSpyObj(['save', 'delete']);
-    mockSecurityService = jasmine.createSpyObj([
-      'isLoggedIn',
-      'login',
-      'setToken',
-    ]);
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
-      declarations: [LoginComponent],
-      providers: [
-        {
-          provide: MatDialog,
-          useValue: { closeAll: () => {} },
-        },
-        {
-          provide: Router,
-          useValue: mockRouter,
-        },
-        {
-          provide: SecurityService,
-          useValue: mockSecurityService,
-        },
-        {
-          provide: Location,
-          useValue: mockLocation,
-        },
-        {
-          provide: LocalStorageService,
-          useValue: mockLocalStorageService,
-        },
-      ],
-      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      mockRouter = {
+        url: 'choose-languages',
+        navigate: jasmine
+          .createSpy('navigate')
+          .and.returnValue(Promise.resolve()),
+      };
+      mockLocation = jasmine.createSpyObj(['back']);
+      mockLocalStorageService = jasmine.createSpyObj(['save', 'delete']);
+      mockSecurityService = jasmine.createSpyObj([
+        'isLoggedIn',
+        'login',
+        'setToken',
+      ]);
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule, RouterTestingModule],
+        declarations: [LoginComponent],
+        providers: [
+          {
+            provide: MatDialog,
+            useValue: { closeAll: () => {} },
+          },
+          {
+            provide: Router,
+            useValue: mockRouter,
+          },
+          {
+            provide: SecurityService,
+            useValue: mockSecurityService,
+          },
+          {
+            provide: Location,
+            useValue: mockLocation,
+          },
+          {
+            provide: LocalStorageService,
+            useValue: mockLocalStorageService,
+          },
+        ],
+        schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LoginComponent);
