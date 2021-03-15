@@ -10,7 +10,8 @@
     "build:prod": "ng build --prod  --aot",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "e2e:ci": "ng e2e -c ci"
+    "e2e:ci": "ng e2e -c ci",
+    "prettier": "prettier --write src/**/*.{ts,js,css,html}"
   },
   "lint-staged": {
     "*.ts": [
@@ -24,8 +25,8 @@
   "private": true,
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "ng lint"
+      "pre-commit": "ng lint",
+      "pre-push": "ng build --aot true"
     }
   },
   "dependencies": {
