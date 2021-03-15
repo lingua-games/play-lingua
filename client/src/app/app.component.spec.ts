@@ -44,7 +44,7 @@ describe('AppComponent', () => {
         ],
         schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
       }).compileComponents();
-    })
+    }),
   );
 
   beforeEach(() => {
@@ -76,7 +76,7 @@ describe('AppComponent', () => {
     component.getUserInformation();
 
     expect(mockSecurityService.initialTotalScore).toHaveBeenCalledWith(
-      'loading'
+      'loading',
     );
   });
 
@@ -89,7 +89,7 @@ describe('AppComponent', () => {
     component.getUserInformation();
 
     expect(mockSecurityService.initialTotalScore).toHaveBeenCalledWith(
-      value.totalScore.toString()
+      value.totalScore.toString(),
     );
   });
 

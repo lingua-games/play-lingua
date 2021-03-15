@@ -16,9 +16,10 @@
   "prettier": "prettier --write src/**/*.{ts,js,css,html}",
   "private": true,
   "lint-staged": {
-    "src/**/*.{ts,css,html}": [
-      "npm run prettier:check",
-      "npm run test:ci"
+    "../client/*": [
+      "git add .",
+      "npm run test:ci client.json",
+      "git add ."
     ]
   },
   "husky": {
