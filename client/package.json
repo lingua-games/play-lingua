@@ -15,10 +15,12 @@
   "prettier": "prettier --write src/**/*.{ts,js,css,html}",
   "private": true,
   "lint-staged": {
-      "*": [
-        "git add",
-        "npm run lint"
-      ]
+    "src/**/*.{js,jsx,ts,tsx,json,css}": [
+      "prettier --write",
+      "eslint --fix src/",
+      "tslint --fix --project .",
+      "git add"
+    ]
   },
   "husky": {
     "hooks": {
