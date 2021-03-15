@@ -15,9 +15,8 @@
   "prettier": "prettier --write src/**/*.{ts,js,css,html}",
   "private": true,
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,json,css}": [
-      "ng lint",
-      "git add"
+    "src/**/*.{ts,css,html}": [
+      "npm run prettier:check"
     ]
   },
   "husky": {
