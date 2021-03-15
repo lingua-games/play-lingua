@@ -10,12 +10,20 @@
     "build:prod": "ng build --prod --aot",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "e2e:ci": "ng e2e -c ci"
+    "e2e:ci": "ng e2e -c ci",
+    "prettier": "prettier --write src/**/*.{ts,js,css,html}",
+    "husky": {
+      "hooks": {
+        "pre-commit": "npm run prettier --staged && ng lint && npm test",
+        "pre-push": "ng build --aot true"
+      }
+    }
   },
+  "prettier": "prettier --write src/**/*.{ts,js,css,html}",
   "private": true,
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged && ng lint && ng test",
+      "pre-commit": "npm run prettier --staged && ng lint && npm test",
       "pre-push": "ng build --aot true"
     }
   },
