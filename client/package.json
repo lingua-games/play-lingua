@@ -19,6 +19,7 @@
       "prettier --write",
       "eslint --fix src/",
       "tslint --fix --project .",
+      "ng lint",
       "git add"
     ]
   },
