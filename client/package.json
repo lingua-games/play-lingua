@@ -10,8 +10,7 @@
     "build:prod": "ng build --prod  --aot",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "e2e:ci": "ng e2e -c ci",
-    "prettier": "prettier --write src/**/*.{ts,js,css,html}"
+    "e2e:ci": "ng e2e -c ci"
   },
   "prettier": "prettier --write src/**/*.{ts,js,css,html}",
   "private": true,
