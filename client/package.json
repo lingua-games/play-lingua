@@ -13,20 +13,12 @@
     "e2e:ci": "ng e2e -c ci",
     "prettier": "prettier --write src/**/*.{ts,js,css,html}"
   },
-  "lint-staged": {
-    "*.ts": [
-      "tslint",
-      "prettier --write",
-      "git add"
-    ],
-    "*.{js,css,md}": "prettier --write"
-  },
   "prettier": "prettier --write src/**/*.{ts,js,css,html}",
   "private": true,
   "husky": {
     "hooks": {
-      "pre-commit": "ng lint",
-      "pre-push": "ng build --aot true"
+      "pre-commit": "ng lint && npm run test:ci",
+      "pre-push": ""
     }
   },
   "dependencies": {
