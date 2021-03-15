@@ -18,7 +18,7 @@ namespace XUnitTestProject1
             // Arrange
             _fakeLoginResult = new LoginResult
             {
-                Token = "Fake token",
+                Token = "Fake token", 
                 User = new User
                 {
                     Email = "Fake email"
