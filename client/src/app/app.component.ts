@@ -10,6 +10,7 @@ import { UserModel } from './core/models/user.model';
 })
 export class AppComponent implements OnInit {
   title = 'client';
+  something: string;
 
   constructor(
     private securityService: SecurityService,
