@@ -26,7 +26,7 @@ namespace XUnitTestProject1
             };
             var mockRepo = new Mock<IAuthRepository>();
             var fakeRequest = new User();
-            mockRepo.Setup(repo => repo.Login(fakeRequest)).Returns(_fakeLoginResult); 
+            mockRepo.Setup(repo => repo.Login(fakeRequest)).Returns(_fakeLoginResult);  
             var controller = new AuthController(mockRepo.Object);
 
             // Act
