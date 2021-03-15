@@ -17,9 +17,7 @@
   "private": true,
   "lint-staged": {
     "../client/**/**/*.{ts,css,html}": [
-      "git add .",
-      "npm run test:ci client.json",
-      "git add ."
+      "npm run test:ci"
     ]
   },
   "husky": {
