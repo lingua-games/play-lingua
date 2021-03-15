@@ -29,12 +29,6 @@
   },
   "prettier": "prettier --write src/**/*.{ts,js,css,html}",
   "private": true,
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "ng build --aot true"
-    }
-  },
   "dependencies": {
     "@angular/animations": "~11.2.5",
     "@angular/cdk": "^11.2.4",
