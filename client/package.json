@@ -14,9 +14,15 @@
   },
   "prettier": "prettier --write src/**/*.{ts,js,css,html}",
   "private": true,
+  "lint-staged": {
+      "*": [
+        "git add",
+        "npm run lint"
+      ]
+  },
   "husky": {
     "hooks": {
-      "pre-commit": "ng lint && npm run test:ci",
+      "pre-commit": "lint-staged",
       "pre-push": ""
     }
   },
