@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { GameMenuComponent } from './game-menu.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -22,56 +22,64 @@ describe('GameMenuComponent', () => {
   let mockRouter;
   let mockSecurityService;
   let mockWordService;
-  beforeEach(async(() => {
-    mockNotificationService = jasmine.createSpyObj(['showMessage']);
-    mockWordService = jasmine.createSpyObj(['getSelectedLanguagesInformation']);
-    mockMatDialog = jasmine.createSpyObj('dialog', {
-      open: {
-        afterClosed: () => {
-          return of();
+  beforeEach(
+    waitForAsync(() => {
+      mockNotificationService = jasmine.createSpyObj(['showMessage']);
+      mockWordService = jasmine.createSpyObj([
+        'getSelectedLanguagesInformation',
+      ]);
+      mockMatDialog = jasmine.createSpyObj('dialog', {
+        open: {
+          afterClosed: () => {
+            return of();
+          },
         },
-      },
-    });
-    mockLocalStorageService = jasmine.createSpyObj(['load', 'delete', 'save']);
-    mockSecurityService = jasmine.createSpyObj(['isGuest', 'isLoggedIn']);
-    mockRouter = {
-      navigate: jasmine
-        .createSpy('navigate')
-        .and.returnValue(Promise.resolve()),
-    };
+      });
+      mockLocalStorageService = jasmine.createSpyObj([
+        'load',
+        'delete',
+        'save',
+      ]);
+      mockSecurityService = jasmine.createSpyObj(['isGuest', 'isLoggedIn']);
+      mockRouter = {
+        navigate: jasmine
+          .createSpy('navigate')
+          .and.returnValue(Promise.resolve()),
+      };
 
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      declarations: [GameMenuComponent],
-      providers: [
-        {
-          provide: WordService,
-          useValue: mockWordService,
-        },
-        {
-          provide: SecurityService,
-          useValue: mockSecurityService,
-        },
-        {
-          provide: LocalStorageService,
-          useValue: mockLocalStorageService,
-        },
-        {
-          provide: MatDialog,
-          useValue: mockMatDialog,
-        },
-        {
-          provide: NotificationService,
-          useValue: mockNotificationService,
-        },
-        {
-          provide: Router,
-          useValue: mockRouter,
-        },
-      ],
-      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule],
+        declarations: [GameMenuComponent],
+        providers: [
+          {
+            provide: WordService,
+            useValue: mockWordService,
+          },
+          {
+            provide: SecurityService,
+            useValue: mockSecurityService,
+          },
+          {
+            provide: LocalStorageService,
+            useValue: mockLocalStorageService,
+          },
+          {
+            provide: MatDialog,
+            useValue: mockMatDialog,
+          },
+          {
+            provide: NotificationService,
+            useValue: mockNotificationService,
+          },
+          {
+            provide: Router,
+            useValue: mockRouter,
+          },
+        ],
+        schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GameMenuComponent);

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AddChapterDialogComponent } from './add-chapter-dialog.component';
 import { FormBuilder } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -13,26 +13,28 @@ describe('AddChapterDialogComponent', () => {
   let fixture: ComponentFixture<AddChapterDialogComponent>;
   let mockMatDialogRef;
   let mockNotificationService;
-  beforeEach(async(() => {
-    mockMatDialogRef = jasmine.createSpyObj(['close']);
-    mockNotificationService = jasmine.createSpyObj(['showMessage']);
+  beforeEach(
+    waitForAsync(() => {
+      mockMatDialogRef = jasmine.createSpyObj(['close']);
+      mockNotificationService = jasmine.createSpyObj(['showMessage']);
 
-    TestBed.configureTestingModule({
-      declarations: [AddChapterDialogComponent],
-      providers: [
-        {
-          provide: MatDialogRef,
-          useValue: mockMatDialogRef,
-        },
-        {
-          provide: NotificationService,
-          useValue: mockNotificationService,
-        },
-        FormBuilder,
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        declarations: [AddChapterDialogComponent],
+        providers: [
+          {
+            provide: MatDialogRef,
+            useValue: mockMatDialogRef,
+          },
+          {
+            provide: NotificationService,
+            useValue: mockNotificationService,
+          },
+          FormBuilder,
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AddChapterDialogComponent);

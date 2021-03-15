@@ -1,12 +1,8 @@
 import { LoadingDirective } from './loading.directive';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  Component,
-  CUSTOM_ELEMENTS_SCHEMA,
-  DebugElement,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { Component, DebugElement } from '@angular/core';
 
 @Component({
   template: `

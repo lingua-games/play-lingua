@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BooksComponent } from './books.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,37 +14,39 @@ describe('BooksComponent', () => {
   let mockBasicInformationService;
   const getBooksApiResult = [{ name: 'testBook' } as BookModel];
 
-  beforeEach(async(() => {
-    mockBasicInformationService = jasmine.createSpyObj([
-      'getBooks',
-      'addBook',
-      'editBook',
-      'deleteBook',
-    ]);
+  beforeEach(
+    waitForAsync(() => {
+      mockBasicInformationService = jasmine.createSpyObj([
+        'getBooks',
+        'addBook',
+        'editBook',
+        'deleteBook',
+      ]);
 
-    mockMatDialog = jasmine.createSpyObj('dialog', {
-      open: {
-        afterClosed: () => {
-          return of();
+      mockMatDialog = jasmine.createSpyObj('dialog', {
+        open: {
+          afterClosed: () => {
+            return of();
+          },
         },
-      },
-    });
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      declarations: [BooksComponent],
-      providers: [
-        {
-          provide: MatDialog,
-          useValue: mockMatDialog,
-        },
-        {
-          provide: BasicInformationService,
-          useValue: mockBasicInformationService,
-        },
-      ],
-      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents();
-  }));
+      });
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule],
+        declarations: [BooksComponent],
+        providers: [
+          {
+            provide: MatDialog,
+            useValue: mockMatDialog,
+          },
+          {
+            provide: BasicInformationService,
+            useValue: mockBasicInformationService,
+          },
+        ],
+        schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(BooksComponent);

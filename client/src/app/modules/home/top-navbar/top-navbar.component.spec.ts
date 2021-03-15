@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { TopNavbarComponent } from './top-navbar.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -12,36 +12,38 @@ describe('TopNavbarComponent', () => {
   let component: TopNavbarComponent;
   let fixture: ComponentFixture<TopNavbarComponent>;
   let mockSecurityService;
-  beforeEach(async(() => {
-    mockSecurityService = jasmine.createSpyObj('securityService', {
-      isGuest: true,
-      getTotalScore: () => {
-        return of();
-      },
-      isLoggedIn: () => {},
-      getTokenInformation: () => {},
-      setTotalScore: () => {},
-    });
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
-      declarations: [TopNavbarComponent],
-      providers: [
-        {
-          provide: MatDialog,
-          useValue: {},
+  beforeEach(
+    waitForAsync(() => {
+      mockSecurityService = jasmine.createSpyObj('securityService', {
+        isGuest: true,
+        getTotalScore: () => {
+          return of();
         },
-        {
-          provide: NotificationService,
-          useValue: {},
-        },
-        {
-          provide: SecurityService,
-          useValue: mockSecurityService,
-        },
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
-  }));
+        isLoggedIn: () => {},
+        getTokenInformation: () => {},
+        setTotalScore: () => {},
+      });
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule, RouterTestingModule],
+        declarations: [TopNavbarComponent],
+        providers: [
+          {
+            provide: MatDialog,
+            useValue: {},
+          },
+          {
+            provide: NotificationService,
+            useValue: {},
+          },
+          {
+            provide: SecurityService,
+            useValue: mockSecurityService,
+          },
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TopNavbarComponent);

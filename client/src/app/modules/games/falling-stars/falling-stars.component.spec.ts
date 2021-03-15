@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { FallingStarsWord } from '../../../core/models/falling-stars-word.interface';
 import { FallingStarsComponent } from './falling-stars.component';
@@ -18,38 +18,40 @@ describe('FallingStarsComponent', () => {
   let mockStore;
   let sampleWords;
 
-  beforeEach(async(() => {
-    mockStore = jasmine.createSpyObj(['select', 'dispatch']);
-    sampleWords = [
-      { key: 'Apple', value: ['appel'] },
-      { key: 'Banana', value: ['banaan'] },
-      { key: 'Orange', value: ['oranje'] },
-      { key: 'Pineapple', value: ['ananas'] },
-      { key: 'Cherry', value: ['kers'] },
-    ];
-    mockMatDialog = jasmine.createSpyObj('dialog', {
-      open: {
-        afterClosed: () => {
-          return of(sampleWords);
+  beforeEach(
+    waitForAsync(() => {
+      mockStore = jasmine.createSpyObj(['select', 'dispatch']);
+      sampleWords = [
+        { key: 'Apple', value: ['appel'] },
+        { key: 'Banana', value: ['banaan'] },
+        { key: 'Orange', value: ['oranje'] },
+        { key: 'Pineapple', value: ['ananas'] },
+        { key: 'Cherry', value: ['kers'] },
+      ];
+      mockMatDialog = jasmine.createSpyObj('dialog', {
+        open: {
+          afterClosed: () => {
+            return of(sampleWords);
+          },
         },
-      },
-    });
-    TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule, HttpClientTestingModule],
-      declarations: [FallingStarsComponent],
-      providers: [
-        {
-          provide: MatDialog,
-          useValue: mockMatDialog,
-        },
-        {
-          provide: Store,
-          useValue: mockStore,
-        },
-      ],
-      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents();
-  }));
+      });
+      TestBed.configureTestingModule({
+        imports: [BrowserAnimationsModule, HttpClientTestingModule],
+        declarations: [FallingStarsComponent],
+        providers: [
+          {
+            provide: MatDialog,
+            useValue: mockMatDialog,
+          },
+          {
+            provide: Store,
+            useValue: mockStore,
+          },
+        ],
+        schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FallingStarsComponent);
