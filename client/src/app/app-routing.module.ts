@@ -19,7 +19,7 @@ const routes: Routes = [
     path: 'games/falling-stars',
     loadChildren: () =>
       import('./modules/games/falling-stars/falling-stars.module').then(
-        (x) => x.FallingStarsModule
+        (x) => x.FallingStarsModule,
       ),
     canActivate: [UserAndGuestAllowService],
   },
@@ -27,7 +27,7 @@ const routes: Routes = [
     path: 'games/super-mario',
     loadChildren: () =>
       import('./modules/games/super-mario/super-mario.module').then(
-        (x) => x.SuperMarioModule
+        (x) => x.SuperMarioModule,
       ),
     canActivate: [UserAndGuestAllowService],
   },
@@ -35,7 +35,7 @@ const routes: Routes = [
     path: 'word-management',
     loadChildren: () =>
       import('./modules/word-management/word-management.module').then(
-        (x) => x.WordManagementModule
+        (x) => x.WordManagementModule,
       ),
     canActivate: [OnlyUserAllowService],
   },
@@ -45,4 +45,5 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}

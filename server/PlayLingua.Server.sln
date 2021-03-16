@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayLingua.Data", "PlayLing
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayLingua.Host", "PlayLingua.Host\PlayLingua.Host.csproj", "{1EB82475-A256-4EE0-AB09-9E6BEB0DDC04}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayLingua.Unit.Test", "XUnitTestProject1\PlayLingua.Unit.Test.csproj", "{372CB07B-9CDA-4C0B-9520-529D2AA7CDF7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{1EB82475-A256-4EE0-AB09-9E6BEB0DDC04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1EB82475-A256-4EE0-AB09-9E6BEB0DDC04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1EB82475-A256-4EE0-AB09-9E6BEB0DDC04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{372CB07B-9CDA-4C0B-9520-529D2AA7CDF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{372CB07B-9CDA-4C0B-9520-529D2AA7CDF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{372CB07B-9CDA-4C0B-9520-529D2AA7CDF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{372CB07B-9CDA-4C0B-9520-529D2AA7CDF7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
