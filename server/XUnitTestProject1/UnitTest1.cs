@@ -20,7 +20,7 @@ namespace XUnitTestProject1
             {
                 Token = "Fake token", 
                 User = new User
-                {
+                { 
                     Email = "Fake email"
                 }
             };
