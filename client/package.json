@@ -10,20 +10,12 @@
     "build:prod": "ng build --prod  --aot",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "e2e:ci": "ng e2e -c ci",
-    "prettier:check": "prettier --config .prettierrc --check \"src/**/*.{ts,css,html}\""
+    "e2e:ci": "ng e2e -c ci"
   },
-  "prettier": "prettier --write src/**/*.{ts,js,css,html}",
   "private": true,
-  "lint-staged": {
-    "../client": [
-      "npm run test:ci",
-      "npm run lint"
-    ]
-  },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged",
+      "pre-commit": "npm run lint && npm run test:ci",
       "pre-push": ""
     }
   },
