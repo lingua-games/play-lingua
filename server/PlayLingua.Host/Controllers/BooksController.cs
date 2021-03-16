@@ -52,18 +52,12 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Update(int id, Book book)
+        public ActionResult<Book> Update(int id, Book book)
         {
             book.Id = id;
             _bookRepository.Update(book);
             return Ok(book);
         }
 
-        //[HttpGet("{bookId}/chapters")]
-        //public ActionResult<List<Chapter>> GetChapters(int bookId)
-        //{
-        //    var chapters = _chapterRepository.GetChapters(bookId);
-        //    return Ok(chapters.Select(ChapterDto.Map));
-        //}
     }
 }

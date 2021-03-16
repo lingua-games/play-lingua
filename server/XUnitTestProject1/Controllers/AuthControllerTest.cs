@@ -8,7 +8,7 @@ using Xunit;
 
 namespace XUnitTestProject1
 {
-    public class UnitTest1
+    public class AuthControllerTest
     {
         private LoginResult _fakeLoginResult;
 
