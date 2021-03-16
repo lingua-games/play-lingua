@@ -10,7 +10,6 @@ namespace PlayLingua.Data
 {
     public class RequestLogRepository : IRequeustLogRepository
     {
-        private IDbConnection _db;
         private string _connectionString;
 
         public RequestLogRepository(string connectionString)
