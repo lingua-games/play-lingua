@@ -101,7 +101,7 @@ namespace PlayLingua.Unit.Test.Controllers
         }
 
         [Fact]
-        public void Update_Should_Call_Update_Method()
+        public void Update_Should_Call_Update_Method_And_Return_Updated_Book()
         {
             // Arrange
             var fakeUpdatedBook = new Book()
@@ -116,7 +116,7 @@ namespace PlayLingua.Unit.Test.Controllers
 
             // Assert
             var testResult = methodResult.Result as OkObjectResult;
-            Assert.Equal(testResult, testResult.Value);
+            Assert.Equal(fakeUpdatedBook, testResult.Value);
         }
     }
 }
