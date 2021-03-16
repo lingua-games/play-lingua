@@ -27,11 +27,12 @@ namespace PlayLingua.Host.Controllers
         [HttpPost]
         public ActionResult<Language> Add([FromBody] List<Language> language)
         {
+            var result = new List<Language>();
             foreach (var item in language)
             {
-                var addedLanguage = _languageRepository.Add(item);
+                result.Add(_languageRepository.Add(item));
             }
-            return Ok();
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]

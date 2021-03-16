@@ -17,7 +17,7 @@ namespace PlayLingua.Host.Middlewares
     public class RequestLog : BaseController
     {
         private readonly RequestDelegate _next;
-        private Stopwatch _stopwatch = new Stopwatch();
+        private readonly Stopwatch _stopwatch = new Stopwatch();
         private readonly IRequeustLogRepository _requeustLogRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -78,6 +78,7 @@ namespace PlayLingua.Host.Middlewares
             }
             catch (Exception loggingException)
             {
+                throw (loggingException);
                 // STORE THE LOG ON DISC
             }
         }
@@ -94,7 +95,7 @@ namespace PlayLingua.Host.Middlewares
             {
                 requestLog.Response = "Too long";
             }
-            requestLog.Failed = httpContext.Response.StatusCode == 200 ? false : true;
+            requestLog.Failed = httpContext.Response.StatusCode != 200;
             _stopwatch.Stop();
             requestLog.ProcessDuration = _stopwatch.Elapsed.TotalMilliseconds;
             _requeustLogRepository.Update(requestLog);
