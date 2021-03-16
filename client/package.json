@@ -16,7 +16,7 @@
   "prettier": "prettier --write src/**/*.{ts,js,css,html}",
   "private": true,
   "lint-staged": {
-    "src/**/**/*.{ts,css,html,json}": [
+    "../client": [
       "npm run test:ci",
       "npm run lint"
     ]
