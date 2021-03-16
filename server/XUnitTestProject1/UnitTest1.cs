@@ -33,7 +33,7 @@ namespace XUnitTestProject1
             var methodResult = controller.Login(fakeRequest);
 
             // Assert
-            var testResult = methodResult.Result as OkObjectResult;  
+            var testResult = methodResult.Result as OkObjectResult;    
             Assert.Equal(_fakeLoginResult, testResult.Value);
 
         }
