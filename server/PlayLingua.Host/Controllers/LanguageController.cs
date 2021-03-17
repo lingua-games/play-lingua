@@ -43,7 +43,7 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Update(int id, Language language)
+        public ActionResult<Language> Update(int id, Language language)
         {
             language.Id = id;
             _languageRepository.Update(language);
