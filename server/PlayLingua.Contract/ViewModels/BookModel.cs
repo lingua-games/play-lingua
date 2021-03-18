@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PlayLingua.Contract.ViewModels
+﻿namespace PlayLingua.Contract.ViewModels
 {
     public class BookModel: BaseModel
     {
