@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PlayLingua.Contract.ViewModels
 {
-    public class BaseModel
+    public class BaseViewModel
     {
         public int AddedBy { get; set; }
         public DateTime AddedDate { get; set; }

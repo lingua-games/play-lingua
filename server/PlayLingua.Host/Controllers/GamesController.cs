@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using PlayLingua.Domain.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
+using PlayLingua.Contract.ViewModels;
 using PlayLingua.Domain.models;
 using PlayLingua.Domain.Ports;
 using System.Collections.Generic;
@@ -20,9 +19,15 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpPost("get-words-for-game")]
-        public ActionResult<List<GetWordsForGameResponseModel>> GetWordsForGame([FromBody] GetWordsForGameInputModel getWordsForGameInputModel)
+        public ActionResult<List<GetWordsForGameResponseViewModel>> GetWordsForGame([FromBody] GetWordsForGameInputViewModel model)
         {
-            return Ok(_gameRepository.GetWordsForGame(getWordsForGameInputModel));
+            return Ok(_gameRepository.GetWordsForGame(new GetWordsForGameInputModel { 
+                BookId = model.BookId,
+                ChapterId = model.ChapterId,
+                Count = model.Count,
+                DefaultBaseLanguage = model.DefaultBaseLanguage,
+                DefaultTargetLanguage = model.DefaultTargetLanguage
+            }));
         }
     }
 }

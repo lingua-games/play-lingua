@@ -1,5 +1,4 @@
-﻿using PlayLingua.Domain.Entities;
-using PlayLingua.Domain.models;
+﻿using PlayLingua.Domain.models;
 using System.Collections.Generic;
 
 namespace PlayLingua.Domain.Ports

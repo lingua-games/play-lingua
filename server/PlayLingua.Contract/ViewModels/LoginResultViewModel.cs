@@ -2,11 +2,11 @@
 
 namespace PlayLingua.Contract.ViewModels
 {
-    public class LoginResultModel
+    public class LoginResultViewModel
     {
         public bool IsLogin { get; set; }
         public string Message { get; set; }
-        public UserModel User { get; set; }
+        public UserViewModel User { get; set; }
         public string Token { get; set; }
     }
 }

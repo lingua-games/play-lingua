@@ -21,9 +21,9 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<BookModel>> List()
+        public ActionResult<List<BookViewModel>> List()
         {
-            return Ok(_bookRepository.List().Select(x => new BookModel
+            return Ok(_bookRepository.List().Select(x => new BookViewModel
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -33,9 +33,9 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpGet("by-language/{id}")]
-        public ActionResult<List<BookModel>> GetByLanguageId(int id)
+        public ActionResult<List<BookViewModel>> GetByLanguageId(int id)
         {
-            return Ok(_bookRepository.GetByLanguage(id).Select(x => new BookModel
+            return Ok(_bookRepository.GetByLanguage(id).Select(x => new BookViewModel
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -45,9 +45,9 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpGet("by-source-and-target-language/{sourceLanguageId}/{targetLanguageId}")]
-        public ActionResult<List<BookModel>> GetBySourceAndTargetLanguageId(int sourceLanguageId, int targetLanguageId)
+        public ActionResult<List<BookViewModel>> GetBySourceAndTargetLanguageId(int sourceLanguageId, int targetLanguageId)
         {
-            return Ok(_bookRepository.GetBySourceAndTargetLanguageId(sourceLanguageId, targetLanguageId).Select(x => new BookModel
+            return Ok(_bookRepository.GetBySourceAndTargetLanguageId(sourceLanguageId, targetLanguageId).Select(x => new BookViewModel
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -57,7 +57,7 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpPost]
-        public ActionResult<BookModel> Add([FromBody] BookModel model)
+        public ActionResult<BookViewModel> Add([FromBody] BookViewModel model)
         {
             var addedBook = _bookRepository.Add(new Book
             {
@@ -76,7 +76,7 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<BookModel> Update(int id, BookModel model)
+        public ActionResult<BookViewModel> Update(int id, BookViewModel model)
         {
             _bookRepository.Update(new Book
             {

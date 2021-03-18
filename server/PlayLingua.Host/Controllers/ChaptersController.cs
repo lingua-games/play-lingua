@@ -18,9 +18,9 @@ namespace PlayLingua.WebApi.Controllers
         }
 
         [HttpGet("by-book/{bookId}")]
-        public ActionResult<List<ChapterModel>> GetByLanguageId(int bookId)
+        public ActionResult<List<ChapterViewModel>> GetByLanguageId(int bookId)
         {
-            return Ok(_chapterRepository.GetByBookId(bookId).Select(x => new ChapterModel
+            return Ok(_chapterRepository.GetByBookId(bookId).Select(x => new ChapterViewModel
             {
                 Id = x.Id,
                 Name = x.Name,

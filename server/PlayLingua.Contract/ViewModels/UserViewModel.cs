@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PlayLingua.Contract.ViewModels
 {
-    public class UserModel
+    public class UserViewModel
     {
         public int Id { get; set; }
         [Required]

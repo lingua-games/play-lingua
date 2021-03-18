@@ -18,9 +18,9 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpPost]
-        public ActionResult<LoginResultModel> Login([FromBody] UserModel model)
+        public ActionResult<LoginResultViewModel> Login([FromBody] UserViewModel model)
         {
-            var result = new LoginResultModel();
+            var result = new LoginResultViewModel();
             var loginResult = _authRepository.Login(new User
             {
                 Email = model.Email,
@@ -30,7 +30,7 @@ namespace PlayLingua.Host.Controllers
 
             if (result.IsLogin)
             {
-                result.User = new UserModel
+                result.User = new UserViewModel
                 {
                     Email = loginResult.User.Email,
                     Id = loginResult.User.Id,

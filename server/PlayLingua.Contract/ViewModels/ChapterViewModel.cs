@@ -1,6 +1,6 @@
 ﻿namespace PlayLingua.Contract.ViewModels
 {
-    public class ChapterModel: BaseModel
+    public class ChapterViewModel: BaseViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
