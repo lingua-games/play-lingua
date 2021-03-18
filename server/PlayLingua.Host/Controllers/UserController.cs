@@ -13,7 +13,6 @@ namespace PlayLingua.Host.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IAuthRepository _authRepository;
-        // private readonly IChapterRepository _chapterRepository;
 
         public UserController(IUserRepository userRepository, IAuthRepository authRepository)
         {
@@ -24,15 +23,7 @@ namespace PlayLingua.Host.Controllers
         [HttpGet]
         public ActionResult<List<User>> List()
         {
-            try
-            {
                 return Ok(_userRepository.List());
-
-            }
-            catch
-            {
-                return Ok(_userRepository.List());
-            }
         }
 
 

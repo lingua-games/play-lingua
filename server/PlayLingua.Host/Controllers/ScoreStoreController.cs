@@ -29,7 +29,7 @@ namespace PlayLingua.Host.Controllers
 
             if (score.UserId != 0)
             {
-                var addedScore = _scoreRepository.Add(score, GetUser().Id);
+                _ = _scoreRepository.Add(score, GetUser().Id);
                 _scoreRepository.IncreaseScore(score.score, score.UserId);
             }
 
@@ -41,7 +41,7 @@ namespace PlayLingua.Host.Controllers
             });
 
             result.AddRange(_scoreRepository.GetTopRanks(score));
-            return Ok(result.Take(5));
+            return Ok(result.Take(5).ToList());
         }
     }
 }

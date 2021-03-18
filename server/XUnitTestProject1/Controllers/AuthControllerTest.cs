@@ -6,9 +6,9 @@ using PlayLingua.Domain.Ports;
 using PlayLingua.Host.Controllers;
 using Xunit;
 
-namespace XUnitTestProject1
+namespace PlayLingua.Unit.Test.Controllers
 {
-    public class UnitTest1
+    public class AuthControllerTest
     {
         private LoginResult _fakeLoginResult;
 

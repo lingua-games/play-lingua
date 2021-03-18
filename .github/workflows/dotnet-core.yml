@@ -12,7 +12,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: Ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v2
@@ -27,5 +27,5 @@ jobs:
         run: dotnet build --configuration Release --no-restore
         working-directory: server
       - name: Test
-        run: dotnet test --no-restore --verbosity normal
+        run: dotnet test --no-restore
         working-directory: server
