@@ -27,7 +27,7 @@ namespace PlayLingua.Data
             _email = email;
         }
 
-        public User Add(User user)
+        public UserModel Add(UserModel user)
         {
             user.EmailVerificationCode = Guid.NewGuid().ToString();
             sendVerificationCode(user);
@@ -54,7 +54,7 @@ namespace PlayLingua.Data
             return Convert.ToBase64String(valueBytes);
         }
 
-        public void sendVerificationCode(User user)
+        public void sendVerificationCode(UserModel user)
         {
             //var mailMessage = new MimeMessage();
             //mailMessage.From.Add(new MailboxAddress("Ghobad", _email.Username));
@@ -80,17 +80,17 @@ namespace PlayLingua.Data
             throw new NotImplementedException();
         }
 
-        public User GetUserInformation(int userId)
+        public UserModel GetUserInformation(int userId)
         {
-            return db.Query<User>("select top 1 * from dbo.Users").Select(x => new User
+            return db.Query<UserModel>("select top 1 * from dbo.Users").Select(x => new UserModel
             {
                 TotalScore = x.TotalScore,
             }).FirstOrDefault();
         }
 
-        public List<User> List()
+        public List<UserModel> List()
         {
-            return db.Query<User>("select * from dbo.Users").ToList();
+            return db.Query<UserModel>("select * from dbo.Users").ToList();
         }
 
         public void Update(EditUserModel user)

@@ -15,15 +15,15 @@ namespace PlayLingua.Unit.Test.Controllers
 {
     public class UserControllerTest
     {
-        private readonly List<User> _fakeUserList = new List<User>();
+        private readonly List<UserModel> _fakeUserList = new List<UserModel>();
         private readonly Mock<IUserRepository> _mockUserRepo;
         private Mock<IAuthRepository> _mockAuthRepo;
         private readonly UserController _mockController;
 
         public UserControllerTest()
         {
-            _fakeUserList.Add(new User { Id = 1 });
-            _fakeUserList.Add(new User { Id = 2 });
+            _fakeUserList.Add(new UserModel { Id = 1 });
+            _fakeUserList.Add(new UserModel { Id = 2 });
             _mockUserRepo = new Mock<IUserRepository>();
             _mockAuthRepo = new Mock<IAuthRepository>();
             _mockController = new UserController(_mockUserRepo.Object, _mockAuthRepo.Object);
@@ -62,7 +62,7 @@ namespace PlayLingua.Unit.Test.Controllers
         public void Add_Should_Return_406_If_Email_Is_Exist()
         {
             // Arrange
-            var fakeAddedUser = new User()
+            var fakeAddedUser = new UserModel()
             {
                 Id = 1,
             };
@@ -81,11 +81,11 @@ namespace PlayLingua.Unit.Test.Controllers
         public void Add_Should_Return_Added_User_If_Email_Is_Not_Exist()
         {
             // Arrange
-            var fakeAddedUser = new User()
+            var fakeAddedUser = new UserModel()
             {
                 Id = 1,
             };
-            _mockUserRepo.Setup(repo => repo.List()).Returns(new List<User>());
+            _mockUserRepo.Setup(repo => repo.List()).Returns(new List<UserModel>());
             _mockUserRepo.Setup(repo => repo.Add(fakeAddedUser)).Returns(fakeAddedUser);
 
             // Act

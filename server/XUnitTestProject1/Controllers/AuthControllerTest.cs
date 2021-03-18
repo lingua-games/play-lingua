@@ -10,22 +10,22 @@ namespace PlayLingua.Unit.Test.Controllers
 {
     public class AuthControllerTest
     {
-        private LoginResult _fakeLoginResult;
+        private LoginResultModel _fakeLoginResult;
 
         [Fact]
         public void Login_Return_User_With_Token()
         {
             // Arrange
-            _fakeLoginResult = new LoginResult
+            _fakeLoginResult = new LoginResultModel
             {
                 Token = "Fake token", 
-                User = new User
+                User = new UserModel
                 { 
                     Email = "Fake email"
                 }
             };
             var mockRepo = new Mock<IAuthRepository>();
-            var fakeRequest = new User();
+            var fakeRequest = new UserModel();
             mockRepo.Setup(repo => repo.Login(fakeRequest)).Returns(_fakeLoginResult);  
             var controller = new AuthController(mockRepo.Object);
 

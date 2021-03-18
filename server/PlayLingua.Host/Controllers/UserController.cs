@@ -21,20 +21,20 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<User>> List()
+        public ActionResult<List<UserModel>> List()
         {
                 return Ok(_userRepository.List());
         }
 
 
         [HttpGet("get-user-information")]
-        public ActionResult<User> GetUserInformation()
+        public ActionResult<UserModel> GetUserInformation()
         {
             return Ok(_userRepository.GetUserInformation(GetUser().Id));
         }
 
         [HttpPost]
-        public ActionResult<User> Add([FromBody] User user)
+        public ActionResult<UserModel> Add([FromBody] UserModel user)
         {
             if (_userRepository.List().Where(x => x.Email == user.Email).Any())
             {
@@ -58,7 +58,7 @@ namespace PlayLingua.Host.Controllers
 
             if (user.IsChangingPassword)
             {
-                var loginResult = _authRepository.Login(new Domain.Entities.User
+                var loginResult = _authRepository.Login(new Domain.Entities.UserModel
                 {
                     Email = GetUser().Email,
                     Password = user.CurrentPassword
@@ -69,7 +69,7 @@ namespace PlayLingua.Host.Controllers
                 }
             }
             _userRepository.Update(user);
-            user.Token = _authRepository.GenerateToken(new User()
+            user.Token = _authRepository.GenerateToken(new UserModel()
             {
                 Email = GetUser().Email,
                 Id = GetUser().Id,

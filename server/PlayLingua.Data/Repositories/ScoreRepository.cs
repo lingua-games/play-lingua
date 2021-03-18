@@ -42,7 +42,7 @@ VALUES(@UserId, @GuestCode, @GameName, @BookId, @ChapterId, @AddedDate, @Score);
 
         public void IncreaseScore(float score, int userId)
         {
-            var user = db.Query<User>("select * from dbo.Users where Id = @userId", new { userId }).FirstOrDefault();
+            var user = db.Query<UserModel>("select * from dbo.Users where Id = @userId", new { userId }).FirstOrDefault();
             score = score + user.TotalScore;
             db.Query("update dbo.Users SET TotalScore = @score WHERE Id = @Id", new { score, user.Id});
         }
