@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PlayLingua.Contract.ViewModels;
 using PlayLingua.Domain.Entities;
-using PlayLingua.Domain.models;
+using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
-using System.Security.Claims;
 
 namespace PlayLingua.Host.Controllers
 {
@@ -20,29 +20,40 @@ namespace PlayLingua.Host.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult<SelectedLanguages> Add([FromBody] SelectedLanguages selectedLanguages)
+        public ActionResult<SelectedLanguagesViewModel> Add([FromBody] SelectedLanguagesViewModel model)
         {
-            selectedLanguages.UserId = GetUser().Id;
             var addedSelection = new SelectedLanguages();
-            var selectedLanguageByUserId = _selectedLanguagesRepository.GetByUserId(selectedLanguages.UserId);
+            var selectedLanguageByUserId = _selectedLanguagesRepository.GetByUserId(GetUser().Id);
             if (selectedLanguageByUserId == null)
             {
-                addedSelection = _selectedLanguagesRepository.Add(selectedLanguages);
+                addedSelection = _selectedLanguagesRepository.Add(new SelectedLanguages
+                {
+                    BaseLanguages = model.BaseLanguages,
+                    TargetLanguages = model.TargetLanguages,
+                    UserId = model.UserId
+                });
             }
             else
             {
-                selectedLanguages.Id = selectedLanguageByUserId.Id;
-                _selectedLanguagesRepository.Update(selectedLanguages);
+                _selectedLanguagesRepository.Update(new SelectedLanguages
+                {
+                    Id = selectedLanguageByUserId.Id,
+                    BaseLanguages = model.BaseLanguages,
+                    TargetLanguages = model.TargetLanguages
+                });
             }
-
             return Ok(addedSelection);
         }
 
         [HttpPost("setDefaultSelection")]
-        public ActionResult SetDefaultSelection([FromBody] SelectDefaultLanguageModel selectDefaultLanguageModel)
+        public ActionResult SetDefaultSelection([FromBody] SelectDefaultLanguageViewModel model)
         {
             var userId = GetUser().Id;
-            _selectedLanguagesRepository.SetDefaultLanguages(selectDefaultLanguageModel, userId);
+            _selectedLanguagesRepository.SetDefaultLanguages(new SelectDefaultLanguageModel
+            {
+                DefaultBaseLanguage = model.DefaultBaseLanguage,
+                DefaultTargetLanguage = model.DefaultTargetLanguage
+            }, userId);
             return Ok();
         }
     }

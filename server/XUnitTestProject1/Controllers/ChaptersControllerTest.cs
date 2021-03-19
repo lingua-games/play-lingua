@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
+using PlayLingua.Contract.ViewModels;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Ports;
 using PlayLingua.WebApi.Controllers;
@@ -11,13 +12,16 @@ namespace PlayLingua.Unit.Test.Controllers
     public class ChaptersControllerTest
     {
         private readonly List<Chapter> _fakeChapterList = new List<Chapter>();
+        private readonly List<ChapterViewModel> _fakeChapterListViewModel = new List<ChapterViewModel>();
         private readonly Mock<IChapterRepository> _mockRepo;
         private readonly ChaptersController _mockController;
 
         public ChaptersControllerTest()
         {
-            _fakeChapterList.Add(new Chapter { Id = 1});
-            _fakeChapterList.Add(new Chapter { Id = 2});
+            _fakeChapterList.Add(new Chapter { Id = 1 });
+            _fakeChapterList.Add(new Chapter { Id = 2 });
+            _fakeChapterListViewModel.Add(new ChapterViewModel { Id = 1 });
+            _fakeChapterListViewModel.Add(new ChapterViewModel { Id = 2 });
             _mockRepo = new Mock<IChapterRepository>();
             _mockController = new ChaptersController(_mockRepo.Object);
         }
@@ -33,7 +37,7 @@ namespace PlayLingua.Unit.Test.Controllers
 
             // Assert
             var testResult = methodResult.Result as OkObjectResult;
-            Assert.Equal(_fakeChapterList, testResult.Value);
+            Assert.Equal(_fakeChapterListViewModel.Count, (testResult.Value as List<ChapterViewModel>).Count);
         }
     }
 }

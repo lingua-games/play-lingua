@@ -1,9 +1,6 @@
 ﻿using PlayLingua.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace PlayLingua.Domain.models
+namespace PlayLingua.Domain.Models
 {
     public class LoginResult
     {
@@ -11,6 +8,5 @@ namespace PlayLingua.Domain.models
         public string Message { get; set; }
         public User User { get; set; }
         public string Token { get; set; }
-
     }
 }

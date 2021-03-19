@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PlayLingua.Contract.ViewModels;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Ports;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PlayLingua.Host.Controllers
 {
@@ -19,28 +21,50 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Book>> List()
+        public ActionResult<List<BookViewModel>> List()
         {
-            return Ok(_bookRepository.List());
-
+            return Ok(_bookRepository.List().Select(x => new BookViewModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                SourceLanguageId = x.SourceLanguageId,
+                TargetLanguageId = x.TargetLanguageId
+            }).ToList());
         }
 
         [HttpGet("by-language/{id}")]
-        public ActionResult<List<Book>> GetByLanguageId(int id)
+        public ActionResult<List<BookViewModel>> GetByLanguageId(int id)
         {
-            return Ok(_bookRepository.GetByLanguage(id));
+            return Ok(_bookRepository.GetByLanguage(id).Select(x => new BookViewModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                SourceLanguageId = x.SourceLanguageId,
+                TargetLanguageId = x.TargetLanguageId
+            }).ToList());
         }
 
         [HttpGet("by-source-and-target-language/{sourceLanguageId}/{targetLanguageId}")]
-        public ActionResult<List<Book>> GetBySourceAndTargetLanguageId(int sourceLanguageId, int targetLanguageId)
+        public ActionResult<List<BookViewModel>> GetBySourceAndTargetLanguageId(int sourceLanguageId, int targetLanguageId)
         {
-            return Ok(_bookRepository.GetBySourceAndTargetLanguageId(sourceLanguageId, targetLanguageId));
+            return Ok(_bookRepository.GetBySourceAndTargetLanguageId(sourceLanguageId, targetLanguageId).Select(x => new BookViewModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                SourceLanguageId = x.SourceLanguageId,
+                TargetLanguageId = x.TargetLanguageId
+            }).ToList());
         }
 
         [HttpPost]
-        public ActionResult<Book> Add([FromBody] Book book)
+        public ActionResult<BookViewModel> Add([FromBody] BookViewModel model)
         {
-            var addedBook = _bookRepository.Add(book, GetUser().Id);
+            var addedBook = _bookRepository.Add(new Book
+            {
+                Name = model.Name,
+                SourceLanguageId = model.SourceLanguageId,
+                TargetLanguageId = model.TargetLanguageId
+            }, GetUser().Id);
             return Ok(addedBook);
         }
 
@@ -52,11 +76,16 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Book> Update(int id, Book book)
+        public ActionResult<BookViewModel> Update(int id, BookViewModel model)
         {
-            book.Id = id;
-            _bookRepository.Update(book);
-            return Ok(book);
+            _bookRepository.Update(new Book
+            {
+                Id = id,
+                Name = model.Name,
+                SourceLanguageId = model.SourceLanguageId,
+                TargetLanguageId = model.TargetLanguageId
+            });
+            return Ok(model);
         }
 
     }

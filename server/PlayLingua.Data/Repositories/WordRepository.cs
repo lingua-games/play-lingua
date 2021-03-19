@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using PlayLingua.Domain;
 using PlayLingua.Domain.Entities;
-using PlayLingua.Domain.models;
 using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
 using System;
@@ -49,7 +48,7 @@ namespace PlayLingua.Data
         {
             foreach (var word in submitWords.Words)
             {
-                foreach (var target in word.targets)
+                foreach (var target in word.Targets)
                 {
                     var wordToAdd = new Word
                     {

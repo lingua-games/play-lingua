@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PlayLingua.Contract.ViewModels;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Ports;
 using System.Collections.Generic;
@@ -19,18 +20,32 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Language>> List()
+        public ActionResult<List<LanguageViewModel>> List()
         {
-            return Ok(_languageRepository.List());
+            return Ok(_languageRepository.List().Select(x => new LanguageViewModel
+            {
+                Code = x.Code,
+                FullName = x.FullName,
+                Id = x.Id,
+                Name = x.Name,
+                NativeName = x.NativeName
+            }).ToList());
         }
 
         [HttpPost]
-        public ActionResult<Language> Add([FromBody] List<Language> language)
+        public ActionResult<LanguageViewModel> Add([FromBody] List<LanguageViewModel> model)
         {
-            var result = new List<Language>();
-            foreach (var item in language)
+            var result = new List<LanguageViewModel>();
+            foreach (var item in model)
             {
-                result.Add(_languageRepository.Add(item));
+                item.Id = _languageRepository.Add(new Language
+                {
+                    Code = item.Code,
+                    FullName = item.FullName,
+                    NativeName = item.NativeName,
+                    Name = item.NativeName
+                }).Id;
+                result.Add(item);
             }
             return Ok(result);
         }
@@ -43,11 +58,17 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Language> Update(int id, Language language)
+        public ActionResult<LanguageViewModel> Update(int id, LanguageViewModel model)
         {
-            language.Id = id;
-            _languageRepository.Update(language);
-            return Ok(language);
+            _languageRepository.Update(new Language
+            {
+                Id = id,
+                Code = model.Code,
+                Name = model.Name,
+                FullName = model.FullName,
+                NativeName = model.NativeName
+            });
+            return Ok(model);
         }
     }
 }

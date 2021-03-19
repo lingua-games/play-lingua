@@ -1,11 +1,16 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace PlayLingua.Domain.Entities
+namespace PlayLingua.Contract.ViewModels
 {
-    public class User : BaseModel
+    public class UserViewModel
     {
         public int Id { get; set; }
+        [Required]
+        [MaxLength(100)]
         public string Email { get; set; }
+        [Required]
+        [MaxLength(200)]
         public string Password { get; set; }
         public string DisplayName { get; set; }
         public string BaseLanguages { get; set; }

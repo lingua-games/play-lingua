@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.IdentityModel.Tokens;
 using PlayLingua.Domain.Entities;
-using PlayLingua.Domain.models;
+using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
 using System;
 using System.Collections.Generic;
@@ -64,7 +64,7 @@ namespace PlayLingua.Data
                         DefaultTargetLanguage = selectedUser.DefaultTargetLanguage,
                         TotalScore = selectedUser.TotalScore,
                         IsSelectedLanguages =
-                            (!string.IsNullOrWhiteSpace(selectedUser.TargetLanguages) && !string.IsNullOrWhiteSpace(selectedUser.BaseLanguages)) ? true : false
+                            !string.IsNullOrWhiteSpace(selectedUser.TargetLanguages) && !string.IsNullOrWhiteSpace(selectedUser.BaseLanguages)
 
                     }
                 };

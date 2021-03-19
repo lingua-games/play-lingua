@@ -1,8 +1,6 @@
-﻿using PlayLingua.Domain.Entities;
-
-namespace PlayLingua.Domain.Models
+﻿namespace PlayLingua.Contract.ViewModels
 {
-    public class EditUserModel: BaseModel
+    public class EditUserViewModel
     {
         public int Id { get; set; }
         public string CurrentPassword { get; set; }
@@ -11,7 +9,5 @@ namespace PlayLingua.Domain.Models
         public string Email { get; set; }
         public bool IsChangingPassword { get; set; }
         public string Token { get; set; }
-        public int DefaultBaseLanguage { get; set; }
-        public int DefaultTargetLanguage { get; set; }
     }
 }

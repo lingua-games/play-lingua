@@ -1,6 +1,6 @@
-﻿namespace PlayLingua.Domain.Models
+﻿namespace PlayLingua.Contract.ViewModels
 {
-    public class NameIdModel
+    public class NameIdViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

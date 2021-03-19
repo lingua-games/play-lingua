@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PlayLingua.Contract.ViewModels;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Ports;
 
@@ -9,7 +10,6 @@ namespace PlayLingua.Host.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthRepository _authRepository;
-        // private readonly IChapterRepository _chapterRepository;
 
         public AuthController(IAuthRepository authRepository)
         {
@@ -17,14 +17,36 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpPost]
-        public ActionResult<User> Login([FromBody] User user)
+        public ActionResult<LoginResultViewModel> Login([FromBody] UserViewModel model)
         {
-            var result = _authRepository.Login(user);
+            var result = new LoginResultViewModel();
+            var loginResult = _authRepository.Login(new User
+            {
+                Email = model.Email,
+                Password = model.Password
+            });
+            result.IsLogin = loginResult.IsLogin;
+
             if (result.IsLogin)
             {
-                result.Token = _authRepository.GenerateToken(result.User);
+                result.User = new UserViewModel
+                {
+                    Email = loginResult.User.Email,
+                    Id = loginResult.User.Id,
+                    DisplayName = loginResult.User.DisplayName,
+                    BaseLanguages = loginResult.User.BaseLanguages,
+                    TargetLanguages = loginResult.User.TargetLanguages,
+                    DefaultBaseLanguage = loginResult.User.DefaultBaseLanguage,
+                    DefaultTargetLanguage = loginResult.User.DefaultTargetLanguage,
+                    TotalScore = loginResult.User.TotalScore,
+                    IsSelectedLanguages = loginResult.User.IsSelectedLanguages
+                };
+                result.Token = _authRepository.GenerateToken(loginResult.User);
+            } else
+            {
+                result.Message = loginResult.Message;
             }
-             
+
             return Ok(result);
         }
     }

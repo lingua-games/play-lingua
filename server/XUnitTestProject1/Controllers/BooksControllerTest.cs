@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
+using PlayLingua.Contract.ViewModels;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Ports;
 using PlayLingua.Host.Controllers;
@@ -14,6 +15,7 @@ namespace PlayLingua.Unit.Test.Controllers
     public class BooksControllerTest
     {
         private readonly List<Book> _fakeBookList = new List<Book>();
+        private readonly List<BookViewModel> _fakeBookListViewModel = new List<BookViewModel>();
         private readonly Mock<IBookRepository> _mockRepo;
         private readonly BooksController _mockController;
 
@@ -21,6 +23,8 @@ namespace PlayLingua.Unit.Test.Controllers
         {
             _fakeBookList.Add(new Book { Id = 1, TargetLanguageId = 1, SourceLanguageId = 1 });
             _fakeBookList.Add(new Book { Id = 2, TargetLanguageId = 1, SourceLanguageId = 2 });
+            _fakeBookListViewModel.Add(new BookViewModel { Id = 1, TargetLanguageId = 1, SourceLanguageId = 1 });
+            _fakeBookListViewModel.Add(new BookViewModel { Id = 2, TargetLanguageId = 1, SourceLanguageId = 2 });
             _mockRepo = new Mock<IBookRepository>();
             _mockController = new BooksController(_mockRepo.Object);
         }
@@ -36,7 +40,7 @@ namespace PlayLingua.Unit.Test.Controllers
 
             // Assert
             var testResult = methodResult.Result as OkObjectResult;
-            Assert.Equal(_fakeBookList, testResult.Value);
+            Assert.Equal(_fakeBookListViewModel.Count(), (testResult.Value as List<BookViewModel>).Count());
         }
 
         [Fact]
@@ -50,7 +54,7 @@ namespace PlayLingua.Unit.Test.Controllers
 
             // Assert
             var testResult = methodResult.Result as OkObjectResult;
-            Assert.Equal(_fakeBookList.Where(x => x.TargetLanguageId == 1).ToList(), testResult.Value);
+            Assert.Equal(_fakeBookListViewModel.Where(x => x.TargetLanguageId == 1).Count(), (testResult.Value as List<BookViewModel>).Count());
         }
 
         [Fact]
@@ -64,7 +68,7 @@ namespace PlayLingua.Unit.Test.Controllers
 
             // Assert
             var testResult = methodResult.Result as OkObjectResult;
-            Assert.Equal(_fakeBookList.Where(x => x.TargetLanguageId == 1 && x.SourceLanguageId == 1).ToList(), testResult.Value);
+            Assert.Equal(_fakeBookList.Where(x => x.TargetLanguageId == 1 && x.SourceLanguageId == 1).Count(), (testResult.Value as List<BookViewModel>).Count());
         }
 
         [Fact]
@@ -76,10 +80,15 @@ namespace PlayLingua.Unit.Test.Controllers
                 Id = 1,
                 Name = "Fake Book"
             };
-            _mockRepo.Setup(repo => repo.Add(fakeAddedBook, 0)).Returns(fakeAddedBook);
+            var fakeAddedBookViewModel = new BookViewModel()
+            {
+                Id = 1,
+                Name = "Fake Book"
+            };
+            _mockRepo.Setup(repo => repo.Add(It.IsAny<Book>(), 0)).Returns(fakeAddedBook);
 
             // Act
-            var methodResult = _mockController.Add(fakeAddedBook);
+            var methodResult = _mockController.Add(fakeAddedBookViewModel);
 
             // Assert
             var testResult = methodResult.Result as OkObjectResult;
@@ -109,14 +118,19 @@ namespace PlayLingua.Unit.Test.Controllers
                 Id = 1,
                 Name = "Fake Book"
             };
+            var fakeUpdatedBookViewModel = new BookViewModel()
+            {
+                Id = 1,
+                Name = "Fake Book"
+            };
             _mockRepo.Setup(repo => repo.Update(fakeUpdatedBook));
 
             // Act
-            var methodResult = _mockController.Update(1, fakeUpdatedBook);
+            var methodResult = _mockController.Update(1, fakeUpdatedBookViewModel);
 
             // Assert
             var testResult = methodResult.Result as OkObjectResult;
-            Assert.Equal(fakeUpdatedBook, testResult.Value);
+            Assert.Equal(fakeUpdatedBookViewModel, testResult.Value);
         }
     }
 }

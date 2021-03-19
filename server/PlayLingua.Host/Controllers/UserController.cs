@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PlayLingua.Contract.ViewModels;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
@@ -21,27 +22,53 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<User>> List()
+        public ActionResult<List<UserViewModel>> List()
         {
-                return Ok(_userRepository.List());
+            return Ok(_userRepository.List().Select(x => new UserViewModel
+            {
+                Email = x.Email,
+                BaseLanguages = x.BaseLanguages,
+                DefaultTargetLanguage = x.DefaultTargetLanguage,
+                DefaultBaseLanguage = x.DefaultBaseLanguage,
+                DisplayName = x.DisplayName,
+                Id = x.Id,
+                TargetLanguages = x.TargetLanguages,
+                TotalScore = x.TotalScore
+            }).ToList());
         }
 
 
         [HttpGet("get-user-information")]
-        public ActionResult<User> GetUserInformation()
+        public ActionResult<UserViewModel> GetUserInformation()
         {
-            return Ok(_userRepository.GetUserInformation(GetUser().Id));
+            var repositoryResult = _userRepository.GetUserInformation(GetUser().Id);
+            return Ok(new UserViewModel
+            {
+                Email = repositoryResult.Email,
+                BaseLanguages = repositoryResult.BaseLanguages,
+                DefaultTargetLanguage = repositoryResult.DefaultTargetLanguage,
+                DefaultBaseLanguage = repositoryResult.DefaultBaseLanguage,
+                DisplayName = repositoryResult.DisplayName,
+                Id = repositoryResult.Id,
+                TargetLanguages = repositoryResult.TargetLanguages,
+                TotalScore = repositoryResult.TotalScore
+            });
         }
 
         [HttpPost]
-        public ActionResult<User> Add([FromBody] User user)
+        public ActionResult<UserViewModel> Add([FromBody] UserViewModel model)
         {
-            if (_userRepository.List().Where(x => x.Email == user.Email).Any())
+            if (_userRepository.List().Where(x => x.Email == model.Email).Any())
             {
                 return StatusCode(406, "This email is already exist");
             }
-            var addedUser = _userRepository.Add(user);
-            return Ok(addedUser);
+            model.Id = _userRepository.Add(new User
+            {
+                Email = model.Email,
+                Password = model.Password,
+                DisplayName = model.DisplayName
+            }).Id;
+            return Ok(model);
         }
 
         [HttpDelete("{id}")]
@@ -52,30 +79,33 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpPut("update")]
-        public ActionResult<string>Update(EditUserModel user)
+        public ActionResult<EditUserViewModel> Update(EditUserViewModel model)
         {
-            user.Id = GetUser().Id;
-
-            if (user.IsChangingPassword)
+            if (model.IsChangingPassword)
             {
-                var loginResult = _authRepository.Login(new Domain.Entities.User
+                var loginResult = _authRepository.Login(new User
                 {
                     Email = GetUser().Email,
-                    Password = user.CurrentPassword
+                    Password = model.CurrentPassword
                 });
                 if (!loginResult.IsLogin)
                 {
                     return StatusCode(406, "The entered current password is not correct.");
                 }
             }
-            _userRepository.Update(user);
-            user.Token = _authRepository.GenerateToken(new User()
+            _userRepository.Update(new EditUserModel
+            {
+                DisplayName = model.DisplayName,
+                IsChangingPassword = model.IsChangingPassword,
+                NewPassword = model.NewPassword
+            });
+            model.Token = _authRepository.GenerateToken(new User
             {
                 Email = GetUser().Email,
                 Id = GetUser().Id,
-                DisplayName = user.DisplayName,
+                DisplayName = model.DisplayName,
             });
-            return Ok(user);
+            return Ok(model);
         }
     }
 }

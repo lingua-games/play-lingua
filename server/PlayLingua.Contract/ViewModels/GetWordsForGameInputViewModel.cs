@@ -1,6 +1,6 @@
-﻿namespace PlayLingua.Domain.Models
+﻿namespace PlayLingua.Contract.ViewModels
 {
-    public class GetWordsForGameInputModel
+    public class GetWordsForGameInputViewModel
     {
         public int BookId { get; set; }
         public int ChapterId { get; set; }

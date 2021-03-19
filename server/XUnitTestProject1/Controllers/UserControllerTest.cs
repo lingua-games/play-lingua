@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
+using PlayLingua.Contract.ViewModels;
 using PlayLingua.Domain.Entities;
-using PlayLingua.Domain.models;
 using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
 using PlayLingua.Host.Controllers;
@@ -16,14 +16,17 @@ namespace PlayLingua.Unit.Test.Controllers
     public class UserControllerTest
     {
         private readonly List<User> _fakeUserList = new List<User>();
+        private readonly List<UserViewModel> _fakeUserListViewModel = new List<UserViewModel>();
         private readonly Mock<IUserRepository> _mockUserRepo;
-        private Mock<IAuthRepository> _mockAuthRepo;
+        private readonly Mock<IAuthRepository> _mockAuthRepo;
         private readonly UserController _mockController;
 
         public UserControllerTest()
         {
             _fakeUserList.Add(new User { Id = 1 });
             _fakeUserList.Add(new User { Id = 2 });
+            _fakeUserListViewModel.Add(new UserViewModel { Id = 1 });
+            _fakeUserListViewModel.Add(new UserViewModel { Id = 2 });
             _mockUserRepo = new Mock<IUserRepository>();
             _mockAuthRepo = new Mock<IAuthRepository>();
             _mockController = new UserController(_mockUserRepo.Object, _mockAuthRepo.Object);
@@ -40,29 +43,29 @@ namespace PlayLingua.Unit.Test.Controllers
 
             // Assert
             var testResult = methodResult.Result as OkObjectResult;
-            Assert.Equal(_fakeUserList, testResult.Value);
+            Assert.Equal(_fakeUserListViewModel.Count, (testResult.Value as List<UserViewModel>).Count);
         }
 
         [Fact]
         public void GetUserInformation_Should_Get_User_Information()
         {
             // Arrange
-            var expectedResult = _fakeUserList.SingleOrDefault(x => x.Id == 1);
-            _mockUserRepo.Setup(repo => repo.GetUserInformation(0)).Returns(expectedResult);
+            var expectedResult = _fakeUserListViewModel.SingleOrDefault(x => x.Id == 1);
+            _mockUserRepo.Setup(repo => repo.GetUserInformation(0)).Returns(_fakeUserList.SingleOrDefault(x => x.Id == 1));
 
             // Act
             var methodResult = _mockController.GetUserInformation();
 
             // Assert
             var testResult = methodResult.Result as OkObjectResult;
-            Assert.Equal(expectedResult, testResult.Value);
+            Assert.Equal(expectedResult.Id, (testResult.Value as UserViewModel).Id);
         }
 
         [Fact]
         public void Add_Should_Return_406_If_Email_Is_Exist()
         {
             // Arrange
-            var fakeAddedUser = new User()
+            var fakeAddedUser = new UserViewModel()
             {
                 Id = 1,
             };
@@ -81,19 +84,24 @@ namespace PlayLingua.Unit.Test.Controllers
         public void Add_Should_Return_Added_User_If_Email_Is_Not_Exist()
         {
             // Arrange
+            var fakeAddedUserViewModel = new UserViewModel()
+            {
+                Id = 1,
+            };
+
             var fakeAddedUser = new User()
             {
                 Id = 1,
             };
             _mockUserRepo.Setup(repo => repo.List()).Returns(new List<User>());
-            _mockUserRepo.Setup(repo => repo.Add(fakeAddedUser)).Returns(fakeAddedUser);
+            _mockUserRepo.Setup(repo => repo.Add(It.IsAny<User>())).Returns(fakeAddedUser);
 
             // Act
-            var methodResult = _mockController.Add(fakeAddedUser);
+            var methodResult = _mockController.Add(fakeAddedUserViewModel);
 
             // Assert
             var testResult = methodResult.Result as OkObjectResult;
-            Assert.Equal(fakeAddedUser, testResult.Value);
+            Assert.Equal(fakeAddedUserViewModel, testResult.Value);
         }
 
         [Fact]

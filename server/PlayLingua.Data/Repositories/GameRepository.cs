@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using PlayLingua.Domain.Entities;
-using PlayLingua.Domain.models;
+using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
 using System;
 using System.Collections.Generic;

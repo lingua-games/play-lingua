@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using PlayLingua.Domain.models;
+using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
 using System;
 using System.Data;
@@ -10,7 +10,7 @@ namespace PlayLingua.Data
 {
     public class RequestLogRepository : IRequeustLogRepository
     {
-        private string _connectionString;
+        private readonly string _connectionString;
 
         public RequestLogRepository(string connectionString)
         {
@@ -57,19 +57,16 @@ namespace PlayLingua.Data
 					@ExceptionMessage
 				);" + "SELECT CAST(SCOPE_IDENTITY() as int)";
 
-            using (var db = new SqlConnection(_connectionString))
-            {
-                var id = db.Query<int>(sql, requestLog).Single();
-                requestLog.Id = id;
-                return requestLog;
-            }
+            using var db = new SqlConnection(_connectionString);
+            var id = db.Query<int>(sql, requestLog).Single();
+            requestLog.Id = id;
+            return requestLog;
         }
 
         public void Update(RequestLogModel requestLog)
         {
-            using (var db = new SqlConnection(_connectionString))
-            {
-                db.Query(@"
+            using var db = new SqlConnection(_connectionString);
+            db.Query(@"
 							update [dbo].[RequestLogs] 
 							SET [ProcessDuration] = @ProcessDuration,
 								[Failed] = @Failed,
@@ -81,9 +78,8 @@ namespace PlayLingua.Data
 								[ExceptionMessage] = @ExceptionMessage,
 								[UserId] = @UserId
 							WHERE Id = @Id
-							", 
-				requestLog);
-            }
+							",
+            requestLog);
         }
 
     }

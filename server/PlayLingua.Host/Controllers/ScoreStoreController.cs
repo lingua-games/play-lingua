@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PlayLingua.Contract.ViewModels;
 using PlayLingua.Domain.Entities;
-using PlayLingua.Domain.models;
 using PlayLingua.Domain.Ports;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,7 +12,6 @@ namespace PlayLingua.Host.Controllers
     public class ScoreStoreController : BaseController
     {
         private readonly IScoreRepository _scoreRepository;
-        // private readonly IChapterRepository _chapterRepository;
 
         public ScoreStoreController(IScoreRepository scoreRepository)
         {
@@ -22,25 +20,44 @@ namespace PlayLingua.Host.Controllers
 
 
         [HttpPost]
-        public ActionResult<List<RankResultModel>> Add([FromBody] Score score)
+        public ActionResult<List<RankResultViewModel>> Add([FromBody] UserScoreViewModel model)
         {
-            var result = new List<RankResultModel>();
-            score.UserId = GetUser().Id;
+            var result = new List<RankResultViewModel>();
 
-            if (score.UserId != 0)
+            if (model.UserId != 0)
             {
-                _ = _scoreRepository.Add(score, GetUser().Id);
-                _scoreRepository.IncreaseScore(score.score, score.UserId);
+                _scoreRepository.Add(new UserScore
+                {
+                    UserId = GetUser().Id,
+                    GuestCode = model.GuestCode,
+                    GameName = model.GameName,
+                    BookId = model.BookId,
+                    ChapterId = model.ChapterId,
+                    AddedDate = model.AddedDate,
+                    Score = model.Score
+                }, GetUser().Id);
+
+                _scoreRepository.IncreaseScore(model.Score, GetUser().Id);
             }
 
-            result.Add(new RankResultModel
+            result.Add(new RankResultViewModel
             {
-                Email = score.UserId != 0 ? GetUser().Email : "You",
-                DisplayName = score.UserId != 0 ? GetUser().DisplayName : "You",
-                Score = score.score
+                Email = model.UserId != 0 ? GetUser().Email : "You",
+                DisplayName = model.UserId != 0 ? GetUser().DisplayName : "You",
+                Score = model.Score
             });
 
-            result.AddRange(_scoreRepository.GetTopRanks(score));
+            result.AddRange(_scoreRepository.GetTopRanks(new UserScore
+            {
+                GameName = model.GameName,
+                BookId = model.BookId,
+                ChapterId = model.ChapterId,
+            }).Select(x => new RankResultViewModel
+            {
+                Score = x.Score,
+                DisplayName = x.DisplayName,
+                Email = x.Email
+            }));
             return Ok(result.Take(5).ToList());
         }
     }
