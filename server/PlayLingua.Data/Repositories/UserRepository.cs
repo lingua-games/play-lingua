@@ -1,9 +1,7 @@
 ﻿using Dapper;
-using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using MimeKit;
 using PlayLingua.Domain.Entities;
-using PlayLingua.Domain.models;
 using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
 using System;
@@ -27,10 +25,10 @@ namespace PlayLingua.Data
             _email = email;
         }
 
-        public UserModel Add(UserModel user)
+        public User Add(User user)
         {
             user.EmailVerificationCode = Guid.NewGuid().ToString();
-            sendVerificationCode(user);
+            SendVerificationCode(user);
             user.Password = CreateHashPassword(user.Password, _hashKey);
             user.AddedDate = DateTime.Now;
             var sql =
@@ -54,8 +52,12 @@ namespace PlayLingua.Data
             return Convert.ToBase64String(valueBytes);
         }
 
-        public void sendVerificationCode(UserModel user)
+        public void SendVerificationCode(User user)
         {
+            if (user is null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
             //var mailMessage = new MimeMessage();
             //mailMessage.From.Add(new MailboxAddress("Ghobad", _email.Username));
             //mailMessage.To.Add(new MailboxAddress("Arash", "vbhost.ir@gmail.com"));
@@ -80,22 +82,22 @@ namespace PlayLingua.Data
             throw new NotImplementedException();
         }
 
-        public UserModel GetUserInformation(int userId)
+        public User GetUserInformation(int userId)
         {
-            return db.Query<UserModel>("select top 1 * from dbo.Users").Select(x => new UserModel
+            return db.Query<User>("select top 1 * from dbo.Users").Select(x => new User
             {
                 TotalScore = x.TotalScore,
             }).FirstOrDefault();
         }
 
-        public List<UserModel> List()
+        public List<User> List()
         {
-            return db.Query<UserModel>("select * from dbo.Users").ToList();
+            return db.Query<User>("select * from dbo.Users").ToList();
         }
 
         public void Update(EditUserModel user)
         {
-            user.newPassword = user.IsChangingPassword ? CreateHashPassword(user.newPassword, _hashKey) : "";
+            user.NewPassword = user.IsChangingPassword ? CreateHashPassword(user.NewPassword, _hashKey) : "";
             user.LastUpdateDate = DateTime.Now;
             var sql = @"
 update dbo.Users SET DisplayName = @DisplayName " +

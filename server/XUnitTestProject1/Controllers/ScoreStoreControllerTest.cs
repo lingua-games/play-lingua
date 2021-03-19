@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Newtonsoft.Json;
+using PlayLingua.Contract.ViewModels;
 using PlayLingua.Domain.Entities;
-using PlayLingua.Domain.models;
+using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
 using PlayLingua.Host.Controllers;
 using PlayLingua.WebApi.Controllers;
@@ -37,19 +38,25 @@ namespace PlayLingua.Unit.Test.Controllers
         public void Add_Should_Add_The_Score_And_Return_Top_5_Of_The_Scores()
         {
             // Arrange
-            var fakeScore = new Score
+            var fakeScore = new UserScore
             {
                 Id = 1,
                 UserId = 1,
-                score = 100
+                Score = 100
+            };
+            var fakeScoreViewModel = new UserScoreViewModel
+            {
+                Id = 1,
+                UserId = 0,
+                Score = 100
             };
             _mockRepo.Setup(repo => repo.Add(fakeScore, 1));
-            _mockRepo.Setup(repo => repo.IncreaseScore(fakeScore.score, fakeScore.UserId));
-            _mockRepo.Setup(repo => repo.GetTopRanks(fakeScore)).Returns(_fakeRankList.Where(x => x.Email != "You").ToList());
+            _mockRepo.Setup(repo => repo.IncreaseScore(fakeScore.Score, fakeScore.UserId));
+            _mockRepo.Setup(repo => repo.GetTopRanks(It.IsAny<UserScore>())).Returns(_fakeRankList.Where(x => x.Email != "You").ToList());
 
 
             // Act
-            var methodResult = _mockController.Add(fakeScore);
+            var methodResult = _mockController.Add(fakeScoreViewModel);
 
             // Assert
             var testResult = methodResult.Result as OkObjectResult;

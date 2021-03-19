@@ -1,4 +1,4 @@
-﻿using PlayLingua.Domain.models;
+﻿using PlayLingua.Domain.Models;
 using System.Collections.Generic;
 
 namespace PlayLingua.Domain.Ports

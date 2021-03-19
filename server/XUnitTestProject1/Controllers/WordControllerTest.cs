@@ -1,23 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
-using PlayLingua.Domain.Entities;
-using PlayLingua.Domain.models;
+using PlayLingua.Contract.ViewModels;
 using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
 using PlayLingua.Host.Controllers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Xunit;
 
 namespace PlayLingua.Unit.Test.Controllers
 {
     public class WordControllerTest
     {
-        private Mock<IWordRepository> _mockWordRepo;
-        private Mock<IBookRepository> _mockBookRepo;
-        private Mock<IChapterRepository> _mockChapterRepo;
+        private readonly Mock<IWordRepository> _mockWordRepo;
+        private readonly Mock<IBookRepository> _mockBookRepo;
+        private readonly Mock<IChapterRepository> _mockChapterRepo;
         private readonly WordController _mockController;
 
         public WordControllerTest()
@@ -32,14 +27,14 @@ namespace PlayLingua.Unit.Test.Controllers
         public void InquiryAboutSelectedLanguages_Should_Return_Inquiry_Result()
         {
             // Arrange
-            var fakeModel = new SelectedLanguageModel
+            var fakeViewModel = new SelectedLanguageViewModel
             {
                 Target = 1
             };
-            _mockWordRepo.Setup(repo => repo.InquiryAboutSelectedLanguages(fakeModel)).Returns(true);
+            _mockWordRepo.Setup(repo => repo.InquiryAboutSelectedLanguages(It.IsAny<SelectedLanguageModel>())).Returns(true);
 
             // Act
-            var methodResult = _mockController.InquiryAboutSelectedLanguages(fakeModel);
+            var methodResult = _mockController.InquiryAboutSelectedLanguages(fakeViewModel);
 
             // Assert
             var testResult = methodResult.Result as OkObjectResult;

@@ -1,6 +1,6 @@
 ﻿using PlayLingua.Domain.Entities;
 
-namespace PlayLingua.Domain.models
+namespace PlayLingua.Domain.Models
 {
     public class LoginResult
     {

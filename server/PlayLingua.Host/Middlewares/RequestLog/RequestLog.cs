@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using PlayLingua.Domain.models;
+using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
 using PlayLingua.Host.Controllers;
 using PlayLingua.Host.Helpers;

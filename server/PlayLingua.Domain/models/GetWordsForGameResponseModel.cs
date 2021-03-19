@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PlayLingua.Domain.models
+namespace PlayLingua.Domain.Models
 {
     public class GetWordsForGameResponseModel
     {

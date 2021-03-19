@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
+using PlayLingua.Contract.ViewModels;
 using PlayLingua.Domain.Entities;
-using PlayLingua.Domain.models;
+using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
 using PlayLingua.Host.Controllers;
 using PlayLingua.WebApi.Controllers;
@@ -33,10 +34,15 @@ namespace PlayLingua.Unit.Test.Controllers
                 BookId = 1,
                 ChapterId = 1
             };
-            _mockRepo.Setup(repo => repo.GetWordsForGame(fakeGetWordsForGameInputModel)).Returns(_fakeGetWordsForGameResponse);
+            var fakeGetWordsForGameInputViewModel = new GetWordsForGameInputViewModel
+            {
+                BookId = 1,
+                ChapterId = 1
+            };
+            _mockRepo.Setup(repo => repo.GetWordsForGame(It.IsAny<GetWordsForGameInputModel>())).Returns(_fakeGetWordsForGameResponse);
 
             // Act
-            var methodResult = _mockController.GetWordsForGame(fakeGetWordsForGameInputModel);
+            var methodResult = _mockController.GetWordsForGame(fakeGetWordsForGameInputViewModel);
 
             // Assert
             var testResult = methodResult.Result as OkObjectResult;

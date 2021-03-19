@@ -97,7 +97,7 @@ namespace PlayLingua.Host.Controllers
             {
                 DisplayName = model.DisplayName,
                 IsChangingPassword = model.IsChangingPassword,
-                newPassword = model.newPassword
+                NewPassword = model.NewPassword
             });
             model.Token = _authRepository.GenerateToken(new User
             {

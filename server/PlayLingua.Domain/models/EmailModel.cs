@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PlayLingua.Domain.models
+namespace PlayLingua.Domain.Models
 {
     public class EmailModel
     {

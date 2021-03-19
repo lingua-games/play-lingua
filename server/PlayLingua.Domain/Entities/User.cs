@@ -1,10 +1,8 @@
-﻿using PlayLingua.Domain.models;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
 
 namespace PlayLingua.Domain.Entities
 {
-    public class User : SelectDefaultLanguageModel
+    public class User : BaseModel
     {
         public int Id { get; set; }
         public string Email { get; set; }
@@ -18,6 +16,8 @@ namespace PlayLingua.Domain.Entities
         public string EmailVerificationCode { get; set; }
         public bool IsEmailVerified { get; set; }
         public DateTime EmailVerifiedDate { get; set; }
+        public int DefaultBaseLanguage { get; set; }
+        public int DefaultTargetLanguage { get; set; }
     }
 }
 

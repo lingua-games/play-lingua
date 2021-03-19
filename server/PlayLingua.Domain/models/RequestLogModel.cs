@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PlayLingua.Domain.models
+namespace PlayLingua.Domain.Models
 {
 	public class RequestLogModel
 	{

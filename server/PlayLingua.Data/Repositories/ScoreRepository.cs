@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using PlayLingua.Domain.Entities;
-using PlayLingua.Domain.models;
+using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace PlayLingua.Data
             db = new SqlConnection(connectionString);
         }
 
-        public void Add(Score score, int userId)
+        public void Add(UserScore score, int userId)
         {
             score.AddedBy = userId;
             score.AddedDate = DateTime.Now;
@@ -38,8 +38,8 @@ VALUES(@UserId, @GuestCode, @GameName, @BookId, @ChapterId, @AddedDate, @Score);
 
         public void IncreaseScore(float score, int userId)
         {
-            var user = db.Query<UserModel>("select * from dbo.Users where Id = @userId", new { userId }).FirstOrDefault();
-            score = score + user.TotalScore;
+            var user = db.Query<User>("select * from dbo.Users where Id = @userId", new { userId }).FirstOrDefault();
+            score += user.TotalScore;
             db.Query("update dbo.Users SET TotalScore = @score WHERE Id = @Id", new { score, user.Id});
         }
 
@@ -48,12 +48,12 @@ VALUES(@UserId, @GuestCode, @GameName, @BookId, @ChapterId, @AddedDate, @Score);
             throw new NotImplementedException();
         }
 
-        public List<Score> GetByUserId(int userId)
+        public List<UserScore> GetByUserId(int userId)
         {
             throw new NotImplementedException();
         }
 
-        public List<RankResultModel> GetTopRanks(Score score)
+        public List<RankResultModel> GetTopRanks(UserScore score)
         {
             var sql = @"
 SELECT top " + score.Count + @" Email as Email,  max(score) as Score, max(DisplayName) as DisplayName FROM [dbo].[GameScores]
@@ -69,7 +69,7 @@ where GameName = @GameName AND " +
             return result;
         }
 
-        public void Update(Score score)
+        public void Update(UserScore score)
         {
             throw new NotImplementedException();
         }

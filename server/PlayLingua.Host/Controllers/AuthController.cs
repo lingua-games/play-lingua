@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PlayLingua.Contract.ViewModels;
 using PlayLingua.Domain.Entities;
-using PlayLingua.Domain.models;
 using PlayLingua.Domain.Ports;
 
 namespace PlayLingua.Host.Controllers

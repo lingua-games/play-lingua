@@ -1,7 +1,7 @@
 ﻿using PlayLingua.Domain.Entities;
 using System.Collections.Generic;
 
-namespace PlayLingua.Domain.models
+namespace PlayLingua.Domain.Models
 {
     public class SubmitWordsModel
     {
@@ -16,7 +16,7 @@ namespace PlayLingua.Domain.models
     public class FormWords
     {
         public FormWord Base { get; set; }
-        public List<FormWord> targets { get; set; }
+        public List<FormWord> Targets { get; set; }
     }
 
     public class FormWord
