@@ -7,9 +7,9 @@ namespace PlayLingua.Domain.Ports
 {
     public interface IUserRepository
     {
-        List<UserModel> List();
-        UserModel Add(UserModel user);
-        UserModel GetUserInformation(int userId);
+        List<User> List();
+        User Add(User user);
+        User GetUserInformation(int userId);
         void Delete(string id);
         void Update(EditUserModel user);
     }
