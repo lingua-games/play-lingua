@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PlayLingua.Contract.ViewModels
 {
-    public class Language
+    public class LanguageViewModel
     {
         public long Id { get; set; }
         public string Code { get; set; }

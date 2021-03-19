@@ -21,7 +21,7 @@ namespace PlayLingua.Data
             db = new SqlConnection(connectionString);
         }
 
-        public Score Add(Score score, int userId)
+        public void Add(Score score, int userId)
         {
             score.AddedBy = userId;
             score.AddedDate = DateTime.Now;
@@ -32,12 +32,8 @@ namespace PlayLingua.Data
                 @"
 insert into dbo.[GameScores] 
 (UserId, GuestCode, GameName, BookId, ChapterId, AddedDate, Score) 
-VALUES(@UserId, @GuestCode, @GameName, @BookId, @ChapterId, @AddedDate, @Score);" +
-                "SELECT CAST(SCOPE_IDENTITY() as int)";
-
-            var id = db.Query<int>(sql, score).Single();
-            score.Id = id;
-            return score;
+VALUES(@UserId, @GuestCode, @GameName, @BookId, @ChapterId, @AddedDate, @Score);";
+            db.Query<int>(sql, score);
         }
 
         public void IncreaseScore(float score, int userId)
