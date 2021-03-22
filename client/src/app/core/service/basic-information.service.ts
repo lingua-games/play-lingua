@@ -46,7 +46,7 @@ export class BasicInformationService {
     menus.push({
       name: 'Super Mario',
       image: './../../../../assets/images/GameMenu/super-mario.png',
-      route: 'super-mario',
+      route: '../games/super-mario',
       id: 'super-mario',
       isDesigned: true,
       gifUrl: './../../../../assets/GIFs/super-mario.gif',
