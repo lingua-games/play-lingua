@@ -1,4 +1,7 @@
 <div class="main-container" style="overflow: hidden">
+  <div class="question-container">
+    {{ currentEnemy?.text?.key }}
+  </div>
   <div
     class="mario"
     [ngStyle]="mario.style"
@@ -11,7 +14,7 @@
   <div class="ground"></div>
   <div *ngFor="let enemy of enemies">
     <div [ngStyle]="enemy.style" *ngIf="enemy.status === 0">
-      {{ enemy.text }}
+      {{ enemy.text.values[0] }}
     </div>
   </div>
 </div>

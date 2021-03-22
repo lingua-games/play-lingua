@@ -1,13 +1,11 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { MarioModel } from '../../../core/models/mario.model';
-import { GamesService } from '../../../core/service/games.service';
 import {
   MarioEnemy,
   MarioEnemyStatus,
 } from '../../../core/models/mario-enemy.model';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
-import { GetGameWordsRequestModel } from '../../../core/models/get-game-words-request.model';
 import { StartGameDialogComponent } from '../common-in-game/start-game-dialog/start-game-dialog.component';
 import { GameInformationInterface } from '../../../core/models/game-information.interface';
 import { GameStartInformation } from '../../../core/models/game-start-information';
@@ -31,6 +29,7 @@ import { EGame } from '../../../core/models/e-game';
 export class SuperMarioComponent implements OnInit {
   mario: MarioModel = new MarioModel();
   enemies: MarioEnemy[];
+  currentEnemy: MarioEnemy = new MarioEnemy();
   copyOfEnemies: MarioEnemy[];
   movingRightInterval?: number;
   movingLeftInterval?: number;
@@ -46,7 +45,6 @@ export class SuperMarioComponent implements OnInit {
 
   @HostListener('document:keydown ', ['$event'])
   keyDownEvent(event: KeyboardEvent): void {
-    console.log(event.code.toString() === ('ArrowLeft' || 'KeyA'));
     switch (event.code) {
       case 'ArrowLeft':
       case 'KeyA':
@@ -106,52 +104,85 @@ export class SuperMarioComponent implements OnInit {
           this.copyOfEnemies = JSON.parse(JSON.stringify(res.words));
           this.bookId = res.bookId;
           this.chapterId = res.chapterId;
-          this.startGame();
+          this.startGame(res.words);
         }
       });
   }
 
-  startGame(): void {
-    this.enemies.forEach((enemy) => {
-      enemy.status = MarioEnemyStatus.WaitingForStart;
-      enemy.style = {
-        position: 'absolute',
-        // random number between floor and max top of the Mario
-        bottom:
-          (
-            Math.floor(Math.random() * (this.jumpHeight + Math.abs(1) + 1)) + 10
-          ).toString() + '%',
-        left: '100%',
-        border: 'solid 1px gray',
-        borderRadius: '10%',
-        padding: '5px',
-        height: '5%',
-        width: '5%',
-        textAlign: 'center',
-      };
+  startGame(words: WordKeyValueModel<string[]>[]): void {
+    this.enemies = [];
+    words.forEach((word) => {
+      this.enemies.push({
+        text: word,
+        status: MarioEnemyStatus.WaitingForStart,
+        style: {
+          position: 'absolute',
+          // random number between floor and max top of the Mario
+          bottom:
+            (
+              Math.floor(Math.random() * (this.jumpHeight + Math.abs(1) + 1)) +
+              10
+            ).toString() + '%',
+          left: '90%',
+          border: 'solid 1px gray',
+          borderRadius: '10px',
+          padding: '.5rem',
+          textAlign: 'center',
+          color: '#283747',
+          height: '4vh',
+          fontSize: '1vw',
+          width: '7%',
+          backgroundColor: '#EAEDED',
+          opacity: '.7',
+        },
+      });
     });
-    this.startAnimating(this.enemies[0]);
+    this.prepareTheWord(this.enemies[0]);
+  }
+
+  prepareTheWord(enemy: MarioEnemy): void {
+    this.currentEnemy = enemy;
+    this.showWordInWaitingMode(enemy);
+  }
+
+  showWordInWaitingMode(enemy: MarioEnemy): void {
+    enemy.status = MarioEnemyStatus.Start;
+    setTimeout(() => {
+      enemy.style.transition = '100ms';
+      enemy.style.opacity = '1';
+      enemy.style.fontSize = '.8vw';
+      this.showMovingEnemy(enemy);
+    }, 2000);
+  }
+
+  showPointNotification(enemy: MarioEnemy): void {
+    // TODO: show earned point here
+    if (this.enemies.indexOf(enemy) < this.enemies.length) {
+      this.prepareTheWord(this.enemies[this.enemies.indexOf(enemy) + 1]);
+    }
   }
 
   // The method does not have test yet because it is not finalized.
-  startAnimating(enemy: MarioEnemy): void {
-    enemy.status = MarioEnemyStatus.Start;
+  showMovingEnemy(playingEnemy: MarioEnemy): void {
+    playingEnemy.status = MarioEnemyStatus.Start;
     const animateInterval = setInterval(() => {
-      enemy.style.transition = '100ms';
-      enemy.style.left =
-        (parseInt(enemy.style.left, null) - 1).toString() + '%';
+      playingEnemy.style.transition = '100ms';
+      playingEnemy.style.left =
+        (parseInt(playingEnemy.style.left, null) - 1).toString() + '%';
 
       // Managing left-right hit
-      const enemyLeft = parseInt(enemy.style.left, null);
+      const enemyLeft = parseInt(playingEnemy.style.left, null);
       const enemyRight =
-        parseInt(enemy.style.left, null) + parseInt(enemy.style.width, null);
+        parseInt(playingEnemy.style.left, null) +
+        parseInt(playingEnemy.style.width, null);
       const marioLeft = parseInt(this.mario.style.left, null);
       const marioRight =
         parseInt(this.mario.style.left, null) +
         parseInt(this.mario.style.width, null);
       const enemyTop =
-        parseInt(enemy.style.bottom, null) + parseInt(enemy.style.height, null);
-      const enemyButton = parseInt(enemy.style.bottom, null);
+        parseInt(playingEnemy.style.bottom, null) +
+        parseInt(playingEnemy.style.height, null);
+      const enemyButton = parseInt(playingEnemy.style.bottom, null);
       const marioButton = parseInt(this.mario.style.bottom, null);
       const marioTop = marioButton + parseInt(this.mario.style.height, null);
       if (
@@ -160,19 +191,29 @@ export class SuperMarioComponent implements OnInit {
         ((marioTop < enemyTop && marioTop > enemyButton) ||
           (marioButton < enemyTop && marioButton > enemyButton))
       ) {
+        if (this.currentEnemy.text.key === playingEnemy.text.key) {
+          this.showPointNotification(playingEnemy);
+          clearInterval(animateInterval);
+          playingEnemy.status = MarioEnemyStatus.Finished;
+          return;
+        }
         clearInterval(animateInterval);
-        const index = this.enemies.indexOf(enemy);
+        const index = this.enemies.indexOf(playingEnemy);
         if (index + 1 < this.enemies.length) {
-          enemy.status = MarioEnemyStatus.Finished;
-          this.startAnimating(this.enemies[index + 1]);
+          playingEnemy.status = MarioEnemyStatus.Finished;
+          this.showWordInWaitingMode(this.enemies[index + 1]);
         }
       }
-      if (parseInt(enemy.style.left, null) <= -5) {
+      if (parseInt(playingEnemy.style.left, null) <= -5) {
+        if (this.enemies.indexOf(playingEnemy) >= this.enemies.length) {
+          // TODO show guid box
+        }
+
         clearInterval(animateInterval);
-        const index = this.enemies.indexOf(enemy);
+        const index = this.enemies.indexOf(playingEnemy);
         if (index + 1 < this.enemies.length) {
-          enemy.status = MarioEnemyStatus.Finished;
-          this.startAnimating(this.enemies[index + 1]);
+          playingEnemy.status = MarioEnemyStatus.Finished;
+          this.showWordInWaitingMode(this.enemies[index + 1]);
         }
       }
     }, 50);
