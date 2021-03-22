@@ -333,6 +333,20 @@ export class BasicInformationService {
       });
     }
 
+    if (game === EGame.supperMario) {
+      result.push({
+        key: '← / A',
+        description: 'Move left',
+      });
+      result.push({
+        key: '→ / D',
+        description: 'Move right',
+      });
+      result.push({
+        key: '[Space]',
+        description: 'Jump',
+      });
+    }
     return result;
   }
 }

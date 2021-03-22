@@ -8,6 +8,12 @@ import {
 import { animate, style, transition, trigger } from '@angular/animations';
 import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
 import { GetGameWordsRequestModel } from '../../../core/models/get-game-words-request.model';
+import { StartGameDialogComponent } from '../common-in-game/start-game-dialog/start-game-dialog.component';
+import { GameInformationInterface } from '../../../core/models/game-information.interface';
+import { GameStartInformation } from '../../../core/models/game-start-information';
+import { MatDialog } from '@angular/material/dialog';
+import { BasicInformationService } from '../../../core/service/basic-information.service';
+import { EGame } from '../../../core/models/e-game';
 
 @Component({
   selector: 'app-super-mario',
@@ -25,11 +31,18 @@ import { GetGameWordsRequestModel } from '../../../core/models/get-game-words-re
 export class SuperMarioComponent implements OnInit {
   mario: MarioModel = new MarioModel();
   enemies: MarioEnemy[];
+  copyOfEnemies: MarioEnemy[];
   movingRightInterval?: number;
   movingLeftInterval?: number;
   jumpHeight = 30;
+  guidBoxShowing: boolean;
+  bookId: number;
+  chapterId: number;
 
-  constructor(private gamesService: GamesService) {}
+  constructor(
+    private dialog: MatDialog,
+    private basicInformationService: BasicInformationService
+  ) {}
 
   @HostListener('document:keydown ', ['$event'])
   keyDownEvent(event: KeyboardEvent): void {
@@ -72,44 +85,52 @@ export class SuperMarioComponent implements OnInit {
       left: '10%',
       transition: '10ms',
     });
-    this.startGame();
+    this.showStartDialog();
+  }
+
+  showStartDialog(): void {
+    this.enemies = [];
+    this.guidBoxShowing = false;
+    this.dialog
+      .open(StartGameDialogComponent, {
+        data: {
+          name: 'Super mario',
+          hints: this.basicInformationService.gameHints(EGame.supperMario),
+        } as GameInformationInterface,
+        disableClose: true,
+        width: '30%',
+      })
+      .afterClosed()
+      .subscribe((res: GameStartInformation<WordKeyValueModel<string[]>[]>) => {
+        if (res && res.words && res.words.length) {
+          this.copyOfEnemies = JSON.parse(JSON.stringify(res.words));
+          this.bookId = res.bookId;
+          this.chapterId = res.chapterId;
+          this.startGame();
+        }
+      });
   }
 
   startGame(): void {
-    this.getWords();
-  }
-
-  getWords(): void {
-    this.enemies = [];
-    this.gamesService.getGameWords(new GetGameWordsRequestModel()).subscribe(
-      (res: WordKeyValueModel<string[]>[]) => {
-        res.forEach((element) => {
-          this.enemies.push({
-            text: element.key,
-            status: MarioEnemyStatus.WaitingForStart,
-            style: {
-              position: 'absolute',
-              // random number between floor and max top of the Mario
-              bottom:
-                (
-                  Math.floor(
-                    Math.random() * (this.jumpHeight + Math.abs(1) + 1)
-                  ) + 10
-                ).toString() + '%',
-              left: '100%',
-              border: 'solid 1px gray',
-              borderRadius: '10%',
-              padding: '5px',
-              height: '5%',
-              width: '5%',
-              textAlign: 'center',
-            },
-          });
-        });
-        this.startAnimating(this.enemies[0]);
-      },
-      () => {}
-    );
+    this.enemies.forEach((enemy) => {
+      enemy.status = MarioEnemyStatus.WaitingForStart;
+      enemy.style = {
+        position: 'absolute',
+        // random number between floor and max top of the Mario
+        bottom:
+          (
+            Math.floor(Math.random() * (this.jumpHeight + Math.abs(1) + 1)) + 10
+          ).toString() + '%',
+        left: '100%',
+        border: 'solid 1px gray',
+        borderRadius: '10%',
+        padding: '5px',
+        height: '5%',
+        width: '5%',
+        textAlign: 'center',
+      };
+    });
+    this.startAnimating(this.enemies[0]);
   }
 
   // The method does not have test yet because it is not finalized.

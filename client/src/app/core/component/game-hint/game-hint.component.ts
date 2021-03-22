@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { GameHint } from '../../models/game-hint.interface';
 import { EGame } from '../../models/e-game';
 import { BasicInformationService } from '../../service/basic-information.service';
@@ -8,16 +8,6 @@ import { BasicInformationService } from '../../service/basic-information.service
   templateUrl: './game-hint.component.html',
   styleUrls: ['./game-hint.component.scss'],
 })
-export class GameHintComponent implements OnInit {
-  hints: GameHint[] = [];
-
-  constructor(private basicInformationService: BasicInformationService) {}
-
-  ngOnInit(): void {
-    this.getHints();
-  }
-
-  getHints(): void {
-    this.hints = this.basicInformationService.gameHints(EGame.fallingStars);
-  }
+export class GameHintComponent {
+  @Input() hints: GameHint[] = [];
 }

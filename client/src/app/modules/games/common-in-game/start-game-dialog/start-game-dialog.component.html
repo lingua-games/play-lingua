@@ -1,36 +1,47 @@
 <div class="dialog-title-container">
-  {{data.name}}
+  {{ data.name }}
 </div>
-<div *ngIf='isPreparing' class='text-center p-5'>
-  <div class="spinner-grow text-success" style="width: 3rem; height: 3rem;" role="status">
+<div *ngIf="isPreparing" class="text-center p-5">
+  <div
+    class="spinner-grow text-success"
+    style="width: 3rem; height: 3rem"
+    role="status"
+  >
     <span class="sr-only">Loading...</span>
   </div>
-  <hr>
+  <hr />
   <h1>Preparing game data</h1>
 </div>
-<div *ngIf='!isPreparing'>
+<div *ngIf="!isPreparing">
   <div class="dialog-content">
-    <app-game-hint></app-game-hint>
-    <hr>
+    <app-game-hint [hints]="data.hints"></app-game-hint>
+    <hr />
     <mat-form-field appearance="fill" class="select-book-input">
       <mat-label>Select a book</mat-label>
-      <mat-select [(ngModel)]="form.selectedBook" (ngModelChange)='getChapters($event)'>
+      <mat-select
+        [(ngModel)]="form.selectedBook"
+        (ngModelChange)="getChapters($event)"
+      >
         <mat-option *ngFor="let book of books" [value]="book">
-          {{book.name}}
+          {{ book.name }}
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field appearance="fill" class="select-book-input" *ngIf='chapters && chapters.length'>
+    <mat-form-field
+      appearance="fill"
+      class="select-book-input"
+      *ngIf="chapters && chapters.length"
+    >
       <mat-label>Select a chapter</mat-label>
       <mat-select [(ngModel)]="form.selectedChapter">
         <mat-option *ngFor="let chapter of chapters" [value]="chapter">
-          {{chapter.name}}
+          {{ chapter.name }}
         </mat-option>
       </mat-select>
     </mat-form-field>
   </div>
   <div class="dialog-actions">
-    <button class="btn btn-danger" (click)='backToMenu()'>Main menu</button>
-    <button class="btn btn-success" (click)='submit()'>Start!</button>
+    <button class="btn btn-danger" (click)="backToMenu()">Main menu</button>
+    <button class="btn btn-success" (click)="submit()">Start!</button>
   </div>
 </div>
