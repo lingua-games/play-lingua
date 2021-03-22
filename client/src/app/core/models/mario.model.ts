@@ -2,17 +2,22 @@ import { ElementStyle } from './element-style.model';
 
 export class MarioModel {
   isJumping?: boolean;
+  isMoving?: boolean;
+  isMovingRight?: boolean;
+  isMovingLeft?: boolean;
   style: ElementStyle;
   originalBottom?: string;
 
   constructor() {}
 
   setStyle(style: ElementStyle): void {
-    console.log(style);
     this.style = style;
   }
 
   moveLeft(distance?: number): void {
+    this.isMovingRight = false;
+    this.isMovingLeft = true;
+    this.isMoving = true;
     distance = distance || 1;
     const left = parseInt(this.style.left, null);
     if (left >= distance) {
@@ -23,6 +28,9 @@ export class MarioModel {
   }
 
   moveRight(distance?: number): void {
+    this.isMovingLeft = false;
+    this.isMovingRight = true;
+    this.isMoving = true;
     distance = distance || 1;
     const right = parseInt(this.style.left, null);
     if (right + parseInt(this.style.width, null) + distance < 100) {

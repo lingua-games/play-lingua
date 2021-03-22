@@ -15,9 +15,21 @@
   height: 10vh;
 }
 
-.mario {
-  /* use the timing function steps() to chunk the animation into 12 equal pieces */
+.isMoving {
   animation: walk 1s steps(7) infinite;
+}
+
+.movingRight {
+  -webkit-transform: scaleX(1);
+  transform: scaleX(1);
+}
+
+.movingLeft {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+
+.mario {
   background: url("../../../../assets/mario/mario-movement.png") 0 0 no-repeat;
   height: 95px;
   width: 60px;

@@ -33,11 +33,14 @@ export class SuperMarioComponent implements OnInit {
 
   @HostListener('document:keydown ', ['$event'])
   keyDownEvent(event: KeyboardEvent): void {
+    console.log(event.code.toString() === ('ArrowLeft' || 'KeyA'));
     switch (event.code) {
       case 'ArrowLeft':
+      case 'KeyA':
         this.startMovingLeft();
         break;
       case 'ArrowRight':
+      case 'KeyD':
         this.startMovingRight();
         break;
       case 'Space':
@@ -50,9 +53,11 @@ export class SuperMarioComponent implements OnInit {
   keyUpEvent(event: KeyboardEvent): void {
     switch (event.code) {
       case 'ArrowLeft':
+      case 'KeyA':
         this.stopMovingLeft();
         break;
       case 'ArrowRight':
+      case 'KeyD':
         this.stopMovingRight();
         break;
     }
@@ -60,7 +65,6 @@ export class SuperMarioComponent implements OnInit {
 
   ngOnInit(): void {
     this.mario.setStyle({
-      // border: '1px solid',
       position: 'absolute',
       bottom: '10%',
       width: '3%',
@@ -154,8 +158,19 @@ export class SuperMarioComponent implements OnInit {
   }
 
   stopMovingLeft(): void {
+    this.stopMoving();
     clearInterval(this.movingLeftInterval);
     this.movingLeftInterval = null;
+  }
+
+  stopMovingRight(): void {
+    this.stopMoving();
+    clearInterval(this.movingRightInterval);
+    this.movingRightInterval = null;
+  }
+
+  stopMoving(): void {
+    this.mario.isMoving = false;
   }
 
   startMovingLeft(): void {
@@ -164,11 +179,6 @@ export class SuperMarioComponent implements OnInit {
         this.mario.moveLeft(1);
       }, 30);
     }
-  }
-
-  stopMovingRight(): void {
-    clearInterval(this.movingRightInterval);
-    this.movingRightInterval = null;
   }
 
   startMovingRight(): void {
