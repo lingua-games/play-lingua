@@ -60,11 +60,11 @@ export class SuperMarioComponent implements OnInit {
 
   ngOnInit(): void {
     this.mario.setStyle({
-      border: '1px solid',
+      // border: '1px solid',
       position: 'absolute',
       bottom: '10%',
-      width: '2%',
-      height: '5%',
+      width: '3%',
+      height: '10%',
       left: '10%',
       transition: '10ms',
     });

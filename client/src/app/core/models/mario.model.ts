@@ -8,6 +8,7 @@ export class MarioModel {
   constructor() {}
 
   setStyle(style: ElementStyle): void {
+    console.log(style);
     this.style = style;
   }
 
