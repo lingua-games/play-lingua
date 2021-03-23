@@ -1,7 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { GameHint } from '../../models/game-hint.interface';
-import { EGame } from '../../models/e-game';
-import { BasicInformationService } from '../../service/basic-information.service';
 
 @Component({
   selector: 'app-game-hint',
