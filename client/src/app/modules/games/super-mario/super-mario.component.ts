@@ -24,6 +24,25 @@ import { EGame } from '../../../core/models/e-game';
         animate(6000, style({ right: '100%' })),
       ]),
     ]),
+    trigger('questionFade', [
+      transition(':enter', [
+        style({
+          opacity: 0,
+          marginTop: '40vh',
+          fontSize: '2vw',
+          padding: '2rem',
+        }),
+        animate('500ms', style({ opacity: 1 })),
+        animate(
+          '1s 2s',
+          style({ marginTop: '10vh', fontSize: '1vw', padding: '1rem 3rem' })
+        ),
+      ]),
+      transition(':leave', [
+        style({ opacity: 1 }),
+        animate('100ms', style({ opacity: 0 })),
+      ]),
+    ]),
   ],
 })
 export class SuperMarioComponent implements OnInit {
@@ -142,7 +161,7 @@ export class SuperMarioComponent implements OnInit {
 
   prepareTheWord(enemy: MarioEnemy): void {
     this.currentEnemy = enemy;
-    this.showWordInWaitingMode(enemy);
+    // this.showWordInWaitingMode(enemy);
   }
 
   showWordInWaitingMode(enemy: MarioEnemy): void {

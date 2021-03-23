@@ -1,5 +1,5 @@
 <div class="main-container" style="overflow: hidden">
-  <div class="question-container">
+  <div class="question-container" @questionFade *ngIf="currentEnemy.text">
     {{ currentEnemy?.text?.key }}
   </div>
   <div
