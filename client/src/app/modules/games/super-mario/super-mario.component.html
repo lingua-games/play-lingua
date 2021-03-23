@@ -3,6 +3,27 @@
   *ngIf="enemies.length"
   (click)="showStartDialog()"
 ></app-exit-game>
+<div *ngIf="guidBoxShowing" class="guid-box-container" @fadeIn>
+  <div class="guid-box-header-container">
+    <span>Wrong!</span>
+  </div>
+  <div class="guid-box-body-container">
+    <span>
+      Correct answer is
+      <span class="guid-box-correct-answer"
+        ><strong>{{ currentEnemy.values[0] }}</strong></span
+      >
+      .
+    </span>
+    <br />
+    <span>{{ currentEnemy.key }} = {{ currentEnemy.values[0] }}</span>
+  </div>
+  <div class="guid-box-action-container text-right">
+    <button class="btn btn-success" (click)="prepareTheWord()">
+      Continue [Enter]
+    </button>
+  </div>
+</div>
 <div class="main-container" style="overflow: hidden">
   <div class="question-container" @questionFade *ngIf="currentEnemy.key">
     {{ currentEnemy?.key }}
