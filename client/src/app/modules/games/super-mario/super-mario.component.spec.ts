@@ -104,11 +104,11 @@ describe('SuperMarioComponent', () => {
   });
 
   it('should getWords be called in startGame method', () => {
-    spyOn(component, 'getWords');
+    spyOn(component, 'prepareTheWord');
 
-    component.startGame();
+    component.startGame([{ key: 'a', values: ['a', 'b'] }]);
 
-    expect(component.getWords).toHaveBeenCalled();
+    expect(component.prepareTheWord).toHaveBeenCalled();
   });
 
   it('should getGameWords service be called in getWords method', () => {
@@ -139,17 +139,6 @@ describe('SuperMarioComponent', () => {
     fixture.detectChanges();
 
     expect(component.enemies.length).toBe(mockServiceResultValue.length);
-  });
-
-  it('should startAnimating be called in getWords method', () => {
-    mockGameService.getGameWords.and.callFake(() => {
-      return of(mockServiceResultValue);
-    });
-    spyOn(component, 'startAnimating');
-
-    fixture.detectChanges();
-
-    expect(component.startAnimating).toHaveBeenCalledWith(component.enemies[0]);
   });
 
   it('should clearInterval be called in stopMovingLeft', () => {
