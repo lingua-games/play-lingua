@@ -1,3 +1,8 @@
+<app-top-navbar></app-top-navbar>
+<app-exit-game
+  *ngIf="enemies.length"
+  (click)="showStartDialog()"
+></app-exit-game>
 <div class="main-container" style="overflow: hidden">
   <div class="question-container" @questionFade *ngIf="currentEnemy.text">
     {{ currentEnemy?.text?.key }}

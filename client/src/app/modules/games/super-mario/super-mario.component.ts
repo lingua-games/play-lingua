@@ -76,6 +76,9 @@ export class SuperMarioComponent implements OnInit {
       case 'Space':
         this.jump();
         break;
+      case 'Escape':
+        this.showStartDialog();
+        break;
     }
   }
 
