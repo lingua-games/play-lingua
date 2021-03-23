@@ -4,8 +4,8 @@
   (click)="showStartDialog()"
 ></app-exit-game>
 <div class="main-container" style="overflow: hidden">
-  <div class="question-container" @questionFade *ngIf="currentEnemy.text">
-    {{ currentEnemy?.text?.key }}
+  <div class="question-container" @questionFade *ngIf="currentEnemy.key">
+    {{ currentEnemy?.key }}
   </div>
   <div
     class="mario"
@@ -18,8 +18,8 @@
   ></div>
   <div class="ground"></div>
   <div *ngFor="let enemy of enemies">
-    <div [ngStyle]="enemy.style" *ngIf="enemy.status === 0">
-      {{ enemy.text.values[0] }}
+    <div [ngStyle]="enemy.style" *ngIf="enemy?.status === 0">
+      {{ enemy?.valueToAsk }}
     </div>
   </div>
 </div>

@@ -48,8 +48,11 @@ import { EGame } from '../../../core/models/e-game';
 export class SuperMarioComponent implements OnInit {
   mario: MarioModel = new MarioModel();
   enemies: MarioEnemy[];
-  currentEnemy: MarioEnemy = new MarioEnemy();
-  copyOfEnemies: MarioEnemy[];
+  currentEnemy: WordKeyValueModel<string[]> = new WordKeyValueModel<string[]>();
+  allEnemies: GameStartInformation<
+    WordKeyValueModel<string[]>[]
+  > = new GameStartInformation<WordKeyValueModel<string[]>[]>();
+  randomNumbers: number[] = [];
   movingRightInterval?: number;
   movingLeftInterval?: number;
   jumpHeight = 30;
@@ -123,48 +126,85 @@ export class SuperMarioComponent implements OnInit {
       .afterClosed()
       .subscribe((res: GameStartInformation<WordKeyValueModel<string[]>[]>) => {
         if (res && res.words && res.words.length) {
-          this.copyOfEnemies = JSON.parse(JSON.stringify(res.words));
+          this.allEnemies = JSON.parse(JSON.stringify(res));
           this.bookId = res.bookId;
           this.chapterId = res.chapterId;
-          this.startGame(res.words);
+          this.startGame();
         }
       });
   }
 
-  startGame(words: WordKeyValueModel<string[]>[]): void {
-    this.enemies = [];
-    words.forEach((word) => {
-      this.enemies.push({
-        text: word,
-        status: MarioEnemyStatus.WaitingForStart,
-        style: {
-          position: 'absolute',
-          // random number between floor and max top of the Mario
-          bottom:
-            (
-              Math.floor(Math.random() * (this.jumpHeight + Math.abs(1) + 1)) +
-              10
-            ).toString() + '%',
-          left: '90%',
-          border: 'solid 1px gray',
-          borderRadius: '10px',
-          padding: '.5rem',
-          textAlign: 'center',
-          color: '#283747',
-          height: '4vh',
-          fontSize: '1vw',
-          width: '7%',
-          backgroundColor: '#EAEDED',
-          opacity: '.7',
-        },
-      });
-    });
-    this.prepareTheWord(this.enemies[0]);
+  startGame(): void {
+    this.prepareTheWord(this.allEnemies.words[0]);
   }
 
-  prepareTheWord(enemy: MarioEnemy): void {
+  prepareTheWord(enemy: WordKeyValueModel<string[]>): void {
     this.currentEnemy = enemy;
-    // this.showWordInWaitingMode(enemy);
+    this.randomNumbers = this.generateRandomNumber();
+    this.prepareAnswerOptions();
+  }
+
+  generateRandomNumber(): number[] {
+    const result: number[] = [];
+    while (result.length < 4) {
+      const r = Math.floor(Math.random() * this.allEnemies.words.length);
+      if (
+        result.indexOf(r) === -1 &&
+        this.allEnemies.words.indexOf(this.currentEnemy) !== r
+      ) {
+        result.push(r);
+      }
+    }
+    return result;
+  }
+
+  prepareAnswerOptions(): void {
+    this.enemies = [];
+    // Placing correct answer into a random position
+    this.enemies[this.randomNumbers[0]] = {
+      valueToAsk: this.currentEnemy.values[0],
+      status: MarioEnemyStatus.WaitingForStart,
+    };
+    this.randomNumbers.splice(0, 1);
+
+    this.randomNumbers.forEach((random) => {
+      this.enemies[random] = {
+        valueToAsk: this.allEnemies.words[random].values[0],
+        status: MarioEnemyStatus.WaitingForStart,
+      };
+    });
+
+    console.log(this.enemies, this.randomNumbers);
+    console.log(this.enemies.find(Boolean));
+    this.setEnemyStyle();
+  }
+
+  setEnemyStyle(): void {
+    this.enemies.forEach((enemy) => {
+      enemy.style = {
+        position: 'absolute',
+        // random number between floor and max top of the Mario
+        bottom:
+          (
+            Math.floor(Math.random() * (this.jumpHeight + Math.abs(1) + 1)) + 10
+          ).toString() + '%',
+        left: '90%',
+        border: 'solid 1px gray',
+        borderRadius: '10px',
+        padding: '.5rem',
+        textAlign: 'center',
+        color: '#283747',
+        height: '4vh',
+        fontSize: '1vw',
+        width: '7%',
+        backgroundColor: '#EAEDED',
+        opacity: '.7',
+      };
+    });
+
+    setTimeout(() => {
+      this.showWordInWaitingMode(this.enemies.find(Boolean));
+    }, 4000);
   }
 
   showWordInWaitingMode(enemy: MarioEnemy): void {
@@ -180,7 +220,7 @@ export class SuperMarioComponent implements OnInit {
   showPointNotification(enemy: MarioEnemy): void {
     // TODO: show earned point here
     if (this.enemies.indexOf(enemy) < this.enemies.length) {
-      this.prepareTheWord(this.enemies[this.enemies.indexOf(enemy) + 1]);
+      // this.prepareTheWord(this.enemies[this.enemies.indexOf(enemy) + 1]);
     }
   }
 
@@ -213,7 +253,9 @@ export class SuperMarioComponent implements OnInit {
         ((marioTop < enemyTop && marioTop > enemyButton) ||
           (marioButton < enemyTop && marioButton > enemyButton))
       ) {
-        if (this.currentEnemy.text.key === playingEnemy.text.key) {
+        if (
+          this.currentEnemy.values.find((x) => x === playingEnemy.valueToAsk)
+        ) {
           this.showPointNotification(playingEnemy);
           clearInterval(animateInterval);
           playingEnemy.status = MarioEnemyStatus.Finished;

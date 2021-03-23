@@ -2,9 +2,10 @@ import { ElementStyle } from './element-style.model';
 import { WordKeyValueModel } from './word-key-value.model';
 
 export class MarioEnemy {
-  text: WordKeyValueModel<string[]>;
-  style: ElementStyle;
-  status: MarioEnemyStatus;
+  text?: WordKeyValueModel<string[]>;
+  valueToAsk?: string;
+  style?: ElementStyle;
+  status?: MarioEnemyStatus;
 }
 
 export enum MarioEnemyStatus {
