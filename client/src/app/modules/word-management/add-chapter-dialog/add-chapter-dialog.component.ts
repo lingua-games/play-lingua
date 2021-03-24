@@ -16,7 +16,7 @@ export class AddChapterDialogComponent implements OnInit {
     chapterName: ['', Validators.required],
   });
 
-  get chapterName(): AbstractControl {
+  get chapterName(): AbstractControl | null {
     return this.addChapterForm.get('chapterName');
   }
 

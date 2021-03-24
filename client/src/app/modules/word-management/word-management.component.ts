@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router, RouterEvent } from '@angular/router';
+import { Event, NavigationEnd, Router, RouterEvent } from '@angular/router';
 
 @Component({
   selector: 'app-word-management',
@@ -7,15 +7,19 @@ import { NavigationEnd, Router, RouterEvent } from '@angular/router';
   styleUrls: ['./word-management.component.scss'],
 })
 export class WordManagementComponent implements OnInit {
-  currentRoute: string;
+  currentRoute = '';
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {
-    this.router.events.subscribe((event: RouterEvent) => {
-      if (event instanceof NavigationEnd) {
-        this.currentRoute = event.url;
-      }
-    });
+    this.router.events.subscribe(
+      (event: Event) => {
+        if (event instanceof NavigationEnd) {
+          this.currentRoute = event.url;
+        }
+      },
+      () => {},
+      () => {}
+    );
   }
 }

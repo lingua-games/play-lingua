@@ -40,15 +40,15 @@ export class AddWordByUserComponent implements OnInit {
     isSelectedLanguageSubmit: [false],
   });
 
-  get baseLanguage(): AbstractControl {
+  get baseLanguage(): AbstractControl | null {
     return this.selectLanguageForm.get('baseLanguage');
   }
 
-  get targetLanguage(): AbstractControl {
+  get targetLanguage(): AbstractControl | null {
     return this.selectLanguageForm.get('targetLanguage');
   }
 
-  get isSelectedLanguageSubmit(): AbstractControl {
+  get isSelectedLanguageSubmit(): AbstractControl | null {
     return this.selectLanguageForm.get('isSelectedLanguageSubmit');
   }
 
@@ -58,15 +58,15 @@ export class AddWordByUserComponent implements OnInit {
     selectBookRandom: ['book'],
   });
 
-  get selectBookRandom(): AbstractControl {
+  get selectBookRandom(): AbstractControl | null {
     return this.selectBookForm.get('selectBookRandom');
   }
 
-  get book(): AbstractControl {
+  get book(): AbstractControl | null {
     return this.selectBookForm.get('book');
   }
 
-  get chapter(): AbstractControl {
+  get chapter(): AbstractControl | null {
     return this.selectBookForm.get('chapter');
   }
 
