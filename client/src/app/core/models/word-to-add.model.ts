@@ -1,6 +1,6 @@
 export class WordToAddModel {
-  base: SourceTargetModel;
-  targets: SourceTargetModel[];
+  base: SourceTargetModel = {} as SourceTargetModel;
+  targets: SourceTargetModel[] = [];
 }
 
 export interface SourceTargetModel {

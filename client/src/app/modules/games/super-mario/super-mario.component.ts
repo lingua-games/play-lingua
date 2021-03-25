@@ -59,7 +59,7 @@ import { ElementStyle } from '../../../core/models/element-style.model';
 export class SuperMarioComponent implements OnInit {
   mario: MarioModel = new MarioModel();
   enemies: MarioEnemy[] = [];
-  currentEnemy: WordKeyValueModel<string[]> = new WordKeyValueModel<string[]>();
+  currentEnemy: WordKeyValueModel<string[]> = {} as WordKeyValueModel<string[]>;
   allEnemies: GameStartInformation<
     WordKeyValueModel<string[]>[]
   > = new GameStartInformation<WordKeyValueModel<string[]>[]>();
@@ -170,7 +170,7 @@ export class SuperMarioComponent implements OnInit {
     if (!enemy) {
       const index = this.allEnemies.words.indexOf(this.currentEnemy);
       if (this.allEnemies.words[index + 1]) {
-        this.currentEnemy = new WordKeyValueModel<string[]>();
+        this.currentEnemy = {} as WordKeyValueModel<string[]>;
         this.currentEnemy = this.allEnemies.words[index + 1];
       } else {
         // TODO. should finish the game
@@ -207,7 +207,7 @@ export class SuperMarioComponent implements OnInit {
 
     this.randomNumbers.forEach((random) => {
       this.enemies[random] = {
-        valueToAsk: this.allEnemies.words[random].values[0],
+        valueToAsk: this.allEnemies?.words[random || 0]?.values[0] || '',
         status: MarioEnemyStatus.WaitingForStart,
       };
     });
@@ -294,7 +294,7 @@ export class SuperMarioComponent implements OnInit {
           (marioButton < enemyTop && marioButton > enemyButton))
       ) {
         if (
-          this.currentEnemy.values.find(
+          this.currentEnemy?.values?.find(
             (x: string) => x === playingEnemy?.valueToAsk
           )
         ) {
@@ -308,7 +308,7 @@ export class SuperMarioComponent implements OnInit {
       }
       if (parseInt(playingEnemy?.style?.left || '', 0) <= -5) {
         if (
-          this.currentEnemy.values.find(
+          this.currentEnemy?.values?.find(
             (x: string) => x === playingEnemy?.valueToAsk
           )
         ) {
