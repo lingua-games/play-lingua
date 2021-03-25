@@ -9,3 +9,8 @@ export class ProfileFormErrors {
   currentPassword: string;
   newPassword: string;
 }
+
+export class LoginFormErrors {
+  password: string;
+  email: string;
+}

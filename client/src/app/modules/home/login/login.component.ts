@@ -7,6 +7,7 @@ import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { Location } from '@angular/common';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
 import { NameIdModel } from '../../../core/models/name-id.model';
+import { LoginFormErrors } from '../../../core/models/form-errors.model';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,7 @@ import { NameIdModel } from '../../../core/models/name-id.model';
 export class LoginComponent implements OnInit {
   user: UserModel = {} as UserModel;
   errorMessage?: string;
-  formError = {};
+  formError: LoginFormErrors = new LoginFormErrors();
   isLoading?: boolean;
 
   constructor(
@@ -37,13 +38,15 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
+    this.formError = new LoginFormErrors();
+
     if (!this.user.email) {
-      this.formError['email'] = 'Email field is empty';
+      this.formError.email = 'Email field is empty';
       return;
     }
 
     if (!this.user.password) {
-      this.formError['password'] = 'Password field is empty';
+      this.formError.password = 'Password field is empty';
       return;
     }
 
@@ -58,10 +61,10 @@ export class LoginComponent implements OnInit {
             res?.user?.totalScore.toString()
           );
           const defaultBaseLanguageFromAPI = JSON.parse(
-            res?.user?.baseLanguages
-          ).find((x) => x.id === res?.user?.defaultBaseLanguage);
+            res?.user?.baseLanguages || '{[]}'
+          ).find((x: NameIdModel) => x.id === res?.user?.defaultBaseLanguage);
           const defaultTargetLanguageFromAPI = JSON.parse(
-            res?.user?.targetLanguages
+            res?.user?.targetLanguages || '{[]}'
           ).find((x: NameIdModel) => x.id === res?.user?.defaultTargetLanguage);
 
           this.localStorageService.delete(LocalStorageHelper.isGuest);
