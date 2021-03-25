@@ -12,6 +12,7 @@ import { GameStartInformation } from '../../../core/models/game-start-informatio
 import { MatDialog } from '@angular/material/dialog';
 import { BasicInformationService } from '../../../core/service/basic-information.service';
 import { EGame } from '../../../core/models/e-game';
+import { ElementStyle } from '../../../core/models/element-style.model';
 
 @Component({
   selector: 'app-super-mario',
@@ -57,7 +58,7 @@ import { EGame } from '../../../core/models/e-game';
 })
 export class SuperMarioComponent implements OnInit {
   mario: MarioModel = new MarioModel();
-  enemies: MarioEnemy[];
+  enemies: MarioEnemy[] = [];
   currentEnemy: WordKeyValueModel<string[]> = new WordKeyValueModel<string[]>();
   allEnemies: GameStartInformation<
     WordKeyValueModel<string[]>[]
@@ -67,8 +68,8 @@ export class SuperMarioComponent implements OnInit {
   movingLeftInterval?: number;
   jumpHeight = 30;
   guidBoxShowing?: boolean;
-  bookId: number;
-  chapterId: number;
+  bookId?: number;
+  chapterId?: number;
 
   constructor(
     private dialog: MatDialog,
@@ -169,7 +170,7 @@ export class SuperMarioComponent implements OnInit {
     if (!enemy) {
       const index = this.allEnemies.words.indexOf(this.currentEnemy);
       if (this.allEnemies.words[index + 1]) {
-        this.currentEnemy = null;
+        this.currentEnemy = new WordKeyValueModel<string[]>();
         this.currentEnemy = this.allEnemies.words[index + 1];
       } else {
         // TODO. should finish the game
@@ -241,12 +242,12 @@ export class SuperMarioComponent implements OnInit {
     }, 4000);
   }
 
-  showWordInWaitingMode(enemy: MarioEnemy): void {
-    enemy.status = MarioEnemyStatus.Start;
+  showWordInWaitingMode(enemy?: MarioEnemy): void {
+    (enemy || ({} as MarioEnemy)).status = MarioEnemyStatus.Start;
     setTimeout(() => {
-      enemy.style.transition = '100ms';
-      enemy.style.opacity = '1';
-      enemy.style.fontSize = '.8vw';
+      (enemy?.style || ({} as ElementStyle)).transition = '100ms';
+      (enemy?.style || ({} as ElementStyle)).opacity = '1';
+      (enemy?.style || ({} as ElementStyle)).fontSize = '.8vw';
       this.showMovingEnemy(enemy);
     }, 2000);
   }
@@ -263,28 +264,29 @@ export class SuperMarioComponent implements OnInit {
   }
 
   // The method does not have test yet because it is not finalized.
-  showMovingEnemy(playingEnemy: MarioEnemy): void {
-    playingEnemy.status = MarioEnemyStatus.Start;
+  showMovingEnemy(playingEnemy?: MarioEnemy): void {
+    (playingEnemy || ({} as MarioEnemy)).status = MarioEnemyStatus.Start;
     const animateInterval = setInterval(() => {
-      playingEnemy.style.transition = '100ms';
-      playingEnemy.style.left =
-        (parseInt(playingEnemy.style.left, null) - 1).toString() + '%';
+      (playingEnemy?.style || ({} as ElementStyle)).transition = '100ms';
+      (playingEnemy?.style || ({} as ElementStyle)).left =
+        (parseInt(playingEnemy?.style?.left || '', 0) - 1).toString() + '%';
 
       // Managing left-right hit
-      const enemyLeft = parseInt(playingEnemy.style.left, null);
+      const enemyLeft = parseInt(playingEnemy?.style?.left || '', 0);
       const enemyRight =
-        parseInt(playingEnemy.style.left, null) +
-        parseInt(playingEnemy.style.width, null);
-      const marioLeft = parseInt(this.mario.style.left, null);
+        parseInt(playingEnemy?.style?.left || '', 0) +
+        parseInt(playingEnemy?.style?.width || '', 0);
+      const marioLeft = parseInt(this.mario?.style?.left || '', 0);
       const marioRight =
-        parseInt(this.mario.style.left, null) +
-        parseInt(this.mario.style.width, null);
+        parseInt(this.mario?.style?.left || '', 0) +
+        parseInt(this.mario?.style?.width || '', 0);
       const enemyTop =
-        parseInt(playingEnemy.style.bottom, null) +
-        parseInt(playingEnemy.style.height, null);
-      const enemyButton = parseInt(playingEnemy.style.bottom, null);
-      const marioButton = parseInt(this.mario.style.bottom, null);
-      const marioTop = marioButton + parseInt(this.mario.style.height, null);
+        parseInt(playingEnemy?.style?.bottom || '', 0) +
+        parseInt(playingEnemy?.style?.height || '', 0);
+      const enemyButton = parseInt(playingEnemy?.style?.bottom || '', 0);
+      const marioButton = parseInt(this.mario?.style?.bottom || '', 0);
+      const marioTop =
+        marioButton + parseInt(this.mario?.style?.height || '', 0);
       if (
         ((marioLeft > enemyLeft && marioLeft < enemyRight) ||
           (marioRight > enemyLeft && marioRight < enemyRight)) &&
@@ -293,32 +295,33 @@ export class SuperMarioComponent implements OnInit {
       ) {
         if (
           this.currentEnemy.values.find(
-            (x: string) => x === playingEnemy.valueToAsk
+            (x: string) => x === playingEnemy?.valueToAsk
           )
         ) {
-          this.showPointNotification(playingEnemy);
+          this.showPointNotification(playingEnemy as MarioEnemy);
         } else {
           this.showGuidBox();
         }
         clearInterval(animateInterval);
-        playingEnemy.status = MarioEnemyStatus.Finished;
+        (playingEnemy || ({} as MarioEnemy)).status = MarioEnemyStatus.Finished;
         return;
       }
-      if (parseInt(playingEnemy.style.left, null) <= -5) {
+      if (parseInt(playingEnemy?.style?.left || '', 0) <= -5) {
         if (
           this.currentEnemy.values.find(
-            (x: string) => x === playingEnemy.valueToAsk
+            (x: string) => x === playingEnemy?.valueToAsk
           )
         ) {
           this.showGuidBox();
           clearInterval(animateInterval);
-          playingEnemy.status = MarioEnemyStatus.Finished;
+          (playingEnemy || ({} as MarioEnemy)).status =
+            MarioEnemyStatus.Finished;
           return;
         }
 
         clearInterval(animateInterval);
-        playingEnemy.status = MarioEnemyStatus.Finished;
-        let nextIndex = this.enemies.indexOf(playingEnemy) + 1;
+        (playingEnemy || ({} as MarioEnemy)).status = MarioEnemyStatus.Finished;
+        let nextIndex = this.enemies.indexOf(playingEnemy as MarioEnemy) + 1;
         this.enemies.forEach(() => {
           if (!this.enemies[nextIndex]) {
             nextIndex++;
@@ -332,13 +335,13 @@ export class SuperMarioComponent implements OnInit {
   stopMovingLeft(): void {
     this.stopMoving();
     clearInterval(this.movingLeftInterval);
-    this.movingLeftInterval = null;
+    this.movingLeftInterval = undefined;
   }
 
   stopMovingRight(): void {
     this.stopMoving();
     clearInterval(this.movingRightInterval);
-    this.movingRightInterval = null;
+    this.movingRightInterval = undefined;
   }
 
   stopMoving(): void {
