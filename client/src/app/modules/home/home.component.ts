@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { SecurityService } from '../../core/service/security.service';
+import { StyleModel } from '../../core/models/style.model';
 
 @Component({
   selector: 'app-home',
@@ -9,7 +10,7 @@ import { SecurityService } from '../../core/service/security.service';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  style = {};
+  style: StyleModel = new StyleModel();
   isLoading?: boolean;
 
   constructor(
@@ -31,16 +32,16 @@ export class HomeComponent implements OnInit {
           this.isLoading = true;
           return;
         }
-        if (!this.style['transform']) {
-          this.style['transform'] = `rotate(0deg)`;
+        if (!this.style.transform) {
+          this.style.transform = `rotate(0deg)`;
         }
 
-        const rotateValue = this.style['transform'];
-        let newRouteValue = +parseInt(rotateValue.substr(7, 3), null);
+        const rotateValue = this.style.transform;
+        let newRouteValue = +parseInt(rotateValue.substr(7, 3), 0);
         newRouteValue = newRouteValue === 0 ? 360 : 0;
-        this.style['transition'] =
+        this.style.transition =
           environment.intervalForRoundMainPage.toString() + 'ms';
-        this.style['transition'] = `rotate(${newRouteValue}deg)`;
+        this.style.transition = `rotate(${newRouteValue}deg)`;
       }
 
       if (val instanceof NavigationEnd) {
