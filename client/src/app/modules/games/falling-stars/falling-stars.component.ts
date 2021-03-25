@@ -55,10 +55,10 @@ export class FallingStarsComponent implements OnInit {
   copyOfWords: FallingStarsWord[] = [];
   currentWord: FallingStarsWord = new FallingStarsWord();
   guidBoxShowing?: boolean;
-  pressedNumber: number;
-  startTime: number;
-  bookId: number;
-  chapterId: number;
+  pressedNumber?: number;
+  startTime?: number;
+  bookId?: number;
+  chapterId?: number;
   isGameFinished = false;
   @HostListener('document:keyup ', ['$event'])
   keyUpEvent(event: KeyboardEvent): void {
@@ -153,6 +153,7 @@ export class FallingStarsComponent implements OnInit {
     dialog.afterClosed().subscribe((res: FinishGameActionEnum) => {
       if (res) {
         if (res === FinishGameActionEnum.retry) {
+          // @ts-ignore
           this.setGameWords(this.copyOfWords);
           this.startGame();
         } else if (res === FinishGameActionEnum.changeMode) {
@@ -186,7 +187,7 @@ export class FallingStarsComponent implements OnInit {
       });
   }
 
-  setGameWords(res): void {
+  setGameWords(res: WordKeyValueModel<string[]>[]): void {
     this.words = [];
     res.forEach((element: WordKeyValueModel<string[]>) => {
       this.words.push({
@@ -230,7 +231,7 @@ export class FallingStarsComponent implements OnInit {
     );
 
     if (!targetWord || !targetWord.values || !targetWord.key) {
-      return;
+      return [];
     }
     // Filling the correct option
     const answerPlace = Math.round(Math.random() * (3 - 0));
@@ -307,7 +308,9 @@ export class FallingStarsComponent implements OnInit {
   calculateScore(wrongCount: number): number {
     // It is the travelled time of the object before user hit the correct Answer.
     const travelledBeforeHit =
-      (secondsForTraver + bufferBeforeStart - (Date.now() - this.startTime)) /
+      (secondsForTraver +
+        bufferBeforeStart -
+        (Date.now() - (this.startTime || 0))) /
       1000;
 
     // Below line `/ 1000` is converting Milli seconds to seconds
@@ -343,15 +346,15 @@ export class FallingStarsComponent implements OnInit {
 
   checkSelectedAnswer(item: string): void {
     const activeWord = this.words.find((x: FallingStarsWord) => x.animating);
-    activeWord.selectedAnswer = item;
-    this.boxAnimationDone(activeWord);
+    (activeWord || ({} as FallingStarsWord)).selectedAnswer = item;
+    this.boxAnimationDone(activeWord as FallingStarsWord);
   }
 
   isPressing(answer: string): boolean {
     return (
-      this.words
-        .find((x: FallingStarsWord) => x.animating)
-        .possibleAnswers.indexOf(answer) +
+      (this.words
+        ?.find((x: FallingStarsWord) => x.animating)
+        ?.possibleAnswers?.indexOf(answer) || 0) +
         1 ===
       this.pressedNumber
     );
