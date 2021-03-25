@@ -29,7 +29,7 @@ export class AddBookDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   submitForm(): void {
-    if (this.bookName.invalid) {
+    if (this.bookName?.invalid) {
       this.notificationService.showMessage(
         'Book name field is empty',
         Severity.error

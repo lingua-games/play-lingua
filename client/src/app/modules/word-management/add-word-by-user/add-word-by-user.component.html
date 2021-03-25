@@ -84,7 +84,7 @@
           [showClear]="true"
           [disabled]="selectBookRandom.value === 'random'"
           [styleClass]="
-            book.invalid && selectBookForm.dirty ? 'field-not-valid' : ''
+            book?.invalid && selectBookForm?.dirty ? 'field-not-valid' : ''
           "
         >
         </p-dropdown>
@@ -96,11 +96,11 @@
           placeholder="Select a chapter"
           formControlName="chapter"
           optionLabel="name"
-          [disabled]="selectBookRandom.value === 'random' || book.invalid"
+          [disabled]="selectBookRandom?.value === 'random' || book?.invalid"
           (onChange)="chapterSelectionChange($event)"
           [showClear]="true"
           [styleClass]="
-            chapter.invalid && selectBookForm.dirty ? 'field-not-valid' : ''
+            chapter?.invalid && selectBookForm?.dirty ? 'field-not-valid' : ''
           "
         >
         </p-dropdown>

@@ -262,7 +262,7 @@ export class AddWordByUserComponent implements OnInit {
         }
       }
 
-      if (this.selectBookForm.invalid) {
+      if (this.selectBookForm?.invalid) {
         return;
       }
     }
@@ -317,8 +317,8 @@ export class AddWordByUserComponent implements OnInit {
           'bc'
         );
       }
-      if (this.selectBookForm.invalid) {
-        this.selectBookForm.markAsDirty();
+      if (this.selectBookForm?.invalid) {
+        this.selectBookForm?.markAsDirty();
         return;
       }
     }
@@ -398,8 +398,8 @@ export class AddWordByUserComponent implements OnInit {
       this.isSelectedLanguageSubmit?.setValue(false);
       return;
     }
-    if (this.selectLanguageForm.invalid) {
-      this.selectLanguageForm.markAsDirty();
+    if (this.selectLanguageForm?.invalid) {
+      this.selectLanguageForm?.markAsDirty();
       if (this.baseLanguage?.invalid) {
         this.notificationService.showMessage(
           'Base language has not selected yet',
