@@ -56,7 +56,7 @@ export class BasicInformationService {
       image: './../../../../assets/images/GameMenu/game.jpg',
       isDesigned: false,
       gifUrl: './../../../../assets/GIFs/coming-soon.gif',
-    });
+    } as GameMenu);
     return menus;
   }
 

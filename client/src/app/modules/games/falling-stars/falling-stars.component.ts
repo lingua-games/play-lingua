@@ -53,7 +53,7 @@ const bufferBeforeStart = 1000;
 export class FallingStarsComponent implements OnInit {
   words: FallingStarsWord[] = [];
   copyOfWords: FallingStarsWord[] = [];
-  currentWord: FallingStarsWord = new FallingStarsWord();
+  currentWord: FallingStarsWord = {} as FallingStarsWord;
   guidBoxShowing?: boolean;
   pressedNumber?: number;
   startTime?: number;

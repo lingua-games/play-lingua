@@ -1,4 +1,4 @@
-export class FallingStarsWord {
+export interface FallingStarsWord {
   animating: boolean;
   key: string;
   style: {};

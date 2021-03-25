@@ -1,16 +1,16 @@
-export class RegisterFormErrors {
+export interface RegisterFormErrors {
   email: string;
   password: string;
   displayName: string;
 }
 
-export class ProfileFormErrors {
+export interface ProfileFormErrors {
   displayName: string;
   currentPassword: string;
   newPassword: string;
 }
 
-export class LoginFormErrors {
+export interface LoginFormErrors {
   password: string;
   email: string;
 }

@@ -32,7 +32,7 @@ export class AddWordByUserComponent implements OnInit {
   chapters: ChapterModel[] = [];
   isBookLoading?: boolean;
   isPageLoading?: boolean;
-  formData: AddWordFormModel = new AddWordFormModel();
+  formData: AddWordFormModel = {} as AddWordFormModel;
 
   selectLanguageForm = this.formBuilder.group({
     baseLanguage: ['', Validators.required],

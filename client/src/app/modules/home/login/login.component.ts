@@ -17,7 +17,7 @@ import { LoginFormErrors } from '../../../core/models/form-errors.model';
 export class LoginComponent implements OnInit {
   user: UserModel = {} as UserModel;
   errorMessage?: string;
-  formError: LoginFormErrors = new LoginFormErrors();
+  formError: LoginFormErrors = {} as LoginFormErrors;
   isLoading?: boolean;
 
   constructor(
@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
-    this.formError = new LoginFormErrors();
+    this.formError = {} as LoginFormErrors;
 
     if (!this.user.email) {
       this.formError.email = 'Email field is empty';

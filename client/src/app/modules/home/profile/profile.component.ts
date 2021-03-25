@@ -29,7 +29,7 @@ import { ProfileFormErrors } from '../../../core/models/form-errors.model';
 })
 export class ProfileComponent implements OnInit {
   public user: EditUserModel = new EditUserModel();
-  public errors: ProfileFormErrors = new ProfileFormErrors();
+  public errors: ProfileFormErrors = {} as ProfileFormErrors;
   public isLoading?: boolean;
   constructor(
     private userService: UserService,
@@ -42,7 +42,7 @@ export class ProfileComponent implements OnInit {
   }
 
   submit(): void {
-    this.errors = new ProfileFormErrors();
+    this.errors = {} as ProfileFormErrors;
 
     if (!this.user.displayName || this.user.displayName === '') {
       this.errors.displayName = 'Display name is a required field';

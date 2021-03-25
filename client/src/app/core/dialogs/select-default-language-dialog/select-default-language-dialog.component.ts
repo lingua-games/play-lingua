@@ -19,7 +19,7 @@ export class SelectDefaultLanguageDialogComponent implements OnInit {
   baseLanguages: LanguageModel[] = [];
   targetLanguages: LanguageModel[] = [];
   isLoading?: boolean;
-  selectedItems: SetDefaultLanguageModel = new SetDefaultLanguageModel();
+  selectedItems: SetDefaultLanguageModel = {} as SetDefaultLanguageModel;
 
   constructor(
     private notificationService: NotificationService,

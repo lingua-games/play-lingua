@@ -62,7 +62,7 @@ export class SuperMarioComponent implements OnInit {
   currentEnemy: WordKeyValueModel<string[]> = {} as WordKeyValueModel<string[]>;
   allEnemies: GameStartInformation<
     WordKeyValueModel<string[]>[]
-  > = new GameStartInformation<WordKeyValueModel<string[]>[]>();
+  > = {} as GameStartInformation<WordKeyValueModel<string[]>[]>;
   randomNumbers: number[] = [];
   movingRightInterval?: number;
   movingLeftInterval?: number;

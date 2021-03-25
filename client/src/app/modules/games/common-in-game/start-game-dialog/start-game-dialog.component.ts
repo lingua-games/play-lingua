@@ -29,8 +29,8 @@ export class StartGameDialogComponent implements OnInit {
   isPreparing?: boolean;
 
   form = {
-    selectedBook: new BookModel(),
-    selectedChapter: new ChapterModel(),
+    selectedBook: {} as BookModel,
+    selectedChapter: {} as ChapterModel,
   };
 
   defaultLanguages: {

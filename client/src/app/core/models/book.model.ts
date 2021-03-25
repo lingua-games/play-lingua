@@ -1,6 +1,6 @@
-export class BookModel {
-  public id: number;
-  public name: string;
-  public targetLanguageId: number;
-  public sourceLanguageId: number;
+export interface BookModel {
+  id: number;
+  name: string;
+  targetLanguageId: number;
+  sourceLanguageId: number;
 }

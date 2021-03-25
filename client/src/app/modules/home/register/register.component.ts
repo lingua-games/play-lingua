@@ -20,7 +20,7 @@ import { RegisterFormErrors } from '../../../core/models/form-errors.model';
 })
 export class RegisterComponent implements OnInit {
   public user: UserModel = {} as UserModel;
-  public errors: RegisterFormErrors = new RegisterFormErrors();
+  public errors: RegisterFormErrors = {} as RegisterFormErrors;
   public isLoading?: boolean;
 
   constructor(
@@ -43,7 +43,7 @@ export class RegisterComponent implements OnInit {
   }
 
   submit(): void {
-    this.errors = new RegisterFormErrors();
+    this.errors = {} as RegisterFormErrors;
 
     if (!this.user.email) {
       this.errors.email = 'Email is a required field';
