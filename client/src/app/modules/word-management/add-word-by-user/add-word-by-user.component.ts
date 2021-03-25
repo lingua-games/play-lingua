@@ -30,8 +30,8 @@ export class AddWordByUserComponent implements OnInit {
   targetLanguages: LanguageModel[] = [];
   books: BookModel[] = [];
   chapters: ChapterModel[] = [];
-  isBookLoading: boolean;
-  isPageLoading: boolean;
+  isBookLoading?: boolean;
+  isPageLoading?: boolean;
   formData: AddWordFormModel = new AddWordFormModel();
 
   selectLanguageForm = this.formBuilder.group({
@@ -83,13 +83,13 @@ export class AddWordByUserComponent implements OnInit {
     this.getBaseAndTargetLanguages();
     this.checkDraft();
 
-    this.isSelectedLanguageSubmit.valueChanges.subscribe((value) => {
+    this.isSelectedLanguageSubmit?.valueChanges.subscribe((value) => {
       if (value) {
-        this.baseLanguage.disable();
-        this.targetLanguage.disable();
+        this.baseLanguage?.disable();
+        this.targetLanguage?.disable();
       } else {
-        this.baseLanguage.enable();
-        this.targetLanguage.enable();
+        this.baseLanguage?.enable();
+        this.targetLanguage?.enable();
       }
     });
   }
@@ -103,20 +103,20 @@ export class AddWordByUserComponent implements OnInit {
       this.localStorageService.load(LocalStorageHelper.addWordDraft)
     ) as AddWordFormModel;
 
-    this.baseLanguage.setValue(draft.baseLanguage);
-    this.targetLanguage.setValue(draft.targetLanguage);
+    this.baseLanguage?.setValue(draft.baseLanguage);
+    this.targetLanguage?.setValue(draft.targetLanguage);
 
     if (!!draft.targetLanguage && !!draft.baseLanguage) {
-      this.isSelectedLanguageSubmit.setValue(true);
+      this.isSelectedLanguageSubmit?.setValue(true);
       if (draft.isRandom === 'random') {
-        this.selectBookRandom.setValue('random');
+        this.selectBookRandom?.setValue('random');
       } else {
-        this.selectBookRandom.setValue('book');
+        this.selectBookRandom?.setValue('book');
         this.getBooks();
         if (draft.book) {
-          this.book.setValue(draft.book);
+          this.book?.setValue(draft.book);
           this.bookSelectionChange({ value: draft.book });
-          this.chapter.setValue(draft.chapter);
+          this.chapter?.setValue(draft.chapter);
         }
       }
     }
@@ -124,7 +124,7 @@ export class AddWordByUserComponent implements OnInit {
     this.formData.words = draft.words;
   }
 
-  bookSelectionChange(event): void {
+  bookSelectionChange(event: { value: BookModel }): void {
     if (event.value.id === -1) {
       this.dialog
         .open(AddBookDialogComponent, {
@@ -135,12 +135,12 @@ export class AddWordByUserComponent implements OnInit {
           if (res) {
             const itemToAdd = {
               id: 0,
-              targetLanguageId: this.targetLanguage.value.id,
-              sourceLanguageId: this.baseLanguage.value.id,
+              targetLanguageId: this.targetLanguage?.value.id,
+              sourceLanguageId: this.baseLanguage?.value.id,
               name: res.bookName,
             };
             this.books = [...this.books, itemToAdd];
-            this.book.setValue(itemToAdd);
+            this.book?.setValue(itemToAdd);
 
             this.chapters = [];
             this.chapters.push({
@@ -148,7 +148,7 @@ export class AddWordByUserComponent implements OnInit {
               name: 'Add new chapter',
             });
           } else {
-            this.book.setValue('');
+            this.book?.setValue('');
           }
         });
     } else {
@@ -183,7 +183,7 @@ export class AddWordByUserComponent implements OnInit {
       });
   }
 
-  chapterSelectionChange(event): void {
+  chapterSelectionChange(event: { value: ChapterModel }): void {
     if (event.value.id === -1) {
       this.dialog
         .open(AddChapterDialogComponent, {
@@ -197,9 +197,9 @@ export class AddWordByUserComponent implements OnInit {
               name: res.chapterName,
             };
             this.chapters = [...this.chapters, itemToAdd];
-            this.chapter.setValue(itemToAdd);
+            this.chapter?.setValue(itemToAdd);
           } else {
-            this.chapter.setValue('');
+            this.chapter?.setValue('');
           }
         });
     }
@@ -207,10 +207,10 @@ export class AddWordByUserComponent implements OnInit {
 
   getBooks(): void {
     this.selectBookForm.reset();
-    this.selectBookRandom.setValue('book');
+    this.selectBookRandom?.setValue('book');
     this.isBookLoading = true;
     this.bookChapterService
-      .getBooksByLanguage(this.targetLanguage.value.id)
+      .getBooksByLanguage(this.targetLanguage?.value.id)
       .subscribe(
         (res: BookModel[]) => {
           this.books = [
@@ -243,8 +243,8 @@ export class AddWordByUserComponent implements OnInit {
   }
 
   submitSelectedBooks(): void {
-    if (this.selectBookRandom.value === 'book') {
-      if (this.book.invalid) {
+    if (this.selectBookRandom?.value === 'book') {
+      if (this.book?.invalid) {
         this.notificationService.showMessage(
           'Please select a book',
           Severity.error,
@@ -252,7 +252,7 @@ export class AddWordByUserComponent implements OnInit {
           'bc'
         );
       } else {
-        if (this.chapter.invalid) {
+        if (this.chapter?.invalid) {
           this.notificationService.showMessage(
             'Please select a chapter',
             Severity.error,
@@ -300,8 +300,8 @@ export class AddWordByUserComponent implements OnInit {
   }
 
   submitForm(): void {
-    if (this.selectBookRandom.value === 'book') {
-      if (this.book.invalid) {
+    if (this.selectBookRandom?.value === 'book') {
+      if (this.book?.invalid) {
         this.notificationService.showMessage(
           'Please select a book',
           Severity.error,
@@ -309,7 +309,7 @@ export class AddWordByUserComponent implements OnInit {
           'bc'
         );
       }
-      if (this.chapter.invalid) {
+      if (this.chapter?.invalid) {
         this.notificationService.showMessage(
           'Please select a chapter',
           Severity.error,
@@ -372,11 +372,11 @@ export class AddWordByUserComponent implements OnInit {
   }
 
   saveInformationInfoForm(): void {
-    this.formData.baseLanguage = this.baseLanguage.value;
-    this.formData.targetLanguage = this.targetLanguage.value;
-    this.formData.isRandom = this.selectBookRandom.value;
-    this.formData.book = this.book.value;
-    this.formData.chapter = this.chapter.value;
+    this.formData.baseLanguage = this.baseLanguage?.value;
+    this.formData.targetLanguage = this.targetLanguage?.value;
+    this.formData.isRandom = this.selectBookRandom?.value;
+    this.formData.book = this.book?.value;
+    this.formData.chapter = this.chapter?.value;
   }
 
   saveToDraft(): void {
@@ -394,13 +394,13 @@ export class AddWordByUserComponent implements OnInit {
   }
 
   submitSelectedLanguages(): void {
-    if (this.isSelectedLanguageSubmit.value) {
-      this.isSelectedLanguageSubmit.setValue(false);
+    if (this.isSelectedLanguageSubmit?.value) {
+      this.isSelectedLanguageSubmit?.setValue(false);
       return;
     }
     if (this.selectLanguageForm.invalid) {
       this.selectLanguageForm.markAsDirty();
-      if (this.baseLanguage.invalid) {
+      if (this.baseLanguage?.invalid) {
         this.notificationService.showMessage(
           'Base language has not selected yet',
           Severity.error,
@@ -409,7 +409,7 @@ export class AddWordByUserComponent implements OnInit {
         );
       }
 
-      if (this.targetLanguage.invalid) {
+      if (this.targetLanguage?.invalid) {
         this.notificationService.showMessage(
           'Target language has not selected yet',
           Severity.error,
@@ -419,7 +419,7 @@ export class AddWordByUserComponent implements OnInit {
       }
       return;
     }
-    this.isSelectedLanguageSubmit.setValue(true);
+    this.isSelectedLanguageSubmit?.setValue(true);
     this.getBooks();
   }
 }

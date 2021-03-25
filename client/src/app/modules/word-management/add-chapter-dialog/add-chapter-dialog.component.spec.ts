@@ -58,8 +58,8 @@ describe('AddChapterDialogComponent', () => {
   });
 
   it('should close dialog if form controllers are valid and submitForm hits', () => {
-    component.chapterName.setValue('');
-    component.addChapterForm.setValue({
+    component.chapterName?.setValue('');
+    component.addChapterForm?.setValue({
       chapterName: 'fake chapter name',
     });
 
