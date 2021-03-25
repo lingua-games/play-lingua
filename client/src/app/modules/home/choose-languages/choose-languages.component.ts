@@ -14,6 +14,7 @@ import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { SecurityService } from '../../../core/service/security.service';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
 import { Location } from '@angular/common';
+import { NameIdModel } from '../../../core/models/name-id.model';
 
 @Component({
   selector: 'app-choose-languages',
@@ -87,14 +88,14 @@ export class ChooseLanguagesComponent implements OnInit {
         if (
           storedData &&
           storedData.base &&
-          storedData.base.find((x) => x.id === element.id)
+          storedData.base.find((x: NameIdModel) => x.id === element.id)
         ) {
           this.baseLanguages.push(element);
         }
         if (
           storedData &&
           storedData.target &&
-          storedData.target.find((x) => x.id === element.id)
+          storedData.target.find((x: NameIdModel) => x.id === element.id)
         ) {
           this.targetLanguages.push(element);
         }
@@ -103,7 +104,9 @@ export class ChooseLanguagesComponent implements OnInit {
   }
 
   checkFormValidation(fieldName: string): string {
-    if (this.formValidation.find((x) => x.field === fieldName)) {
+    if (
+      this.formValidation.find((x: ValidationModel) => x.field === fieldName)
+    ) {
       return 'field-not-valid';
     }
     return '';

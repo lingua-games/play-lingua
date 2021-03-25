@@ -74,7 +74,10 @@ export class FallingStarsComponent implements OnInit {
       return;
     }
 
-    if (this.guidBoxShowing || !this.words.find((x) => x.animating)) {
+    if (
+      this.guidBoxShowing ||
+      !this.words.find((x: FallingStarsWord) => x.animating)
+    ) {
       return;
     }
 
@@ -209,7 +212,7 @@ export class FallingStarsComponent implements OnInit {
 
   getAnswers(): string[] {
     return this.words
-      .filter((x) => x.animating)
+      .filter((x: FallingStarsWord) => x.animating)
       .map((y) => y.possibleAnswers)[0];
   }
 
@@ -219,7 +222,11 @@ export class FallingStarsComponent implements OnInit {
   ): string[] {
     const result: string[] = [];
     const copyOfAllWords: WordKeyValueModel<string[]>[] = JSON.parse(
-      JSON.stringify(allWords.filter((x) => x.key !== targetWord.key))
+      JSON.stringify(
+        allWords.filter(
+          (x: WordKeyValueModel<string[]>) => x.key !== targetWord.key
+        )
+      )
     );
 
     if (!targetWord || !targetWord.values || !targetWord.key) {
@@ -267,7 +274,7 @@ export class FallingStarsComponent implements OnInit {
       return;
     }
     this.currentWord.correctShowingAnswer = this.currentWord.correctAnswers.filter(
-      (x) => this.getAnswers().find((y: string) => x === y)
+      (x: string) => this.getAnswers().find((y: string) => x === y)
     )[0];
     word.animating = false;
     if (!word.selectedAnswer) {
@@ -275,7 +282,7 @@ export class FallingStarsComponent implements OnInit {
       word.wrongCount++;
       this.words.push(JSON.parse(JSON.stringify(word)));
     } else {
-      if (word.correctAnswers.find((x) => x === word.selectedAnswer)) {
+      if (word.correctAnswers.find((x: string) => x === word.selectedAnswer)) {
         if (!isCalledFromView) {
           this.store.dispatch(
             toggleNotification({
@@ -335,14 +342,16 @@ export class FallingStarsComponent implements OnInit {
   }
 
   checkSelectedAnswer(item: string): void {
-    const activeWord = this.words.find((x) => x.animating);
+    const activeWord = this.words.find((x: FallingStarsWord) => x.animating);
     activeWord.selectedAnswer = item;
     this.boxAnimationDone(activeWord);
   }
 
   isPressing(answer: string): boolean {
     return (
-      this.words.find((x) => x.animating).possibleAnswers.indexOf(answer) +
+      this.words
+        .find((x: FallingStarsWord) => x.animating)
+        .possibleAnswers.indexOf(answer) +
         1 ===
       this.pressedNumber
     );

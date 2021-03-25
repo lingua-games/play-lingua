@@ -284,7 +284,9 @@ export class AddWordByUserComponent implements OnInit {
   }
 
   disableAddTarget(word: WordToAddModel): boolean {
-    return word.targets.filter((x) => x.value === '').length > 0;
+    return (
+      word.targets.filter((x: SourceTargetModel) => x.value === '').length > 0
+    );
   }
 
   disableRemoveTarget(word: WordToAddModel): boolean {

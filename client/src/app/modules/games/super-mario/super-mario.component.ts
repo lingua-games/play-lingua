@@ -292,7 +292,9 @@ export class SuperMarioComponent implements OnInit {
           (marioButton < enemyTop && marioButton > enemyButton))
       ) {
         if (
-          this.currentEnemy.values.find((x) => x === playingEnemy.valueToAsk)
+          this.currentEnemy.values.find(
+            (x: string) => x === playingEnemy.valueToAsk
+          )
         ) {
           this.showPointNotification(playingEnemy);
         } else {
@@ -304,7 +306,9 @@ export class SuperMarioComponent implements OnInit {
       }
       if (parseInt(playingEnemy.style.left, null) <= -5) {
         if (
-          this.currentEnemy.values.find((x) => x === playingEnemy.valueToAsk)
+          this.currentEnemy.values.find(
+            (x: string) => x === playingEnemy.valueToAsk
+          )
         ) {
           this.showGuidBox();
           clearInterval(animateInterval);
