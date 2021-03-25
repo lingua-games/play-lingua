@@ -19,7 +19,7 @@ import { RegisterFormErrors } from '../../../core/models/form-errors.model';
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
-  public user: UserModel = new UserModel();
+  public user: UserModel = {} as UserModel;
   public errors: RegisterFormErrors = new RegisterFormErrors();
   public isLoading?: boolean;
 
@@ -43,6 +43,8 @@ export class RegisterComponent implements OnInit {
   }
 
   submit(): void {
+    this.errors = new RegisterFormErrors();
+
     if (!this.user.email) {
       this.errors.email = 'Email is a required field';
       return;
@@ -89,11 +91,17 @@ export class RegisterComponent implements OnInit {
         );
         this.securityService.setToken(res.token);
         this.localStorageService.delete(LocalStorageHelper.isGuest);
-        this.localStorageService.save(LocalStorageHelper.email, res.user.email);
-        if (res.user.defaultBaseLanguage && res.user.defaultTargetLanguage) {
+        this.localStorageService.save(
+          LocalStorageHelper.email,
+          res?.user?.email
+        );
+        if (
+          res?.user?.defaultBaseLanguage &&
+          res?.user?.defaultTargetLanguage
+        ) {
           this.localStorageService.save(
             LocalStorageHelper.defaultLanguages,
-            `{defaultBaseLanguage: ${res.user.defaultBaseLanguage}, defaultBaseLanguage: ${res.user.defaultTargetLanguage} }`
+            `{defaultBaseLanguage: ${res?.user?.defaultBaseLanguage}, defaultBaseLanguage: ${res?.user?.defaultTargetLanguage} }`
           );
         }
         this.router.navigate(['../game-menu']).then();

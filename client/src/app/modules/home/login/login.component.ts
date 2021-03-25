@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { Location } from '@angular/common';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
+import { NameIdModel } from '../../../core/models/name-id.model';
 
 @Component({
   selector: 'app-login',
@@ -13,10 +14,10 @@ import { LocalStorageService } from '../../../core/service/local-storage.service
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  user: UserModel = new UserModel();
-  errorMessage: string;
+  user: UserModel = {} as UserModel;
+  errorMessage?: string;
   formError = {};
-  isLoading: boolean;
+  isLoading?: boolean;
 
   constructor(
     private securityService: SecurityService,
@@ -54,14 +55,14 @@ export class LoginComponent implements OnInit {
           this.securityService.setToken(res.token);
           this.localStorageService.save(
             LocalStorageHelper.totalScore,
-            res.user.totalScore.toString()
+            res?.user?.totalScore.toString()
           );
           const defaultBaseLanguageFromAPI = JSON.parse(
-            res.user.baseLanguages
-          ).find((x) => x.id === res.user.defaultBaseLanguage);
+            res?.user?.baseLanguages
+          ).find((x) => x.id === res?.user?.defaultBaseLanguage);
           const defaultTargetLanguageFromAPI = JSON.parse(
-            res.user.targetLanguages
-          ).find((x) => x.id === res.user.defaultTargetLanguage);
+            res?.user?.targetLanguages
+          ).find((x: NameIdModel) => x.id === res?.user?.defaultTargetLanguage);
 
           this.localStorageService.delete(LocalStorageHelper.isGuest);
           this.localStorageService.save(
@@ -71,10 +72,10 @@ export class LoginComponent implements OnInit {
               defaultTargetLanguage: defaultTargetLanguageFromAPI,
             })
           );
-          if (res.user.isSelectedLanguages) {
+          if (res?.user?.isSelectedLanguages) {
             this.localStorageService.save(
               LocalStorageHelper.selectedLanguages,
-              `{ "base": ${res.user.baseLanguages}, "target": ${res.user.targetLanguages} }`
+              `{ "base": ${res?.user?.baseLanguages}, "target": ${res?.user?.targetLanguages} }`
             );
           }
           this.router.navigate(['../game-menu']).then();

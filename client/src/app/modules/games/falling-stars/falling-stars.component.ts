@@ -54,7 +54,7 @@ export class FallingStarsComponent implements OnInit {
   words: FallingStarsWord[] = [];
   copyOfWords: FallingStarsWord[] = [];
   currentWord: FallingStarsWord = new FallingStarsWord();
-  guidBoxShowing: boolean;
+  guidBoxShowing?: boolean;
   pressedNumber: number;
   startTime: number;
   bookId: number;

@@ -27,7 +27,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 export class ScoreNotificationComponent implements OnInit {
   constructor(private store: Store<State>) {}
   notification: NotificationState = {} as NotificationState;
-  showNotification: boolean;
+  showNotification?: boolean;
   ngOnInit(): void {
     this.store
       .select(getShowNotification)

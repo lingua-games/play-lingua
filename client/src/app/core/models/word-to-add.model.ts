@@ -3,7 +3,7 @@ export class WordToAddModel {
   targets: SourceTargetModel[];
 }
 
-export class SourceTargetModel {
+export interface SourceTargetModel {
   value: string;
-  isValid?: boolean;
+  isValid: boolean;
 }

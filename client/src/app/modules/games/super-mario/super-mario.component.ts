@@ -66,7 +66,7 @@ export class SuperMarioComponent implements OnInit {
   movingRightInterval?: number;
   movingLeftInterval?: number;
   jumpHeight = 30;
-  guidBoxShowing: boolean;
+  guidBoxShowing?: boolean;
   bookId: number;
   chapterId: number;
 

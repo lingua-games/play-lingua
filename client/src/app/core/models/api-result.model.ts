@@ -1,7 +1,7 @@
 export class ApiResult<T> {
   data: T;
-  hasError: boolean;
-  isLoading: boolean;
+  hasError?: boolean;
+  isLoading?: boolean;
   errorMessage: string;
 
   constructor() {

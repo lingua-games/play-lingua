@@ -13,7 +13,7 @@ import { environment } from '../../../../../environments/environment';
   styleUrls: ['./finish-game-dialog.component.scss'],
 })
 export class FinishGameDialogComponent implements OnInit {
-  isLoading: boolean;
+  isLoading?: boolean;
   ranks: RanksResultInterface[];
 
   @HostListener('document:keydown ', ['$event'])

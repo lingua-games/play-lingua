@@ -3,3 +3,9 @@ export class RegisterFormErrors {
   password: string;
   displayName: string;
 }
+
+export class ProfileFormErrors {
+  displayName: string;
+  currentPassword: string;
+  newPassword: string;
+}

@@ -18,7 +18,7 @@ import { LocalStorageService } from '../../service/local-storage.service';
 export class SelectDefaultLanguageDialogComponent implements OnInit {
   baseLanguages: LanguageModel[] = [];
   targetLanguages: LanguageModel[] = [];
-  isLoading: boolean;
+  isLoading?: boolean;
   selectedItems: SetDefaultLanguageModel = new SetDefaultLanguageModel();
 
   constructor(

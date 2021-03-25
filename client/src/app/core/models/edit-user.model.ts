@@ -1,9 +1,9 @@
 export class EditUserModel {
-  public id: number;
-  public email: string;
-  public displayName: string;
-  public currentPassword: string;
-  public newPassword: string;
-  public reNewPassword: string;
-  public isChangingPassword: boolean;
+  public id?: number;
+  public email?: string;
+  public displayName?: string;
+  public currentPassword?: string;
+  public newPassword?: string;
+  public reNewPassword?: string;
+  public isChangingPassword?: boolean;
 }

@@ -10,7 +10,7 @@ import { SecurityService } from '../../core/service/security.service';
 })
 export class HomeComponent implements OnInit {
   style = {};
-  isLoading: boolean;
+  isLoading?: boolean;
 
   constructor(
     private router: Router,

@@ -31,7 +31,7 @@ export class GameMenuComponent implements OnInit {
     defaultBaseLanguage: new LanguageModel(),
     defaultTargetLanguage: new LanguageModel(),
   };
-  loadingFullPage: boolean;
+  loadingFullPage?: boolean;
   inquiryResult: ApiResult<boolean> = new ApiResult<boolean>();
 
   constructor(
