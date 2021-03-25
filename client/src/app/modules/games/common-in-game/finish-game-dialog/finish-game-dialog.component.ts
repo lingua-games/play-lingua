@@ -14,7 +14,7 @@ import { environment } from '../../../../../environments/environment';
 })
 export class FinishGameDialogComponent implements OnInit {
   isLoading?: boolean;
-  ranks: RanksResultInterface[];
+  ranks: RanksResultInterface[] = [];
 
   @HostListener('document:keydown ', ['$event'])
   keyDownEvent(event: KeyboardEvent): void {
@@ -73,7 +73,7 @@ export class FinishGameDialogComponent implements OnInit {
       return '';
     }
 
-    if (rank.email === this.securityService.getTokenInformation().email) {
+    if (rank.email === this.securityService?.getTokenInformation()?.email) {
       result = 'current-user ';
     }
 

@@ -25,8 +25,8 @@ export class BasicInformationService {
     return this.http.post<BookModel>(this.bookUrl, book);
   }
 
-  deleteBook(bookId: number): Observable<{}> {
-    return this.http.delete(`${this.bookUrl}/${bookId}`);
+  deleteBook(bookId: number): Observable<BookModel> {
+    return this.http.delete<BookModel>(`${this.bookUrl}/${bookId}`);
   }
 
   editBook(book: BookModel): Observable<BookModel> {
