@@ -5,7 +5,7 @@ export class MarioModel {
   isMoving?: boolean;
   isMovingRight?: boolean;
   isMovingLeft?: boolean;
-  style: ElementStyle;
+  style: ElementStyle = new ElementStyle();
   originalBottom?: string;
 
   constructor() {}
@@ -19,7 +19,7 @@ export class MarioModel {
     this.isMovingLeft = true;
     this.isMoving = true;
     distance = distance || 1;
-    const left = parseInt(this.style.left, null);
+    const left = parseInt(this.style.left || '0', 0);
     if (left >= distance) {
       this.style.left = (left - distance).toString() + '%';
     } else {
@@ -32,12 +32,12 @@ export class MarioModel {
     this.isMovingRight = true;
     this.isMoving = true;
     distance = distance || 1;
-    const right = parseInt(this.style.left, null);
-    if (right + parseInt(this.style.width, null) + distance < 100) {
+    const right = parseInt(this.style.left || '0', 0);
+    if (right + parseInt(this.style.width || '0', 0) + distance < 100) {
       this.style.left = (right + distance).toString() + '%';
     } else {
       this.style.left =
-        (100 - parseInt(this.style.width, null)).toString() + '%';
+        (100 - parseInt(this.style.width || '0', 0)).toString() + '%';
     }
   }
 
@@ -50,10 +50,10 @@ export class MarioModel {
     this.isJumping = true;
     const interval = setInterval(() => {
       this.style.bottom =
-        (parseInt(this.style.bottom, null) + 1).toString() + '%';
+        (parseInt(this.style.bottom || '0', 0) + 1).toString() + '%';
       if (
-        parseInt(this.style.bottom, null) >=
-        height + parseInt(this.originalBottom, null)
+        parseInt(this.style.bottom || '0', 0) >=
+        (height || 0) + parseInt(this.originalBottom || '0', 0)
       ) {
         clearInterval(interval);
         this.comeDown();
@@ -64,14 +64,15 @@ export class MarioModel {
   comeDown(): void {
     const interval = setInterval(() => {
       if (
-        parseInt(this.style.bottom, null) <= parseInt(this.originalBottom, null)
+        parseInt(this.style.bottom || '0', 0) <=
+        parseInt(this.originalBottom || '0', 0)
       ) {
         clearInterval(interval);
         this.isJumping = false;
         return;
       }
       this.style.bottom =
-        (parseInt(this.style.bottom, null) - 1).toString() + '%';
+        (parseInt(this.style?.bottom || '0', 0) - 1).toString() + '%';
     }, 10);
   }
 }

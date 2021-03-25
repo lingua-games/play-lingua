@@ -1,5 +1,5 @@
-export class SelectedLanguageModel {
-  public id: number;
-  public baseLanguages: string;
-  public targetLanguages: string;
+export interface SelectedLanguageModel {
+  id: number;
+  baseLanguages: string;
+  targetLanguages: string;
 }

@@ -10,7 +10,7 @@ import { StyleModel } from '../../core/models/style.model';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  style: StyleModel = new StyleModel();
+  style: StyleModel = {} as StyleModel;
   isLoading?: boolean;
 
   constructor(
