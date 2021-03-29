@@ -6,8 +6,13 @@
     "types": [],
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-//    "noImplicitReturns": true,
-//    "noFallthroughCasesInSwitch": true
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "angularCompilerOptions": {
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
   },
   "files": [
     "src/main.ts",

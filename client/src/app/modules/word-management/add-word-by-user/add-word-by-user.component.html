@@ -68,9 +68,9 @@
           pButton
           pRipple
           type="button"
-          [icon]="selectBookRandom.value === 'book' ? 'pi pi-check' : 'pi'"
+          [icon]="selectBookRandom?.value === 'book' ? 'pi pi-check' : 'pi'"
           class="p-button-rounded"
-          (click)="selectBookRandom.setValue('book'); selectBookForm.enable()"
+          (click)="selectBookRandom?.setValue('book'); selectBookForm.enable()"
         ></button>
       </div>
       <div class="col-sm-1 pre-text-container">Book</div>
@@ -82,7 +82,7 @@
           optionLabel="name"
           (onChange)="bookSelectionChange($event)"
           [showClear]="true"
-          [disabled]="selectBookRandom.value === 'random'"
+          [disabled]="selectBookRandom?.value === 'random'"
           [styleClass]="
             book?.invalid && selectBookForm?.dirty ? 'field-not-valid' : ''
           "
@@ -96,7 +96,9 @@
           placeholder="Select a chapter"
           formControlName="chapter"
           optionLabel="name"
-          [disabled]="selectBookRandom?.value === 'random' || book?.invalid"
+          [disabled]="
+            !!(selectBookRandom?.value === 'random') || !!book?.invalid
+          "
           (onChange)="chapterSelectionChange($event)"
           [showClear]="true"
           [styleClass]="
@@ -123,10 +125,10 @@
           pButton
           pRipple
           type="button"
-          [icon]="selectBookRandom.value === 'random' ? 'pi pi-check' : 'pi'"
+          [icon]="selectBookRandom?.value === 'random' ? 'pi pi-check' : 'pi'"
           class="p-button-rounded"
           (click)="
-            selectBookRandom.setValue('random'); selectBookForm.disable()
+            selectBookRandom?.setValue('random'); selectBookForm?.disable()
           "
         ></button>
       </div>

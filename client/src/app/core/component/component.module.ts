@@ -7,6 +7,8 @@ import { TopNavbarComponent } from '../../modules/home/top-navbar/top-navbar.com
 import { RouterModule } from '@angular/router';
 import { StartGameDialogComponent } from '../../modules/games/common-in-game/start-game-dialog/start-game-dialog.component';
 import { FinishGameDialogComponent } from '../../modules/games/common-in-game/finish-game-dialog/finish-game-dialog.component';
+import { MaterialModule } from '../../modules/common/material/material.module';
+import { PrimengModule } from '../../modules/common/primeng/primeng.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,13 @@ import { FinishGameDialogComponent } from '../../modules/games/common-in-game/fi
     StartGameDialogComponent,
     FinishGameDialogComponent,
   ],
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    MaterialModule,
+    PrimengModule,
+  ],
   exports: [
     GameHintComponent,
     ExitGameComponent,
