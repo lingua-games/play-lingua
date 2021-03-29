@@ -40,7 +40,7 @@ export class FinishGameDialogComponent implements OnInit {
       .storeScore({
         bookId: this.data.bookId,
         chapterId: this.data.chapterId,
-        gameName: 'falling-stars',
+        gameName: this.data.gameName,
         count: environment.recordCount,
       } as ScoreStoreInterface)
       .subscribe(

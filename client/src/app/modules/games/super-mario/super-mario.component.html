@@ -1,6 +1,6 @@
 <app-top-navbar></app-top-navbar>
 <app-exit-game
-  *ngIf="enemies.length"
+  *ngIf="enemies.length && !isGameFinished"
   (click)="showStartDialog()"
 ></app-exit-game>
 <div *ngIf="guidBoxShowing" class="guid-box-container" @fadeIn>

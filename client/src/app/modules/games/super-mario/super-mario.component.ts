@@ -18,6 +18,9 @@ import { toggleNotification } from '../../../core/component/score-notification/s
 import { NotificationState } from '../../../core/component/score-notification/state/score-notification.reducer';
 import { Store } from '@ngrx/store';
 import { ScoreType } from '../../../core/models/score-notification-appearance.enum';
+import { FinishGameDialogComponent } from '../common-in-game/finish-game-dialog/finish-game-dialog.component';
+import { ScoreStoreInterface } from '../../../core/models/score-store.interface';
+import { FinishGameActionEnum } from '../../../core/models/finish-game-action.enum';
 
 @Component({
   selector: 'app-super-mario',
@@ -75,6 +78,7 @@ export class SuperMarioComponent implements OnInit {
   guidBoxShowing?: boolean;
   bookId?: number;
   chapterId?: number;
+  isGameFinished = false;
 
   constructor(
     private dialog: MatDialog,
@@ -179,7 +183,36 @@ export class SuperMarioComponent implements OnInit {
     this.prepareTheWord(this.allEnemies.words[0]);
   }
 
+  showEndGameDialog(): void {
+    this.isGameFinished = true;
+    const dialog = this.dialog.open(FinishGameDialogComponent, {
+      disableClose: true,
+      width: '30%',
+      autoFocus: false,
+      data: {
+        bookId: this.bookId,
+        chapterId: this.chapterId,
+        gameName: 'super-mario',
+        score: this.scoreStorageService.getCachedScores(),
+        gameDisplayName: 'Super mario',
+      } as ScoreStoreInterface,
+    });
+
+    dialog.afterClosed().subscribe((res: FinishGameActionEnum) => {
+      if (res) {
+        if (res === FinishGameActionEnum.retry) {
+          // @ts-ignore
+          this.setGameWords(this.copyOfWords);
+          this.startGame();
+        } else if (res === FinishGameActionEnum.changeMode) {
+          this.showStartDialog();
+        }
+      }
+    });
+  }
+
   prepareTheWord(enemy?: WordKeyValueModel<string[]>): void {
+    this.isGameFinished = false;
     this.guidBoxShowing = false;
     if (!enemy) {
       const index = this.allEnemies.words.indexOf(this.currentEnemy);
@@ -192,7 +225,7 @@ export class SuperMarioComponent implements OnInit {
           this.prepareAnswerOptions();
         }, 1);
       } else {
-        // TODO. should finish the game
+        this.showEndGameDialog();
       }
     } else {
       this.currentEnemy = enemy;
@@ -273,6 +306,7 @@ export class SuperMarioComponent implements OnInit {
 
   showPointNotification(enemy: MarioEnemy): void {
     const earnedScore = parseInt(enemy?.style?.left || '0', 0) / 10;
+    this.showEndGameDialog();
     this.scoreStorageService.catchScores(earnedScore);
     this.store.dispatch(
       toggleNotification({
