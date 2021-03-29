@@ -2,24 +2,46 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SuperMarioComponent } from './super-mario.component';
-import { GamesService } from '../../../core/service/games.service';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { Store } from '@ngrx/store';
+import { GameStartInformation } from '../../../core/models/game-start-information';
+import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
 
 describe('SuperMarioComponent', () => {
   let component: SuperMarioComponent;
   let fixture: ComponentFixture<SuperMarioComponent>;
-  let mockGameService;
   let mockServiceResultValue;
+  let mockMatDialogRef;
+  let mockStore;
+  let mockMatDialog;
   beforeEach(
     waitForAsync(() => {
-      mockGameService = jasmine.createSpyObj(['getGameWords']);
-
+      mockStore = jasmine.createSpyObj(['select', 'dispatch']);
+      mockMatDialogRef = jasmine.createSpyObj(['close']);
+      mockMatDialog = jasmine.createSpyObj('dialog', {
+        open: {
+          afterClosed: () => {
+            return of();
+          },
+        },
+      });
       TestBed.configureTestingModule({
         declarations: [SuperMarioComponent],
+        imports: [HttpClientTestingModule],
         providers: [
           {
-            provide: GamesService,
-            useValue: mockGameService,
+            provide: Store,
+            useValue: mockStore,
+          },
+          {
+            provide: MatDialogRef,
+            useValue: mockMatDialogRef,
+          },
+          {
+            provide: MatDialog,
+            useValue: mockMatDialog,
           },
         ],
         schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
@@ -104,52 +126,14 @@ describe('SuperMarioComponent', () => {
   });
 
   it('should getWords be called in startGame method', () => {
-    spyOn(component, 'getWords');
+    spyOn(component, 'prepareTheWord');
+    component.allEnemies = {
+      words: [],
+    } as GameStartInformation<WordKeyValueModel<string[]>[]>;
 
     component.startGame();
 
-    expect(component.getWords).toHaveBeenCalled();
-  });
-
-  it('should getGameWords service be called in getWords method', () => {
-    mockGameService.getGameWords.and.callFake(() => {
-      return of(['foo', 'baar']);
-    });
-
-    fixture.detectChanges();
-
-    expect(mockGameService.getGameWords).toHaveBeenCalled();
-  });
-
-  it('should handle errors when getWordAPI fail', () => {
-    mockGameService.getGameWords.and.callFake(() => {
-      return throwError('some error');
-    });
-
-    fixture.detectChanges();
-
-    expect(2).toBe(2);
-  });
-
-  it('should getWords fill enemies array', () => {
-    mockGameService.getGameWords.and.callFake(() => {
-      return of(mockServiceResultValue);
-    });
-
-    fixture.detectChanges();
-
-    expect(component.enemies.length).toBe(mockServiceResultValue.length);
-  });
-
-  it('should startAnimating be called in getWords method', () => {
-    mockGameService.getGameWords.and.callFake(() => {
-      return of(mockServiceResultValue);
-    });
-    spyOn(component, 'startAnimating');
-
-    fixture.detectChanges();
-
-    expect(component.startAnimating).toHaveBeenCalledWith(component.enemies[0]);
+    expect(component.prepareTheWord).toHaveBeenCalled();
   });
 
   it('should clearInterval be called in stopMovingLeft', () => {
@@ -158,7 +142,7 @@ describe('SuperMarioComponent', () => {
     component.stopMovingLeft();
 
     expect(clearInterval).toHaveBeenCalled();
-    expect(component.movingLeftInterval).toBeNull();
+    expect(component.movingLeftInterval).toBeUndefined();
   });
 
   it('should clearInterval be called in stopMovingRight', () => {
@@ -167,7 +151,7 @@ describe('SuperMarioComponent', () => {
     component.stopMovingRight();
 
     expect(clearInterval).toHaveBeenCalled();
-    expect(component.movingRightInterval).toBeNull();
+    expect(component.movingRightInterval).toBeUndefined();
   });
 
   it('should startMovingLeft call moveLeft after a period', () => {

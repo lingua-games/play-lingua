@@ -13,7 +13,7 @@ export class TopNavbarComponent implements OnInit {
   }
 
   showFullSize = true;
-  totalScore: string;
+  totalScore = '';
   ngOnInit(): void {
     if (this.securityService.isGuest()) {
       this.totalScore = ' - ';
@@ -31,7 +31,7 @@ export class TopNavbarComponent implements OnInit {
 
   getUsername(): string {
     return this.securityService.isLoggedIn()
-      ? `Welcome, ${this.securityService.getTokenInformation().displayName}`
+      ? `Welcome, ${this.securityService?.getTokenInformation()?.displayName}`
       : 'Welcome, guest';
   }
 }

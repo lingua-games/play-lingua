@@ -25,8 +25,8 @@ export class BasicInformationService {
     return this.http.post<BookModel>(this.bookUrl, book);
   }
 
-  deleteBook(bookId: number): Observable<{}> {
-    return this.http.delete(`${this.bookUrl}/${bookId}`);
+  deleteBook(bookId: number): Observable<BookModel> {
+    return this.http.delete<BookModel>(`${this.bookUrl}/${bookId}`);
   }
 
   editBook(book: BookModel): Observable<BookModel> {
@@ -46,7 +46,7 @@ export class BasicInformationService {
     menus.push({
       name: 'Super Mario',
       image: './../../../../assets/images/GameMenu/super-mario.png',
-      route: 'super-mario',
+      route: '../games/super-mario',
       id: 'super-mario',
       isDesigned: true,
       gifUrl: './../../../../assets/GIFs/super-mario.gif',
@@ -56,7 +56,7 @@ export class BasicInformationService {
       image: './../../../../assets/images/GameMenu/game.jpg',
       isDesigned: false,
       gifUrl: './../../../../assets/GIFs/coming-soon.gif',
-    });
+    } as GameMenu);
     return menus;
   }
 
@@ -333,6 +333,24 @@ export class BasicInformationService {
       });
     }
 
+    if (game === EGame.supperMario) {
+      result.push({
+        key: '← / A',
+        description: 'Move left',
+      });
+      result.push({
+        key: '→ / D',
+        description: 'Move right',
+      });
+      result.push({
+        key: '[Q]',
+        description: 'Skip answer',
+      });
+      result.push({
+        key: '[Space]',
+        description: 'Jump',
+      });
+    }
     return result;
   }
 }

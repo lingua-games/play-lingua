@@ -26,11 +26,11 @@ import { LocalStorageService } from '../../../../core/service/local-storage.serv
 export class StartGameDialogComponent implements OnInit {
   books: BookModel[] = [];
   chapters: ChapterModel[] = [];
-  isPreparing: boolean;
+  isPreparing?: boolean;
 
   form = {
-    selectedBook: new BookModel(),
-    selectedChapter: new ChapterModel(),
+    selectedBook: {} as BookModel,
+    selectedChapter: {} as ChapterModel,
   };
 
   defaultLanguages: {

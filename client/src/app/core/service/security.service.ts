@@ -25,7 +25,7 @@ export class SecurityService {
     private localStorageService: LocalStorageService
   ) {}
 
-  setToken(token: string): void {
+  setToken(token: string | undefined): void {
     this.localStorageService.save(LocalStorageHelper.token, token);
   }
 
@@ -61,7 +61,7 @@ export class SecurityService {
     this.storageSub.next(score);
   }
 
-  getTokenInformation(): SecurityTokenInterface {
+  getTokenInformation(): SecurityTokenInterface | undefined {
     if (this.localStorageService.load(LocalStorageHelper.token) === 'null') {
       this.logoutOn401();
       return;

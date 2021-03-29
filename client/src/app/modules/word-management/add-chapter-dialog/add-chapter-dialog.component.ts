@@ -16,7 +16,7 @@ export class AddChapterDialogComponent implements OnInit {
     chapterName: ['', Validators.required],
   });
 
-  get chapterName(): AbstractControl {
+  get chapterName(): AbstractControl | null {
     return this.addChapterForm.get('chapterName');
   }
 
@@ -29,7 +29,7 @@ export class AddChapterDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   submitForm(): void {
-    if (this.chapterName.invalid) {
+    if (this.chapterName?.invalid) {
       this.notificationService.showMessage(
         'Chapter name is empty',
         Severity.error

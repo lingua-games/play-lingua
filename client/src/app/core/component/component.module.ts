@@ -5,10 +5,32 @@ import { FormsModule } from '@angular/forms';
 import { ExitGameComponent } from './exit-game/exit-game.component';
 import { TopNavbarComponent } from '../../modules/home/top-navbar/top-navbar.component';
 import { RouterModule } from '@angular/router';
+import { StartGameDialogComponent } from '../../modules/games/common-in-game/start-game-dialog/start-game-dialog.component';
+import { FinishGameDialogComponent } from '../../modules/games/common-in-game/finish-game-dialog/finish-game-dialog.component';
+import { MaterialModule } from '../../modules/common/material/material.module';
+import { PrimengModule } from '../../modules/common/primeng/primeng.module';
 
 @NgModule({
-  declarations: [GameHintComponent, ExitGameComponent, TopNavbarComponent],
-  imports: [CommonModule, FormsModule, RouterModule],
-  exports: [GameHintComponent, ExitGameComponent, TopNavbarComponent],
+  declarations: [
+    GameHintComponent,
+    ExitGameComponent,
+    TopNavbarComponent,
+    StartGameDialogComponent,
+    FinishGameDialogComponent,
+  ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    MaterialModule,
+    PrimengModule,
+  ],
+  exports: [
+    GameHintComponent,
+    ExitGameComponent,
+    TopNavbarComponent,
+    StartGameDialogComponent,
+    FinishGameDialogComponent,
+  ],
 })
 export class ComponentModule {}

@@ -1,4 +1,4 @@
-export class GameStartInformation<T> {
+export interface GameStartInformation<T> {
   words: T;
   bookId: number;
   chapterId: number;

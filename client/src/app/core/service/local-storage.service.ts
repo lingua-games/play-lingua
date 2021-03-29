@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LocalStorageHelper } from '../models/local-storage.enum';
+// @ts-ignore
 import * as CryptoJS from 'crypto-js';
 import { secretKeys } from '../../../environments/secret';
 
@@ -9,13 +10,13 @@ import { secretKeys } from '../../../environments/secret';
 export class LocalStorageService {
   constructor() {}
 
-  save(item: LocalStorageHelper, value: string): void {
-    localStorage.setItem(item, this.encryptData(value));
+  save(item: LocalStorageHelper, value?: string): void {
+    localStorage.setItem(item, this.encryptData(value as {}));
   }
 
   load(item: LocalStorageHelper): string {
     if (localStorage.getItem(item)) {
-      return this.decryptData(localStorage.getItem(item));
+      return this.decryptData(localStorage.getItem(item) || '{}');
     } else {
       return '';
     }
@@ -29,14 +30,14 @@ export class LocalStorageService {
     localStorage.clear();
   }
 
-  encryptData(data): string {
+  encryptData(data: {}): string {
     return CryptoJS.AES.encrypt(
       JSON.stringify(data),
       secretKeys.localStoragePrivateKey
     ).toString();
   }
 
-  decryptData(data): string {
+  decryptData(data: string): string {
     const bytes = CryptoJS.AES.decrypt(data, secretKeys.localStoragePrivateKey);
     const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
     return decryptedData;

@@ -13,6 +13,8 @@ import { FinishGameActionEnum } from '../../../core/models/finish-game-action.en
 import { FinishGameDialogComponent } from '../common-in-game/finish-game-dialog/finish-game-dialog.component';
 import { StartGameDialogComponent } from '../common-in-game/start-game-dialog/start-game-dialog.component';
 import { GameInformationInterface } from '../../../core/models/game-information.interface';
+import { BasicInformationService } from '../../../core/service/basic-information.service';
+import { EGame } from '../../../core/models/e-game';
 
 const secondsForTraver = 5000;
 const bufferBeforeStart = 1000;
@@ -51,12 +53,12 @@ const bufferBeforeStart = 1000;
 export class FallingStarsComponent implements OnInit {
   words: FallingStarsWord[] = [];
   copyOfWords: FallingStarsWord[] = [];
-  currentWord: FallingStarsWord = new FallingStarsWord();
-  guidBoxShowing: boolean;
-  pressedNumber: number;
-  startTime: number;
-  bookId: number;
-  chapterId: number;
+  currentWord: FallingStarsWord = {} as FallingStarsWord;
+  guidBoxShowing?: boolean;
+  pressedNumber?: number;
+  startTime?: number;
+  bookId?: number;
+  chapterId?: number;
   isGameFinished = false;
   @HostListener('document:keyup ', ['$event'])
   keyUpEvent(event: KeyboardEvent): void {
@@ -72,7 +74,10 @@ export class FallingStarsComponent implements OnInit {
       return;
     }
 
-    if (this.guidBoxShowing || !this.words.find((x) => x.animating)) {
+    if (
+      this.guidBoxShowing ||
+      !this.words.find((x: FallingStarsWord) => x.animating)
+    ) {
       return;
     }
 
@@ -121,11 +126,13 @@ export class FallingStarsComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private store: Store<{}>,
-    private scoreStorageService: ScoreStorageService
+    private scoreStorageService: ScoreStorageService,
+    private basicInformationService: BasicInformationService
   ) {}
 
   ngOnInit(): void {
     this.showStartDialog();
+    this.scoreStorageService.clearCatch();
     // this.showEndGameDialog();
   }
 
@@ -147,6 +154,7 @@ export class FallingStarsComponent implements OnInit {
     dialog.afterClosed().subscribe((res: FinishGameActionEnum) => {
       if (res) {
         if (res === FinishGameActionEnum.retry) {
+          // @ts-ignore
           this.setGameWords(this.copyOfWords);
           this.startGame();
         } else if (res === FinishGameActionEnum.changeMode) {
@@ -163,6 +171,7 @@ export class FallingStarsComponent implements OnInit {
       .open(StartGameDialogComponent, {
         data: {
           name: 'Falling stars',
+          hints: this.basicInformationService.gameHints(EGame.fallingStars),
         } as GameInformationInterface,
         disableClose: true,
         width: '30%',
@@ -179,7 +188,7 @@ export class FallingStarsComponent implements OnInit {
       });
   }
 
-  setGameWords(res): void {
+  setGameWords(res: WordKeyValueModel<string[]>[]): void {
     this.words = [];
     res.forEach((element: WordKeyValueModel<string[]>) => {
       this.words.push({
@@ -205,7 +214,7 @@ export class FallingStarsComponent implements OnInit {
 
   getAnswers(): string[] {
     return this.words
-      .filter((x) => x.animating)
+      .filter((x: FallingStarsWord) => x.animating)
       .map((y) => y.possibleAnswers)[0];
   }
 
@@ -215,11 +224,15 @@ export class FallingStarsComponent implements OnInit {
   ): string[] {
     const result: string[] = [];
     const copyOfAllWords: WordKeyValueModel<string[]>[] = JSON.parse(
-      JSON.stringify(allWords.filter((x) => x.key !== targetWord.key))
+      JSON.stringify(
+        allWords.filter(
+          (x: WordKeyValueModel<string[]>) => x.key !== targetWord.key
+        )
+      )
     );
 
     if (!targetWord || !targetWord.values || !targetWord.key) {
-      return;
+      return [];
     }
     // Filling the correct option
     const answerPlace = Math.round(Math.random() * (3 - 0));
@@ -263,7 +276,7 @@ export class FallingStarsComponent implements OnInit {
       return;
     }
     this.currentWord.correctShowingAnswer = this.currentWord.correctAnswers.filter(
-      (x) => this.getAnswers().find((y: string) => x === y)
+      (x: string) => this.getAnswers().find((y: string) => x === y)
     )[0];
     word.animating = false;
     if (!word.selectedAnswer) {
@@ -271,7 +284,7 @@ export class FallingStarsComponent implements OnInit {
       word.wrongCount++;
       this.words.push(JSON.parse(JSON.stringify(word)));
     } else {
-      if (word.correctAnswers.find((x) => x === word.selectedAnswer)) {
+      if (word.correctAnswers.find((x: string) => x === word.selectedAnswer)) {
         if (!isCalledFromView) {
           this.store.dispatch(
             toggleNotification({
@@ -296,7 +309,9 @@ export class FallingStarsComponent implements OnInit {
   calculateScore(wrongCount: number): number {
     // It is the travelled time of the object before user hit the correct Answer.
     const travelledBeforeHit =
-      (secondsForTraver + bufferBeforeStart - (Date.now() - this.startTime)) /
+      (secondsForTraver +
+        bufferBeforeStart -
+        (Date.now() - (this.startTime || 0))) /
       1000;
 
     // Below line `/ 1000` is converting Milli seconds to seconds
@@ -331,14 +346,16 @@ export class FallingStarsComponent implements OnInit {
   }
 
   checkSelectedAnswer(item: string): void {
-    const activeWord = this.words.find((x) => x.animating);
-    activeWord.selectedAnswer = item;
-    this.boxAnimationDone(activeWord);
+    const activeWord = this.words.find((x: FallingStarsWord) => x.animating);
+    (activeWord || ({} as FallingStarsWord)).selectedAnswer = item;
+    this.boxAnimationDone(activeWord as FallingStarsWord);
   }
 
   isPressing(answer: string): boolean {
     return (
-      this.words.find((x) => x.animating).possibleAnswers.indexOf(answer) +
+      (this.words
+        ?.find((x: FallingStarsWord) => x.animating)
+        ?.possibleAnswers?.indexOf(answer) || 0) +
         1 ===
       this.pressedNumber
     );

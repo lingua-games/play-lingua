@@ -1,4 +1,4 @@
-export class WordKeyValueModel<T> {
-  public key: string;
-  public values: T;
+export interface WordKeyValueModel<T = void> {
+  key: string;
+  values: T;
 }

@@ -37,15 +37,19 @@ export class BooksComponent implements OnInit {
       data: book || null,
     });
 
-    dialogRef.afterClosed().subscribe((res: BookModel) => {
-      if (res) {
-        if (res.id) {
-          this.editBook(res);
-        } else {
-          this.addBook(res);
+    dialogRef.afterClosed().subscribe(
+      (res: BookModel) => {
+        if (res) {
+          if (res.id) {
+            this.editBook(res);
+          } else {
+            this.addBook(res);
+          }
         }
-      }
-    });
+      },
+      () => {},
+      () => {}
+    );
   }
 
   addBook(book: BookModel): void {
@@ -77,7 +81,8 @@ export class BooksComponent implements OnInit {
       },
       () => {
         // Todo: handle error
-      }
+      },
+      () => {}
     );
   }
 }

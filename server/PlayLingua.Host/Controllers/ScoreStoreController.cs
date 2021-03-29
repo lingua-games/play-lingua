@@ -23,6 +23,8 @@ namespace PlayLingua.Host.Controllers
         public ActionResult<List<RankResultViewModel>> Add([FromBody] UserScoreViewModel model)
         {
             var result = new List<RankResultViewModel>();
+            model.UserId = GetUser().Id;
+            var foo = GetUser();
 
             if (model.UserId != 0)
             {

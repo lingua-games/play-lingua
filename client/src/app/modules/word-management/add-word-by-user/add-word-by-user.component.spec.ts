@@ -15,7 +15,10 @@ import { of, throwError } from 'rxjs';
 import { ChapterModel } from '../../../core/models/chapter.model';
 import { BookChapterService } from '../../../core/service/book-chapter.service';
 import { BookModel } from '../../../core/models/book.model';
-import { WordToAddModel } from '../../../core/models/word-to-add.model';
+import {
+  SourceTargetModel,
+  WordToAddModel,
+} from '../../../core/models/word-to-add.model';
 import { AddWordFormModel } from '../../../core/models/add-word-form.model';
 import { Router } from '@angular/router';
 
@@ -103,7 +106,7 @@ describe('AddWordByUserComponent', () => {
     it('should disable base and target languages when subscribe true', () => {
       spyOn(component.baseLanguage, 'disable');
       spyOn(component.targetLanguage, 'disable');
-      component.isSelectedLanguageSubmit.setValue(true);
+      component.isSelectedLanguageSubmit?.setValue(true);
 
       expect(component.baseLanguage.disable).toHaveBeenCalled();
       expect(component.targetLanguage.disable).toHaveBeenCalled();
@@ -112,7 +115,7 @@ describe('AddWordByUserComponent', () => {
     it('should enable base and target languages when subscribe false', () => {
       spyOn(component.baseLanguage, 'enable');
       spyOn(component.targetLanguage, 'enable');
-      component.isSelectedLanguageSubmit.setValue(false);
+      component.isSelectedLanguageSubmit?.setValue(false);
 
       expect(component.baseLanguage.enable).toHaveBeenCalled();
       expect(component.targetLanguage.enable).toHaveBeenCalled();
@@ -172,7 +175,7 @@ describe('AddWordByUserComponent', () => {
 
   describe('bookSelectionChange', () => {
     it('should open dialog', () => {
-      component.bookSelectionChange({ value: { id: -1 } });
+      component.bookSelectionChange({ value: { id: -1 } as BookModel });
       expect(mockMatDialog.open).toHaveBeenCalled();
     });
 
@@ -183,7 +186,7 @@ describe('AddWordByUserComponent', () => {
         },
       });
 
-      component.bookSelectionChange({ value: { id: -1 } });
+      component.bookSelectionChange({ value: { id: -1 } as BookModel });
 
       expect(component.book.value.name).toBe('foo book');
     });
@@ -195,7 +198,7 @@ describe('AddWordByUserComponent', () => {
         },
       });
 
-      component.bookSelectionChange({ value: { id: -1 } });
+      component.bookSelectionChange({ value: { id: -1 } as BookModel });
 
       expect(component.book.value).toBe('');
     });
@@ -222,7 +225,7 @@ describe('AddWordByUserComponent', () => {
 
   describe('chapterSelectionChange', () => {
     it('should open dialog', () => {
-      component.chapterSelectionChange({ value: { id: -1 } });
+      component.chapterSelectionChange({ value: { id: -1 } as ChapterModel });
       expect(mockMatDialog.open).toHaveBeenCalled();
     });
 
@@ -233,7 +236,7 @@ describe('AddWordByUserComponent', () => {
         };
       });
 
-      component.chapterSelectionChange({ value: { id: -1 } });
+      component.chapterSelectionChange({ value: { id: -1 } as ChapterModel });
 
       expect(component.chapter.value.name).toBe('fake chapter name');
     });
@@ -245,7 +248,7 @@ describe('AddWordByUserComponent', () => {
         };
       });
 
-      component.chapterSelectionChange({ value: { id: -1 } });
+      component.chapterSelectionChange({ value: { id: -1 } as ChapterModel });
 
       expect(component.chapter.value).toBe('');
     });
@@ -277,7 +280,7 @@ describe('AddWordByUserComponent', () => {
 
   describe('submitSelectedBooks', () => {
     it('should show error if book is invalid', () => {
-      component.selectBookRandom.setValue('book');
+      component.selectBookRandom?.setValue('book');
       component.book.setErrors([]);
 
       component.submitSelectedBooks();
@@ -291,9 +294,9 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should show error if chapter is invalid', () => {
-      component.selectBookRandom.setValue('book');
-      component.book.setValue('fake book');
-      component.chapter.setErrors([]);
+      component.selectBookRandom?.setValue('book');
+      component.book?.setValue('fake book');
+      component.chapter?.setErrors([]);
 
       component.submitSelectedBooks();
 
@@ -308,8 +311,8 @@ describe('AddWordByUserComponent', () => {
 
   describe('submitForm', () => {
     it('should show error if book is invalid', () => {
-      component.book.setErrors([]);
-      component.selectBookRandom.setValue('book');
+      component.book?.setErrors([]);
+      component.selectBookRandom?.setValue('book');
 
       component.submitForm();
 
@@ -323,7 +326,7 @@ describe('AddWordByUserComponent', () => {
 
     it('should show error if chapter is invalid', () => {
       component.chapter.setErrors([]);
-      component.selectBookRandom.setValue('book');
+      component.selectBookRandom?.setValue('book');
 
       component.submitForm();
 
@@ -336,7 +339,7 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should show error if no word selected in the form', () => {
-      component.selectBookRandom.setValue('something else');
+      component.selectBookRandom?.setValue('something else');
 
       component.submitForm();
 
@@ -349,7 +352,7 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should set all the words invalid in the form if target.value is null', () => {
-      component.selectBookRandom.setValue('something else');
+      component.selectBookRandom?.setValue('something else');
       component.formData = {
         words: [
           {
@@ -366,7 +369,7 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should call saveInformationInfoForm', () => {
-      component.selectBookRandom.setValue('something else');
+      component.selectBookRandom?.setValue('something else');
       component.formData = {
         words: [
           {
@@ -386,7 +389,7 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should delete draft if API can store data into backend', () => {
-      component.selectBookRandom.setValue('something else');
+      component.selectBookRandom?.setValue('something else');
       component.formData = {
         words: [
           {
@@ -406,7 +409,7 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should stop page loading ig API fail', () => {
-      component.selectBookRandom.setValue('something else');
+      component.selectBookRandom?.setValue('something else');
       component.formData = {
         words: [
           {
@@ -429,12 +432,20 @@ describe('AddWordByUserComponent', () => {
   it('should remove word from the form', () => {
     const words: WordToAddModel[] = [
       {
-        targets: [{ value: 'a' }, { value: 'b' }, { value: 'c' }],
-        base: { value: 'z' },
+        targets: [
+          { value: 'a' } as SourceTargetModel,
+          { value: 'b' } as SourceTargetModel,
+          { value: 'c' } as SourceTargetModel,
+        ],
+        base: { value: 'z' } as SourceTargetModel,
       },
       {
-        targets: [{ value: 'v' }, { value: 'n' }, { value: 'm' }],
-        base: { value: 't' },
+        targets: [
+          { value: 'v' } as SourceTargetModel,
+          { value: 'n' } as SourceTargetModel,
+          { value: 'm' } as SourceTargetModel,
+        ],
+        base: { value: 't' } as SourceTargetModel,
       },
     ];
 
@@ -447,7 +458,11 @@ describe('AddWordByUserComponent', () => {
   it('should series of words and scroll down', () => {
     jasmine.clock().uninstall();
     jasmine.clock().install();
-
+    component.formData = {
+      words: [
+        { targets: [{ value: 'foo' } as SourceTargetModel] } as WordToAddModel,
+      ],
+    } as AddWordFormModel;
     const el = { scrollTo: () => {} } as Element;
     component.addWordSeries(el);
     jasmine.clock().tick(2);
@@ -462,7 +477,7 @@ describe('AddWordByUserComponent', () => {
   it('should disable add target if target values is empty', () => {
     const word: WordToAddModel = {
       base: { value: 'fake base', isValid: true },
-      targets: [{ value: '' }],
+      targets: [{ value: '' } as SourceTargetModel],
     };
 
     expect(component.disableAddTarget(word)).toBeTrue();
@@ -478,24 +493,29 @@ describe('AddWordByUserComponent', () => {
   });
 
   it('should return form value for selectBookRandom', () => {
-    component.selectBookForm.controls['selectBookRandom'].setValue('testValue');
+    component.selectBookForm.controls['selectBookRandom']?.setValue(
+      'testValue'
+    );
     expect(component.selectBookRandom.value).toEqual('testValue');
   });
 
   it('should return form value for book', () => {
-    component.selectBookForm.controls['book'].setValue('testValue');
+    component.selectBookForm.controls['book']?.setValue('testValue');
     expect(component.book.value).toEqual('testValue');
   });
 
   it('should return form value for chapter', () => {
-    component.selectBookForm.controls['chapter'].setValue('testValue');
+    component.selectBookForm.controls['chapter']?.setValue('testValue');
     expect(component.chapter.value).toEqual('testValue');
   });
 
   it('should remove last target of the word', () => {
     const fakeWord: WordToAddModel = {
-      targets: [{ value: 'a' }, { value: 'b' }],
-      base: { value: 'z' },
+      targets: [
+        { value: 'a' } as SourceTargetModel,
+        { value: 'b' } as SourceTargetModel,
+      ],
+      base: { value: 'z' } as SourceTargetModel,
     };
 
     component.removeTargetWord(fakeWord);
@@ -505,8 +525,11 @@ describe('AddWordByUserComponent', () => {
 
   it('should add empty target word', () => {
     const fakeWord: WordToAddModel = {
-      targets: [{ value: 'a' }, { value: 'b' }],
-      base: { value: 'z' },
+      targets: [
+        { value: 'a' } as SourceTargetModel,
+        { value: 'b' } as SourceTargetModel,
+      ],
+      base: { value: 'z' } as SourceTargetModel,
     };
 
     component.addTargetWord(fakeWord);
@@ -545,7 +568,7 @@ describe('AddWordByUserComponent', () => {
 
   describe('submitSelectedLanguages', () => {
     it('should check isSelectedLanguageSubmit', () => {
-      component.isSelectedLanguageSubmit.setValue(true);
+      component.isSelectedLanguageSubmit?.setValue(true);
 
       component.submitSelectedLanguages();
 
@@ -566,7 +589,7 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should getBooks if selectLanguageForm is valid', () => {
-      component.selectLanguageForm.setValue({
+      component.selectLanguageForm?.setValue({
         baseLanguage: 1,
         targetLanguage: 1,
         isSelectedLanguageSubmit: false,

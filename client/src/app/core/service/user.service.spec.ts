@@ -29,7 +29,7 @@ describe('UserService', () => {
   });
 
   it('should post to userUrl when add() hits', () => {
-    service.add(new UserModel());
+    service.add({} as UserModel);
     expect(httpClientSpy.post).toHaveBeenCalled();
   });
 

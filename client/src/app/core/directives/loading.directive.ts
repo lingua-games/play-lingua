@@ -5,7 +5,7 @@ import { Directive, ElementRef, Input, OnChanges, OnInit } from '@angular/core';
 })
 export class LoadingDirective implements OnInit, OnChanges {
   // tslint:disable-next-line:no-input-rename
-  @Input('loadingFlag') loadingFlag: boolean;
+  @Input('loadingFlag') loadingFlag?: boolean;
 
   constructor(private element: ElementRef) {}
 

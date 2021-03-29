@@ -6,7 +6,7 @@ export class NotificationService {
   constructor(public messageService: MessageService) {}
 
   public showMessage(
-    message,
+    message: string,
     severity: Severity,
     header: string = 'Error',
     key: string = ''

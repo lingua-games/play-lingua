@@ -28,10 +28,10 @@ export class GameMenuComponent implements OnInit {
     target: [],
   };
   defaultSelectedLanguages: SetDefaultLanguageModel = {
-    defaultBaseLanguage: new LanguageModel(),
-    defaultTargetLanguage: new LanguageModel(),
+    defaultBaseLanguage: {} as LanguageModel,
+    defaultTargetLanguage: {} as LanguageModel,
   };
-  loadingFullPage: boolean;
+  loadingFullPage?: boolean;
   inquiryResult: ApiResult<boolean> = new ApiResult<boolean>();
 
   constructor(

@@ -1,13 +1,13 @@
-export class UserModel {
-  public id: number;
-  public email: string;
-  public displayName: string;
-  public password: string;
-  public rePassword: string;
-  public baseLanguages: string;
-  public targetLanguages: string;
-  public isSelectedLanguages: boolean;
-  public defaultBaseLanguage: number;
-  public defaultTargetLanguage: number;
-  public totalScore: number;
+export interface UserModel {
+  id: number;
+  email: string;
+  displayName: string;
+  password: string;
+  rePassword: string;
+  baseLanguages: string;
+  targetLanguages: string;
+  isSelectedLanguages: boolean;
+  defaultBaseLanguage: number;
+  defaultTargetLanguage: number;
+  totalScore: number;
 }

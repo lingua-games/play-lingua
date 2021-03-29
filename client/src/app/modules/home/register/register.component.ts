@@ -11,6 +11,7 @@ import { LoginResultModel } from '../../../core/models/login-result.model';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { Location } from '@angular/common';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
+import { RegisterFormErrors } from '../../../core/models/form-errors.model';
 
 @Component({
   selector: 'app-register',
@@ -18,9 +19,9 @@ import { LocalStorageService } from '../../../core/service/local-storage.service
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
-  public user: UserModel = new UserModel();
-  public errors = {};
-  public isLoading: boolean;
+  public user: UserModel = {} as UserModel;
+  public errors: RegisterFormErrors = {} as RegisterFormErrors;
+  public isLoading?: boolean;
 
   constructor(
     private userService: UserService,
@@ -42,29 +43,30 @@ export class RegisterComponent implements OnInit {
   }
 
   submit(): void {
-    this.errors = {};
+    this.errors = {} as RegisterFormErrors;
+
     if (!this.user.email) {
-      this.errors['email'] = 'Email is a required field';
+      this.errors.email = 'Email is a required field';
       return;
     }
 
     if (!this.user.displayName || this.user.displayName === '') {
-      this.errors['displayName'] = 'Display name is a required field';
+      this.errors.displayName = 'Display name is a required field';
       return;
     }
 
     if (!/\S+@\S+\.\S+/.test(this.user.email)) {
-      this.errors['email'] = 'Email is not in correct format';
+      this.errors.email = 'Email is not in correct format';
       return;
     }
 
     if (!this.user.password) {
-      this.errors['password'] = 'Password is a required field';
+      this.errors.password = 'Password is a required field';
       return;
     }
 
     if (this.user.password !== this.user.rePassword) {
-      this.errors['password'] = 'Password and Re-Password should be the same';
+      this.errors.password = 'Password and Re-Password should be the same';
       return;
     }
     this.isLoading = true;
@@ -89,11 +91,17 @@ export class RegisterComponent implements OnInit {
         );
         this.securityService.setToken(res.token);
         this.localStorageService.delete(LocalStorageHelper.isGuest);
-        this.localStorageService.save(LocalStorageHelper.email, res.user.email);
-        if (res.user.defaultBaseLanguage && res.user.defaultTargetLanguage) {
+        this.localStorageService.save(
+          LocalStorageHelper.email,
+          res?.user?.email
+        );
+        if (
+          res?.user?.defaultBaseLanguage &&
+          res?.user?.defaultTargetLanguage
+        ) {
           this.localStorageService.save(
             LocalStorageHelper.defaultLanguages,
-            `{defaultBaseLanguage: ${res.user.defaultBaseLanguage}, defaultBaseLanguage: ${res.user.defaultTargetLanguage} }`
+            `{defaultBaseLanguage: ${res?.user?.defaultBaseLanguage}, defaultBaseLanguage: ${res?.user?.defaultTargetLanguage} }`
           );
         }
         this.router.navigate(['../game-menu']).then();

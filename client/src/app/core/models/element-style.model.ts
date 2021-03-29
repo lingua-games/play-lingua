@@ -9,6 +9,12 @@ export class ElementStyle {
   transition?: string;
   right?: string;
   bottom?: string;
+  color?: string;
   borderRadius?: string;
   padding?: string;
+  minWidth?: string;
+  maxWidth?: string;
+  fontSize?: string;
+  backgroundColor?: string;
+  opacity?: string;
 }

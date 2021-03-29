@@ -36,8 +36,8 @@ describe('BookChapterService', () => {
     const expectedForm: AddWordFormModel = {
       words: [],
       isRandom: 'true',
-      book: new BookModel(),
-      chapter: new ChapterModel(),
+      book: {} as BookModel,
+      chapter: {} as ChapterModel,
       targetLanguage: 1,
       baseLanguage: 1,
     };

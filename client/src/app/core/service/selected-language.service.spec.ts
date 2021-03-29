@@ -27,7 +27,7 @@ describe('SelectedLanguageService', () => {
   });
 
   it('should call selectionLanguageUrl when add() hits', () => {
-    service.add(new SelectedLanguageModel());
+    service.add({} as SelectedLanguageModel);
     expect(httpClientSpy.post).toHaveBeenCalled();
   });
 

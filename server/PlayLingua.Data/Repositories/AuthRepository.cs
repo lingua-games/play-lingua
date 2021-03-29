@@ -109,7 +109,7 @@ namespace PlayLingua.Data
                     }
                 ),
                 // TODO: Expiration of token should test in both front-end and backend
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddYears(1),
                 Issuer = "Lingua.security.com",
                 Audience = "Lingua.security.com",
                 SigningCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256Signature)

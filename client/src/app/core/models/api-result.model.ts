@@ -1,12 +1,13 @@
 export class ApiResult<T> {
   data: T;
-  hasError: boolean;
-  isLoading: boolean;
-  errorMessage: string;
+  hasError?: boolean;
+  isLoading?: boolean;
+  errorMessage?: string;
 
   constructor() {
     this.hasError = false;
     this.isLoading = true;
+    this.data = {} as T;
   }
 
   setLoading(trigger: boolean): void {

@@ -13,8 +13,8 @@ import { environment } from '../../../../../environments/environment';
   styleUrls: ['./finish-game-dialog.component.scss'],
 })
 export class FinishGameDialogComponent implements OnInit {
-  isLoading: boolean;
-  ranks: RanksResultInterface[];
+  isLoading?: boolean;
+  ranks: RanksResultInterface[] = [];
 
   @HostListener('document:keydown ', ['$event'])
   keyDownEvent(event: KeyboardEvent): void {
@@ -40,7 +40,7 @@ export class FinishGameDialogComponent implements OnInit {
       .storeScore({
         bookId: this.data.bookId,
         chapterId: this.data.chapterId,
-        gameName: 'falling-stars',
+        gameName: this.data.gameName,
         count: environment.recordCount,
       } as ScoreStoreInterface)
       .subscribe(
@@ -73,7 +73,7 @@ export class FinishGameDialogComponent implements OnInit {
       return '';
     }
 
-    if (rank.email === this.securityService.getTokenInformation().email) {
+    if (rank.email === this.securityService?.getTokenInformation()?.email) {
       result = 'current-user ';
     }
 
