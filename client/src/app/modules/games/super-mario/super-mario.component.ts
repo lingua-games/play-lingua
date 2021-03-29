@@ -87,7 +87,7 @@ export class SuperMarioComponent implements OnInit {
       (event.code === 'Enter' || event.code === 'NumpadEnter') &&
       this.guidBoxShowing
     ) {
-      // this.playNextStar();
+      this.prepareTheWord();
       return;
     }
 
