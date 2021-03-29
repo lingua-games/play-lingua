@@ -83,6 +83,12 @@ export class SuperMarioComponent implements OnInit {
     private store: Store<{}>
   ) {}
 
+  @HostListener('window:blur', ['$event'])
+  onBlur(): void {
+    this.stopMovingRight();
+    this.stopMovingLeft();
+  }
+
   @HostListener('document:keydown ', ['$event'])
   keyDownEvent(event: KeyboardEvent): void {
     if (event.code === 'Escape') {
