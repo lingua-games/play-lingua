@@ -2,6 +2,7 @@
 <app-exit-game
   *ngIf="enemies.length && !isGameFinished"
   (click)="showStartDialog()"
+  [hasSkip]="true"
 ></app-exit-game>
 <div *ngIf="guidBoxShowing" class="guid-box-container" @fadeIn>
   <div class="guid-box-header-container">

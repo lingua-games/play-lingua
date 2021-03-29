@@ -1,16 +1,36 @@
-.main-container {
+:host {
   position: absolute;
-  background-color: #C0392B;
-  color: white;
   top: .5vh;
-  padding: .8rem;
-  font-size: 1vw;
-  border-bottom-right-radius: 20px;
-  border-top-right-radius: 20px;
   z-index: 1;
 }
 
-.main-container:hover {
+.item-container {
+  padding: .8rem;
+  font-size: 1vw;
+  display: inline-block;
+}
+
+.exit-container {
+  background-color: #C0392B;
+  color: white;
+  border-bottom-right-radius: 20px;
+  border-top-right-radius: 20px;
+
+}
+
+.exit-container:hover {
   cursor: pointer;
   background-color: #7B241C;
+}
+
+.skip-container:hover {
+  cursor: pointer;
+  background-color: #D4AC0D;
+}
+
+.skip-container {
+  background-color: #F4D03F;
+  border-radius: 20px;
+  margin-left: .5rem;
+
 }
