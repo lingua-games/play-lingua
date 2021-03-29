@@ -306,7 +306,6 @@ export class SuperMarioComponent implements OnInit {
 
   showPointNotification(enemy: MarioEnemy): void {
     const earnedScore = parseInt(enemy?.style?.left || '0', 0) / 10;
-    this.showEndGameDialog();
     this.scoreStorageService.catchScores(earnedScore);
     this.store.dispatch(
       toggleNotification({

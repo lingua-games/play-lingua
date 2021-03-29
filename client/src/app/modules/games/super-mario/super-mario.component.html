@@ -25,10 +25,15 @@
   </div>
 </div>
 <div class="main-container" style="overflow: hidden">
-  <div class="question-container" @questionFade *ngIf="currentEnemy.key">
+  <div
+    class="question-container"
+    @questionFade
+    *ngIf="currentEnemy.key && !isGameFinished"
+  >
     {{ currentEnemy?.key }}
   </div>
   <div
+    *ngIf="!isGameFinished"
     class="mario"
     [ngStyle]="mario.style"
     [ngClass]="{
