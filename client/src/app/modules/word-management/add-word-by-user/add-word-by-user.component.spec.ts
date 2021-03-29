@@ -15,7 +15,10 @@ import { of, throwError } from 'rxjs';
 import { ChapterModel } from '../../../core/models/chapter.model';
 import { BookChapterService } from '../../../core/service/book-chapter.service';
 import { BookModel } from '../../../core/models/book.model';
-import { WordToAddModel } from '../../../core/models/word-to-add.model';
+import {
+  SourceTargetModel,
+  WordToAddModel,
+} from '../../../core/models/word-to-add.model';
 import { AddWordFormModel } from '../../../core/models/add-word-form.model';
 import { Router } from '@angular/router';
 
@@ -172,7 +175,7 @@ describe('AddWordByUserComponent', () => {
 
   describe('bookSelectionChange', () => {
     it('should open dialog', () => {
-      component.bookSelectionChange({ value: { id: -1 } });
+      component.bookSelectionChange({ value: { id: -1 } as BookModel });
       expect(mockMatDialog.open).toHaveBeenCalled();
     });
 
@@ -183,7 +186,7 @@ describe('AddWordByUserComponent', () => {
         },
       });
 
-      component.bookSelectionChange({ value: { id: -1 } });
+      component.bookSelectionChange({ value: { id: -1 } as BookModel });
 
       expect(component.book.value.name).toBe('foo book');
     });
@@ -195,7 +198,7 @@ describe('AddWordByUserComponent', () => {
         },
       });
 
-      component.bookSelectionChange({ value: { id: -1 } });
+      component.bookSelectionChange({ value: { id: -1 } as BookModel });
 
       expect(component.book.value).toBe('');
     });
@@ -222,7 +225,7 @@ describe('AddWordByUserComponent', () => {
 
   describe('chapterSelectionChange', () => {
     it('should open dialog', () => {
-      component.chapterSelectionChange({ value: { id: -1 } });
+      component.chapterSelectionChange({ value: { id: -1 } as ChapterModel });
       expect(mockMatDialog.open).toHaveBeenCalled();
     });
 
@@ -233,7 +236,7 @@ describe('AddWordByUserComponent', () => {
         };
       });
 
-      component.chapterSelectionChange({ value: { id: -1 } });
+      component.chapterSelectionChange({ value: { id: -1 } as ChapterModel });
 
       expect(component.chapter.value.name).toBe('fake chapter name');
     });
@@ -245,7 +248,7 @@ describe('AddWordByUserComponent', () => {
         };
       });
 
-      component.chapterSelectionChange({ value: { id: -1 } });
+      component.chapterSelectionChange({ value: { id: -1 } as ChapterModel });
 
       expect(component.chapter.value).toBe('');
     });
@@ -429,12 +432,20 @@ describe('AddWordByUserComponent', () => {
   it('should remove word from the form', () => {
     const words: WordToAddModel[] = [
       {
-        targets: [{ value: 'a' }, { value: 'b' }, { value: 'c' }],
-        base: { value: 'z' },
+        targets: [
+          { value: 'a' } as SourceTargetModel,
+          { value: 'b' } as SourceTargetModel,
+          { value: 'c' } as SourceTargetModel,
+        ],
+        base: { value: 'z' } as SourceTargetModel,
       },
       {
-        targets: [{ value: 'v' }, { value: 'n' }, { value: 'm' }],
-        base: { value: 't' },
+        targets: [
+          { value: 'v' } as SourceTargetModel,
+          { value: 'n' } as SourceTargetModel,
+          { value: 'm' } as SourceTargetModel,
+        ],
+        base: { value: 't' } as SourceTargetModel,
       },
     ];
 
@@ -447,7 +458,11 @@ describe('AddWordByUserComponent', () => {
   it('should series of words and scroll down', () => {
     jasmine.clock().uninstall();
     jasmine.clock().install();
-
+    component.formData = {
+      words: [
+        { targets: [{ value: 'foo' } as SourceTargetModel] } as WordToAddModel,
+      ],
+    } as AddWordFormModel;
     const el = { scrollTo: () => {} } as Element;
     component.addWordSeries(el);
     jasmine.clock().tick(2);
@@ -462,7 +477,7 @@ describe('AddWordByUserComponent', () => {
   it('should disable add target if target values is empty', () => {
     const word: WordToAddModel = {
       base: { value: 'fake base', isValid: true },
-      targets: [{ value: '' }],
+      targets: [{ value: '' } as SourceTargetModel],
     };
 
     expect(component.disableAddTarget(word)).toBeTrue();
@@ -496,8 +511,11 @@ describe('AddWordByUserComponent', () => {
 
   it('should remove last target of the word', () => {
     const fakeWord: WordToAddModel = {
-      targets: [{ value: 'a' }, { value: 'b' }],
-      base: { value: 'z' },
+      targets: [
+        { value: 'a' } as SourceTargetModel,
+        { value: 'b' } as SourceTargetModel,
+      ],
+      base: { value: 'z' } as SourceTargetModel,
     };
 
     component.removeTargetWord(fakeWord);
@@ -507,8 +525,11 @@ describe('AddWordByUserComponent', () => {
 
   it('should add empty target word', () => {
     const fakeWord: WordToAddModel = {
-      targets: [{ value: 'a' }, { value: 'b' }],
-      base: { value: 'z' },
+      targets: [
+        { value: 'a' } as SourceTargetModel,
+        { value: 'b' } as SourceTargetModel,
+      ],
+      base: { value: 'z' } as SourceTargetModel,
     };
 
     component.addTargetWord(fakeWord);

@@ -5,14 +5,17 @@ import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 import { NotificationState } from './state/score-notification.reducer';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MessageService } from 'primeng/api';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ScoreNotificationComponent', () => {
   let component: ScoreNotificationComponent;
   let fixture: ComponentFixture<ScoreNotificationComponent>;
   let mockStore;
-
+  let mockMessageService;
   beforeEach(
     waitForAsync(() => {
+      mockMessageService = jasmine.createSpyObj(['add']);
       mockStore = jasmine.createSpyObj('store', {
         select: of({}),
       });
@@ -21,10 +24,15 @@ describe('ScoreNotificationComponent', () => {
         declarations: [ScoreNotificationComponent],
         providers: [
           {
+            provide: MessageService,
+            useValue: mockMessageService,
+          },
+          {
             provide: Store,
             useValue: mockStore,
           },
         ],
+        schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
       }).compileComponents();
     })
   );
