@@ -33,7 +33,7 @@ import { ElementStyle } from '../../../core/models/element-style.model';
           fontSize: '2vw',
           padding: '2rem',
         }),
-        animate('500ms', style({ opacity: 1 })),
+        animate('2s', style({ opacity: 1 })),
         animate(
           '1s 2s',
           style({ marginTop: '10vh', fontSize: '1vw', padding: '1rem 3rem' })
@@ -171,15 +171,20 @@ export class SuperMarioComponent implements OnInit {
       const index = this.allEnemies.words.indexOf(this.currentEnemy);
       if (this.allEnemies.words[index + 1]) {
         this.currentEnemy = {} as WordKeyValueModel<string[]>;
-        this.currentEnemy = this.allEnemies.words[index + 1];
+        // Just to fire ngIf in the template
+        setTimeout(() => {
+          this.currentEnemy = this.allEnemies.words[index + 1];
+          this.randomNumbers = this.generateRandomNumber();
+          this.prepareAnswerOptions();
+        }, 1);
       } else {
         // TODO. should finish the game
       }
     } else {
       this.currentEnemy = enemy;
+      this.randomNumbers = this.generateRandomNumber();
+      this.prepareAnswerOptions();
     }
-    this.randomNumbers = this.generateRandomNumber();
-    this.prepareAnswerOptions();
   }
 
   generateRandomNumber(): number[] {
@@ -260,12 +265,15 @@ export class SuperMarioComponent implements OnInit {
   }
 
   showGuidBox(): void {
+    this.stopMovingLeft();
+    this.stopMovingRight();
     this.guidBoxShowing = true;
   }
 
   // The method does not have test yet because it is not finalized.
   showMovingEnemy(playingEnemy?: MarioEnemy): void {
     (playingEnemy || ({} as MarioEnemy)).status = MarioEnemyStatus.Start;
+    // tslint:disable-next-line:cyclomatic-complexity
     const animateInterval = setInterval(() => {
       (playingEnemy?.style || ({} as ElementStyle)).transition = '100ms';
       (playingEnemy?.style || ({} as ElementStyle)).left =
