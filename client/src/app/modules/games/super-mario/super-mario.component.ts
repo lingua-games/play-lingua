@@ -34,14 +34,14 @@ import { ScoreType } from '../../../core/models/score-notification-appearance.en
       transition(':enter', [
         style({
           opacity: 0,
-          marginTop: '40vh',
+          top: '40%',
           fontSize: '2vw',
           padding: '2rem',
         }),
         animate('2s', style({ opacity: 1 })),
         animate(
           '1s 2s',
-          style({ marginTop: '10vh', fontSize: '1vw', padding: '1rem 3rem' })
+          style({ top: '10%', fontSize: '1vw', padding: '1rem 3rem' })
         ),
       ]),
       transition(':leave', [
@@ -274,7 +274,7 @@ export class SuperMarioComponent implements OnInit {
         score: earnedScore,
         title: 'Correct',
         message: `Yay, + ${earnedScore}`,
-        position: ScoreType.primeBottomCenter,
+        position: ScoreType.primeTopCenter,
         positionKey: 'SuperMario',
       } as NotificationState)
     );

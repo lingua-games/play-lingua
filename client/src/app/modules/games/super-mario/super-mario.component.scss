@@ -63,13 +63,13 @@
   color: #2C3E50;
   font-size: 1vw;
   background-color: #ABB2B9;
-  width: fit-content;
-  display: flex;
-  justify-content: center;
   padding: 1rem 3rem;
   text-align: center;
-  margin-left: 40%;
-  margin-top: 10vh;
   border-radius: 10px;
 
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translate(-50%,-50%);
 }
