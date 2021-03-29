@@ -7,7 +7,12 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "crypto": [
+        "./node_modules/crypto-js"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
