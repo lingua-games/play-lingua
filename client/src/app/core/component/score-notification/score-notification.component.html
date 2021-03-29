@@ -1,5 +1,9 @@
-<div class='score-container text-center' *ngIf='showNotification' @fadeIn>
+<p-toast
+  [position]="notification?.position"
+  [key]="notification?.positionKey"
+></p-toast>
+<div class="score-container text-center" *ngIf="showNotification" @fadeIn>
   <div class="alert alert-success" role="alert">
-    Yay, +{{notification.score}}
+    Yay, +{{ notification.score }}
   </div>
 </div>

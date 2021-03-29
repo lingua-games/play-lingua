@@ -6,6 +6,7 @@ import {
   NotificationState,
 } from './state/score-notification.reducer';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-score-notification',
@@ -25,7 +26,10 @@ import { animate, style, transition, trigger } from '@angular/animations';
   ],
 })
 export class ScoreNotificationComponent implements OnInit {
-  constructor(private store: Store<State>) {}
+  constructor(
+    private store: Store<State>,
+    private messageService: MessageService
+  ) {}
   notification: NotificationState = {} as NotificationState;
   showNotification?: boolean;
   ngOnInit(): void {
@@ -33,12 +37,27 @@ export class ScoreNotificationComponent implements OnInit {
       .select(getShowNotification)
       .subscribe((notification: NotificationState) => {
         if (notification && notification.gameName) {
-          this.showNotification = true;
           this.notification = notification;
-          setTimeout(() => {
-            this.showNotification = false;
-          }, 1000);
+          if (notification.position) {
+            this.showMessage();
+          } else {
+            this.showNotification = true;
+            setTimeout(() => {
+              this.showNotification = false;
+            }, 1000);
+          }
         }
       });
+  }
+
+  showMessage(): void {
+    setTimeout(() => {
+      this.messageService.add({
+        severity: 'success',
+        key: this.notification.positionKey,
+        summary: this.notification.title,
+        detail: this.notification.message,
+      });
+    }, 1);
   }
 }

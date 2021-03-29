@@ -13,6 +13,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { BasicInformationService } from '../../../core/service/basic-information.service';
 import { EGame } from '../../../core/models/e-game';
 import { ElementStyle } from '../../../core/models/element-style.model';
+import { ScoreStorageService } from '../../../core/service/score-storage.service';
+import { toggleNotification } from '../../../core/component/score-notification/state/score-notification.actions';
+import { NotificationState } from '../../../core/component/score-notification/state/score-notification.reducer';
+import { Store } from '@ngrx/store';
+import { ScoreType } from '../../../core/models/score-notification-appearance.enum';
 
 @Component({
   selector: 'app-super-mario',
@@ -73,7 +78,9 @@ export class SuperMarioComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private basicInformationService: BasicInformationService
+    private basicInformationService: BasicInformationService,
+    private scoreStorageService: ScoreStorageService,
+    private store: Store<{}>
   ) {}
 
   @HostListener('document:keydown ', ['$event'])
@@ -135,6 +142,7 @@ export class SuperMarioComponent implements OnInit {
       left: '10%',
       transition: '10ms',
     });
+    this.scoreStorageService.clearCatch();
     this.showStartDialog();
   }
 
@@ -258,10 +266,18 @@ export class SuperMarioComponent implements OnInit {
   }
 
   showPointNotification(enemy: MarioEnemy): void {
-    // TODO: show earned point here
-    if (this.enemies.indexOf(enemy) < this.enemies.length) {
-      // this.prepareTheWord(this.enemies[this.enemies.indexOf(enemy) + 1]);
-    }
+    const earnedScore = parseInt(enemy?.style?.left || '0', 0) / 10;
+    this.scoreStorageService.catchScores(earnedScore);
+    this.store.dispatch(
+      toggleNotification({
+        gameName: 'Super mario',
+        score: earnedScore,
+        title: 'Correct',
+        message: `Yay, + ${earnedScore}`,
+        position: ScoreType.primeBottomCenter,
+        positionKey: 'SuperMario',
+      } as NotificationState)
+    );
   }
 
   showGuidBox(): void {
@@ -307,6 +323,7 @@ export class SuperMarioComponent implements OnInit {
           )
         ) {
           this.showPointNotification(playingEnemy as MarioEnemy);
+          this.prepareTheWord();
         } else {
           this.showGuidBox();
         }

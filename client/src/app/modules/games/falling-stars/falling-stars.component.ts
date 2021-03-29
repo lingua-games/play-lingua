@@ -132,6 +132,7 @@ export class FallingStarsComponent implements OnInit {
 
   ngOnInit(): void {
     this.showStartDialog();
+    this.scoreStorageService.clearCatch();
     // this.showEndGameDialog();
   }
 
