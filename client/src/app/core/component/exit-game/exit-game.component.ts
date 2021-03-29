@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-exit-game',
@@ -7,4 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ExitGameComponent {
   @Input() hasSkip?: boolean;
+
+  @Output() exit = new EventEmitter();
+  @Output() skip = new EventEmitter();
 }

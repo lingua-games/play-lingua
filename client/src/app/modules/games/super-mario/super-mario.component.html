@@ -1,7 +1,8 @@
 <app-top-navbar></app-top-navbar>
 <app-exit-game
   *ngIf="enemies.length && !isGameFinished"
-  (click)="showStartDialog()"
+  (exit)="showStartDialog()"
+  (skip)="skipEnemy()"
   [hasSkip]="true"
 ></app-exit-game>
 <div *ngIf="guidBoxShowing" class="guid-box-container" @fadeIn>
@@ -45,7 +46,10 @@
   ></div>
   <div class="ground"></div>
   <div *ngFor="let enemy of enemies">
-    <div [ngStyle]="enemy.style" *ngIf="enemy?.status === 0">
+    <div
+      [ngStyle]="enemy.style"
+      *ngIf="enemy?.status === 0 || enemy?.status === 1"
+    >
       {{ enemy?.valueToAsk }}
     </div>
   </div>

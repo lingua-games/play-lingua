@@ -1,2 +1,10 @@
-<div class="exit-container item-container">Exit [ESC]</div>
-<div class="skip-container item-container" *ngIf="hasSkip">Skip [Q]</div>
+<div class="exit-container item-container" (click)="exit.emit()">
+  Exit [ESC]
+</div>
+<div
+  class="skip-container item-container"
+  *ngIf="hasSkip"
+  (click)="skip.emit()"
+>
+  Skip [Q]
+</div>

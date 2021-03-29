@@ -79,6 +79,7 @@ export class SuperMarioComponent implements OnInit {
   bookId?: number;
   chapterId?: number;
   isGameFinished = false;
+  enemyAnimateInterval?: number;
 
   constructor(
     private dialog: MatDialog,
@@ -115,6 +116,9 @@ export class SuperMarioComponent implements OnInit {
       case 'ArrowLeft':
       case 'KeyA':
         this.startMovingLeft();
+        break;
+      case 'KeyQ':
+        this.skipEnemy();
         break;
       case 'ArrowRight':
       case 'KeyD':
@@ -201,8 +205,6 @@ export class SuperMarioComponent implements OnInit {
     dialog.afterClosed().subscribe((res: FinishGameActionEnum) => {
       if (res) {
         if (res === FinishGameActionEnum.retry) {
-          // @ts-ignore
-          this.setGameWords(this.copyOfWords);
           this.startGame();
         } else if (res === FinishGameActionEnum.changeMode) {
           this.showStartDialog();
@@ -300,6 +302,7 @@ export class SuperMarioComponent implements OnInit {
       (enemy?.style || ({} as ElementStyle)).transition = '100ms';
       (enemy?.style || ({} as ElementStyle)).opacity = '1';
       (enemy?.style || ({} as ElementStyle)).fontSize = '.8vw';
+      (enemy || ({} as MarioEnemy)).status = MarioEnemyStatus.IsMoving;
       this.showMovingEnemy(enemy);
     }, 2000);
   }
@@ -327,9 +330,8 @@ export class SuperMarioComponent implements OnInit {
 
   // The method does not have test yet because it is not finalized.
   showMovingEnemy(playingEnemy?: MarioEnemy): void {
-    (playingEnemy || ({} as MarioEnemy)).status = MarioEnemyStatus.Start;
     // tslint:disable-next-line:cyclomatic-complexity
-    const animateInterval = setInterval(() => {
+    this.enemyAnimateInterval = setInterval(() => {
       (playingEnemy?.style || ({} as ElementStyle)).transition = '100ms';
       (playingEnemy?.style || ({} as ElementStyle)).left =
         (parseInt(playingEnemy?.style?.left || '', 0) - 1).toString() + '%';
@@ -366,7 +368,7 @@ export class SuperMarioComponent implements OnInit {
         } else {
           this.showGuidBox();
         }
-        clearInterval(animateInterval);
+        clearInterval(this.enemyAnimateInterval);
         (playingEnemy || ({} as MarioEnemy)).status = MarioEnemyStatus.Finished;
         return;
       }
@@ -377,23 +379,43 @@ export class SuperMarioComponent implements OnInit {
           )
         ) {
           this.showGuidBox();
-          clearInterval(animateInterval);
+          clearInterval(this.enemyAnimateInterval);
           (playingEnemy || ({} as MarioEnemy)).status =
             MarioEnemyStatus.Finished;
           return;
         }
-
-        clearInterval(animateInterval);
-        (playingEnemy || ({} as MarioEnemy)).status = MarioEnemyStatus.Finished;
-        let nextIndex = this.enemies.indexOf(playingEnemy as MarioEnemy) + 1;
-        this.enemies.forEach(() => {
-          if (!this.enemies[nextIndex]) {
-            nextIndex++;
-          }
-        });
-        this.showWordInWaitingMode(this.enemies[nextIndex]);
+        this.showNextEnemyWhenEnemyReachToEnd(playingEnemy);
       }
     }, 50);
+  }
+
+  skipEnemy(): void {
+    const movingElement = this.enemies.find(
+      (x) => x?.status === MarioEnemyStatus.IsMoving
+    );
+    if (!movingElement) {
+      return;
+    }
+    console.log('skipping');
+    movingElement.status = MarioEnemyStatus.Finished;
+    if (this.currentEnemy.values.find((x) => x === movingElement?.valueToAsk)) {
+      this.showGuidBox();
+      return;
+    }
+
+    this.showNextEnemyWhenEnemyReachToEnd(movingElement);
+  }
+
+  showNextEnemyWhenEnemyReachToEnd(playingEnemy: MarioEnemy | undefined): void {
+    clearInterval(this.enemyAnimateInterval);
+    (playingEnemy || ({} as MarioEnemy)).status = MarioEnemyStatus.Finished;
+    let nextIndex = this.enemies.indexOf(playingEnemy as MarioEnemy) + 1;
+    this.enemies.forEach(() => {
+      if (!this.enemies[nextIndex]) {
+        nextIndex++;
+      }
+    });
+    this.showWordInWaitingMode(this.enemies[nextIndex]);
   }
 
   stopMovingLeft(): void {

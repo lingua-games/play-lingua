@@ -343,6 +343,10 @@ export class BasicInformationService {
         description: 'Move right',
       });
       result.push({
+        key: '[Q]',
+        description: 'Skip answer',
+      });
+      result.push({
         key: '[Space]',
         description: 'Jump',
       });
