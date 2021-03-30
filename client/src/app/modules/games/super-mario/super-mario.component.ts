@@ -21,6 +21,7 @@ import { ScoreType } from '../../../core/models/score-notification-appearance.en
 import { FinishGameDialogComponent } from '../common-in-game/finish-game-dialog/finish-game-dialog.component';
 import { ScoreStoreInterface } from '../../../core/models/score-store.interface';
 import { FinishGameActionEnum } from '../../../core/models/finish-game-action.enum';
+import { Angle } from '../../../core/models/angle.interface';
 
 @Component({
   selector: 'app-super-mario',
@@ -116,7 +117,6 @@ export class SuperMarioComponent implements OnInit {
     switch (event.code) {
       case 'ArrowLeft':
       case 'KeyA':
-        this.stopMovingRight();
         this.startMovingLeft();
         break;
       case 'KeyQ':
@@ -124,7 +124,6 @@ export class SuperMarioComponent implements OnInit {
         break;
       case 'ArrowRight':
       case 'KeyD':
-        // this.stopMovingLeft();
         this.startMovingRight();
         break;
       case 'Space':
@@ -279,10 +278,12 @@ export class SuperMarioComponent implements OnInit {
       enemy.style = {
         position: 'absolute',
         // random number between floor and max top of the Mario
-        bottom:
-          (
-            Math.floor(Math.random() * (this.jumpHeight + Math.abs(1) + 1)) + 10
-          ).toString() + '%',
+        // bottom:
+        //   (
+        //     Math.floor(Math.random() * (this.jumpHeight + Math.abs(1) + 1)) + 10
+        //   ).toString() + '%',
+        // Todo. comment out above line
+        bottom: '15%',
         left: '90%',
         border: 'solid 1px gray',
         borderRadius: '10px',
@@ -366,11 +367,29 @@ export class SuperMarioComponent implements OnInit {
       const marioButton = parseInt(this.mario?.style?.bottom || '', 0);
       const marioTop =
         marioButton + parseInt(this.mario?.style?.height || '', 0);
+      console.log(
+        playingEnemy?.style,
+        'right: ',
+        enemyRight,
+        'top: ',
+        enemyTop
+      );
+
       if (
-        ((marioLeft > enemyLeft && marioLeft < enemyRight) ||
-          (marioRight > enemyLeft && marioRight < enemyRight)) &&
-        ((marioTop < enemyTop && marioTop > enemyButton) ||
-          (marioButton < enemyTop && marioButton > enemyButton))
+        this.isCrashed(
+          {
+            topLeft: [marioTop, marioLeft],
+            topRight: [marioTop, marioRight],
+            bottomRight: [marioButton, marioRight],
+            bottomLeft: [marioButton, marioLeft],
+          },
+          {
+            topLeft: [enemyTop, enemyLeft],
+            topRight: [enemyTop, enemyRight],
+            bottomRight: [enemyButton, enemyLeft],
+            bottomLeft: [enemyButton, enemyLeft],
+          }
+        )
       ) {
         if (
           this.currentEnemy?.values?.find(
@@ -398,7 +417,91 @@ export class SuperMarioComponent implements OnInit {
         }
         this.showNextEnemyWhenEnemyReachToEnd(playingEnemy);
       }
+      // Todo. below should be on 50
     }, 50);
+  }
+
+  // tslint:disable-next-line:cyclomatic-complexity
+  isCrashed(marioAngle: Angle, enemyAngle: Angle): boolean {
+    // Check middle right
+    if (
+      marioAngle.topRight[0] > enemyAngle.topLeft[0] &&
+      marioAngle.bottomRight[0] < enemyAngle.bottomLeft[0]
+    ) {
+      if (
+        marioAngle.topLeft[1] < enemyAngle.topLeft[1] &&
+        marioAngle.topRight[1] > enemyAngle.topLeft[1]
+      ) {
+        return true;
+      }
+    }
+
+    // Check middle left
+    if (
+      marioAngle.topLeft[0] > enemyAngle.topLeft[0] &&
+      marioAngle.bottomLeft[0] < enemyAngle.bottomLeft[0]
+    ) {
+      if (
+        marioAngle.topRight[1] > enemyAngle.topRight[1] &&
+        marioAngle.topLeft[1] < enemyAngle.topRight[1]
+      ) {
+        return true;
+      }
+    }
+
+    // check mario bottom right angle
+    if (
+      marioAngle.bottomRight[0] > enemyAngle.bottomRight[0] &&
+      marioAngle.bottomRight[0] < enemyAngle.topRight[0]
+    ) {
+      if (
+        marioAngle.bottomRight[1] > enemyAngle.topLeft[1] &&
+        marioAngle.bottomRight[1] < enemyAngle.topRight[1]
+      ) {
+        return true;
+      }
+    }
+
+    // check mario bottom left angle
+    if (
+      marioAngle.bottomLeft[0] > enemyAngle.bottomLeft[0] &&
+      marioAngle.bottomLeft[0] < enemyAngle.topLeft[0]
+    ) {
+      if (
+        marioAngle.bottomLeft[1] > enemyAngle.topLeft[1] &&
+        marioAngle.bottomLeft[1] < enemyAngle.topRight[1]
+      ) {
+        return true;
+      }
+    }
+
+    // check mario top right angle
+    if (
+      marioAngle.topRight[0] > enemyAngle.bottomRight[0] &&
+      marioAngle.topRight[0] < enemyAngle.topRight[0]
+    ) {
+      if (
+        marioAngle.topRight[1] > enemyAngle.topLeft[1] &&
+        marioAngle.topRight[1] < enemyAngle.topRight[1]
+      ) {
+        return true;
+      }
+    }
+
+    // check mario top left angle
+    if (
+      marioAngle.topLeft[0] > enemyAngle.bottomLeft[0] &&
+      marioAngle.topLeft[0] < enemyAngle.topLeft[0]
+    ) {
+      if (
+        marioAngle.topLeft[1] > enemyAngle.topLeft[1] &&
+        marioAngle.topLeft[1] < enemyAngle.topRight[1]
+      ) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   skipEnemy(): void {
@@ -446,6 +549,7 @@ export class SuperMarioComponent implements OnInit {
   }
 
   startMovingLeft(): void {
+    clearInterval(this.movingRightInterval);
     if (!this.movingLeftInterval) {
       this.movingLeftInterval = +setInterval(() => {
         this.mario.moveLeft(1);
@@ -454,6 +558,7 @@ export class SuperMarioComponent implements OnInit {
   }
 
   startMovingRight(): void {
+    clearInterval(this.movingLeftInterval);
     if (!this.movingRightInterval) {
       this.movingRightInterval = +setInterval(() => {
         this.mario.moveRight(1);
