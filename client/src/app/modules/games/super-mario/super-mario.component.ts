@@ -112,9 +112,11 @@ export class SuperMarioComponent implements OnInit {
     if (this.guidBoxShowing) {
       return;
     }
+
     switch (event.code) {
       case 'ArrowLeft':
       case 'KeyA':
+        this.stopMovingRight();
         this.startMovingLeft();
         break;
       case 'KeyQ':
@@ -122,6 +124,7 @@ export class SuperMarioComponent implements OnInit {
         break;
       case 'ArrowRight':
       case 'KeyD':
+        // this.stopMovingLeft();
         this.startMovingRight();
         break;
       case 'Space':
@@ -216,13 +219,16 @@ export class SuperMarioComponent implements OnInit {
   prepareTheWord(enemy?: WordKeyValueModel<string[]>): void {
     this.isGameFinished = false;
     this.guidBoxShowing = false;
+
     if (!enemy) {
-      const index = this.allEnemies.words.indexOf(this.currentEnemy);
-      if (this.allEnemies.words[index + 1]) {
+      const indexOfCurrentEnemy = this.allEnemies.words.indexOf(
+        this.currentEnemy
+      );
+      if (this.allEnemies.words[indexOfCurrentEnemy + 1]) {
         this.currentEnemy = {} as WordKeyValueModel<string[]>;
         // Just to fire ngIf in the template
         setTimeout(() => {
-          this.currentEnemy = this.allEnemies.words[index + 1];
+          this.currentEnemy = this.allEnemies.words[indexOfCurrentEnemy + 1];
           this.randomNumbers = this.generateRandomNumber();
           this.prepareAnswerOptions();
         }, 1);
@@ -308,7 +314,10 @@ export class SuperMarioComponent implements OnInit {
   }
 
   showPointNotification(enemy: MarioEnemy): void {
-    const earnedScore = parseInt(enemy?.style?.left || '0', 0) / 10;
+    let earnedScore = parseInt(enemy?.style?.left || '0', 0) / 10;
+    if (this.currentEnemy.wrongCount && this.currentEnemy.wrongCount > 0) {
+      earnedScore = earnedScore / (this.currentEnemy.wrongCount + 1);
+    }
     this.scoreStorageService.catchScores(earnedScore);
     this.store.dispatch(
       toggleNotification({
@@ -323,8 +332,13 @@ export class SuperMarioComponent implements OnInit {
   }
 
   showGuidBox(): void {
+    clearInterval(this.enemyAnimateInterval);
     this.stopMovingLeft();
     this.stopMovingRight();
+    this.currentEnemy.wrongCount = this.currentEnemy.wrongCount
+      ? this.currentEnemy.wrongCount + 1
+      : 1;
+    this.allEnemies.words.push(JSON.parse(JSON.stringify(this.currentEnemy)));
     this.guidBoxShowing = true;
   }
 
@@ -368,7 +382,6 @@ export class SuperMarioComponent implements OnInit {
         } else {
           this.showGuidBox();
         }
-        clearInterval(this.enemyAnimateInterval);
         (playingEnemy || ({} as MarioEnemy)).status = MarioEnemyStatus.Finished;
         return;
       }
@@ -379,7 +392,6 @@ export class SuperMarioComponent implements OnInit {
           )
         ) {
           this.showGuidBox();
-          clearInterval(this.enemyAnimateInterval);
           (playingEnemy || ({} as MarioEnemy)).status =
             MarioEnemyStatus.Finished;
           return;
@@ -396,7 +408,6 @@ export class SuperMarioComponent implements OnInit {
     if (!movingElement) {
       return;
     }
-    console.log('skipping');
     movingElement.status = MarioEnemyStatus.Finished;
     if (this.currentEnemy.values.find((x) => x === movingElement?.valueToAsk)) {
       this.showGuidBox();
