@@ -278,12 +278,10 @@ export class SuperMarioComponent implements OnInit {
       enemy.style = {
         position: 'absolute',
         // random number between floor and max top of the Mario
-        // bottom:
-        //   (
-        //     Math.floor(Math.random() * (this.jumpHeight + Math.abs(1) + 1)) + 10
-        //   ).toString() + '%',
-        // Todo. comment out above line
-        bottom: '15%',
+        bottom:
+          (
+            Math.floor(Math.random() * (this.jumpHeight + Math.abs(1) + 1)) + 10
+          ).toString() + '%',
         left: '90%',
         border: 'solid 1px gray',
         borderRadius: '10px',
@@ -345,6 +343,9 @@ export class SuperMarioComponent implements OnInit {
 
   // The method does not have test yet because it is not finalized.
   showMovingEnemy(playingEnemy?: MarioEnemy): void {
+    if (this.guidBoxShowing) {
+      return;
+    }
     // tslint:disable-next-line:cyclomatic-complexity
     this.enemyAnimateInterval = setInterval(() => {
       (playingEnemy?.style || ({} as ElementStyle)).transition = '100ms';
@@ -391,6 +392,7 @@ export class SuperMarioComponent implements OnInit {
           }
         )
       ) {
+        clearInterval(this.enemyAnimateInterval);
         if (
           this.currentEnemy?.values?.find(
             (x: string) => x === playingEnemy?.valueToAsk
@@ -417,7 +419,6 @@ export class SuperMarioComponent implements OnInit {
         }
         this.showNextEnemyWhenEnemyReachToEnd(playingEnemy);
       }
-      // Todo. below should be on 50
     }, 50);
   }
 
