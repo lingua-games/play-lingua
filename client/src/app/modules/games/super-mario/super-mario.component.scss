@@ -73,3 +73,21 @@
   -ms-transform: translateX(-50%) translateY(-50%);
   -webkit-transform: translate(-50%,-50%);
 }
+
+.enemy-container {
+  border-top: solid 1px gray;
+  border-right: solid 1px gray;
+  border-bottom: solid 1px gray;
+  color: #283747;
+  fontSize: 1vw;
+  background-color: #EAEDED;
+}
+
+.enemy-mushroom {
+  background: url("../../../../assets/mario/mario-mushroom.png") #EAEDED;
+  background-size: cover;
+  border-top: solid 1px gray;
+  border-left: solid 1px gray;
+  border-bottom: solid 1px gray;
+}
+

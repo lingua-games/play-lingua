@@ -22,6 +22,7 @@ import { FinishGameDialogComponent } from '../common-in-game/finish-game-dialog/
 import { ScoreStoreInterface } from '../../../core/models/score-store.interface';
 import { FinishGameActionEnum } from '../../../core/models/finish-game-action.enum';
 import { Angle } from '../../../core/models/angle.interface';
+import { absCeil } from 'ngx-bootstrap/chronos/utils/abs-ceil';
 
 @Component({
   selector: 'app-super-mario',
@@ -275,24 +276,32 @@ export class SuperMarioComponent implements OnInit {
 
   setEnemyStyle(): void {
     this.enemies.forEach((enemy) => {
+      const randomBottom =
+        (
+          Math.floor(Math.random() * (this.jumpHeight + Math.abs(1) + 1)) + 10
+        ).toString() + '%';
+      // Todo. remove below line
       enemy.style = {
         position: 'absolute',
         // random number between floor and max top of the Mario
-        bottom:
-          (
-            Math.floor(Math.random() * (this.jumpHeight + Math.abs(1) + 1)) + 10
-          ).toString() + '%',
-        left: '90%',
-        border: 'solid 1px gray',
-        borderRadius: '10px',
-        padding: '.5rem',
-        textAlign: 'center',
-        color: '#283747',
+        bottom: randomBottom,
+        // Todo. change to 90%
+        left: '92%',
         height: '4vh',
+        width: `${this.calculateEnemyWidth(enemy.valueToAsk)}%`,
+      };
+      enemy.textStyle = {
+        position: 'absolute',
         fontSize: '1vw',
-        width: '7%',
-        backgroundColor: '#EAEDED',
-        opacity: '.7',
+        top: '.2vw',
+        padding: '0 0 0 5px',
+      };
+      enemy.mushroomStyle = {
+        position: 'absolute',
+        left: '90%',
+        bottom: randomBottom,
+        width: '2%',
+        height: '4vh',
       };
     });
 
@@ -301,13 +310,19 @@ export class SuperMarioComponent implements OnInit {
     }, 4000);
   }
 
+  calculateEnemyWidth(enemy: string | undefined): number {
+    return ((enemy?.length || 0) * 2) / 3 + 1;
+  }
+
   showWordInWaitingMode(enemy?: MarioEnemy): void {
     (enemy || ({} as MarioEnemy)).status = MarioEnemyStatus.Start;
     setTimeout(() => {
       (enemy?.style || ({} as ElementStyle)).transition = '100ms';
+      (enemy?.mushroomStyle || ({} as ElementStyle)).transition = '100ms';
       (enemy?.style || ({} as ElementStyle)).opacity = '1';
       (enemy?.style || ({} as ElementStyle)).fontSize = '.8vw';
       (enemy || ({} as MarioEnemy)).status = MarioEnemyStatus.IsMoving;
+      // Todo uncomment
       this.showMovingEnemy(enemy);
     }, 2000);
   }
@@ -351,6 +366,9 @@ export class SuperMarioComponent implements OnInit {
       (playingEnemy?.style || ({} as ElementStyle)).transition = '100ms';
       (playingEnemy?.style || ({} as ElementStyle)).left =
         (parseInt(playingEnemy?.style?.left || '', 0) - 1).toString() + '%';
+      (playingEnemy?.mushroomStyle || ({} as ElementStyle)).left =
+        (parseInt(playingEnemy?.mushroomStyle?.left || '', 0) - 1).toString() +
+        '%';
 
       // Managing left-right hit
       const enemyLeft = parseInt(playingEnemy?.style?.left || '', 0);
@@ -368,13 +386,6 @@ export class SuperMarioComponent implements OnInit {
       const marioButton = parseInt(this.mario?.style?.bottom || '', 0);
       const marioTop =
         marioButton + parseInt(this.mario?.style?.height || '', 0);
-      console.log(
-        playingEnemy?.style,
-        'right: ',
-        enemyRight,
-        'top: ',
-        enemyTop
-      );
 
       if (
         this.isCrashed(

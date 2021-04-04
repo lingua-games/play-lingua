@@ -5,6 +5,8 @@ export class MarioEnemy {
   text?: WordKeyValueModel<string[]>;
   valueToAsk?: string;
   style?: ElementStyle;
+  mushroomStyle?: ElementStyle;
+  textStyle?: ElementStyle;
   status?: MarioEnemyStatus;
 }
 
