@@ -1,4 +1,10 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MarioModel } from '../../../core/models/mario.model';
 import {
   MarioEnemy,
@@ -67,6 +73,7 @@ import { absCeil } from 'ngx-bootstrap/chronos/utils/abs-ceil';
   ],
 })
 export class SuperMarioComponent implements OnInit {
+  @ViewChild('marioTemplate') marioTemplate?: ElementRef = {} as ElementRef;
   mario: MarioModel = new MarioModel();
   enemies: MarioEnemy[] = [];
   currentEnemy: WordKeyValueModel<string[]> = {} as WordKeyValueModel<string[]>;
@@ -89,6 +96,11 @@ export class SuperMarioComponent implements OnInit {
     private scoreStorageService: ScoreStorageService,
     private store: Store<{}>
   ) {}
+
+  @HostListener('window:resize', ['$event'])
+  onResize(): void {
+    this.mario.style.width = (60 / window.innerWidth) * 100 + '%';
+  }
 
   @HostListener('window:blur', ['$event'])
   onBlur(): void {
@@ -154,8 +166,8 @@ export class SuperMarioComponent implements OnInit {
     this.mario.setStyle({
       position: 'absolute',
       bottom: '10%',
-      width: '3%',
-      height: '10%',
+      height: '6rem',
+      width: (60 / window.innerWidth) * 100 + '%',
       left: '10%',
       transition: '10ms',
     });
@@ -280,12 +292,11 @@ export class SuperMarioComponent implements OnInit {
         (
           Math.floor(Math.random() * (this.jumpHeight + Math.abs(1) + 1)) + 10
         ).toString() + '%';
-      // Todo. remove below line
       enemy.style = {
         position: 'absolute',
         // random number between floor and max top of the Mario
-        bottom: randomBottom,
-        // Todo. change to 90%
+        // Todo. set below to randomButtom
+        bottom: '10%',
         left: '92%',
         height: '4vh',
         width: `${this.calculateEnemyWidth(enemy.valueToAsk)}%`,
@@ -322,7 +333,6 @@ export class SuperMarioComponent implements OnInit {
       (enemy?.style || ({} as ElementStyle)).opacity = '1';
       (enemy?.style || ({} as ElementStyle)).fontSize = '.8vw';
       (enemy || ({} as MarioEnemy)).status = MarioEnemyStatus.IsMoving;
-      // Todo uncomment
       this.showMovingEnemy(enemy);
     }, 2000);
   }
@@ -386,7 +396,6 @@ export class SuperMarioComponent implements OnInit {
       const marioButton = parseInt(this.mario?.style?.bottom || '', 0);
       const marioTop =
         marioButton + parseInt(this.mario?.style?.height || '', 0);
-
       if (
         this.isCrashed(
           {
@@ -437,12 +446,12 @@ export class SuperMarioComponent implements OnInit {
   isCrashed(marioAngle: Angle, enemyAngle: Angle): boolean {
     // Check middle right
     if (
-      marioAngle.topRight[0] > enemyAngle.topLeft[0] &&
-      marioAngle.bottomRight[0] < enemyAngle.bottomLeft[0]
+      marioAngle.topRight[0] >= enemyAngle.topLeft[0] &&
+      marioAngle.bottomRight[0] <= enemyAngle.bottomLeft[0]
     ) {
       if (
-        marioAngle.topLeft[1] < enemyAngle.topLeft[1] &&
-        marioAngle.topRight[1] > enemyAngle.topLeft[1]
+        marioAngle.topLeft[1] <= enemyAngle.topLeft[1] &&
+        marioAngle.topRight[1] >= enemyAngle.topLeft[1]
       ) {
         return true;
       }
@@ -450,12 +459,12 @@ export class SuperMarioComponent implements OnInit {
 
     // Check middle left
     if (
-      marioAngle.topLeft[0] > enemyAngle.topLeft[0] &&
-      marioAngle.bottomLeft[0] < enemyAngle.bottomLeft[0]
+      marioAngle.topLeft[0] >= enemyAngle.topLeft[0] &&
+      marioAngle.bottomLeft[0] <= enemyAngle.bottomLeft[0]
     ) {
       if (
-        marioAngle.topRight[1] > enemyAngle.topRight[1] &&
-        marioAngle.topLeft[1] < enemyAngle.topRight[1]
+        marioAngle.topRight[1] >= enemyAngle.topRight[1] &&
+        marioAngle.topLeft[1] <= enemyAngle.topRight[1]
       ) {
         return true;
       }

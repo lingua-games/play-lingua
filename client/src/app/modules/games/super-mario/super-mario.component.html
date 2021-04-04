@@ -37,6 +37,7 @@
   <div
     *ngIf="!isGameFinished"
     class="mario"
+    #marioTemplate
     [ngStyle]="mario.style"
     [ngClass]="{
       isMoving: mario.isMoving,
