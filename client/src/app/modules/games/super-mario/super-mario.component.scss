@@ -56,21 +56,7 @@
   box-shadow: 0rem 0rem 2rem #bdc3c7;
 }
 
-.question-container {
-  border: solid 1px #2C3E50;
-  color: #2C3E50;
-  font-size: 1vw;
-  background-color: #ABB2B9;
-  padding: 1rem 3rem;
-  text-align: center;
-  border-radius: 10px;
 
-  position: absolute;
-  top: 10%;
-  left: 50%;
-  -ms-transform: translateX(-50%) translateY(-50%);
-  -webkit-transform: translate(-50%,-50%);
-}
 
 .enemy-container {
   border-top: solid 1px gray;
@@ -82,17 +68,50 @@
 
 }
 
-.enemy-mushroom {
+.mushroom-image-container {
   background-size: cover;
   width: 3rem;
   height: 3rem;
 }
 
-.enemy-text-container , .enemy-mushroom {
+.mushroom-image-container , .mushroom-text-container {
   display: table-cell;
 }
 
-.enemy-text-container {
+.mushroom-text-container {
   height: 3rem;
   line-height: 3rem;
+}
+
+.enemy-image-container, .enemy-text-container {
+  display: table-cell;
+}
+
+.enemy-image-container {
+  background: url("../../../../assets/mario/enemy.png") 0 0 no-repeat;
+  background-size: cover;
+  width: 4rem;
+  height: 4rem;
+}
+
+.enemy-text-container {
+  height: 5rem;
+  line-height: 4rem;
+  //width: 12rem;
+  text-align: center;
+}
+
+.question-container {
+  padding-right: 1rem;
+  border: solid 1px #2C3E50;
+  color: #2C3E50;
+  font-size: 1.8vw;
+  background-color: #ABB2B9;
+  border-radius: 10px;
+
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translate(-50%,-50%);
 }

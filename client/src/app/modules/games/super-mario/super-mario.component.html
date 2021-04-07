@@ -32,7 +32,11 @@
     @questionFade
     *ngIf="currentEnemy.key && !isGameFinished"
   >
-    {{ currentEnemy?.key }}
+    <div class="enemy-image-container"></div>
+    <span style="display: table-cell">  </span>
+    <div class="enemy-text-container">
+      {{ currentEnemy?.key }}
+    </div>
   </div>
   <div
     *ngIf="!isGameFinished"
@@ -55,10 +59,10 @@
     >
       <div
         [style.background-image]="enemy.mushroomImageUrl"
-        class="enemy-mushroom"
+        class="mushroom-image-container"
       ></div>
       <span style="display: table-cell">  </span>
-      <div class="enemy-text-container">
+      <div class="mushroom-text-container">
         {{ enemy?.valueToAsk }}
       </div>
     </div>

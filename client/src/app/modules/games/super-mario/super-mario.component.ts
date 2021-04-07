@@ -41,13 +41,9 @@ import { FinishGameActionEnum } from '../../../core/models/finish-game-action.en
           opacity: 0,
           top: '40%',
           fontSize: '2vw',
-          padding: '2rem',
         }),
         animate('2s', style({ opacity: 1 })),
-        animate(
-          '1s 2s',
-          style({ top: '10%', fontSize: '1vw', padding: '1rem 3rem' })
-        ),
+        animate('1s 2s', style({ top: '10%', fontSize: '1.8vw' })),
       ]),
       transition(':leave', [
         style({ opacity: 1 }),
