@@ -52,8 +52,6 @@ export class StartGameDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.getBooks();
-    // TODO. remove below line
-    this.submit();
   }
 
   getBooks(): void {
@@ -118,11 +116,10 @@ export class StartGameDialogComponent implements OnInit {
       } as GetGameWordsRequestModel)
       .subscribe(
         (res: WordKeyValueModel<string[]>[]) => {
-          // Todo. uncomment
-          // setTimeout(() => {
-          result.words = res;
-          this.dialogRef.close(result);
-          // }, 2000);
+          setTimeout(() => {
+            result.words = res;
+            this.dialogRef.close(result);
+          }, 2000);
         },
         () => {
           this.notificationService.showMessage(

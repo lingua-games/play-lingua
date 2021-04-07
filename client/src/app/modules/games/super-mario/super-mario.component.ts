@@ -94,7 +94,7 @@ export class SuperMarioComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(): void {
-    this.mario.style.width = (60 / window.innerWidth) * 100 + '%';
+    this.mario.style.width = ((60 / window.innerWidth) * 100).toString() + '%';
   }
 
   @HostListener('window:blur', ['$event'])
@@ -162,7 +162,7 @@ export class SuperMarioComponent implements OnInit {
       position: 'absolute',
       bottom: '10%',
       height: '6rem',
-      width: (60 / window.innerWidth) * 100 + '%',
+      width: ((60 / window.innerWidth) * 100).toString() + '%',
       left: '10%',
       transition: '10ms',
     } as ElementStyle);
@@ -295,7 +295,7 @@ export class SuperMarioComponent implements OnInit {
         position: 'absolute',
         // random number between floor and max top of the Mario
         bottom: randomBottom,
-        // Todo. below should be 92
+        // Todo. below should be 1
         right: '1%',
         fontSize: '1vw',
       } as ElementStyle;
@@ -346,7 +346,8 @@ export class SuperMarioComponent implements OnInit {
     enemy.mushroomImageUrl =
       'url(../../../../assets/mario/success-mushroom.png)';
     enemy.style.transition = '2s';
-    enemy.style.bottom = parseInt(enemy.style.bottom, 0) + 20 + '%';
+    enemy.style.bottom =
+      (parseInt(enemy.style.bottom, 0) + 20).toString() + '%';
     enemy.style.color = 'green';
   }
 
@@ -409,17 +410,17 @@ export class SuperMarioComponent implements OnInit {
       return;
     }
     this.marioTemplate.nativeElement.offsetBottom =
-      this.marioTemplate.nativeElement.offsetTop +
-      this.marioTemplate.nativeElement.offsetHeight;
+      (this.marioTemplate.nativeElement.offsetTop as string) +
+      (this.marioTemplate.nativeElement.offsetHeight as string);
     this.marioTemplate.nativeElement.offsetRight =
-      this.marioTemplate.nativeElement.offsetLeft +
-      this.marioTemplate.nativeElement.offsetWidth;
+      (this.marioTemplate.nativeElement.offsetLeft as string) +
+      (this.marioTemplate.nativeElement.offsetWidth as string);
     this.enemyTemplate.nativeElement.offsetBottom =
-      this.enemyTemplate.nativeElement.offsetTop +
-      this.enemyTemplate.nativeElement.offsetHeight;
+      (this.enemyTemplate.nativeElement.offsetTop as string) +
+      (this.enemyTemplate.nativeElement.offsetHeight as string);
     this.enemyTemplate.nativeElement.offsetRight =
-      this.enemyTemplate.nativeElement.offsetLeft +
-      this.enemyTemplate.nativeElement.offsetWidth;
+      (this.enemyTemplate.nativeElement.offsetLeft as string) +
+      (this.enemyTemplate.nativeElement.offsetWidth as string);
 
     return !(
       this.marioTemplate.nativeElement.offsetBottom <
