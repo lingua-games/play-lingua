@@ -1,41 +1,56 @@
 <app-top-navbar></app-top-navbar>
-<app-exit-game *ngIf='words.length && !isGameFinished' (click)='showStartDialog()'></app-exit-game>
-<div *ngIf='guidBoxShowing' class='guid-box-container' @fadeIn>
-  <div class='guid-box-header-container'>
+<app-game-options
+  *ngIf="words.length && !isGameFinished"
+  (click)="showStartDialog()"
+></app-game-options>
+<div *ngIf="guidBoxShowing" class="guid-box-container" @fadeIn>
+  <div class="guid-box-header-container">
     <span>Wrong!</span>
   </div>
-  <div class='guid-box-body-container'>
+  <div class="guid-box-body-container">
     <span>
-          Correct answer is <span class='guid-box-correct-answer'><strong>{{currentWord.correctShowingAnswer}}</strong></span> .
+      Correct answer is
+      <span class="guid-box-correct-answer"
+        ><strong>{{ currentWord.correctShowingAnswer }}</strong></span
+      >
+      .
     </span>
-    <br>
-    <span>{{currentWord.key}} = {{currentWord.correctShowingAnswer}}</span>
+    <br />
+    <span>{{ currentWord.key }} = {{ currentWord.correctShowingAnswer }}</span>
   </div>
-  <div class='guid-box-action-container text-right'>
-    <button class='btn btn-success' (click)='playNextStar()'>Continue [Enter]</button>
+  <div class="guid-box-action-container text-right">
+    <button class="btn btn-success" (click)="playNextStar()">
+      Continue [Enter]
+    </button>
   </div>
 </div>
-<div class='game-board-container'>
-  <div class='falling-container'>
-    <span *ngFor='let word of words'>
-      <div class='box'
-           [@fade]='word?.animating'
-           [ngStyle]='word.style'
-           *ngIf='word?.animating'
-           (@fade.done)='boxAnimationDone(word, true)'>
-        <span>{{word.key}}</span>
+<div class="game-board-container">
+  <div class="falling-container">
+    <span *ngFor="let word of words">
+      <div
+        class="box"
+        [@fade]="word?.animating"
+        [ngStyle]="word.style"
+        *ngIf="word?.animating"
+        (@fade.done)="boxAnimationDone(word, true)"
+      >
+        <span>{{ word.key }}</span>
       </div>
     </span>
   </div>
-  <div class='ground-container text-center' @fadeIn *ngIf='!guidBoxShowing'>
-    <div class='answer-container'>
-      <div class='answer-item-container mr-4' *ngFor='let answer of getAnswers();let index = index'
-           (click)='checkSelectedAnswer(answer)' [ngClass]="{'answer-pressed': isPressing(answer)}">
-        <div class='item-number-container'>
-          <span class='number-index'>{{index + 1}}</span>
+  <div class="ground-container text-center" @fadeIn *ngIf="!guidBoxShowing">
+    <div class="answer-container">
+      <div
+        class="answer-item-container mr-4"
+        *ngFor="let answer of getAnswers(); let index = index"
+        (click)="checkSelectedAnswer(answer)"
+        [ngClass]="{ 'answer-pressed': isPressing(answer) }"
+      >
+        <div class="item-number-container">
+          <span class="number-index">{{ index + 1 }}</span>
         </div>
-        <div class='answer-text-container'>
-          <span>{{answer}}</span>
+        <div class="answer-text-container">
+          <span>{{ answer }}</span>
         </div>
       </div>
     </div>

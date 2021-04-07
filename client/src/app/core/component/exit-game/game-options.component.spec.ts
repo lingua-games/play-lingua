@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ExitGameComponent } from './exit-game.component';
+import { GameOptionsComponent } from './game-options.component';
 
-describe('ExitGameComponent', () => {
-  let component: ExitGameComponent;
-  let fixture: ComponentFixture<ExitGameComponent>;
+describe('GameOptionsComponent', () => {
+  let component: GameOptionsComponent;
+  let fixture: ComponentFixture<GameOptionsComponent>;
 
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [ExitGameComponent],
+        declarations: [GameOptionsComponent],
       }).compileComponents();
     })
   );
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ExitGameComponent);
+    fixture = TestBed.createComponent(GameOptionsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

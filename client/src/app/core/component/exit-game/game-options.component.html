@@ -1,10 +1,33 @@
-<div class="exit-container item-container" (click)="exit.emit()">
-  Exit [ESC]
-</div>
 <div
-  class="skip-container item-container"
-  *ngIf="hasSkip"
-  (click)="skip.emit()"
+  class="main-container"
+  (mouseover)="showDetails()"
+  (mouseleave)="hideDetails()"
 >
-  Skip [Q]
+  <div
+    class="exit-container action-container"
+    [style.width]="isDetailsShowing ? '10rem' : '2.5rem'"
+    (click)="exit.emit()"
+  >
+    <fa-icon
+      [@iconAnimation]="!isDetailsShowing"
+      [icon]="['fas', 'power-off']"
+    ></fa-icon>
+    <div *ngIf="isDetailsShowing" class="text-container">
+      <span [@textAnimation]="isDetailsShowing">Exit [ESC]</span>
+    </div>
+  </div>
+  <div
+    class="skip-container action-container"
+    *ngIf="hasSkip"
+    [style.width]="isDetailsShowing ? '10rem' : '2.5rem'"
+    (click)="skip.emit()"
+  >
+    <fa-icon
+      [@iconAnimation]="!isDetailsShowing"
+      [icon]="['fas', 'forward']"
+    ></fa-icon>
+    <div *ngIf="isDetailsShowing" class="text-container">
+      <span [@textAnimation]="isDetailsShowing">Skip [Q]</span>
+    </div>
+  </div>
 </div>

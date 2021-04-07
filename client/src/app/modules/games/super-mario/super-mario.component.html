@@ -1,10 +1,10 @@
 <app-top-navbar></app-top-navbar>
-<app-exit-game
+<app-game-options
   *ngIf="enemies.length && !isGameFinished"
   (exit)="showStartDialog()"
   (skip)="skipEnemy()"
   [hasSkip]="true"
-></app-exit-game>
+></app-game-options>
 <div *ngIf="guidBoxShowing" class="guid-box-container" @fadeIn>
   <div class="guid-box-header-container">
     <span>Wrong!</span>
