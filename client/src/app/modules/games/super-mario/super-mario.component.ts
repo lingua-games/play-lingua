@@ -20,15 +20,9 @@ import { BasicInformationService } from '../../../core/service/basic-information
 import { EGame } from '../../../core/models/e-game';
 import { ElementStyle } from '../../../core/models/element-style.model';
 import { ScoreStorageService } from '../../../core/service/score-storage.service';
-import { toggleNotification } from '../../../core/component/score-notification/state/score-notification.actions';
-import { NotificationState } from '../../../core/component/score-notification/state/score-notification.reducer';
-import { Store } from '@ngrx/store';
-import { ScoreType } from '../../../core/models/score-notification-appearance.enum';
 import { FinishGameDialogComponent } from '../common-in-game/finish-game-dialog/finish-game-dialog.component';
 import { ScoreStoreInterface } from '../../../core/models/score-store.interface';
 import { FinishGameActionEnum } from '../../../core/models/finish-game-action.enum';
-import { Angle } from '../../../core/models/angle.interface';
-import { absCeil } from 'ngx-bootstrap/chronos/utils/abs-ceil';
 
 @Component({
   selector: 'app-super-mario',
@@ -73,7 +67,13 @@ import { absCeil } from 'ngx-bootstrap/chronos/utils/abs-ceil';
   ],
 })
 export class SuperMarioComponent implements OnInit {
-  @ViewChild('marioTemplate') marioTemplate?: ElementRef = {} as ElementRef;
+  @ViewChild('marioTemplate') marioTemplate?: ElementRef = {
+    nativeElement: {} as ElementRef,
+  } as ElementRef;
+  @ViewChild('enemyTemplate') enemyTemplate?: ElementRef = {
+    nativeElement: {} as ElementRef,
+  } as ElementRef;
+
   mario: MarioModel = new MarioModel();
   enemies: MarioEnemy[] = [];
   currentEnemy: WordKeyValueModel<string[]> = {} as WordKeyValueModel<string[]>;
@@ -93,8 +93,7 @@ export class SuperMarioComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private basicInformationService: BasicInformationService,
-    private scoreStorageService: ScoreStorageService,
-    private store: Store<{}>
+    private scoreStorageService: ScoreStorageService
   ) {}
 
   @HostListener('window:resize', ['$event'])
@@ -170,7 +169,7 @@ export class SuperMarioComponent implements OnInit {
       width: (60 / window.innerWidth) * 100 + '%',
       left: '10%',
       transition: '10ms',
-    });
+    } as ElementStyle);
     this.scoreStorageService.clearCatch();
     this.showStartDialog();
   }
@@ -274,89 +273,90 @@ export class SuperMarioComponent implements OnInit {
     this.enemies[this.randomNumbers[0]] = {
       valueToAsk: this.currentEnemy.values[0],
       status: MarioEnemyStatus.WaitingForStart,
-    };
+    } as MarioEnemy;
     this.randomNumbers.splice(0, 1);
 
     this.randomNumbers.forEach((random) => {
       this.enemies[random] = {
         valueToAsk: this.allEnemies?.words[random || 0]?.values[0] || '',
         status: MarioEnemyStatus.WaitingForStart,
-      };
+      } as MarioEnemy;
     });
     this.setEnemyStyle();
   }
 
   setEnemyStyle(): void {
     this.enemies.forEach((enemy) => {
+      // Todo. remove below line
+      // enemy.status = MarioEnemyStatus.IsMoving;
       const randomBottom =
         (
           Math.floor(Math.random() * (this.jumpHeight + Math.abs(1) + 1)) + 10
         ).toString() + '%';
+      enemy.mushroomImageUrl =
+        'url(../../../../assets/mario/question-mushroom.png)';
       enemy.style = {
         position: 'absolute',
         // random number between floor and max top of the Mario
-        // Todo. set below to randomButtom
-        bottom: '10%',
-        left: '92%',
-        height: '4vh',
-        width: `${this.calculateEnemyWidth(enemy.valueToAsk)}%`,
-      };
-      enemy.textStyle = {
-        position: 'absolute',
-        fontSize: '1vw',
-        top: '.2vw',
-        padding: '0 0 0 5px',
-      };
-      enemy.mushroomStyle = {
-        position: 'absolute',
-        left: '90%',
         bottom: randomBottom,
-        width: '2%',
-        height: '4vh',
-      };
+        // Todo. below should be 92
+        right: '1%',
+        fontSize: '1vw',
+      } as ElementStyle;
     });
 
     setTimeout(() => {
-      this.showWordInWaitingMode(this.enemies.find(Boolean));
+      this.showWordInWaitingMode(
+        this.enemies.find(Boolean) || ({} as MarioEnemy)
+      );
     }, 4000);
   }
 
-  calculateEnemyWidth(enemy: string | undefined): number {
-    return ((enemy?.length || 0) * 2) / 3 + 1;
-  }
-
-  showWordInWaitingMode(enemy?: MarioEnemy): void {
+  showWordInWaitingMode(enemy: MarioEnemy): void {
     (enemy || ({} as MarioEnemy)).status = MarioEnemyStatus.Start;
     setTimeout(() => {
-      (enemy?.style || ({} as ElementStyle)).transition = '100ms';
-      (enemy?.mushroomStyle || ({} as ElementStyle)).transition = '100ms';
-      (enemy?.style || ({} as ElementStyle)).opacity = '1';
-      (enemy?.style || ({} as ElementStyle)).fontSize = '.8vw';
+      (enemy.style || ({} as ElementStyle)).transition = '100ms';
+      (enemy.style || ({} as ElementStyle)).opacity = '1';
+      (enemy.style || ({} as ElementStyle)).fontSize = '.8vw';
       (enemy || ({} as MarioEnemy)).status = MarioEnemyStatus.IsMoving;
+      // Todo, uncomment
       this.showMovingEnemy(enemy);
     }, 2000);
   }
 
   showPointNotification(enemy: MarioEnemy): void {
-    let earnedScore = parseInt(enemy?.style?.left || '0', 0) / 10;
+    let earnedScore = (100 - parseInt(enemy?.style?.right || '0', 0)) / 10;
     if (this.currentEnemy.wrongCount && this.currentEnemy.wrongCount > 0) {
       earnedScore = earnedScore / (this.currentEnemy.wrongCount + 1);
     }
     this.scoreStorageService.catchScores(earnedScore);
-    this.store.dispatch(
-      toggleNotification({
-        gameName: 'Super mario',
-        score: earnedScore,
-        title: 'Correct',
-        message: `Yay, + ${earnedScore}`,
-        position: ScoreType.primeTopCenter,
-        positionKey: 'SuperMario',
-      } as NotificationState)
-    );
+    enemy.valueToAsk = '+ ' + earnedScore.toString();
+    this.animationOnCorrectAnswer(enemy);
   }
 
-  showGuidBox(): void {
+  animationOnWrongAnswer(enemy: MarioEnemy): void {
+    enemy.mushroomImageUrl = 'url(../../../../assets/mario/wrong-mushroom.png)';
+    if (enemy.style) {
+      enemy.style.opacity = '1';
+      enemy.style.transition = '2s';
+      enemy.style.opacity = '0';
+    }
+    setTimeout(() => {
+      (enemy || ({} as MarioEnemy)).status = MarioEnemyStatus.Finished;
+    }, 2000);
+  }
+
+  animationOnCorrectAnswer(enemy: MarioEnemy): void {
+    enemy.mushroomImageUrl =
+      'url(../../../../assets/mario/success-mushroom.png)';
+    enemy.style.transition = '2s';
+    enemy.style.bottom = parseInt(enemy.style.bottom, 0) + 20 + '%';
+    enemy.style.color = 'green';
+  }
+
+  showGuidBox(enemy: MarioEnemy): void {
     clearInterval(this.enemyAnimateInterval);
+    this.animationOnWrongAnswer(enemy);
     this.stopMovingLeft();
     this.stopMovingRight();
     this.currentEnemy.wrongCount = this.currentEnemy.wrongCount
@@ -367,51 +367,17 @@ export class SuperMarioComponent implements OnInit {
   }
 
   // The method does not have test yet because it is not finalized.
-  showMovingEnemy(playingEnemy?: MarioEnemy): void {
+  showMovingEnemy(playingEnemy: MarioEnemy): void {
     if (this.guidBoxShowing) {
       return;
     }
     // tslint:disable-next-line:cyclomatic-complexity
     this.enemyAnimateInterval = setInterval(() => {
       (playingEnemy?.style || ({} as ElementStyle)).transition = '100ms';
-      (playingEnemy?.style || ({} as ElementStyle)).left =
-        (parseInt(playingEnemy?.style?.left || '', 0) - 1).toString() + '%';
-      (playingEnemy?.mushroomStyle || ({} as ElementStyle)).left =
-        (parseInt(playingEnemy?.mushroomStyle?.left || '', 0) - 1).toString() +
-        '%';
+      (playingEnemy?.style || ({} as ElementStyle)).right =
+        (parseInt(playingEnemy?.style?.right || '', 0) + 1).toString() + '%';
 
-      // Managing left-right hit
-      const enemyLeft = parseInt(playingEnemy?.style?.left || '', 0);
-      const enemyRight =
-        parseInt(playingEnemy?.style?.left || '', 0) +
-        parseInt(playingEnemy?.style?.width || '', 0);
-      const marioLeft = parseInt(this.mario?.style?.left || '', 0);
-      const marioRight =
-        parseInt(this.mario?.style?.left || '', 0) +
-        parseInt(this.mario?.style?.width || '', 0);
-      const enemyTop =
-        parseInt(playingEnemy?.style?.bottom || '', 0) +
-        parseInt(playingEnemy?.style?.height || '', 0);
-      const enemyButton = parseInt(playingEnemy?.style?.bottom || '', 0);
-      const marioButton = parseInt(this.mario?.style?.bottom || '', 0);
-      const marioTop =
-        marioButton + parseInt(this.mario?.style?.height || '', 0);
-      if (
-        this.isCrashed(
-          {
-            topLeft: [marioTop, marioLeft],
-            topRight: [marioTop, marioRight],
-            bottomRight: [marioButton, marioRight],
-            bottomLeft: [marioButton, marioLeft],
-          },
-          {
-            topLeft: [enemyTop, enemyLeft],
-            topRight: [enemyTop, enemyRight],
-            bottomRight: [enemyButton, enemyLeft],
-            bottomLeft: [enemyButton, enemyLeft],
-          }
-        )
-      ) {
+      if (this.isCrashed()) {
         clearInterval(this.enemyAnimateInterval);
         if (
           this.currentEnemy?.values?.find(
@@ -419,22 +385,21 @@ export class SuperMarioComponent implements OnInit {
           )
         ) {
           this.showPointNotification(playingEnemy as MarioEnemy);
-          this.prepareTheWord();
+          setTimeout(() => {
+            this.prepareTheWord();
+          }, 2000);
         } else {
-          this.showGuidBox();
+          this.showGuidBox(playingEnemy);
         }
-        (playingEnemy || ({} as MarioEnemy)).status = MarioEnemyStatus.Finished;
         return;
       }
-      if (parseInt(playingEnemy?.style?.left || '', 0) <= -5) {
+      if (parseInt(playingEnemy?.style?.right || '', 0) >= 105) {
         if (
           this.currentEnemy?.values?.find(
             (x: string) => x === playingEnemy?.valueToAsk
           )
         ) {
-          this.showGuidBox();
-          (playingEnemy || ({} as MarioEnemy)).status =
-            MarioEnemyStatus.Finished;
+          this.showGuidBox(playingEnemy);
           return;
         }
         this.showNextEnemyWhenEnemyReachToEnd(playingEnemy);
@@ -443,86 +408,33 @@ export class SuperMarioComponent implements OnInit {
   }
 
   // tslint:disable-next-line:cyclomatic-complexity
-  isCrashed(marioAngle: Angle, enemyAngle: Angle): boolean {
-    // Check middle right
-    if (
-      marioAngle.topRight[0] >= enemyAngle.topLeft[0] &&
-      marioAngle.bottomRight[0] <= enemyAngle.bottomLeft[0]
-    ) {
-      if (
-        marioAngle.topLeft[1] <= enemyAngle.topLeft[1] &&
-        marioAngle.topRight[1] >= enemyAngle.topLeft[1]
-      ) {
-        return true;
-      }
+  isCrashed(): boolean | undefined {
+    if (!this.enemyTemplate || !this.marioTemplate) {
+      return;
     }
+    this.marioTemplate.nativeElement.offsetBottom =
+      this.marioTemplate.nativeElement.offsetTop +
+      this.marioTemplate.nativeElement.offsetHeight;
+    this.marioTemplate.nativeElement.offsetRight =
+      this.marioTemplate.nativeElement.offsetLeft +
+      this.marioTemplate.nativeElement.offsetWidth;
+    this.enemyTemplate.nativeElement.offsetBottom =
+      this.enemyTemplate.nativeElement.offsetTop +
+      this.enemyTemplate.nativeElement.offsetHeight;
+    this.enemyTemplate.nativeElement.offsetRight =
+      this.enemyTemplate.nativeElement.offsetLeft +
+      this.enemyTemplate.nativeElement.offsetWidth;
 
-    // Check middle left
-    if (
-      marioAngle.topLeft[0] >= enemyAngle.topLeft[0] &&
-      marioAngle.bottomLeft[0] <= enemyAngle.bottomLeft[0]
-    ) {
-      if (
-        marioAngle.topRight[1] >= enemyAngle.topRight[1] &&
-        marioAngle.topLeft[1] <= enemyAngle.topRight[1]
-      ) {
-        return true;
-      }
-    }
-
-    // check mario bottom right angle
-    if (
-      marioAngle.bottomRight[0] > enemyAngle.bottomRight[0] &&
-      marioAngle.bottomRight[0] < enemyAngle.topRight[0]
-    ) {
-      if (
-        marioAngle.bottomRight[1] > enemyAngle.topLeft[1] &&
-        marioAngle.bottomRight[1] < enemyAngle.topRight[1]
-      ) {
-        return true;
-      }
-    }
-
-    // check mario bottom left angle
-    if (
-      marioAngle.bottomLeft[0] > enemyAngle.bottomLeft[0] &&
-      marioAngle.bottomLeft[0] < enemyAngle.topLeft[0]
-    ) {
-      if (
-        marioAngle.bottomLeft[1] > enemyAngle.topLeft[1] &&
-        marioAngle.bottomLeft[1] < enemyAngle.topRight[1]
-      ) {
-        return true;
-      }
-    }
-
-    // check mario top right angle
-    if (
-      marioAngle.topRight[0] > enemyAngle.bottomRight[0] &&
-      marioAngle.topRight[0] < enemyAngle.topRight[0]
-    ) {
-      if (
-        marioAngle.topRight[1] > enemyAngle.topLeft[1] &&
-        marioAngle.topRight[1] < enemyAngle.topRight[1]
-      ) {
-        return true;
-      }
-    }
-
-    // check mario top left angle
-    if (
-      marioAngle.topLeft[0] > enemyAngle.bottomLeft[0] &&
-      marioAngle.topLeft[0] < enemyAngle.topLeft[0]
-    ) {
-      if (
-        marioAngle.topLeft[1] > enemyAngle.topLeft[1] &&
-        marioAngle.topLeft[1] < enemyAngle.topRight[1]
-      ) {
-        return true;
-      }
-    }
-
-    return false;
+    return !(
+      this.marioTemplate.nativeElement.offsetBottom <
+        this.enemyTemplate.nativeElement.offsetTop ||
+      this.marioTemplate.nativeElement.offsetTop >
+        this.enemyTemplate.nativeElement.offsetBottom ||
+      this.marioTemplate.nativeElement.offsetRight <
+        this.enemyTemplate.nativeElement.offsetLeft ||
+      this.marioTemplate.nativeElement.offsetLeft >
+        this.enemyTemplate.nativeElement.offsetRight
+    );
   }
 
   skipEnemy(): void {
@@ -532,9 +444,8 @@ export class SuperMarioComponent implements OnInit {
     if (!movingElement) {
       return;
     }
-    movingElement.status = MarioEnemyStatus.Finished;
     if (this.currentEnemy.values.find((x) => x === movingElement?.valueToAsk)) {
-      this.showGuidBox();
+      this.showGuidBox(movingElement);
       return;
     }
 

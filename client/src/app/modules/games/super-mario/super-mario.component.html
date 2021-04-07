@@ -48,17 +48,17 @@
   <div class="ground"></div>
   <div *ngFor="let enemy of enemies">
     <div
-      [ngStyle]="enemy?.mushroomStyle"
-      class="enemy-mushroom"
-      *ngIf="enemy?.status === 0 || enemy?.status === 1"
-    ></div>
-
-    <div
+      #enemyTemplate
       [ngStyle]="enemy.style"
       *ngIf="enemy?.status === 0 || enemy?.status === 1"
       class="enemy-container"
     >
-      <div [ngStyle]="enemy.textStyle">
+      <div
+        [style.background-image]="enemy.mushroomImageUrl"
+        class="enemy-mushroom"
+      ></div>
+      <span style="display: table-cell">  </span>
+      <div class="enemy-text-container">
         {{ enemy?.valueToAsk }}
       </div>
     </div>

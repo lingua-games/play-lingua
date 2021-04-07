@@ -1,14 +1,14 @@
-export class ElementStyle {
+export interface ElementStyle {
   border?: string;
   position?: string;
-  top?: string;
+  top: string;
   width?: string;
   height?: string;
   textAlign?: string;
   left?: string;
   transition?: string;
   right?: string;
-  bottom?: string;
+  bottom: string;
   color?: string;
   borderRadius?: string;
   padding?: string;
@@ -16,5 +16,6 @@ export class ElementStyle {
   maxWidth?: string;
   fontSize?: string;
   backgroundColor?: string;
-  opacity?: string;
+  opacity: string;
+  background?: string;
 }
