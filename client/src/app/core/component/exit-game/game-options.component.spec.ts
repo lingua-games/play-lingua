@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { GameOptionsComponent } from './game-options.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('GameOptionsComponent', () => {
   let component: GameOptionsComponent;
@@ -9,6 +10,7 @@ describe('GameOptionsComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
+        imports: [BrowserAnimationsModule],
         declarations: [GameOptionsComponent],
       }).compileComponents();
     })

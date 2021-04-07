@@ -142,9 +142,13 @@ describe('StartGameDialogComponent', () => {
       return of([{}] as WordKeyValueModel<string[]>[]);
     });
 
+    jasmine.clock().uninstall();
+    jasmine.clock().install();
     component.submit();
+    jasmine.clock().tick(2005);
 
     expect(mockMatDialogRef.close).toHaveBeenCalled();
+    jasmine.clock().uninstall();
   });
 
   it('should show notification if getGameWords API fail', () => {
