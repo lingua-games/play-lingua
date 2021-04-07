@@ -1,4 +1,4 @@
-import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ScoreNotificationComponent } from './score-notification.component';
 import { Store } from '@ngrx/store';
@@ -7,6 +7,7 @@ import { NotificationState } from './state/score-notification.reducer';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MessageService } from 'primeng/api';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { ScoreType } from '../../models/score-notification-appearance.enum';
 
 describe('ScoreNotificationComponent', () => {
   let component: ScoreNotificationComponent;
@@ -74,5 +75,30 @@ describe('ScoreNotificationComponent', () => {
     jasmine.clock().tick(1100);
 
     expect(component.showNotification).toBe(false);
+  });
+
+  it('should call showMessage if position has value', () => {
+    mockStore.select.and.callFake(() => {
+      return of({
+        gameName: 'something',
+        position: ScoreType.primeBottomCenter,
+      } as NotificationState);
+    });
+    spyOn(component, 'showMessage');
+
+    fixture.detectChanges();
+    jasmine.clock().tick(1100);
+
+    expect(component.showMessage).toHaveBeenCalled();
+  });
+
+  it('should add notification information into messageService when showMessage call', () => {
+    jasmine.clock().uninstall();
+    jasmine.clock().install();
+
+    component.showMessage();
+    jasmine.clock().tick(10);
+
+    expect(mockMessageService.add).toHaveBeenCalled();
   });
 });
