@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'app-exit-game',
+  selector: 'app-game-options',
   templateUrl: './exit-game.component.html',
   styleUrls: ['./exit-game.component.scss'],
 })
