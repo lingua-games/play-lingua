@@ -231,22 +231,23 @@ export class SuperMarioComponent implements OnInit {
       const indexOfCurrentEnemy = this.allEnemies.words.indexOf(
         this.currentEnemy
       );
+
       if (this.allEnemies.words[indexOfCurrentEnemy + 1]) {
         this.currentEnemy = {} as WordKeyValueModel<string[]>;
         // Just to fire ngIf in the template
         setTimeout(() => {
+          console.log();
           this.currentEnemy = this.allEnemies.words[indexOfCurrentEnemy + 1];
-          this.randomNumbers = this.generateRandomNumber();
-          this.prepareAnswerOptions();
         }, 1);
       } else {
         this.showEndGameDialog();
+        return;
       }
     } else {
       this.currentEnemy = enemy;
-      this.randomNumbers = this.generateRandomNumber();
-      this.prepareAnswerOptions();
     }
+    this.randomNumbers = this.generateRandomNumber();
+    this.prepareAnswerOptions();
   }
 
   generateRandomNumber(): number[] {
