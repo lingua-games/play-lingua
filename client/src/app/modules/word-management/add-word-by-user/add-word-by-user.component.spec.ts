@@ -5,7 +5,7 @@ import {
   NotificationService,
   Severity,
 } from '../../../core/service/notification.service';
-import { FormBuilder } from '@angular/forms';
+import { AbstractControl, FormBuilder } from '@angular/forms';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -600,5 +600,14 @@ describe('AddWordByUserComponent', () => {
 
       expect(component.getBooks).toHaveBeenCalled();
     });
+  });
+
+  it('should call addWordSeries when both of Ctrl and Enter are pressed', () => {
+    spyOn(component, 'addWordSeries');
+    component.isSelectedLanguageSubmit.setValue('something');
+
+    component.keyDownEvent({ ctrlKey: true, key: 'Enter' } as KeyboardEvent);
+
+    expect(component.addWordSeries).toHaveBeenCalled();
   });
 });
