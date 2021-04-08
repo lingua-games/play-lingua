@@ -602,7 +602,7 @@ describe('AddWordByUserComponent', () => {
     });
   });
 
-  it('should call addWordSeries when both of Ctrl and Enter are pressed', () => {
+  it('should call addWordSeries when both of   Ctrl and Enter are pressed', () => {
     spyOn(component, 'addWordSeries');
     component.isSelectedLanguageSubmit.setValue('something');
 
