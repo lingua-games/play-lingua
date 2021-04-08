@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { LanguageModel } from '../../../core/models/language.model';
 import {
   NotificationService,
@@ -26,6 +32,7 @@ import { LocalStorageService } from '../../../core/service/local-storage.service
   styleUrls: ['./add-word-by-user.component.scss'],
 })
 export class AddWordByUserComponent implements OnInit {
+  @ViewChild('container') container: ElementRef = {} as ElementRef;
   baseLanguages: LanguageModel[] = [];
   targetLanguages: LanguageModel[] = [];
   books: BookModel[] = [];
@@ -40,6 +47,24 @@ export class AddWordByUserComponent implements OnInit {
     isSelectedLanguageSubmit: [false],
   });
 
+  selectBookForm = this.formBuilder.group({
+    book: ['', Validators.required],
+    chapter: ['', Validators.required],
+    selectBookRandom: ['book'],
+  });
+
+  @HostListener('document:keydown ', ['$event'])
+  keyDownEvent(event: KeyboardEvent): void {
+    if (event.ctrlKey && event.key === 'Enter') {
+      if (
+        this.isSelectedLanguageSubmit &&
+        this.isSelectedLanguageSubmit.value
+      ) {
+        this.addWordSeries(this.container.nativeElement);
+      }
+    }
+  }
+
   get baseLanguage(): AbstractControl | null {
     return this.selectLanguageForm.get('baseLanguage');
   }
@@ -51,12 +76,6 @@ export class AddWordByUserComponent implements OnInit {
   get isSelectedLanguageSubmit(): AbstractControl | null {
     return this.selectLanguageForm.get('isSelectedLanguageSubmit');
   }
-
-  selectBookForm = this.formBuilder.group({
-    book: ['', Validators.required],
-    chapter: ['', Validators.required],
-    selectBookRandom: ['book'],
-  });
 
   get selectBookRandom(): AbstractControl | null {
     return this.selectBookForm.get('selectBookRandom');
@@ -274,6 +293,9 @@ export class AddWordByUserComponent implements OnInit {
   }
 
   addWordSeries(el: Element): void {
+    if (!this.formData.words) {
+      this.formData.words = [];
+    }
     this.formData.words.push({
       base: { value: '', isValid: true },
       targets: [{ value: '', isValid: true }],
@@ -422,6 +444,7 @@ export class AddWordByUserComponent implements OnInit {
       return;
     }
     this.isSelectedLanguageSubmit?.setValue(true);
+    this.formData.words = [];
     this.getBooks();
   }
 }

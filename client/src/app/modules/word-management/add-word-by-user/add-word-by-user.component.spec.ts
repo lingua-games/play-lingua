@@ -601,4 +601,13 @@ describe('AddWordByUserComponent', () => {
       expect(component.getBooks).toHaveBeenCalled();
     });
   });
+
+  it('should call addWordSeries when both of   Ctrl and Enter are pressed', () => {
+    spyOn(component, 'addWordSeries');
+    component.isSelectedLanguageSubmit.setValue('something');
+
+    component.keyDownEvent({ ctrlKey: true, key: 'Enter' } as KeyboardEvent);
+
+    expect(component.addWordSeries).toHaveBeenCalled();
+  });
 });
