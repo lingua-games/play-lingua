@@ -1,0 +1,58 @@
+:host {
+  position: absolute;
+  z-index: 1;
+}
+
+.exit-container {
+  border-color: #CD6155;
+  color: #CD6155;
+
+}
+
+.action-container {
+  text-transform: uppercase;
+  border: solid 1px;
+  margin: 5px;
+  padding: 3px;
+  border-radius: 5px;
+  text-align: center;
+  transition: 500ms;
+  overflow: hidden;
+
+  fa-icon {
+    float: left;
+    width: 2rem;
+  }
+
+  div {
+    width: 10rem;
+  }
+}
+
+.exit-container:hover {
+  cursor: pointer;
+  color: #922B21;
+  border-color: #922B21;
+}
+
+.skip-container {
+  border-color: #DC7633;
+  color: #DC7633;
+}
+
+.skip-container:hover {
+  cursor: pointer;
+  color: #A04000;
+  border-color: #A04000;
+}
+
+.main-container {
+  font-size: .7vw;
+  border: solid 1px #D0D3D4;
+  background-color: #ECF0F1;
+  margin: .3rem;
+}
+
+.text-container {
+  text-align: left;
+}

@@ -1,4 +1,10 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MarioModel } from '../../../core/models/mario.model';
 import {
   MarioEnemy,
@@ -14,10 +20,6 @@ import { BasicInformationService } from '../../../core/service/basic-information
 import { EGame } from '../../../core/models/e-game';
 import { ElementStyle } from '../../../core/models/element-style.model';
 import { ScoreStorageService } from '../../../core/service/score-storage.service';
-import { toggleNotification } from '../../../core/component/score-notification/state/score-notification.actions';
-import { NotificationState } from '../../../core/component/score-notification/state/score-notification.reducer';
-import { Store } from '@ngrx/store';
-import { ScoreType } from '../../../core/models/score-notification-appearance.enum';
 import { FinishGameDialogComponent } from '../common-in-game/finish-game-dialog/finish-game-dialog.component';
 import { ScoreStoreInterface } from '../../../core/models/score-store.interface';
 import { FinishGameActionEnum } from '../../../core/models/finish-game-action.enum';
@@ -39,13 +41,9 @@ import { FinishGameActionEnum } from '../../../core/models/finish-game-action.en
           opacity: 0,
           top: '40%',
           fontSize: '2vw',
-          padding: '2rem',
         }),
         animate('2s', style({ opacity: 1 })),
-        animate(
-          '1s 2s',
-          style({ top: '10%', fontSize: '1vw', padding: '1rem 3rem' })
-        ),
+        animate('1s 2s', style({ top: '10%', fontSize: '1.8vw' })),
       ]),
       transition(':leave', [
         style({ opacity: 1 }),
@@ -65,6 +63,13 @@ import { FinishGameActionEnum } from '../../../core/models/finish-game-action.en
   ],
 })
 export class SuperMarioComponent implements OnInit {
+  @ViewChild('marioTemplate') marioTemplate?: ElementRef = {
+    nativeElement: {} as ElementRef,
+  } as ElementRef;
+  @ViewChild('enemyTemplate') enemyTemplate?: ElementRef = {
+    nativeElement: {} as ElementRef,
+  } as ElementRef;
+
   mario: MarioModel = new MarioModel();
   enemies: MarioEnemy[] = [];
   currentEnemy: WordKeyValueModel<string[]> = {} as WordKeyValueModel<string[]>;
@@ -84,9 +89,13 @@ export class SuperMarioComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private basicInformationService: BasicInformationService,
-    private scoreStorageService: ScoreStorageService,
-    private store: Store<{}>
+    private scoreStorageService: ScoreStorageService
   ) {}
+
+  @HostListener('window:resize', ['$event'])
+  onResize(): void {
+    this.mario.style.width = ((60 / window.innerWidth) * 100).toString() + '%';
+  }
 
   @HostListener('window:blur', ['$event'])
   onBlur(): void {
@@ -112,6 +121,7 @@ export class SuperMarioComponent implements OnInit {
     if (this.guidBoxShowing) {
       return;
     }
+
     switch (event.code) {
       case 'ArrowLeft':
       case 'KeyA':
@@ -151,11 +161,11 @@ export class SuperMarioComponent implements OnInit {
     this.mario.setStyle({
       position: 'absolute',
       bottom: '10%',
-      width: '3%',
-      height: '10%',
+      height: '6rem',
+      width: ((60 / window.innerWidth) * 100).toString() + '%',
       left: '10%',
       transition: '10ms',
-    });
+    } as ElementStyle);
     this.scoreStorageService.clearCatch();
     this.showStartDialog();
   }
@@ -216,24 +226,28 @@ export class SuperMarioComponent implements OnInit {
   prepareTheWord(enemy?: WordKeyValueModel<string[]>): void {
     this.isGameFinished = false;
     this.guidBoxShowing = false;
+
     if (!enemy) {
-      const index = this.allEnemies.words.indexOf(this.currentEnemy);
-      if (this.allEnemies.words[index + 1]) {
+      const indexOfCurrentEnemy = this.allEnemies.words.indexOf(
+        this.currentEnemy
+      );
+
+      if (this.allEnemies.words[indexOfCurrentEnemy + 1]) {
         this.currentEnemy = {} as WordKeyValueModel<string[]>;
         // Just to fire ngIf in the template
         setTimeout(() => {
-          this.currentEnemy = this.allEnemies.words[index + 1];
-          this.randomNumbers = this.generateRandomNumber();
-          this.prepareAnswerOptions();
+          console.log();
+          this.currentEnemy = this.allEnemies.words[indexOfCurrentEnemy + 1];
         }, 1);
       } else {
         this.showEndGameDialog();
+        return;
       }
     } else {
       this.currentEnemy = enemy;
-      this.randomNumbers = this.generateRandomNumber();
-      this.prepareAnswerOptions();
     }
+    this.randomNumbers = this.generateRandomNumber();
+    this.prepareAnswerOptions();
   }
 
   generateRandomNumber(): number[] {
@@ -256,137 +270,177 @@ export class SuperMarioComponent implements OnInit {
     this.enemies[this.randomNumbers[0]] = {
       valueToAsk: this.currentEnemy.values[0],
       status: MarioEnemyStatus.WaitingForStart,
-    };
+    } as MarioEnemy;
     this.randomNumbers.splice(0, 1);
 
     this.randomNumbers.forEach((random) => {
       this.enemies[random] = {
         valueToAsk: this.allEnemies?.words[random || 0]?.values[0] || '',
         status: MarioEnemyStatus.WaitingForStart,
-      };
+      } as MarioEnemy;
     });
     this.setEnemyStyle();
   }
 
   setEnemyStyle(): void {
     this.enemies.forEach((enemy) => {
+      // Todo. remove below line
+      // enemy.status = MarioEnemyStatus.IsMoving;
+      const randomBottom =
+        (
+          Math.floor(Math.random() * (this.jumpHeight + Math.abs(1) + 1)) + 10
+        ).toString() + '%';
+      enemy.mushroomImageUrl =
+        'url(../../../../assets/mario/question-mushroom.png)';
       enemy.style = {
         position: 'absolute',
         // random number between floor and max top of the Mario
-        bottom:
-          (
-            Math.floor(Math.random() * (this.jumpHeight + Math.abs(1) + 1)) + 10
-          ).toString() + '%',
-        left: '90%',
-        border: 'solid 1px gray',
-        borderRadius: '10px',
-        padding: '.5rem',
-        textAlign: 'center',
-        color: '#283747',
-        height: '4vh',
+        bottom: randomBottom,
+        // Todo. below should be 1
+        right: '1%',
         fontSize: '1vw',
-        width: '7%',
-        backgroundColor: '#EAEDED',
-        opacity: '.7',
-      };
+      } as ElementStyle;
     });
 
     setTimeout(() => {
-      this.showWordInWaitingMode(this.enemies.find(Boolean));
+      this.showWordInWaitingMode(
+        this.enemies.find(Boolean) || ({} as MarioEnemy)
+      );
     }, 4000);
   }
 
-  showWordInWaitingMode(enemy?: MarioEnemy): void {
-    (enemy || ({} as MarioEnemy)).status = MarioEnemyStatus.Start;
-    setTimeout(() => {
-      (enemy?.style || ({} as ElementStyle)).transition = '100ms';
-      (enemy?.style || ({} as ElementStyle)).opacity = '1';
-      (enemy?.style || ({} as ElementStyle)).fontSize = '.8vw';
-      (enemy || ({} as MarioEnemy)).status = MarioEnemyStatus.IsMoving;
-      this.showMovingEnemy(enemy);
-    }, 2000);
+  showWordInWaitingMode(enemy: MarioEnemy): void {
+    if (enemy && enemy.style) {
+      enemy.status = MarioEnemyStatus.Start;
+      setTimeout(() => {
+        enemy.style.transition = '100ms';
+        enemy.style.opacity = '1';
+        enemy.style.fontSize = '.8vw';
+        enemy.status = MarioEnemyStatus.IsMoving;
+        // Todo, uncomment
+        this.showMovingEnemy(enemy);
+      }, 2000);
+    }
   }
 
   showPointNotification(enemy: MarioEnemy): void {
-    const earnedScore = parseInt(enemy?.style?.left || '0', 0) / 10;
-    this.scoreStorageService.catchScores(earnedScore);
-    this.store.dispatch(
-      toggleNotification({
-        gameName: 'Super mario',
-        score: earnedScore,
-        title: 'Correct',
-        message: `Yay, + ${earnedScore}`,
-        position: ScoreType.primeTopCenter,
-        positionKey: 'SuperMario',
-      } as NotificationState)
-    );
+    if (enemy && enemy.style && enemy.style.right) {
+      let earnedScore = (100 - parseInt(enemy.style.right, 0)) / 10;
+      if (this.currentEnemy.wrongCount && this.currentEnemy.wrongCount > 0) {
+        earnedScore = earnedScore / (this.currentEnemy.wrongCount + 1);
+      }
+      this.scoreStorageService.catchScores(earnedScore);
+      enemy.valueToAsk = '+ ' + earnedScore.toString();
+      this.animationOnCorrectAnswer(enemy);
+    }
   }
 
-  showGuidBox(): void {
+  animationOnWrongAnswer(enemy: MarioEnemy): void {
+    if (enemy) {
+      enemy.mushroomImageUrl =
+        'url(../../../../assets/mario/wrong-mushroom.png)';
+      if (enemy.style) {
+        enemy.style.opacity = '1';
+        enemy.style.transition = '2s';
+        enemy.style.opacity = '0';
+      }
+      setTimeout(() => {
+        enemy.status = MarioEnemyStatus.Finished;
+      }, 2000);
+    }
+  }
+
+  animationOnCorrectAnswer(enemy: MarioEnemy): void {
+    enemy.mushroomImageUrl =
+      'url(../../../../assets/mario/success-mushroom.png)';
+    enemy.style.transition = '2s';
+    enemy.style.bottom =
+      (parseInt(enemy.style.bottom, 0) + 20).toString() + '%';
+    enemy.style.color = 'green';
+  }
+
+  showGuidBox(enemy: MarioEnemy): void {
+    clearInterval(this.enemyAnimateInterval);
+    this.animationOnWrongAnswer(enemy);
     this.stopMovingLeft();
     this.stopMovingRight();
+    this.currentEnemy.wrongCount = this.currentEnemy.wrongCount
+      ? this.currentEnemy.wrongCount + 1
+      : 1;
+    this.allEnemies.words.push(JSON.parse(JSON.stringify(this.currentEnemy)));
     this.guidBoxShowing = true;
   }
 
-  // The method does not have test yet because it is not finalized.
-  showMovingEnemy(playingEnemy?: MarioEnemy): void {
-    // tslint:disable-next-line:cyclomatic-complexity
+  showMovingEnemy(playingEnemy: MarioEnemy): void {
+    if (this.guidBoxShowing) {
+      clearInterval(this.enemyAnimateInterval);
+      return;
+    }
     this.enemyAnimateInterval = setInterval(() => {
-      (playingEnemy?.style || ({} as ElementStyle)).transition = '100ms';
-      (playingEnemy?.style || ({} as ElementStyle)).left =
-        (parseInt(playingEnemy?.style?.left || '', 0) - 1).toString() + '%';
+      if (playingEnemy && playingEnemy.style) {
+        playingEnemy.style.transition = '100ms';
+        playingEnemy.style.right =
+          (parseInt(playingEnemy?.style?.right || '', 0) + 1).toString() + '%';
+      }
 
-      // Managing left-right hit
-      const enemyLeft = parseInt(playingEnemy?.style?.left || '', 0);
-      const enemyRight =
-        parseInt(playingEnemy?.style?.left || '', 0) +
-        parseInt(playingEnemy?.style?.width || '', 0);
-      const marioLeft = parseInt(this.mario?.style?.left || '', 0);
-      const marioRight =
-        parseInt(this.mario?.style?.left || '', 0) +
-        parseInt(this.mario?.style?.width || '', 0);
-      const enemyTop =
-        parseInt(playingEnemy?.style?.bottom || '', 0) +
-        parseInt(playingEnemy?.style?.height || '', 0);
-      const enemyButton = parseInt(playingEnemy?.style?.bottom || '', 0);
-      const marioButton = parseInt(this.mario?.style?.bottom || '', 0);
-      const marioTop =
-        marioButton + parseInt(this.mario?.style?.height || '', 0);
-      if (
-        ((marioLeft > enemyLeft && marioLeft < enemyRight) ||
-          (marioRight > enemyLeft && marioRight < enemyRight)) &&
-        ((marioTop < enemyTop && marioTop > enemyButton) ||
-          (marioButton < enemyTop && marioButton > enemyButton))
-      ) {
+      if (this.isCrashed()) {
+        clearInterval(this.enemyAnimateInterval);
         if (
           this.currentEnemy?.values?.find(
             (x: string) => x === playingEnemy?.valueToAsk
           )
         ) {
           this.showPointNotification(playingEnemy as MarioEnemy);
-          this.prepareTheWord();
+          setTimeout(() => {
+            this.prepareTheWord();
+          }, 2000);
         } else {
-          this.showGuidBox();
+          this.showGuidBox(playingEnemy);
         }
-        clearInterval(this.enemyAnimateInterval);
-        (playingEnemy || ({} as MarioEnemy)).status = MarioEnemyStatus.Finished;
         return;
       }
-      if (parseInt(playingEnemy?.style?.left || '', 0) <= -5) {
+      if (parseInt(playingEnemy?.style?.right || '', 0) >= 105) {
         if (
           this.currentEnemy?.values?.find(
             (x: string) => x === playingEnemy?.valueToAsk
           )
         ) {
-          this.showGuidBox();
-          clearInterval(this.enemyAnimateInterval);
-          (playingEnemy || ({} as MarioEnemy)).status =
-            MarioEnemyStatus.Finished;
+          this.showGuidBox(playingEnemy);
           return;
         }
         this.showNextEnemyWhenEnemyReachToEnd(playingEnemy);
       }
     }, 50);
+  }
+
+  // tslint:disable-next-line:cyclomatic-complexity
+  isCrashed(): boolean | undefined {
+    if (!this.enemyTemplate || !this.marioTemplate) {
+      return;
+    }
+    this.marioTemplate.nativeElement.offsetBottom =
+      (this.marioTemplate.nativeElement.offsetTop as string) +
+      (this.marioTemplate.nativeElement.offsetHeight as string);
+    this.marioTemplate.nativeElement.offsetRight =
+      (this.marioTemplate.nativeElement.offsetLeft as string) +
+      (this.marioTemplate.nativeElement.offsetWidth as string);
+    this.enemyTemplate.nativeElement.offsetBottom =
+      (this.enemyTemplate.nativeElement.offsetTop as string) +
+      (this.enemyTemplate.nativeElement.offsetHeight as string);
+    this.enemyTemplate.nativeElement.offsetRight =
+      (this.enemyTemplate.nativeElement.offsetLeft as string) +
+      (this.enemyTemplate.nativeElement.offsetWidth as string);
+
+    return !(
+      this.marioTemplate.nativeElement.offsetBottom <
+        this.enemyTemplate.nativeElement.offsetTop ||
+      this.marioTemplate.nativeElement.offsetTop >
+        this.enemyTemplate.nativeElement.offsetBottom ||
+      this.marioTemplate.nativeElement.offsetRight <
+        this.enemyTemplate.nativeElement.offsetLeft ||
+      this.marioTemplate.nativeElement.offsetLeft >
+        this.enemyTemplate.nativeElement.offsetRight
+    );
   }
 
   skipEnemy(): void {
@@ -396,10 +450,8 @@ export class SuperMarioComponent implements OnInit {
     if (!movingElement) {
       return;
     }
-    console.log('skipping');
-    movingElement.status = MarioEnemyStatus.Finished;
     if (this.currentEnemy.values.find((x) => x === movingElement?.valueToAsk)) {
-      this.showGuidBox();
+      this.showGuidBox(movingElement);
       return;
     }
 
@@ -407,15 +459,17 @@ export class SuperMarioComponent implements OnInit {
   }
 
   showNextEnemyWhenEnemyReachToEnd(playingEnemy: MarioEnemy | undefined): void {
-    clearInterval(this.enemyAnimateInterval);
-    (playingEnemy || ({} as MarioEnemy)).status = MarioEnemyStatus.Finished;
-    let nextIndex = this.enemies.indexOf(playingEnemy as MarioEnemy) + 1;
-    this.enemies.forEach(() => {
-      if (!this.enemies[nextIndex]) {
-        nextIndex++;
-      }
-    });
-    this.showWordInWaitingMode(this.enemies[nextIndex]);
+    if (playingEnemy) {
+      clearInterval(this.enemyAnimateInterval);
+      playingEnemy.status = MarioEnemyStatus.Finished;
+      let nextIndex = this.enemies.indexOf(playingEnemy as MarioEnemy) + 1;
+      this.enemies.forEach(() => {
+        if (!this.enemies[nextIndex]) {
+          nextIndex++;
+        }
+      });
+      this.showWordInWaitingMode(this.enemies[nextIndex]);
+    }
   }
 
   stopMovingLeft(): void {
@@ -435,6 +489,7 @@ export class SuperMarioComponent implements OnInit {
   }
 
   startMovingLeft(): void {
+    clearInterval(this.movingRightInterval);
     if (!this.movingLeftInterval) {
       this.movingLeftInterval = +setInterval(() => {
         this.mario.moveLeft(1);
@@ -443,6 +498,7 @@ export class SuperMarioComponent implements OnInit {
   }
 
   startMovingRight(): void {
+    clearInterval(this.movingLeftInterval);
     if (!this.movingRightInterval) {
       this.movingRightInterval = +setInterval(() => {
         this.mario.moveRight(1);

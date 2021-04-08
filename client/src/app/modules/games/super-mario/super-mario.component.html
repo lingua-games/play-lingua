@@ -1,10 +1,10 @@
 <app-top-navbar></app-top-navbar>
-<app-exit-game
+<app-game-options
   *ngIf="enemies.length && !isGameFinished"
   (exit)="showStartDialog()"
   (skip)="skipEnemy()"
   [hasSkip]="true"
-></app-exit-game>
+></app-game-options>
 <div *ngIf="guidBoxShowing" class="guid-box-container" @fadeIn>
   <div class="guid-box-header-container">
     <span>Wrong!</span>
@@ -32,11 +32,16 @@
     @questionFade
     *ngIf="currentEnemy.key && !isGameFinished"
   >
-    {{ currentEnemy?.key }}
+    <div class="enemy-image-container"></div>
+    <span style="display: table-cell">  </span>
+    <div class="enemy-text-container">
+      {{ currentEnemy?.key }}
+    </div>
   </div>
   <div
     *ngIf="!isGameFinished"
     class="mario"
+    #marioTemplate
     [ngStyle]="mario.style"
     [ngClass]="{
       isMoving: mario.isMoving,
@@ -47,10 +52,19 @@
   <div class="ground"></div>
   <div *ngFor="let enemy of enemies">
     <div
+      #enemyTemplate
       [ngStyle]="enemy.style"
       *ngIf="enemy?.status === 0 || enemy?.status === 1"
+      class="enemy-container"
     >
-      {{ enemy?.valueToAsk }}
+      <div
+        [style.background-image]="enemy.mushroomImageUrl"
+        class="mushroom-image-container"
+      ></div>
+      <span style="display: table-cell">  </span>
+      <div class="mushroom-text-container">
+        {{ enemy?.valueToAsk }}
+      </div>
     </div>
   </div>
 </div>

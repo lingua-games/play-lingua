@@ -5,7 +5,7 @@ export class MarioModel {
   isMoving?: boolean;
   isMovingRight?: boolean;
   isMovingLeft?: boolean;
-  style: ElementStyle = new ElementStyle();
+  style: ElementStyle = {} as ElementStyle;
   originalBottom?: string;
 
   constructor() {}

@@ -4,7 +4,8 @@ import { WordKeyValueModel } from './word-key-value.model';
 export class MarioEnemy {
   text?: WordKeyValueModel<string[]>;
   valueToAsk?: string;
-  style?: ElementStyle;
+  style: ElementStyle = {} as ElementStyle;
+  mushroomImageUrl?: string;
   status?: MarioEnemyStatus;
 }
 

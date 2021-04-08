@@ -20,6 +20,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { MaterialModule } from './modules/common/material/material.module';
 import { PrimengModule } from './modules/common/primeng/primeng.module';
+import { faPowerOff } from '@fortawesome/free-solid-svg-icons/faPowerOff';
+import { faForward } from '@fortawesome/free-solid-svg-icons/faForward';
 
 @NgModule({
   declarations: [AppComponent, ScoreNotificationComponent],
@@ -55,6 +57,6 @@ import { PrimengModule } from './modules/common/primeng/primeng.module';
 })
 export class AppModule {
   constructor(library: FaIconLibrary) {
-    library.addIcons(faPlus, faEdit, faTrash);
+    library.addIcons(faPlus, faEdit, faTrash, faPowerOff, faForward);
   }
 }

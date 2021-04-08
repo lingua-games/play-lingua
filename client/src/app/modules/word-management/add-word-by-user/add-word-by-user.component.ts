@@ -274,7 +274,6 @@ export class AddWordByUserComponent implements OnInit {
   }
 
   addWordSeries(el: Element): void {
-    console.log(this.formData);
     this.formData.words.push({
       base: { value: '', isValid: true },
       targets: [{ value: '', isValid: true }],
