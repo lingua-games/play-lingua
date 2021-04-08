@@ -310,37 +310,44 @@ export class SuperMarioComponent implements OnInit {
   }
 
   showWordInWaitingMode(enemy: MarioEnemy): void {
-    (enemy || ({} as MarioEnemy)).status = MarioEnemyStatus.Start;
-    setTimeout(() => {
-      (enemy.style || ({} as ElementStyle)).transition = '100ms';
-      (enemy.style || ({} as ElementStyle)).opacity = '1';
-      (enemy.style || ({} as ElementStyle)).fontSize = '.8vw';
-      (enemy || ({} as MarioEnemy)).status = MarioEnemyStatus.IsMoving;
-      // Todo, uncomment
-      this.showMovingEnemy(enemy);
-    }, 2000);
+    if (enemy && enemy.style) {
+      enemy.status = MarioEnemyStatus.Start;
+      setTimeout(() => {
+        enemy.style.transition = '100ms';
+        enemy.style.opacity = '1';
+        enemy.style.fontSize = '.8vw';
+        enemy.status = MarioEnemyStatus.IsMoving;
+        // Todo, uncomment
+        this.showMovingEnemy(enemy);
+      }, 2000);
+    }
   }
 
   showPointNotification(enemy: MarioEnemy): void {
-    let earnedScore = (100 - parseInt(enemy?.style?.right || '0', 0)) / 10;
-    if (this.currentEnemy.wrongCount && this.currentEnemy.wrongCount > 0) {
-      earnedScore = earnedScore / (this.currentEnemy.wrongCount + 1);
+    if (enemy && enemy.style && enemy.style.right) {
+      let earnedScore = (100 - parseInt(enemy.style.right, 0)) / 10;
+      if (this.currentEnemy.wrongCount && this.currentEnemy.wrongCount > 0) {
+        earnedScore = earnedScore / (this.currentEnemy.wrongCount + 1);
+      }
+      this.scoreStorageService.catchScores(earnedScore);
+      enemy.valueToAsk = '+ ' + earnedScore.toString();
+      this.animationOnCorrectAnswer(enemy);
     }
-    this.scoreStorageService.catchScores(earnedScore);
-    enemy.valueToAsk = '+ ' + earnedScore.toString();
-    this.animationOnCorrectAnswer(enemy);
   }
 
   animationOnWrongAnswer(enemy: MarioEnemy): void {
-    enemy.mushroomImageUrl = 'url(../../../../assets/mario/wrong-mushroom.png)';
-    if (enemy.style) {
-      enemy.style.opacity = '1';
-      enemy.style.transition = '2s';
-      enemy.style.opacity = '0';
+    if (enemy) {
+      enemy.mushroomImageUrl =
+        'url(../../../../assets/mario/wrong-mushroom.png)';
+      if (enemy.style) {
+        enemy.style.opacity = '1';
+        enemy.style.transition = '2s';
+        enemy.style.opacity = '0';
+      }
+      setTimeout(() => {
+        enemy.status = MarioEnemyStatus.Finished;
+      }, 2000);
     }
-    setTimeout(() => {
-      (enemy || ({} as MarioEnemy)).status = MarioEnemyStatus.Finished;
-    }, 2000);
   }
 
   animationOnCorrectAnswer(enemy: MarioEnemy): void {
@@ -364,16 +371,17 @@ export class SuperMarioComponent implements OnInit {
     this.guidBoxShowing = true;
   }
 
-  // The method does not have test yet because it is not finalized.
   showMovingEnemy(playingEnemy: MarioEnemy): void {
     if (this.guidBoxShowing) {
+      clearInterval(this.enemyAnimateInterval);
       return;
     }
-    // tslint:disable-next-line:cyclomatic-complexity
     this.enemyAnimateInterval = setInterval(() => {
-      (playingEnemy?.style || ({} as ElementStyle)).transition = '100ms';
-      (playingEnemy?.style || ({} as ElementStyle)).right =
-        (parseInt(playingEnemy?.style?.right || '', 0) + 1).toString() + '%';
+      if (playingEnemy && playingEnemy.style) {
+        playingEnemy.style.transition = '100ms';
+        playingEnemy.style.right =
+          (parseInt(playingEnemy?.style?.right || '', 0) + 1).toString() + '%';
+      }
 
       if (this.isCrashed()) {
         clearInterval(this.enemyAnimateInterval);
@@ -451,15 +459,17 @@ export class SuperMarioComponent implements OnInit {
   }
 
   showNextEnemyWhenEnemyReachToEnd(playingEnemy: MarioEnemy | undefined): void {
-    clearInterval(this.enemyAnimateInterval);
-    (playingEnemy || ({} as MarioEnemy)).status = MarioEnemyStatus.Finished;
-    let nextIndex = this.enemies.indexOf(playingEnemy as MarioEnemy) + 1;
-    this.enemies.forEach(() => {
-      if (!this.enemies[nextIndex]) {
-        nextIndex++;
-      }
-    });
-    this.showWordInWaitingMode(this.enemies[nextIndex]);
+    if (playingEnemy) {
+      clearInterval(this.enemyAnimateInterval);
+      playingEnemy.status = MarioEnemyStatus.Finished;
+      let nextIndex = this.enemies.indexOf(playingEnemy as MarioEnemy) + 1;
+      this.enemies.forEach(() => {
+        if (!this.enemies[nextIndex]) {
+          nextIndex++;
+        }
+      });
+      this.showWordInWaitingMode(this.enemies[nextIndex]);
+    }
   }
 
   stopMovingLeft(): void {

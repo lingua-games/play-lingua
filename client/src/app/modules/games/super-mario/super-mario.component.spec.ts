@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SuperMarioComponent } from './super-mario.component';
 import { of } from 'rxjs';
@@ -12,7 +12,10 @@ import { MarioModel } from '../../../core/models/mario.model';
 import { ElementStyle } from '../../../core/models/element-style.model';
 import { ScoreStorageService } from '../../../core/service/score-storage.service';
 import { FinishGameActionEnum } from '../../../core/models/finish-game-action.enum';
-import { MarioEnemy } from '../../../core/models/mario-enemy.model';
+import {
+  MarioEnemy,
+  MarioEnemyStatus,
+} from '../../../core/models/mario-enemy.model';
 
 describe('SuperMarioComponent', () => {
   let component: SuperMarioComponent;
@@ -29,6 +32,7 @@ describe('SuperMarioComponent', () => {
       mockScoreStorageService = jasmine.createSpyObj([
         'clearCatch',
         'getCachedScores',
+        'catchScores',
       ]);
       mockMatDialogRef = jasmine.createSpyObj(['close']);
       mockMatDialog = jasmine.createSpyObj('dialog', {
@@ -368,5 +372,379 @@ describe('SuperMarioComponent', () => {
 
       expect(component.currentEnemy).toEqual(component.allEnemies.words[0]);
     });
+  });
+
+  it('should return random numbers when calling generateRandomNumber', () => {
+    component.allEnemies = { words: [] } as GameStartInformation<
+      WordKeyValueModel<string[]>[]
+    >;
+    component.allEnemies.words.push({} as WordKeyValueModel<string[]>);
+    component.allEnemies.words.push({} as WordKeyValueModel<string[]>);
+    component.allEnemies.words.push({} as WordKeyValueModel<string[]>);
+    component.allEnemies.words.push({} as WordKeyValueModel<string[]>);
+
+    expect(component.generateRandomNumber().length).toBe(4);
+  });
+
+  it('should call setEnemyStyle when calling prepareAnswerOptions', () => {
+    component.enemies = [];
+    component.randomNumbers = [0, 1, 2, 3];
+    component.currentEnemy = { values: ['foo'] } as WordKeyValueModel<string[]>;
+    component.allEnemies = { words: [] } as GameStartInformation<
+      WordKeyValueModel<string[]>[]
+    >;
+    component.allEnemies.words.push({ values: ['foo'] } as WordKeyValueModel<
+      string[]
+    >);
+    component.allEnemies.words.push({ values: ['foo'] } as WordKeyValueModel<
+      string[]
+    >);
+    component.allEnemies.words.push({ values: ['foo'] } as WordKeyValueModel<
+      string[]
+    >);
+    component.allEnemies.words.push({ values: ['foo'] } as WordKeyValueModel<
+      string[]
+    >);
+    spyOn(component, 'setEnemyStyle');
+
+    component.prepareAnswerOptions();
+
+    expect(component.setEnemyStyle).toHaveBeenCalled();
+  });
+
+  describe('setEnemyStyle', () => {
+    beforeEach(() => {
+      component.enemies = [
+        { valueToAsk: 'foo1' } as MarioEnemy,
+        { valueToAsk: 'foo2' } as MarioEnemy,
+        { valueToAsk: 'foo3' } as MarioEnemy,
+        { valueToAsk: 'foo4' } as MarioEnemy,
+      ];
+    });
+
+    it('should set random numbers for bottom', () => {
+      component.setEnemyStyle();
+
+      component.enemies.forEach((enemy) => {
+        expect(parseInt(enemy.style.bottom, 0)).toBeGreaterThan(0);
+      });
+    });
+
+    it('should call showWordInWaitingMode after 4 seconds', () => {
+      jasmine.clock().uninstall();
+      jasmine.clock().install();
+      spyOn(component, 'showWordInWaitingMode');
+      component.enemies = [];
+
+      component.setEnemyStyle();
+      jasmine.clock().tick(4000);
+
+      expect(component.showWordInWaitingMode).toHaveBeenCalledWith(
+        {} as MarioEnemy
+      );
+    });
+  });
+
+  describe('showWordInWaitingMode', () => {
+    it('should set enemy status after 2 seconds', () => {
+      const enemy = {
+        status: MarioEnemyStatus.WaitingForStart,
+        style: { width: '' },
+      } as MarioEnemy;
+      jasmine.clock().uninstall();
+      jasmine.clock().install();
+
+      component.showWordInWaitingMode(enemy);
+      jasmine.clock().tick(2000);
+
+      expect(enemy.status).toBe(MarioEnemyStatus.IsMoving);
+    });
+
+    it('should call showMovingEnemy after 2 seconds', () => {
+      const enemy = {
+        status: MarioEnemyStatus.WaitingForStart,
+        style: { width: '' },
+      } as MarioEnemy;
+      jasmine.clock().uninstall();
+      jasmine.clock().install();
+      spyOn(component, 'showMovingEnemy');
+
+      component.showWordInWaitingMode(enemy);
+      jasmine.clock().tick(2000);
+
+      expect(component.showMovingEnemy).toHaveBeenCalled();
+    });
+  });
+
+  describe('showPointNotification', () => {
+    let enemy: MarioEnemy;
+    beforeEach(() => {
+      enemy = {} as MarioEnemy;
+      enemy.valueToAsk = 'foo';
+      enemy.style = { right: '10%' } as ElementStyle;
+    });
+    it('should add earned score into valueToAsk  of enemy', () => {
+      spyOn(component, 'animationOnWrongAnswer');
+
+      component.showPointNotification(enemy);
+
+      expect(enemy.valueToAsk).toBe('+ 9');
+    });
+
+    it('should divide score by 2 answered once wrong', () => {
+      spyOn(component, 'animationOnWrongAnswer');
+      component.currentEnemy = { wrongCount: 1 } as WordKeyValueModel<string[]>;
+
+      component.showPointNotification(enemy);
+
+      expect(enemy.valueToAsk).toBe('+ 4.5');
+    });
+
+    it('should call animationOnCorrectAnswer', () => {
+      spyOn(component, 'animationOnCorrectAnswer');
+
+      component.showPointNotification(enemy);
+
+      expect(component.animationOnCorrectAnswer).toHaveBeenCalledWith(enemy);
+    });
+  });
+
+  it('should set status to finish after 2 seconds when animationOnWrongAnswer is being called', () => {
+    jasmine.clock().uninstall();
+    jasmine.clock().install();
+    const enemy = {
+      status: MarioEnemyStatus.IsMoving,
+      style: { width: '' },
+    } as MarioEnemy;
+
+    component.animationOnWrongAnswer(enemy);
+    jasmine.clock().tick(2000);
+
+    expect(enemy.status).toBe(MarioEnemyStatus.Finished);
+  });
+
+  describe('showGuidBox', () => {
+    beforeEach(() => {
+      component.allEnemies = {
+        words: [{} as WordKeyValueModel<string[]>],
+      } as GameStartInformation<WordKeyValueModel<string[]>[]>;
+    });
+    it('should call animationOnWrongAnswer', () => {
+      spyOn(component, 'animationOnWrongAnswer');
+
+      component.showGuidBox({} as MarioEnemy);
+
+      expect(component.animationOnWrongAnswer).toHaveBeenCalled();
+    });
+
+    it('should call stopMovingLeft', () => {
+      spyOn(component, 'stopMovingLeft');
+
+      component.showGuidBox({} as MarioEnemy);
+
+      expect(component.stopMovingLeft).toHaveBeenCalled();
+    });
+
+    it('should call stopMovingRight', () => {
+      spyOn(component, 'stopMovingRight');
+
+      component.showGuidBox({} as MarioEnemy);
+
+      expect(component.stopMovingRight).toHaveBeenCalled();
+    });
+  });
+
+  describe('showMovingEnemy', () => {
+    let enemy: MarioEnemy;
+    beforeEach(() => {
+      enemy = {} as MarioEnemy;
+    });
+
+    it('should stop interval if guid box is showing', () => {
+      component.guidBoxShowing = true;
+      spyOn(window, 'clearInterval');
+
+      component.showMovingEnemy(enemy);
+
+      expect(clearInterval).toHaveBeenCalled();
+    });
+
+    it('should increase right of mushroom by 1 percent', () => {
+      spyOn(component, 'isCrashed');
+      jasmine.clock().uninstall();
+      jasmine.clock().install();
+      enemy.style = {
+        right: '10%',
+      } as ElementStyle;
+
+      component.showMovingEnemy(enemy);
+      jasmine.clock().tick(55);
+
+      expect(enemy.style.right).toBe('11%');
+      jasmine.clock().uninstall();
+    });
+
+    it('should clear interval if objects are crashed', () => {
+      spyOn(component, 'isCrashed').and.returnValue(true);
+      spyOn(component, 'showGuidBox');
+      jasmine.clock().uninstall();
+      jasmine.clock().install();
+      spyOn(window, 'clearInterval');
+
+      component.showMovingEnemy(enemy);
+      jasmine.clock().tick(55);
+
+      expect(clearInterval).toHaveBeenCalled();
+      jasmine.clock().uninstall();
+    });
+
+    it('should show point notification if hitting correct answer', () => {
+      spyOn(component, 'isCrashed').and.returnValue(true);
+      spyOn(component, 'showGuidBox');
+      spyOn(component, 'showPointNotification');
+      component.currentEnemy = {
+        values: ['foo'],
+      } as WordKeyValueModel<string[]>;
+      enemy.valueToAsk = 'foo';
+      jasmine.clock().uninstall();
+      jasmine.clock().install();
+      spyOn(window, 'clearInterval');
+
+      component.showMovingEnemy(enemy);
+      jasmine.clock().tick(55);
+
+      expect(component.showPointNotification).toHaveBeenCalled();
+      jasmine.clock().uninstall();
+    });
+
+    it('should call prepareTheWord after 2 seconds if hitting correct answer', () => {
+      spyOn(component, 'isCrashed').and.returnValue(true);
+      spyOn(component, 'showGuidBox');
+      spyOn(component, 'showPointNotification');
+      spyOn(component, 'prepareTheWord');
+      component.currentEnemy = {
+        values: ['foo'],
+      } as WordKeyValueModel<string[]>;
+      enemy.valueToAsk = 'foo';
+      jasmine.clock().uninstall();
+      jasmine.clock().install();
+      spyOn(window, 'clearInterval');
+
+      component.showMovingEnemy(enemy);
+      jasmine.clock().tick(2055);
+
+      expect(component.prepareTheWord).toHaveBeenCalled();
+      jasmine.clock().uninstall();
+    });
+
+    it('should show guid box if correct enemy reach to the end of the edge', () => {
+      spyOn(component, 'isCrashed').and.returnValue(false);
+      spyOn(component, 'showGuidBox');
+      component.currentEnemy = {
+        values: ['foo'],
+      } as WordKeyValueModel<string[]>;
+      enemy.valueToAsk = 'foo';
+      enemy.style = { right: '150%' } as ElementStyle;
+      jasmine.clock().uninstall();
+      jasmine.clock().install();
+      spyOn(window, 'clearInterval');
+
+      component.showMovingEnemy(enemy);
+      jasmine.clock().tick(50);
+
+      expect(component.showGuidBox).toHaveBeenCalled();
+      jasmine.clock().uninstall();
+    });
+
+    it('should call showNextEnemyWhenEnemyReachToEnd when incorrect mushroom reach to the end of the edge', () => {
+      spyOn(component, 'isCrashed').and.returnValue(false);
+      spyOn(component, 'showNextEnemyWhenEnemyReachToEnd');
+      component.currentEnemy = {
+        values: ['foo1'],
+      } as WordKeyValueModel<string[]>;
+      enemy.valueToAsk = 'foo';
+      enemy.style = { right: '150%' } as ElementStyle;
+      jasmine.clock().uninstall();
+      jasmine.clock().install();
+      spyOn(window, 'clearInterval');
+
+      component.showMovingEnemy(enemy);
+      jasmine.clock().tick(50);
+
+      expect(component.showNextEnemyWhenEnemyReachToEnd).toHaveBeenCalled();
+      jasmine.clock().uninstall();
+    });
+  });
+
+  describe('isCrashed', () => {
+    beforeEach(() => {
+      component.marioTemplate = {
+        nativeElement: {
+          offsetTop: '1',
+          offsetHeight: '2',
+          offsetLeft: '3',
+          offsetBottom: '4',
+        },
+      };
+    });
+    it('should break if enemyTemplate is empty', () => {
+      component.enemyTemplate = null;
+      expect(component.isCrashed()).toBeUndefined();
+    });
+
+    it('should return true if object crashed', () => {
+      expect(component.isCrashed()).toBeTruthy();
+    });
+  });
+
+  describe('skipEnemy', () => {
+    beforeEach(() => {
+      component.enemies = [
+        { valueToAsk: 'foo1' } as MarioEnemy,
+        { valueToAsk: 'foo2' } as MarioEnemy,
+        { valueToAsk: 'foo3' } as MarioEnemy,
+        { valueToAsk: 'foo4' } as MarioEnemy,
+      ];
+    });
+
+    it('should break if nothing is moving', () => {
+      expect(component.skipEnemy()).toBeUndefined();
+    });
+
+    it('should show guid box if skip the incorrect mushroom', () => {
+      component.enemies[0].status = MarioEnemyStatus.IsMoving;
+      spyOn(component, 'showGuidBox');
+      component.currentEnemy = {
+        values: ['foo1'],
+      } as WordKeyValueModel<string[]>;
+
+      component.skipEnemy();
+
+      expect(component.showGuidBox).toHaveBeenCalled();
+    });
+    it('should show next mushroom if skip the correct mushroom', () => {
+      component.enemies[0].status = MarioEnemyStatus.IsMoving;
+      spyOn(component, 'showNextEnemyWhenEnemyReachToEnd');
+      component.currentEnemy = {
+        values: ['foo2'],
+      } as WordKeyValueModel<string[]>;
+
+      component.skipEnemy();
+
+      expect(component.showNextEnemyWhenEnemyReachToEnd).toHaveBeenCalled();
+    });
+  });
+
+  it('should call showWordInWaitingMode with next index of enemy when calling showNextEnemyWhenEnemyReachToEnd', () => {
+    component.enemies[0] = { valueToAsk: 'foo1' } as MarioEnemy;
+    component.enemies[2] = { valueToAsk: 'foo2' } as MarioEnemy;
+    spyOn(component, 'showWordInWaitingMode');
+    const playingEnemy = component.enemies[0];
+
+    component.showNextEnemyWhenEnemyReachToEnd(playingEnemy);
+
+    expect(component.showWordInWaitingMode).toHaveBeenCalledWith(
+      component.enemies[2]
+    );
   });
 });
