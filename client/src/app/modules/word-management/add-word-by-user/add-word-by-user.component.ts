@@ -47,6 +47,12 @@ export class AddWordByUserComponent implements OnInit {
     isSelectedLanguageSubmit: [false],
   });
 
+  selectBookForm = this.formBuilder.group({
+    book: ['', Validators.required],
+    chapter: ['', Validators.required],
+    selectBookRandom: ['book'],
+  });
+
   @HostListener('document:keydown ', ['$event'])
   keyDownEvent(event: KeyboardEvent): void {
     if (event.ctrlKey && event.key === 'Enter') {
@@ -70,12 +76,6 @@ export class AddWordByUserComponent implements OnInit {
   get isSelectedLanguageSubmit(): AbstractControl | null {
     return this.selectLanguageForm.get('isSelectedLanguageSubmit');
   }
-
-  selectBookForm = this.formBuilder.group({
-    book: ['', Validators.required],
-    chapter: ['', Validators.required],
-    selectBookRandom: ['book'],
-  });
 
   get selectBookRandom(): AbstractControl | null {
     return this.selectBookForm.get('selectBookRandom');
