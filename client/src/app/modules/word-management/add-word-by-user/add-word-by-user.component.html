@@ -154,7 +154,7 @@
       <button
         class="btn btn-success col-sm-12"
         (click)="addWordSeries(container)"
-        *ngIf="formData.words.length === 0"
+        *ngIf="formData?.words?.length === 0"
       >
         Add first word
       </button>
@@ -170,7 +170,7 @@
               type="email"
               class="form-control"
               aria-describedby="emailHelp"
-              placeholder="Base word"
+              [placeholder]="baseLanguage.value.name + ' word'"
               (ngModelChange)="word.base.isValid = true"
               [(ngModel)]="word.base.value"
               [ngClass]="!word.base.isValid ? 'field-not-valid' : ''"
@@ -184,7 +184,7 @@
                 type="text"
                 class="form-control"
                 aria-describedby="emailHelp"
-                placeholder="Target word"
+                [placeholder]="targetLanguage.value.name + ' word'"
                 (ngModelChange)="target.isValid = true"
                 [(ngModel)]="target.value"
                 [ngClass]="!target.isValid ? 'field-not-valid' : ''"
@@ -216,9 +216,10 @@
         <button
           class="btn btn-info"
           (click)="addWordSeries(container)"
-          *ngIf="formData.words.length"
+          *ngIf="formData?.words?.length > 0"
         >
           More word
+          <span style="font-size: 0.5vw">[Ctrl] + [Enter]</span>
         </button>
       </div>
       <div class="col-sm-6 text-right">
