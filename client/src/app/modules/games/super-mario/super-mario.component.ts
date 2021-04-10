@@ -236,7 +236,6 @@ export class SuperMarioComponent implements OnInit {
         this.currentEnemy = {} as WordKeyValueModel<string[]>;
         // Just to fire ngIf in the template
         setTimeout(() => {
-          console.log();
           this.currentEnemy = this.allEnemies.words[indexOfCurrentEnemy + 1];
         }, 1);
       } else {
@@ -246,8 +245,10 @@ export class SuperMarioComponent implements OnInit {
     } else {
       this.currentEnemy = enemy;
     }
-    this.randomNumbers = this.generateRandomNumber();
-    this.prepareAnswerOptions();
+    setTimeout(() => {
+      this.randomNumbers = this.generateRandomNumber();
+      this.prepareAnswerOptions();
+    }, 2);
   }
 
   generateRandomNumber(): number[] {
@@ -462,7 +463,14 @@ export class SuperMarioComponent implements OnInit {
     if (playingEnemy) {
       clearInterval(this.enemyAnimateInterval);
       playingEnemy.status = MarioEnemyStatus.Finished;
-      let nextIndex = this.enemies.indexOf(playingEnemy as MarioEnemy) + 1;
+      const currentIndex = this.enemies.indexOf(playingEnemy as MarioEnemy);
+      let nextIndex = 0;
+
+      this.enemies.forEach((enemy: MarioEnemy, index: number) => {
+        if (index > currentIndex && nextIndex === 0) {
+          nextIndex = index;
+        }
+      });
       this.enemies.forEach(() => {
         if (!this.enemies[nextIndex]) {
           nextIndex++;
