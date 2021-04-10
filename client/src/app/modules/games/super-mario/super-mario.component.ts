@@ -39,15 +39,15 @@ import { FinishGameActionEnum } from '../../../core/models/finish-game-action.en
       transition(':enter', [
         style({
           opacity: 0,
-          top: '40%',
+          top: '30%',
           fontSize: '2vw',
         }),
-        animate('2s', style({ opacity: 1 })),
-        animate('1s 2s', style({ top: '10%', fontSize: '1.8vw' })),
+        animate('500ms', style({ opacity: 1 })),
+        animate('1s', style({ top: '10%', fontSize: '1.8vw' })),
       ]),
       transition(':leave', [
         style({ opacity: 1 }),
-        animate('100ms', style({ opacity: 0 })),
+        animate('600ms', style({ top: '-50%' })),
       ]),
     ]),
     trigger('fadeIn', [
@@ -307,7 +307,7 @@ export class SuperMarioComponent implements OnInit {
       this.showWordInWaitingMode(
         this.enemies.find(Boolean) || ({} as MarioEnemy)
       );
-    }, 4000);
+    }, 1000);
   }
 
   showWordInWaitingMode(enemy: MarioEnemy): void {
@@ -320,7 +320,7 @@ export class SuperMarioComponent implements OnInit {
         enemy.status = MarioEnemyStatus.IsMoving;
         // Todo, uncomment
         this.showMovingEnemy(enemy);
-      }, 2000);
+      }, 1000);
     }
   }
 
