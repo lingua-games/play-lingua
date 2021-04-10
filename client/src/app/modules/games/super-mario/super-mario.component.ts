@@ -312,8 +312,11 @@ export class SuperMarioComponent implements OnInit {
 
   showWordInWaitingMode(enemy: MarioEnemy): void {
     if (enemy && enemy.style) {
+      enemy.style.animation =
+        'loading-mushroom-animation 200ms linear infinite';
       enemy.status = MarioEnemyStatus.Start;
       setTimeout(() => {
+        enemy.style.animation = '';
         enemy.style.transition = '100ms';
         enemy.style.opacity = '1';
         enemy.style.fontSize = '.8vw';

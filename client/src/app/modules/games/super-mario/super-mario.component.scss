@@ -44,20 +44,6 @@
   }
 }
 
-.guid-box-container {
-  left: 30%;
-  position: absolute;
-  width: 40%;
-  border: solid 1px #BDC3C7;
-  top: 30vh;
-  z-index: 100;
-  padding: 0.5rem;
-  background-color: #E5E8E8;
-  box-shadow: 0rem 0rem 2rem #bdc3c7;
-}
-
-
-
 .enemy-container {
   border-top: solid 1px gray;
   border-right: solid 1px gray;
@@ -114,4 +100,10 @@
   left: 50%;
   -ms-transform: translateX(-50%) translateY(-50%);
   -webkit-transform: translate(-50%,-50%);
+}
+
+@keyframes loading-mushroom-animation {
+  0% { opacity: .9 }
+  50% { opacity: .7 }
+  100% { opacity: .9 }
 }
