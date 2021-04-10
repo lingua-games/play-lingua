@@ -16,11 +16,7 @@ export class GreetingComponent implements OnInit {
     private securityService: SecurityService
   ) {}
 
-  ngOnInit(): void {
-    if (this.securityService.isLoggedIn()) {
-      this.router.navigate(['game-menu']).then();
-    }
-  }
+  ngOnInit(): void {}
 
   playGuest(): void {
     this.localStorageService.save(LocalStorageHelper.isGuest, 'true');
