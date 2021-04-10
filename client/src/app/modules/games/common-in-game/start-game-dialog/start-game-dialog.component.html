@@ -16,7 +16,15 @@
   <div class="dialog-content">
     <app-game-hint [hints]="data.hints"></app-game-hint>
     <hr />
-    <mat-form-field appearance="fill" class="select-book-input">
+    <mat-progress-bar
+      mode="indeterminate"
+      *ngIf="bookListLoading"
+    ></mat-progress-bar>
+    <mat-form-field
+      appearance="fill"
+      class="select-book-input"
+      *ngIf="!bookListLoading"
+    >
       <mat-label>Select a book</mat-label>
       <mat-select
         [(ngModel)]="form.selectedBook"
@@ -27,10 +35,14 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
+    <mat-progress-bar
+      mode="indeterminate"
+      *ngIf="chapterListLoading"
+    ></mat-progress-bar>
     <mat-form-field
       appearance="fill"
       class="select-book-input"
-      *ngIf="chapters && chapters.length"
+      *ngIf="form.selectedBook.id && chapters && chapters.length"
     >
       <mat-label>Select a chapter</mat-label>
       <mat-select [(ngModel)]="form.selectedChapter">

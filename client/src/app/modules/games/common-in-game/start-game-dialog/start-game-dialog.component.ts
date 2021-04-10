@@ -27,7 +27,8 @@ export class StartGameDialogComponent implements OnInit {
   books: BookModel[] = [];
   chapters: ChapterModel[] = [];
   isPreparing?: boolean;
-
+  bookListLoading = false;
+  chapterListLoading = false;
   form = {
     selectedBook: {} as BookModel,
     selectedChapter: {} as ChapterModel,
@@ -55,6 +56,7 @@ export class StartGameDialogComponent implements OnInit {
   }
 
   getBooks(): void {
+    this.bookListLoading = true;
     this.bookChapterService
       .getBooksBySourceAndTargetLanguageId(
         this.defaultLanguages.defaultBaseLanguage.id,
@@ -62,6 +64,7 @@ export class StartGameDialogComponent implements OnInit {
       )
       .subscribe(
         (res: BookModel[]) => {
+          this.bookListLoading = false;
           this.books.push({
             id: 0,
             name: 'No book, just random',
@@ -71,22 +74,32 @@ export class StartGameDialogComponent implements OnInit {
           this.books = this.books.concat(res);
           this.form.selectedBook = this.books[0];
         },
-        () => {}
+        () => {
+          this.bookListLoading = false;
+        }
       );
   }
 
   getChapters(selectedBook: BookModel): void {
+    if (!selectedBook.id) {
+      return;
+    }
+    this.chapterListLoading = true;
     this.chapters = [];
-    this.bookChapterService
-      .getChaptersByBookId(selectedBook.id)
-      .subscribe((res: ChapterModel[]) => {
+    this.bookChapterService.getChaptersByBookId(selectedBook.id).subscribe(
+      (res: ChapterModel[]) => {
+        this.chapterListLoading = false;
         this.chapters.push({
           id: 0,
           name: 'No chapter, just random',
         });
         this.chapters = this.chapters.concat(res);
         this.form.selectedChapter = this.chapters[0];
-      });
+      },
+      () => {
+        this.chapterListLoading = false;
+      }
+    );
   }
 
   backToMenu(): void {
