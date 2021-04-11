@@ -17,6 +17,7 @@ import { PrepareAddWordsComponent } from './prepare-add-words/prepare-add-words.
 import { ProfileComponent } from './profile/profile.component';
 import { UserAndGuestAllowService } from '../../core/service/guards/user-and-guest-allow.service';
 import { OnlyUserAllowService } from '../../core/service/guards/only-user-allow.service';
+import { OnlyNotSignedAllowService } from '../../core/service/guards/only-not-signed-allow.service';
 
 export interface CanComponentDeactivate {
   canDeactivate: () => Promise<boolean>;
@@ -47,6 +48,7 @@ const routes: Routes = [
         path: '',
         component: GreetingComponent,
         canDeactivate: [DeactivateWithDelay],
+        canActivate: [OnlyNotSignedAllowService],
       },
       {
         path: 'profile',

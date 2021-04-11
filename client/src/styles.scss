@@ -74,7 +74,13 @@ body {
   color: white;
 }
 
-//.btn-back-container {
-//  position: absolute;
-//  left: -10%;
-//}
+.guid-box-container {
+  left: 30%;
+  position: absolute;
+  width: 40%;
+  border: solid 1px #BDC3C7;
+  top: 30vh;
+  z-index: 100;
+  padding: 0.5rem;
+  background-color: #E5E8E8;
+}

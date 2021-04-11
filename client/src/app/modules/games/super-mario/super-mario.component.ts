@@ -39,15 +39,15 @@ import { FinishGameActionEnum } from '../../../core/models/finish-game-action.en
       transition(':enter', [
         style({
           opacity: 0,
-          top: '40%',
+          top: '30%',
           fontSize: '2vw',
         }),
-        animate('2s', style({ opacity: 1 })),
-        animate('1s 2s', style({ top: '10%', fontSize: '1.8vw' })),
+        animate('500ms', style({ opacity: 1 })),
+        animate('1s', style({ top: '10%', fontSize: '1.8vw' })),
       ]),
       transition(':leave', [
         style({ opacity: 1 }),
-        animate('100ms', style({ opacity: 0 })),
+        animate('600ms', style({ top: '-50%' })),
       ]),
     ]),
     trigger('fadeIn', [
@@ -236,7 +236,6 @@ export class SuperMarioComponent implements OnInit {
         this.currentEnemy = {} as WordKeyValueModel<string[]>;
         // Just to fire ngIf in the template
         setTimeout(() => {
-          console.log();
           this.currentEnemy = this.allEnemies.words[indexOfCurrentEnemy + 1];
         }, 1);
       } else {
@@ -246,8 +245,10 @@ export class SuperMarioComponent implements OnInit {
     } else {
       this.currentEnemy = enemy;
     }
-    this.randomNumbers = this.generateRandomNumber();
-    this.prepareAnswerOptions();
+    setTimeout(() => {
+      this.randomNumbers = this.generateRandomNumber();
+      this.prepareAnswerOptions();
+    }, 2);
   }
 
   generateRandomNumber(): number[] {
@@ -306,20 +307,23 @@ export class SuperMarioComponent implements OnInit {
       this.showWordInWaitingMode(
         this.enemies.find(Boolean) || ({} as MarioEnemy)
       );
-    }, 4000);
+    }, 1000);
   }
 
   showWordInWaitingMode(enemy: MarioEnemy): void {
     if (enemy && enemy.style) {
+      enemy.style.animation =
+        'loading-mushroom-animation 200ms linear infinite';
       enemy.status = MarioEnemyStatus.Start;
       setTimeout(() => {
+        enemy.style.animation = '';
         enemy.style.transition = '100ms';
         enemy.style.opacity = '1';
         enemy.style.fontSize = '.8vw';
         enemy.status = MarioEnemyStatus.IsMoving;
         // Todo, uncomment
         this.showMovingEnemy(enemy);
-      }, 2000);
+      }, 1000);
     }
   }
 
@@ -462,7 +466,14 @@ export class SuperMarioComponent implements OnInit {
     if (playingEnemy) {
       clearInterval(this.enemyAnimateInterval);
       playingEnemy.status = MarioEnemyStatus.Finished;
-      let nextIndex = this.enemies.indexOf(playingEnemy as MarioEnemy) + 1;
+      const currentIndex = this.enemies.indexOf(playingEnemy as MarioEnemy);
+      let nextIndex = 0;
+
+      this.enemies.forEach((enemy: MarioEnemy, index: number) => {
+        if (index > currentIndex && nextIndex === 0) {
+          nextIndex = index;
+        }
+      });
       this.enemies.forEach(() => {
         if (!this.enemies[nextIndex]) {
           nextIndex++;

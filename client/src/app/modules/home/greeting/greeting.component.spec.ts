@@ -54,16 +54,6 @@ describe('GreetingComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should navigate if user is logged in', () => {
-    mockSecurityService.isLoggedIn.and.callFake(() => {
-      return true;
-    });
-
-    fixture.detectChanges();
-
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['game-menu']);
-  });
-
   describe('playGuest', () => {
     it('should save is guest to true', () => {
       component.playGuest();

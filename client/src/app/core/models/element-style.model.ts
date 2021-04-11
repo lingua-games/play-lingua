@@ -18,4 +18,5 @@ export interface ElementStyle {
   backgroundColor?: string;
   opacity: string;
   background?: string;
+  animation: string;
 }
