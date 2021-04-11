@@ -126,7 +126,7 @@ describe('StartGameDialogComponent', () => {
       return of(fakeChapterList);
     });
 
-    component.getChapters({} as BookModel);
+    component.getChapters({ id: 1 } as BookModel);
 
     expect(component.chapters[1]).toEqual(fakeChapterList[0]);
   });

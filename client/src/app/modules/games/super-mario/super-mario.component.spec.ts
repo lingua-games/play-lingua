@@ -455,7 +455,7 @@ describe('SuperMarioComponent', () => {
       jasmine.clock().install();
 
       component.showWordInWaitingMode(enemy);
-      jasmine.clock().tick(2000);
+      jasmine.clock().tick(1000);
 
       expect(enemy.status).toBe(MarioEnemyStatus.IsMoving);
     });

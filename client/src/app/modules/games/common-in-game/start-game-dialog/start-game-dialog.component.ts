@@ -53,7 +53,6 @@ export class StartGameDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.getBooks();
-    this.submit();
   }
 
   getBooks(): void {
