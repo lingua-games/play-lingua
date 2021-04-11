@@ -26,36 +26,46 @@
 
 .section-right {
   border: solid 2px #DC7633;
-  color: #DC7633;
   margin: 5px 0;
   border-radius: 10px;
+  height: 55vh;
+  overflow: auto;
 }
 
-.icon-container:hover {
-  width: 96%;
-  margin: .5rem 2%;
-  border-radius: 5px;
-  font-size: 1vw;
+.icon-container-not-selected:hover {
+  font-size: .9vw;
   cursor: pointer;
+  background-color: #bc4b20;
+  color: white;
+}
+
+.icon-container-selected {
+  background-color: #bc4b20;
+  color: white;
+  border-top-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+
+}
+
+fa-icon {
+  font-size: 1.5vw;
+}
+
+.icon-container-not-selected {
+  color: #bc4b20;
 }
 
 .icon-container {
-  width: 50%;
-  margin: .5rem 20%;
-  border-radius: 50%;
-  font-size: 1vw;
-  text-align: center;
   transition: 300ms;
-  border: solid 2px #DC7633;
-  color: #DC7633;
-  background-color: white;
-  padding:1rem;
-
-  overflow: hidden;
+  margin: 1rem 0;
+  width: 100%;
+  text-align: center;
+  font-size: .9vw;
+  padding: 1rem;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .row {
-  margin: 0 2rem 0 0;
+  margin: 0 1rem 0 0;
 }

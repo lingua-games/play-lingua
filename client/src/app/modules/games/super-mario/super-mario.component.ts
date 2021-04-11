@@ -17,7 +17,7 @@ import { GameInformationInterface } from '../../../core/models/game-information.
 import { GameStartInformation } from '../../../core/models/game-start-information';
 import { MatDialog } from '@angular/material/dialog';
 import { BasicInformationService } from '../../../core/service/basic-information.service';
-import { EGame } from '../../../core/models/e-game';
+import { GameNameEnum } from '../../../core/models/game-name.enum';
 import { ElementStyle } from '../../../core/models/element-style.model';
 import { ScoreStorageService } from '../../../core/service/score-storage.service';
 import { FinishGameDialogComponent } from '../common-in-game/finish-game-dialog/finish-game-dialog.component';
@@ -177,10 +177,14 @@ export class SuperMarioComponent implements OnInit {
       .open(StartGameDialogComponent, {
         data: {
           name: 'Super mario',
-          hints: this.basicInformationService.gameHints(EGame.supperMario),
+          code: GameNameEnum.supperMario,
+          hints: this.basicInformationService.gameHints(
+            GameNameEnum.supperMario
+          ),
         } as GameInformationInterface,
         disableClose: true,
         width: '60%',
+        height: '60vh',
       })
       .afterClosed()
       .subscribe((res: GameStartInformation<WordKeyValueModel<string[]>[]>) => {

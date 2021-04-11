@@ -14,7 +14,7 @@ import { FinishGameDialogComponent } from '../common-in-game/finish-game-dialog/
 import { StartGameDialogComponent } from '../common-in-game/start-game-dialog/start-game-dialog.component';
 import { GameInformationInterface } from '../../../core/models/game-information.interface';
 import { BasicInformationService } from '../../../core/service/basic-information.service';
-import { EGame } from '../../../core/models/e-game';
+import { GameNameEnum } from '../../../core/models/game-name.enum';
 
 const secondsForTraver = 5000;
 const bufferBeforeStart = 1000;
@@ -171,7 +171,10 @@ export class FallingStarsComponent implements OnInit {
       .open(StartGameDialogComponent, {
         data: {
           name: 'Falling stars',
-          hints: this.basicInformationService.gameHints(EGame.fallingStars),
+          code: GameNameEnum.fallingStars,
+          hints: this.basicInformationService.gameHints(
+            GameNameEnum.fallingStars
+          ),
         } as GameInformationInterface,
         disableClose: true,
         width: '30%',

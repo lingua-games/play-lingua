@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { LanguageModel } from '../models/language.model';
 import { GameMenu } from '../models/game.menu.model';
-import { EGame } from '../models/e-game';
+import { GameNameEnum } from '../models/game-name.enum';
 import { GameHint } from '../models/game-hint.interface';
 import { BookModel } from '../models/book.model';
 
@@ -308,9 +308,9 @@ export class BasicInformationService {
     return this.http.get<LanguageModel[]>(`${this.languageUrl}`);
   }
 
-  gameHints(game: EGame): GameHint[] {
+  gameHints(game: GameNameEnum): GameHint[] {
     const result: GameHint[] = [];
-    if (game === EGame.fallingStars) {
+    if (game === GameNameEnum.fallingStars) {
       result.push({
         key: 'ESC',
         description: 'Pause the game and show menus',
@@ -333,7 +333,7 @@ export class BasicInformationService {
       });
     }
 
-    if (game === EGame.supperMario) {
+    if (game === GameNameEnum.supperMario) {
       result.push({
         key: '← / A',
         description: 'Move left',

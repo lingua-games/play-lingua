@@ -10,6 +10,7 @@ import { MaterialModule } from '../../modules/common/material/material.module';
 import { PrimengModule } from '../../modules/common/primeng/primeng.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { GameOptionsComponent } from './game-options/game-options.component';
+import { GameInstructionComponent } from './game-instruction/game-instruction.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { GameOptionsComponent } from './game-options/game-options.component';
     TopNavbarComponent,
     StartGameDialogComponent,
     FinishGameDialogComponent,
+    GameInstructionComponent,
   ],
   imports: [
     CommonModule,

@@ -17,11 +17,24 @@ import { GameInformationInterface } from '../../../../core/models/game-informati
 import { LocalStorageHelper } from '../../../../core/models/local-storage.enum';
 import { GetGameWordsRequestModel } from '../../../../core/models/get-game-words-request.model';
 import { LocalStorageService } from '../../../../core/service/local-storage.service';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-start-game-dialog',
   templateUrl: './start-game-dialog.component.html',
   styleUrls: ['./start-game-dialog.component.scss'],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('100ms', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        style({ opacity: 1 }),
+        animate('100ms', style({ opacity: 0 })),
+      ]),
+    ]),
+  ],
 })
 export class StartGameDialogComponent implements OnInit {
   books: BookModel[] = [];
@@ -29,7 +42,8 @@ export class StartGameDialogComponent implements OnInit {
   isPreparing?: boolean;
   bookListLoading = false;
   chapterListLoading = false;
-  optionMouseHovered = '';
+  hoveredOption = '';
+  selectedOption = 'help';
   form = {
     selectedBook: {} as BookModel,
     selectedChapter: {} as ChapterModel,
@@ -54,6 +68,20 @@ export class StartGameDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.getBooks();
+  }
+
+  showSection(item: string): void {
+    this.selectedOption = '';
+    setTimeout(() => {
+      this.selectedOption = item;
+    }, 100);
+  }
+
+  showHover(item: string): void {
+    if (item === this.selectedOption) {
+      return;
+    }
+    this.hoveredOption = item;
   }
 
   getBooks(): void {

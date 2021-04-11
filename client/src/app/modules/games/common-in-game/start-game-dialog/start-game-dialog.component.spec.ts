@@ -13,6 +13,7 @@ import { ChapterModel } from '../../../../core/models/chapter.model';
 import { GamesService } from '../../../../core/service/games.service';
 import { Router } from '@angular/router';
 import { WordKeyValueModel } from '../../../../core/models/word-key-value.model';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('StartGameDialogComponent', () => {
   let component: StartGameDialogComponent;
@@ -35,7 +36,7 @@ describe('StartGameDialogComponent', () => {
       ]);
       mockGameService = jasmine.createSpyObj(['getGameWords']);
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [HttpClientTestingModule, BrowserAnimationsModule],
         declarations: [StartGameDialogComponent],
         providers: [
           {
