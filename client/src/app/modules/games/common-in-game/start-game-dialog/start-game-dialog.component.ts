@@ -29,6 +29,7 @@ export class StartGameDialogComponent implements OnInit {
   isPreparing?: boolean;
   bookListLoading = false;
   chapterListLoading = false;
+  optionMouseHovered = '';
   form = {
     selectedBook: {} as BookModel,
     selectedChapter: {} as ChapterModel,

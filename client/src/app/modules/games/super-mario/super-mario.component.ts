@@ -180,7 +180,7 @@ export class SuperMarioComponent implements OnInit {
           hints: this.basicInformationService.gameHints(EGame.supperMario),
         } as GameInformationInterface,
         disableClose: true,
-        width: '30%',
+        width: '60%',
       })
       .afterClosed()
       .subscribe((res: GameStartInformation<WordKeyValueModel<string[]>[]>) => {

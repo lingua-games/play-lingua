@@ -23,3 +23,39 @@
 .dialog-actions {
   padding: .4rem .4rem;
 }
+
+.section-right {
+  border: solid 2px #DC7633;
+  color: #DC7633;
+  margin: 5px 0;
+  border-radius: 10px;
+}
+
+.icon-container:hover {
+  width: 96%;
+  margin: .5rem 2%;
+  border-radius: 5px;
+  font-size: 1vw;
+  cursor: pointer;
+}
+
+.icon-container {
+  width: 50%;
+  margin: .5rem 20%;
+  border-radius: 50%;
+  font-size: 1vw;
+  text-align: center;
+  transition: 300ms;
+  border: solid 2px #DC7633;
+  color: #DC7633;
+  background-color: white;
+  padding:1rem;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row {
+  margin: 0 2rem 0 0;
+}
