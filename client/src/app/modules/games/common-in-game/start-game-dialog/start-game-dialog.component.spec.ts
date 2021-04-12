@@ -6,14 +6,12 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NotificationService } from '../../../../core/service/notification.service';
 import { LocalStorageService } from '../../../../core/service/local-storage.service';
-import { BookChapterService } from '../../../../core/service/book-chapter.service';
 import { of, throwError } from 'rxjs';
-import { BookModel } from '../../../../core/models/book.model';
-import { ChapterModel } from '../../../../core/models/chapter.model';
 import { GamesService } from '../../../../core/service/games.service';
 import { Router } from '@angular/router';
 import { WordKeyValueModel } from '../../../../core/models/word-key-value.model';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { GameConfigModel } from '../../../../core/models/game-config-model';
 
 describe('StartGameDialogComponent', () => {
   let component: StartGameDialogComponent;
@@ -21,7 +19,6 @@ describe('StartGameDialogComponent', () => {
   let mockMatDialogRef;
   let mockNotificationService;
   let mockLocalStorageService;
-  let mockBookChapterService;
   let mockGameService;
   beforeEach(
     waitForAsync(() => {
@@ -30,10 +27,7 @@ describe('StartGameDialogComponent', () => {
       mockLocalStorageService = jasmine.createSpyObj('localStorageService', {
         load: `{ "defaultBaseLanguage": {}, "defaultTargetLanguage": {} }`,
       });
-      mockBookChapterService = jasmine.createSpyObj([
-        'getBooksBySourceAndTargetLanguageId',
-        'getChaptersByBookId',
-      ]);
+
       mockGameService = jasmine.createSpyObj(['getGameWords']);
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule, BrowserAnimationsModule],
@@ -64,10 +58,6 @@ describe('StartGameDialogComponent', () => {
             useValue: mockLocalStorageService,
           },
           {
-            provide: BookChapterService,
-            useValue: mockBookChapterService,
-          },
-          {
             provide: GamesService,
             useValue: mockGameService,
           },
@@ -83,53 +73,9 @@ describe('StartGameDialogComponent', () => {
   });
 
   it('should create', () => {
-    mockBookChapterService.getBooksBySourceAndTargetLanguageId.and.callFake(
-      () => {
-        return of();
-      }
-    );
-
     fixture.detectChanges();
 
     expect(component).toBeTruthy();
-  });
-
-  it('should set books into books array after calling getBooks API', () => {
-    component.books = [];
-    const fakeBookList = [{ id: 1, name: 'someName' } as BookModel];
-    mockBookChapterService.getBooksBySourceAndTargetLanguageId.and.callFake(
-      () => {
-        return of(fakeBookList);
-      }
-    );
-
-    fixture.detectChanges();
-
-    expect(component.books[1]).toEqual(fakeBookList[0]);
-  });
-
-  it('should handle error when getBooks API fail', () => {
-    mockBookChapterService.getBooksBySourceAndTargetLanguageId.and.callFake(
-      () => {
-        return throwError('some errors');
-      }
-    );
-
-    fixture.detectChanges();
-
-    expect(2).toBe(2);
-  });
-
-  it('should return chapters when getChapters hits', () => {
-    component.chapters = [];
-    const fakeChapterList = [{ id: 1, name: 'someName' } as ChapterModel];
-    mockBookChapterService.getChaptersByBookId.and.callFake(() => {
-      return of(fakeChapterList);
-    });
-
-    component.getChapters({ id: 1 } as BookModel);
-
-    expect(component.chapters[1]).toEqual(fakeChapterList[0]);
   });
 
   it('should call dialog close when backToMenu hits', () => {
@@ -145,7 +91,7 @@ describe('StartGameDialogComponent', () => {
 
     jasmine.clock().uninstall();
     jasmine.clock().install();
-    component.submit();
+    component.submit({} as GameConfigModel);
     jasmine.clock().tick(2005);
 
     expect(mockMatDialogRef.close).toHaveBeenCalled();
@@ -157,7 +103,7 @@ describe('StartGameDialogComponent', () => {
       return throwError('I am error');
     });
 
-    component.submit();
+    component.submit({} as GameConfigModel);
 
     expect(mockNotificationService.showMessage).toHaveBeenCalled();
   });
