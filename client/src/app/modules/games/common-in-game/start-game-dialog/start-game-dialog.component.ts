@@ -15,6 +15,7 @@ import { GetGameWordsRequestModel } from '../../../../core/models/get-game-words
 import { LocalStorageService } from '../../../../core/service/local-storage.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { GameConfigModel } from '../../../../core/models/game-config-model';
+import { GameNameEnum } from '../../../../core/models/game-name.enum';
 
 @Component({
   selector: 'app-start-game-dialog',
@@ -35,7 +36,7 @@ import { GameConfigModel } from '../../../../core/models/game-config-model';
 })
 export class StartGameDialogComponent implements OnInit {
   hoveredOption = '';
-  selectedOption = 'help';
+  selectedOption = '';
   isPreparing?: boolean;
 
   constructor(
@@ -47,7 +48,33 @@ export class StartGameDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: GameInformationInterface
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.data.code === GameNameEnum.supperMario) {
+      if (
+        JSON.parse(
+          this.localStorageService.load(LocalStorageHelper.showHelpForMario)
+        )
+      ) {
+        this.selectedOption = 'start';
+      } else {
+        this.selectedOption = 'help';
+      }
+    }
+
+    if (this.data.code === GameNameEnum.fallingStars) {
+      if (
+        JSON.parse(
+          this.localStorageService.load(
+            LocalStorageHelper.showHelpForFallingStars
+          )
+        )
+      ) {
+        this.selectedOption = 'start';
+      } else {
+        this.selectedOption = 'help';
+      }
+    }
+  }
 
   showSection(item: string): void {
     this.selectedOption = '';

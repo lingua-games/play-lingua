@@ -1,12 +1,10 @@
-<p>
-  game-instruction works!game-instruction works!game-instruction 7 78 7 7 7 77
-  78 7 7 7 77 78 7 7 7 77 78 7 7 7 77 78 7 7 7 77 78 7 7 7 77 78 7 7 7 77 78 7 7
-  7 77 78 7 7 7 7 works!game-instruction works!game-instruction
-  works!game-instruction works!game-instruction works!game-instruction
-  works!game-instruction works!game-instruction works!game-instruction
-  works!game-instruction works!game-instruction works!game-instruction
-  works!game-instruction works!game-instruction works!game-instruction
-  works!game-instruction works!game-instruction works!
-</p>
-<p>game-instruction works!</p>
-<p>game-instruction works!</p>
+<div [innerHTML]="textTemplate" class="main-container"></div>
+<div class="p-field-checkbox">
+  <mat-checkbox
+    [(ngModel)]="showHelp"
+    color="primary"
+    (ngModelChange)="changeShowHelp()"
+  >
+    Dont show help by default
+  </mat-checkbox>
+</div>
