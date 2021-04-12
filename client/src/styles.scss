@@ -5,8 +5,14 @@ body {
   overflow: hidden !important;
 }
 
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Poppins'), url("/assets/fonts/Poppins/Poppins-Medium.ttf") format('truetype');
+}
 * {
-  font-family: cursive;
+  font-family: 'Poppins', Arial, sans-serif;
 }
 
 *:focus {

@@ -176,7 +176,7 @@ export class SuperMarioComponent implements OnInit {
     this.dialog
       .open(StartGameDialogComponent, {
         data: {
-          name: 'Super mario',
+          name: 'Super Mario',
           code: GameNameEnum.supperMario,
           hints: this.basicInformationService.gameHints(
             GameNameEnum.supperMario
@@ -212,7 +212,7 @@ export class SuperMarioComponent implements OnInit {
         chapterId: this.chapterId,
         gameName: 'super-mario',
         score: this.scoreStorageService.getCachedScores(),
-        gameDisplayName: 'Super mario',
+        gameDisplayName: 'Super Mario',
       } as ScoreStoreInterface,
     });
 

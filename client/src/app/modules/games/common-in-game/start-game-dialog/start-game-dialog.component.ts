@@ -1,8 +1,4 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { BookModel } from '../../../../core/models/book.model';
-import { BookChapterService } from '../../../../core/service/book-chapter.service';
-import { LanguageModel } from '../../../../core/models/language.model';
-import { ChapterModel } from '../../../../core/models/chapter.model';
 import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GamesService } from '../../../../core/service/games.service';
@@ -18,6 +14,7 @@ import { LocalStorageHelper } from '../../../../core/models/local-storage.enum';
 import { GetGameWordsRequestModel } from '../../../../core/models/get-game-words-request.model';
 import { LocalStorageService } from '../../../../core/service/local-storage.service';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { GameConfigModel } from '../../../../core/models/game-config-model';
 
 @Component({
   selector: 'app-start-game-dialog',
@@ -37,27 +34,11 @@ import { animate, style, transition, trigger } from '@angular/animations';
   ],
 })
 export class StartGameDialogComponent implements OnInit {
-  books: BookModel[] = [];
-  chapters: ChapterModel[] = [];
-  isPreparing?: boolean;
-  bookListLoading = false;
-  chapterListLoading = false;
   hoveredOption = '';
   selectedOption = 'help';
-  form = {
-    selectedBook: {} as BookModel,
-    selectedChapter: {} as ChapterModel,
-  };
-
-  defaultLanguages: {
-    defaultBaseLanguage: LanguageModel;
-    defaultTargetLanguage: LanguageModel;
-  } = JSON.parse(
-    this.localStorageService.load(LocalStorageHelper.defaultLanguages)
-  );
+  isPreparing?: boolean;
 
   constructor(
-    private bookChapterService: BookChapterService,
     private router: Router,
     private dialogRef: MatDialogRef<StartGameDialogComponent>,
     private gamesService: GamesService,
@@ -66,9 +47,7 @@ export class StartGameDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: GameInformationInterface
   ) {}
 
-  ngOnInit(): void {
-    this.getBooks();
-  }
+  ngOnInit(): void {}
 
   showSection(item: string): void {
     this.selectedOption = '';
@@ -84,63 +63,16 @@ export class StartGameDialogComponent implements OnInit {
     this.hoveredOption = item;
   }
 
-  getBooks(): void {
-    this.bookListLoading = true;
-    this.bookChapterService
-      .getBooksBySourceAndTargetLanguageId(
-        this.defaultLanguages.defaultBaseLanguage.id,
-        this.defaultLanguages.defaultTargetLanguage.id
-      )
-      .subscribe(
-        (res: BookModel[]) => {
-          this.bookListLoading = false;
-          this.books.push({
-            id: 0,
-            name: 'No book, just random',
-            targetLanguageId: 0,
-            sourceLanguageId: 0,
-          });
-          this.books = this.books.concat(res);
-          this.form.selectedBook = this.books[0];
-        },
-        () => {
-          this.bookListLoading = false;
-        }
-      );
-  }
-
-  getChapters(selectedBook: BookModel): void {
-    if (!selectedBook.id) {
-      return;
-    }
-    this.chapterListLoading = true;
-    this.chapters = [];
-    this.bookChapterService.getChaptersByBookId(selectedBook.id).subscribe(
-      (res: ChapterModel[]) => {
-        this.chapterListLoading = false;
-        this.chapters.push({
-          id: 0,
-          name: 'No chapter, just random',
-        });
-        this.chapters = this.chapters.concat(res);
-        this.form.selectedChapter = this.chapters[0];
-      },
-      () => {
-        this.chapterListLoading = false;
-      }
-    );
-  }
-
   backToMenu(): void {
     this.router.navigate(['../game-menu']).then();
     this.dialogRef.close();
   }
 
-  submit(): void {
+  submit(form: GameConfigModel): void {
     this.isPreparing = true;
     const result: GameStartInformation<WordKeyValueModel<string[]>[]> = {
-      bookId: this.form.selectedBook ? this.form.selectedBook.id : 0,
-      chapterId: this.form.selectedChapter ? this.form.selectedChapter.id : 0,
+      bookId: form.selectedBook ? form.selectedBook.id : 0,
+      chapterId: form.selectedChapter ? form.selectedChapter.id : 0,
       words: [],
     };
 

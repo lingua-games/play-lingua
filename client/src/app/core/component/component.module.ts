@@ -11,6 +11,7 @@ import { PrimengModule } from '../../modules/common/primeng/primeng.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { GameOptionsComponent } from './game-options/game-options.component';
 import { GameInstructionComponent } from './game-instruction/game-instruction.component';
+import { GameConfigComponent } from './game-config/game-config.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { GameInstructionComponent } from './game-instruction/game-instruction.co
     StartGameDialogComponent,
     FinishGameDialogComponent,
     GameInstructionComponent,
+    GameConfigComponent,
   ],
   imports: [
     CommonModule,
