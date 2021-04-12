@@ -25,11 +25,11 @@
   margin: 5px 0;
   border-radius: 10px;
   height: 55vh;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .icon-container-not-selected:hover {
-  font-size: .9vw;
+  font-size: .8vw;
   cursor: pointer;
   background-color: #bc4b20;
   color: white;
@@ -43,17 +43,13 @@
 
 }
 
-fa-icon {
-  font-size: 1.5vw;
-}
-
 .icon-container-not-selected {
   color: #bc4b20;
 }
 
 .icon-container {
   transition: 300ms;
-  margin: 1rem 0;
+  margin: .4rem 0;
   width: 100%;
   text-align: center;
   font-size: .9vw;
@@ -64,4 +60,13 @@ fa-icon {
 
 .row {
   margin: 0 1rem 0 0;
+}
+
+.dialog-title-container {
+  text-align: center;
+  border-bottom: 1px solid lightgray;
+  padding: .5rem 0;
+  font-size: 1vw;
+  background-color: #3A001E;
+  color: #EDE9D0;
 }

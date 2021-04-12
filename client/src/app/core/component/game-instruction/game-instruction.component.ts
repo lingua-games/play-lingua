@@ -54,7 +54,6 @@ export class GameInstructionComponent implements OnInit {
   }
 
   changeShowHelp(): void {
-    console.log(this.showHelp);
     this.localStorageService.save(
       LocalStorageHelper.showHelpForMario,
       this.showHelp.toString()

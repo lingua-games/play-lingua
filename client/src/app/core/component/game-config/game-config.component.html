@@ -9,8 +9,8 @@
   <hr />
   <h1>Preparing game data</h1>
 </div>
-<div *ngIf="!isPreparing">
-  <div class="dialog-content">
+<div *ngIf="!isPreparing" class="main-container">
+  <div class="body-container">
     <app-game-hint [hints]="data.hints"></app-game-hint>
     <hr />
     <mat-progress-bar
@@ -50,11 +50,11 @@
     </mat-form-field>
   </div>
   <div class="action-container">
-    <button class="btn btn-danger" (click)="backToMenu.emit()">
-      Main menu
-    </button>
     <button class="btn btn-success" (click)="submitEmitter.emit(form)">
       Start!
+    </button>
+    <button class="btn btn-danger" (click)="backToMenu.emit()">
+      Main menu
     </button>
   </div>
 </div>

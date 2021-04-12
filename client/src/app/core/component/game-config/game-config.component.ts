@@ -69,7 +69,6 @@ export class GameConfigComponent implements OnInit {
   }
 
   getChapters(selectedBook: BookModel): void {
-    debugger;
     if (!selectedBook.id) {
       return;
     }

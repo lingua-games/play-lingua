@@ -41,8 +41,6 @@ describe('GameConfigComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(GameConfigComponent);
     component = fixture.componentInstance;
-
-    console.log(component);
   });
 
   it('should create', () => {
@@ -84,7 +82,6 @@ describe('GameConfigComponent', () => {
   });
 
   it('should return chapters when getChapters hits', () => {
-    console.log(component);
     component.chapters = [];
 
     const fakeChapterList = [{ id: 1, name: 'someName' } as ChapterModel];

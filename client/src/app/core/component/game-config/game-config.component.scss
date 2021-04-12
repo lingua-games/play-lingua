@@ -1,3 +1,25 @@
 .select-book-input {
   width: 100%;
 }
+
+.action-container {
+  .btn-danger {
+    width: 28%;
+  }
+
+  .btn-success {
+    margin-right: 2%;
+    width: 70%;
+  }
+
+  margin-bottom: 2%;
+}
+
+.body-container {
+  max-height: 47vh;
+  overflow: auto;
+}
+
+.main-container {
+  overflow-y: hidden !important;
+}

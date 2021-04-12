@@ -185,6 +185,7 @@ export class SuperMarioComponent implements OnInit {
         disableClose: true,
         width: '60%',
         height: '60vh',
+        maxHeight: '95vh',
       })
       .afterClosed()
       .subscribe((res: GameStartInformation<WordKeyValueModel<string[]>[]>) => {
