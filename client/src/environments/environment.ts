@@ -4,4 +4,5 @@ export const environment = {
   intervalForRoundMainPage: 1500,
   startGameCount: 100,
   recordCount: 5,
+  rankCount: 10,
 };

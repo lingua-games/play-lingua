@@ -1,0 +1,52 @@
+.col-cup {
+  width: 8%;
+  text-align: center;
+  transform: rotate(
+      15deg
+  );
+}
+
+.col-rank {
+  text-align: center;
+}
+
+fa-icon {
+  font-size: 1vw;
+  border: solid 1px;
+  border-radius: 50%;
+  padding: 3px;
+}
+
+tr:nth-child(1) {
+  fa-icon {
+    color: #D4AC0D;
+  }
+}
+
+tr:nth-child(2) {
+  fa-icon {
+    color: #909497;
+  }
+}
+
+tr:nth-child(3) {
+  fa-icon {
+    color: #922B21;
+  }
+}
+
+.rank-item {
+  font-size: 1vw;
+}
+
+.alert-success {
+  a {
+    color: #bc4b20;
+    font-weight: bolder;
+    text-decoration: underline;
+  }
+
+  a:hover {
+    cursor: pointer;
+  }
+}

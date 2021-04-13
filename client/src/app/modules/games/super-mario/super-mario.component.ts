@@ -177,6 +177,7 @@ export class SuperMarioComponent implements OnInit {
       .open(StartGameDialogComponent, {
         data: {
           name: 'Super Mario',
+          gameNameForRanking: 'super-mario',
           code: GameNameEnum.supperMario,
           hints: this.basicInformationService.gameHints(
             GameNameEnum.supperMario

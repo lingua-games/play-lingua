@@ -13,6 +13,13 @@ export class ScoreStorageService {
   cachedScore = 0;
   constructor(private http: HttpClient) {}
 
+  getTopRanks(score: ScoreStoreInterface): Observable<RanksResultInterface[]> {
+    return this.http.post<RanksResultInterface[]>(
+      this.storeScoreApi + '/get-top-scores',
+      score
+    );
+  }
+
   storeScore(score: ScoreStoreInterface): Observable<RanksResultInterface[]> {
     score.score = Math.round(this.cachedScore * 10) / 10;
     this.cachedScore = 0;

@@ -56,17 +56,19 @@ export class StartGameDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.data.code === GameNameEnum.supperMario) {
-      if (
-        JSON.parse(
-          this.localStorageService.load(LocalStorageHelper.showHelpForMario)
-        )
-      ) {
-        this.selectedOption = 'start';
-      } else {
-        this.selectedOption = 'help';
-      }
-    }
+    this.selectedOption = 'ranking';
+    // Todo: uncomment below
+    // if (this.data.code === GameNameEnum.supperMario) {
+    //   if (
+    //     JSON.parse(
+    //       this.localStorageService.load(LocalStorageHelper.showHelpForMario)
+    //     )
+    //   ) {
+    //     this.selectedOption = 'start';
+    //   } else {
+    //     this.selectedOption = 'help';
+    //   }
+    // }
 
     if (this.data.code === GameNameEnum.fallingStars) {
       if (

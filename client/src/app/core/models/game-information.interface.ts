@@ -3,6 +3,7 @@ import { GameNameEnum } from './game-name.enum';
 
 export interface GameInformationInterface {
   name: string;
+  gameNameForRanking: string;
   code: GameNameEnum;
   hints: GameHint[];
 }

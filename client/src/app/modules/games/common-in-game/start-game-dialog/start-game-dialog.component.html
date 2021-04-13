@@ -64,7 +64,7 @@
     <app-game-instruction
       @fadeIn
       style="display: block"
-      [hidden]="selectedOption !== 'help'"
+      *ngIf="selectedOption === 'help'"
       [gameName]="data.code"
     ></app-game-instruction>
 
@@ -77,11 +77,14 @@
       [form]="form"
       (submitEmitter)="submit()"
     ></app-game-config>
+
     <app-ranking
       style="display: block"
-      [hidden]="selectedOption !== 'ranking'"
+      *ngIf="selectedOption === 'ranking'"
       @fadeIn
+      [data]="data"
       [form]="form"
+      (goToStart)="showSection('start')"
     ></app-ranking>
   </div>
 </div>

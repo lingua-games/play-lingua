@@ -1,1 +1,51 @@
-<p>ranking works!</p>
+<div *ngIf="ranks.isLoading" class="text-center p-5">
+  <div
+    class="spinner-grow text-success"
+    style="width: 3rem; height: 3rem"
+    role="status"
+  >
+    <span class="sr-only">Loading...</span>
+  </div>
+  <hr />
+  <h1>Preparing ranks</h1>
+</div>
+
+<div *ngIf="!ranks.isLoading">
+  <div class="alert alert-success mt-2" role="alert">
+    The ranks belong to the players who played
+    <span *ngIf="form.selectedBook.id > 0 && form.selectedChapter.id === 0">
+      <strong>{{ form.selectedBook.name }}</strong> book and
+      <strong>Random</strong> chapter
+    </span>
+    <span *ngIf="form.selectedBook.id === 0"
+      ><strong>random</strong> books/chapters</span
+    >
+    <span *ngIf="form.selectedBook.id > 0 && form.selectedChapter.id > 0">
+      <strong>{{ form.selectedBook.name }}</strong> book and
+      <strong>{{ form.selectedChapter.name }}</strong> chapter
+    </span>
+    . You can always change this filter in
+    <a (click)="goToStart.emit()">Start</a> tab.
+  </div>
+  <table class="table table-hover" *ngIf="ranks.data && ranks.data.length">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Player</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let rank of ranks.data; let index = index">
+        <td class="col-cup" *ngIf="index < 3" scope="row">
+          <fa-icon *ngIf="index < 3" [icon]="['fas', 'trophy']"> </fa-icon>
+        </td>
+        <td class="col-rank" *ngIf="index >= 3">
+          <span class="rank-item">{{ index + 1 }}</span>
+        </td>
+        <td>{{ rank.displayName || rank.email }}</td>
+        <td>{{ rank.score }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
