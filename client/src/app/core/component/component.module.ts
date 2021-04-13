@@ -12,6 +12,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { GameOptionsComponent } from './game-options/game-options.component';
 import { GameInstructionComponent } from './game-instruction/game-instruction.component';
 import { GameConfigComponent } from './game-config/game-config.component';
+import { RankingComponent } from './ranking/ranking.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { GameConfigComponent } from './game-config/game-config.component';
     FinishGameDialogComponent,
     GameInstructionComponent,
     GameConfigComponent,
+    RankingComponent,
   ],
   imports: [
     CommonModule,

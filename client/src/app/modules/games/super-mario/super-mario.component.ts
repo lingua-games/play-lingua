@@ -184,7 +184,7 @@ export class SuperMarioComponent implements OnInit {
         } as GameInformationInterface,
         disableClose: true,
         width: '60%',
-        height: '60vh',
+        height: '62vh',
         maxHeight: '95vh',
       })
       .afterClosed()

@@ -8,6 +8,7 @@ import {
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {
+  faArrowCircleLeft,
   faPlus,
   faQuestion,
   faTrash,
@@ -71,7 +72,8 @@ export class AppModule {
       faForward,
       faQuestion,
       faGooglePlay,
-      faTrophy
+      faTrophy,
+      faArrowCircleLeft
     );
   }
 }

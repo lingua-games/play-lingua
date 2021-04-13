@@ -16,6 +16,9 @@ import { LocalStorageService } from '../../../../core/service/local-storage.serv
 import { animate, style, transition, trigger } from '@angular/animations';
 import { GameConfigModel } from '../../../../core/models/game-config-model';
 import { GameNameEnum } from '../../../../core/models/game-name.enum';
+import { BookModel } from '../../../../core/models/book.model';
+import { ChapterModel } from '../../../../core/models/chapter.model';
+import { retry } from 'rxjs/operators';
 
 @Component({
   selector: 'app-start-game-dialog',
@@ -38,6 +41,10 @@ export class StartGameDialogComponent implements OnInit {
   hoveredOption = '';
   selectedOption = '';
   isPreparing?: boolean;
+  form: GameConfigModel = {
+    selectedBook: {} as BookModel,
+    selectedChapter: {} as ChapterModel,
+  };
 
   constructor(
     private router: Router,
@@ -95,11 +102,11 @@ export class StartGameDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  submit(form: GameConfigModel): void {
+  submit(): void {
     this.isPreparing = true;
     const result: GameStartInformation<WordKeyValueModel<string[]>[]> = {
-      bookId: form.selectedBook ? form.selectedBook.id : 0,
-      chapterId: form.selectedChapter ? form.selectedChapter.id : 0,
+      bookId: this.form.selectedBook ? this.form.selectedBook.id : 0,
+      chapterId: this.form.selectedChapter ? this.form.selectedChapter.id : 0,
       words: [],
     };
 

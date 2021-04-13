@@ -32,12 +32,12 @@
   font-size: .8vw;
   cursor: pointer;
   background-color: #bc4b20;
-  color: white;
+  color: #BDA69E;
 }
 
 .icon-container-selected {
   background-color: #bc4b20;
-  color: white;
+  color: #BDA69E;
   border-top-left-radius: 15px;
   border-bottom-right-radius: 15px;
 
@@ -67,6 +67,17 @@
   border-bottom: 1px solid lightgray;
   padding: .5rem 0;
   font-size: 1vw;
-  background-color: #3A001E;
-  color: #EDE9D0;
+  background-color: #BDA69E;
+  color: #BC4B20;
+}
+
+.back-container {
+  float: left;
+  margin-left: .5rem;
+  transition: 100ms;
+}
+
+.back-container:hover {
+  cursor: pointer;
+  opacity: .7;
 }

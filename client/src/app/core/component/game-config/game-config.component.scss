@@ -3,13 +3,14 @@
 }
 
 .action-container {
-  .btn-danger {
-    width: 28%;
-  }
+  position: absolute;
+  bottom: -2%;
+  height: fit-content;
+  left: 5%;
+  width: 90%;
 
   .btn-success {
-    margin-right: 2%;
-    width: 70%;
+    width: 100%;
   }
 
   margin-bottom: 2%;
@@ -23,3 +24,9 @@
 .main-container {
   overflow-y: hidden !important;
 }
+
+:host {
+  color: #55433C;
+}
+
+

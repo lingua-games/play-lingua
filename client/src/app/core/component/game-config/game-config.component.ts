@@ -16,8 +16,12 @@ import { GameInformationInterface } from '../../models/game-information.interfac
 export class GameConfigComponent implements OnInit {
   @Input() data: GameInformationInterface = {} as GameInformationInterface;
   @Input() isPreparing?: boolean;
+  @Input() form: GameConfigModel = {
+    selectedBook: {} as BookModel,
+    selectedChapter: {} as ChapterModel,
+  };
+
   @Output() submitEmitter = new EventEmitter();
-  @Output() backToMenu = new EventEmitter();
 
   bookListLoading = false;
   chapters: ChapterModel[] = [];
@@ -29,10 +33,6 @@ export class GameConfigComponent implements OnInit {
     this.localStorageService.load(LocalStorageHelper.defaultLanguages)
   );
   books: BookModel[] = [];
-  form: GameConfigModel = {
-    selectedBook: {} as BookModel,
-    selectedChapter: {} as ChapterModel,
-  };
 
   constructor(
     private bookChapterService: BookChapterService,

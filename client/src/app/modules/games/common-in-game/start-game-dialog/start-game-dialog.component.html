@@ -1,4 +1,9 @@
+<p-toast></p-toast>
 <div class="dialog-title-container">
+  <div class="back-container" (click)="backToMenu()">
+    <fa-icon [icon]="['fas', 'arrow-circle-left']"></fa-icon>
+    Back
+  </div>
   {{ data.name }}
 </div>
 <div class="row">
@@ -59,18 +64,24 @@
     <app-game-instruction
       @fadeIn
       style="display: block"
-      *ngIf="selectedOption === 'help'"
+      [hidden]="selectedOption !== 'help'"
       [gameName]="data.code"
     ></app-game-instruction>
 
     <app-game-config
       style="display: block"
-      *ngIf="selectedOption === 'start'"
+      [hidden]="selectedOption !== 'start'"
       @fadeIn
       [isPreparing]="isPreparing"
       [data]="data"
-      (submitEmitter)="submit($event)"
-      (backToMenu)="backToMenu()"
+      [form]="form"
+      (submitEmitter)="submit()"
     ></app-game-config>
+    <app-ranking
+      style="display: block"
+      [hidden]="selectedOption !== 'ranking'"
+      @fadeIn
+      [form]="form"
+    ></app-ranking>
   </div>
 </div>
