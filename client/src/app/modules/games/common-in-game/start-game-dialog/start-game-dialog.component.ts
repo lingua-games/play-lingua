@@ -1,8 +1,4 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { BookModel } from '../../../../core/models/book.model';
-import { BookChapterService } from '../../../../core/service/book-chapter.service';
-import { LanguageModel } from '../../../../core/models/language.model';
-import { ChapterModel } from '../../../../core/models/chapter.model';
 import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GamesService } from '../../../../core/service/games.service';
@@ -17,32 +13,39 @@ import { GameInformationInterface } from '../../../../core/models/game-informati
 import { LocalStorageHelper } from '../../../../core/models/local-storage.enum';
 import { GetGameWordsRequestModel } from '../../../../core/models/get-game-words-request.model';
 import { LocalStorageService } from '../../../../core/service/local-storage.service';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { GameConfigModel } from '../../../../core/models/game-config-model';
+import { GameNameEnum } from '../../../../core/models/game-name.enum';
+import { BookModel } from '../../../../core/models/book.model';
+import { ChapterModel } from '../../../../core/models/chapter.model';
 
 @Component({
   selector: 'app-start-game-dialog',
   templateUrl: './start-game-dialog.component.html',
   styleUrls: ['./start-game-dialog.component.scss'],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('100ms', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        style({ opacity: 1 }),
+        animate('100ms', style({ opacity: 0 })),
+      ]),
+    ]),
+  ],
 })
 export class StartGameDialogComponent implements OnInit {
-  books: BookModel[] = [];
-  chapters: ChapterModel[] = [];
+  hoveredOption = '';
+  selectedOption = '';
   isPreparing?: boolean;
-  bookListLoading = false;
-  chapterListLoading = false;
-  form = {
+  form: GameConfigModel = {
     selectedBook: {} as BookModel,
     selectedChapter: {} as ChapterModel,
   };
 
-  defaultLanguages: {
-    defaultBaseLanguage: LanguageModel;
-    defaultTargetLanguage: LanguageModel;
-  } = JSON.parse(
-    this.localStorageService.load(LocalStorageHelper.defaultLanguages)
-  );
-
   constructor(
-    private bookChapterService: BookChapterService,
     private router: Router,
     private dialogRef: MatDialogRef<StartGameDialogComponent>,
     private gamesService: GamesService,
@@ -52,54 +55,46 @@ export class StartGameDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getBooks();
+    this.selectedOption = 'ranking';
+    if (this.data.code === GameNameEnum.supperMario) {
+      if (
+        JSON.parse(
+          this.localStorageService.load(LocalStorageHelper.showHelpForMario)
+        )
+      ) {
+        this.selectedOption = 'start';
+      } else {
+        this.selectedOption = 'help';
+      }
+    }
+
+    if (this.data.code === GameNameEnum.fallingStars) {
+      if (
+        JSON.parse(
+          this.localStorageService.load(
+            LocalStorageHelper.showHelpForFallingStars
+          )
+        )
+      ) {
+        this.selectedOption = 'start';
+      } else {
+        this.selectedOption = 'help';
+      }
+    }
   }
 
-  getBooks(): void {
-    this.bookListLoading = true;
-    this.bookChapterService
-      .getBooksBySourceAndTargetLanguageId(
-        this.defaultLanguages.defaultBaseLanguage.id,
-        this.defaultLanguages.defaultTargetLanguage.id
-      )
-      .subscribe(
-        (res: BookModel[]) => {
-          this.bookListLoading = false;
-          this.books.push({
-            id: 0,
-            name: 'No book, just random',
-            targetLanguageId: 0,
-            sourceLanguageId: 0,
-          });
-          this.books = this.books.concat(res);
-          this.form.selectedBook = this.books[0];
-        },
-        () => {
-          this.bookListLoading = false;
-        }
-      );
+  showSection(item: string): void {
+    this.selectedOption = '';
+    setTimeout(() => {
+      this.selectedOption = item;
+    }, 100);
   }
 
-  getChapters(selectedBook: BookModel): void {
-    if (!selectedBook.id) {
+  showHover(item: string): void {
+    if (item === this.selectedOption) {
       return;
     }
-    this.chapterListLoading = true;
-    this.chapters = [];
-    this.bookChapterService.getChaptersByBookId(selectedBook.id).subscribe(
-      (res: ChapterModel[]) => {
-        this.chapterListLoading = false;
-        this.chapters.push({
-          id: 0,
-          name: 'No chapter, just random',
-        });
-        this.chapters = this.chapters.concat(res);
-        this.form.selectedChapter = this.chapters[0];
-      },
-      () => {
-        this.chapterListLoading = false;
-      }
-    );
+    this.hoveredOption = item;
   }
 
   backToMenu(): void {

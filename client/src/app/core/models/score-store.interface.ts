@@ -1,5 +1,5 @@
 export interface ScoreStoreInterface {
-  guestCore: string;
+  guestCode: string;
   gameName: string;
   bookId: number;
   chapterId: number;

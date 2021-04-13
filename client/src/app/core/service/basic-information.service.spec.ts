@@ -3,7 +3,7 @@ import { BasicInformationService } from './basic-information.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { BookModel } from '../models/book.model';
-import { EGame } from '../models/e-game';
+import { GameNameEnum } from '../models/game-name.enum';
 
 describe('BasicInformationService', () => {
   let service: BasicInformationService;
@@ -82,6 +82,8 @@ describe('BasicInformationService', () => {
   });
 
   it('should return array of GameHint when calling gameHints with falling stars', () => {
-    expect(service.gameHints(EGame.fallingStars).length).toBeGreaterThan(0);
+    expect(service.gameHints(GameNameEnum.fallingStars).length).toBeGreaterThan(
+      0
+    );
   });
 });

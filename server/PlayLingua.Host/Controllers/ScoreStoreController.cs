@@ -18,13 +18,31 @@ namespace PlayLingua.Host.Controllers
             _scoreRepository = scoreRepository;
         }
 
+        [HttpPost("get-top-scores")]
+        public ActionResult<List<RankResultViewModel>> GetTopScores([FromBody] UserScoreViewModel model)
+        {
+            var result = new List<RankResultViewModel>();
+
+            result.AddRange(_scoreRepository.GetTopRanks(new UserScore
+            {
+                GameName = model.GameName,
+                BookId = model.BookId,
+                ChapterId = model.ChapterId,
+                Count = model.Count
+            }).Select(x => new RankResultViewModel
+            {
+                Score = x.Score,
+                DisplayName = x.DisplayName,
+                Email = x.Email
+            }));
+            return Ok(result.ToList());
+        }
 
         [HttpPost]
         public ActionResult<List<RankResultViewModel>> Add([FromBody] UserScoreViewModel model)
         {
             var result = new List<RankResultViewModel>();
             model.UserId = GetUser().Id;
-            var foo = GetUser();
 
             if (model.UserId != 0)
             {

@@ -1,0 +1,32 @@
+.select-book-input {
+  width: 100%;
+}
+
+.action-container {
+  position: absolute;
+  bottom: -2%;
+  height: fit-content;
+  left: 5%;
+  width: 90%;
+
+  .btn-success {
+    width: 100%;
+  }
+
+  margin-bottom: 2%;
+}
+
+.body-container {
+  max-height: 47vh;
+  overflow: auto;
+}
+
+.main-container {
+  overflow-y: hidden !important;
+}
+
+:host {
+  color: #55433C;
+}
+
+

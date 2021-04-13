@@ -1,59 +1,90 @@
+<p-toast></p-toast>
 <div class="dialog-title-container">
+  <div class="back-container" (click)="backToMenu()">
+    <fa-icon [icon]="['fas', 'arrow-circle-left']"></fa-icon>
+    Back
+  </div>
   {{ data.name }}
 </div>
-<div *ngIf="isPreparing" class="text-center p-5">
-  <div
-    class="spinner-grow text-success"
-    style="width: 3rem; height: 3rem"
-    role="status"
-  >
-    <span class="sr-only">Loading...</span>
-  </div>
-  <hr />
-  <h1>Preparing game data</h1>
-</div>
-<div *ngIf="!isPreparing">
-  <div class="dialog-content">
-    <app-game-hint [hints]="data.hints"></app-game-hint>
-    <hr />
-    <mat-progress-bar
-      mode="indeterminate"
-      *ngIf="bookListLoading"
-    ></mat-progress-bar>
-    <mat-form-field
-      appearance="fill"
-      class="select-book-input"
-      *ngIf="!bookListLoading"
+<div class="row">
+  <div class="col-sm-2">
+    <div
+      [ngClass]="{
+        'icon-container-selected': selectedOption === 'help',
+        'icon-container-not-selected': selectedOption !== 'help'
+      }"
+      class="icon-container"
+      (mouseenter)="showHover('help')"
+      (mouseleave)="hoveredOption = ''"
+      (click)="showSection('help')"
     >
-      <mat-label>Select a book</mat-label>
-      <mat-select
-        [(ngModel)]="form.selectedBook"
-        (ngModelChange)="getChapters($event)"
+      <fa-icon [icon]="['fas', 'question']"></fa-icon>
+      <span
+        class="ml-2"
+        *ngIf="hoveredOption === 'help' || selectedOption === 'help'"
+        >Help</span
       >
-        <mat-option *ngFor="let book of books" [value]="book">
-          {{ book.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-progress-bar
-      mode="indeterminate"
-      *ngIf="chapterListLoading"
-    ></mat-progress-bar>
-    <mat-form-field
-      appearance="fill"
-      class="select-book-input"
-      *ngIf="form.selectedBook.id && chapters && chapters.length"
+    </div>
+    <div
+      [ngClass]="{
+        'icon-container-selected': selectedOption === 'start',
+        'icon-container-not-selected': selectedOption !== 'start'
+      }"
+      class="icon-container"
+      (mouseenter)="showHover('start')"
+      (mouseleave)="hoveredOption = ''"
+      (click)="showSection('start')"
     >
-      <mat-label>Select a chapter</mat-label>
-      <mat-select [(ngModel)]="form.selectedChapter">
-        <mat-option *ngFor="let chapter of chapters" [value]="chapter">
-          {{ chapter.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+      <fa-icon [icon]="['fab', 'google-play']"></fa-icon>
+      <span
+        class="ml-2"
+        *ngIf="hoveredOption === 'start' || selectedOption === 'start'"
+        >Start</span
+      >
+    </div>
+    <div
+      [ngClass]="{
+        'icon-container-selected': selectedOption === 'ranking',
+        'icon-container-not-selected': selectedOption !== 'ranking'
+      }"
+      class="icon-container"
+      (mouseenter)="showHover('ranking')"
+      (mouseleave)="hoveredOption = ''"
+      (click)="showSection('ranking')"
+    >
+      <fa-icon [icon]="['fas', 'trophy']"></fa-icon>
+      <span
+        class="ml-2"
+        *ngIf="hoveredOption === 'ranking' || selectedOption === 'ranking'"
+        >Ranking</span
+      >
+    </div>
   </div>
-  <div class="dialog-actions">
-    <button class="btn btn-danger" (click)="backToMenu()">Main menu</button>
-    <button class="btn btn-success" (click)="submit()">Start!</button>
+  <div class="col-sm-10 section-right">
+    <app-game-instruction
+      @fadeIn
+      style="display: block"
+      *ngIf="selectedOption === 'help'"
+      [gameName]="data.code"
+    ></app-game-instruction>
+
+    <app-game-config
+      style="display: block"
+      [hidden]="selectedOption !== 'start'"
+      @fadeIn
+      [isPreparing]="isPreparing"
+      [data]="data"
+      [form]="form"
+      (submitEmitter)="submit()"
+    ></app-game-config>
+
+    <app-ranking
+      style="display: block"
+      *ngIf="selectedOption === 'ranking'"
+      @fadeIn
+      [data]="data"
+      [form]="form"
+      (goToStart)="showSection('start')"
+    ></app-ranking>
   </div>
 </div>

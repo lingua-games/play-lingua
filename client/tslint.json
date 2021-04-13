@@ -144,7 +144,6 @@
     "no-conditional-assignment": true,
     "cyclomatic-complexity": true,
     "no-any": true,
-    "no-unused-variable": true,
     "no-conflicting-lifecycle": true,
     "no-host-metadata-property": true,
     "no-input-rename": true,

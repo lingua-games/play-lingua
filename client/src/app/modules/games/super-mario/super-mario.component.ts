@@ -17,7 +17,7 @@ import { GameInformationInterface } from '../../../core/models/game-information.
 import { GameStartInformation } from '../../../core/models/game-start-information';
 import { MatDialog } from '@angular/material/dialog';
 import { BasicInformationService } from '../../../core/service/basic-information.service';
-import { EGame } from '../../../core/models/e-game';
+import { GameNameEnum } from '../../../core/models/game-name.enum';
 import { ElementStyle } from '../../../core/models/element-style.model';
 import { ScoreStorageService } from '../../../core/service/score-storage.service';
 import { FinishGameDialogComponent } from '../common-in-game/finish-game-dialog/finish-game-dialog.component';
@@ -176,11 +176,17 @@ export class SuperMarioComponent implements OnInit {
     this.dialog
       .open(StartGameDialogComponent, {
         data: {
-          name: 'Super mario',
-          hints: this.basicInformationService.gameHints(EGame.supperMario),
+          name: 'Super Mario',
+          gameNameForRanking: 'super-mario',
+          code: GameNameEnum.supperMario,
+          hints: this.basicInformationService.gameHints(
+            GameNameEnum.supperMario
+          ),
         } as GameInformationInterface,
         disableClose: true,
-        width: '30%',
+        width: '60%',
+        height: '62vh',
+        maxHeight: '95vh',
       })
       .afterClosed()
       .subscribe((res: GameStartInformation<WordKeyValueModel<string[]>[]>) => {
@@ -208,7 +214,7 @@ export class SuperMarioComponent implements OnInit {
         chapterId: this.chapterId,
         gameName: 'super-mario',
         score: this.scoreStorageService.getCachedScores(),
-        gameDisplayName: 'Super mario',
+        gameDisplayName: 'Super Mario',
       } as ScoreStoreInterface,
     });
 
@@ -469,7 +475,7 @@ export class SuperMarioComponent implements OnInit {
       const currentIndex = this.enemies.indexOf(playingEnemy as MarioEnemy);
       let nextIndex = 0;
 
-      this.enemies.forEach((enemy: MarioEnemy, index: number) => {
+      this.enemies.forEach(({}, index: number) => {
         if (index > currentIndex && nextIndex === 0) {
           nextIndex = index;
         }

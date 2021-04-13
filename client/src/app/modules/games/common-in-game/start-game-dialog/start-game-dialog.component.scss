@@ -8,10 +8,6 @@
   width: 73%;
 }
 
-.select-book-input {
-  width: 100%;
-}
-
 .best-score-container {
   padding-top: 1rem;
 }
@@ -22,4 +18,66 @@
 
 .dialog-actions {
   padding: .4rem .4rem;
+}
+
+.section-right {
+  border: solid 2px #DC7633;
+  margin: 5px 0;
+  border-radius: 10px;
+  height: 55vh;
+  overflow: hidden;
+}
+
+.icon-container-not-selected:hover {
+  font-size: .8vw;
+  cursor: pointer;
+  background-color: #bc4b20;
+  color: #BDA69E;
+}
+
+.icon-container-selected {
+  background-color: #bc4b20;
+  color: #BDA69E;
+  border-top-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+
+}
+
+.icon-container-not-selected {
+  color: #bc4b20;
+}
+
+.icon-container {
+  transition: 300ms;
+  margin: .4rem 0;
+  width: 100%;
+  text-align: center;
+  font-size: .9vw;
+  padding: 1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row {
+  margin: 0 1rem 0 0;
+}
+
+.dialog-title-container {
+  text-align: center;
+  border-bottom: 1px solid lightgray;
+  padding: .5rem 0;
+  font-size: 1vw;
+  background-color: #BDA69E;
+  color: #BC4B20;
+}
+
+.back-container {
+  float: left;
+  margin-left: .5rem;
+  transition: 100ms;
+}
+
+.back-container:hover {
+  cursor: pointer;
+  opacity: .7;
 }

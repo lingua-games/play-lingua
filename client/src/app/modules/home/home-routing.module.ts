@@ -1,11 +1,5 @@
 import { Injectable, NgModule } from '@angular/core';
-import {
-  Routes,
-  RouterModule,
-  CanDeactivate,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-} from '@angular/router';
+import { Routes, RouterModule, CanDeactivate } from '@angular/router';
 import { GreetingComponent } from './greeting/greeting.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -26,11 +20,7 @@ export interface CanComponentDeactivate {
 @Injectable()
 export class DeactivateWithDelay
   implements CanDeactivate<CanComponentDeactivate> {
-  canDeactivate(
-    component: CanComponentDeactivate,
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Promise<true> {
+  canDeactivate(): Promise<true> {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(true);

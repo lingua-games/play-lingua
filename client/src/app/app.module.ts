@@ -7,7 +7,13 @@ import {
 } from '@fortawesome/angular-fontawesome';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowCircleLeft,
+  faPlus,
+  faQuestion,
+  faTrash,
+  faTrophy,
+} from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
@@ -22,6 +28,7 @@ import { MaterialModule } from './modules/common/material/material.module';
 import { PrimengModule } from './modules/common/primeng/primeng.module';
 import { faPowerOff } from '@fortawesome/free-solid-svg-icons/faPowerOff';
 import { faForward } from '@fortawesome/free-solid-svg-icons/faForward';
+import { faGooglePlay } from '@fortawesome/free-brands-svg-icons';
 
 @NgModule({
   declarations: [AppComponent, ScoreNotificationComponent],
@@ -57,6 +64,16 @@ import { faForward } from '@fortawesome/free-solid-svg-icons/faForward';
 })
 export class AppModule {
   constructor(library: FaIconLibrary) {
-    library.addIcons(faPlus, faEdit, faTrash, faPowerOff, faForward);
+    library.addIcons(
+      faPlus,
+      faEdit,
+      faTrash,
+      faPowerOff,
+      faForward,
+      faQuestion,
+      faGooglePlay,
+      faTrophy,
+      faArrowCircleLeft
+    );
   }
 }
