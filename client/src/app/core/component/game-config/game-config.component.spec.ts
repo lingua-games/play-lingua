@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { GameConfigComponent } from './game-config.component';
 import { BookModel } from '../../models/book.model';
 import { of, throwError } from 'rxjs';
@@ -81,6 +80,10 @@ describe('GameConfigComponent', () => {
     expect(component.bookListLoading).toBeFalsy();
   });
 
+  it('should break getChapters if bookId is null', () => {
+    expect(component.getChapters({ id: 0 } as BookModel)).toBeUndefined();
+  });
+
   it('should return chapters when getChapters hits', () => {
     component.chapters = [];
 
@@ -92,5 +95,17 @@ describe('GameConfigComponent', () => {
     component.getChapters({ id: 1 } as BookModel);
 
     expect(component.chapters[1]).toEqual(fakeChapterList[0]);
+  });
+
+  it('should stop loading if getChapter API fail', () => {
+    component.chapters = [];
+
+    mockBookChapterService.getChaptersByBookId.and.callFake(() => {
+      return throwError('some errors');
+    });
+
+    component.getChapters({ id: 1 } as BookModel);
+
+    expect(component.chapterListLoading).toBeFalsy();
   });
 });

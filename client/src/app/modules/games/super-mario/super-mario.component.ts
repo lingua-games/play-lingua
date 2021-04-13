@@ -475,7 +475,7 @@ export class SuperMarioComponent implements OnInit {
       const currentIndex = this.enemies.indexOf(playingEnemy as MarioEnemy);
       let nextIndex = 0;
 
-      this.enemies.forEach((enemy: MarioEnemy, index: number) => {
+      this.enemies.forEach(({}, index: number) => {
         if (index > currentIndex && nextIndex === 0) {
           nextIndex = index;
         }

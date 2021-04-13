@@ -338,8 +338,6 @@ export class FallingStarsComponent implements OnInit {
     this.guidBoxShowing = false;
     if (this.words.length === this.words.indexOf(this.currentWord) + 1) {
       // It means the game is finish
-      // TODO: Remove below line, it is just for develop a feature
-      // this.words[0].animating = true;
       setTimeout(() => {
         this.showEndGameDialog();
       }, 1000);

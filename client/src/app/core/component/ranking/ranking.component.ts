@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { GameConfigModel } from '../../models/game-config-model';
 import { BookModel } from '../../models/book.model';
 import { ChapterModel } from '../../models/chapter.model';
@@ -36,7 +29,6 @@ export class RankingComponent implements OnInit {
 
   ngOnInit(): void {
     this.getRanks();
-    console.log(this.form);
   }
 
   getRanks(): void {

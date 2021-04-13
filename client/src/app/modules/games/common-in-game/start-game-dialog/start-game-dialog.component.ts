@@ -18,7 +18,6 @@ import { GameConfigModel } from '../../../../core/models/game-config-model';
 import { GameNameEnum } from '../../../../core/models/game-name.enum';
 import { BookModel } from '../../../../core/models/book.model';
 import { ChapterModel } from '../../../../core/models/chapter.model';
-import { retry } from 'rxjs/operators';
 
 @Component({
   selector: 'app-start-game-dialog',
@@ -57,18 +56,17 @@ export class StartGameDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedOption = 'ranking';
-    // Todo: uncomment below
-    // if (this.data.code === GameNameEnum.supperMario) {
-    //   if (
-    //     JSON.parse(
-    //       this.localStorageService.load(LocalStorageHelper.showHelpForMario)
-    //     )
-    //   ) {
-    //     this.selectedOption = 'start';
-    //   } else {
-    //     this.selectedOption = 'help';
-    //   }
-    // }
+    if (this.data.code === GameNameEnum.supperMario) {
+      if (
+        JSON.parse(
+          this.localStorageService.load(LocalStorageHelper.showHelpForMario)
+        )
+      ) {
+        this.selectedOption = 'start';
+      } else {
+        this.selectedOption = 'help';
+      }
+    }
 
     if (this.data.code === GameNameEnum.fallingStars) {
       if (

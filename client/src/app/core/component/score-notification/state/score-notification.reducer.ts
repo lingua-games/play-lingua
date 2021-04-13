@@ -36,7 +36,7 @@ export const scoreNotificationReducer = createReducer<NotificationState>(
   initialState,
   on(
     toggleNotification,
-    (state, newAction): NotificationState => {
+    (newAction): NotificationState => {
       return newAction;
     }
   )
