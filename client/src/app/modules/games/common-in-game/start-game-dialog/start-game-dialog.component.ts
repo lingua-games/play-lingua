@@ -15,7 +15,6 @@ import { GetGameWordsRequestModel } from '../../../../core/models/get-game-words
 import { LocalStorageService } from '../../../../core/service/local-storage.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { GameConfigModel } from '../../../../core/models/game-config-model';
-import { GameNameEnum } from '../../../../core/models/game-name.enum';
 import { BookModel } from '../../../../core/models/book.model';
 import { ChapterModel } from '../../../../core/models/chapter.model';
 
@@ -55,32 +54,9 @@ export class StartGameDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.selectedOption = 'ranking';
-    if (this.data.code === GameNameEnum.supperMario) {
-      if (
-        JSON.parse(
-          this.localStorageService.load(LocalStorageHelper.showHelpForMario)
-        )
-      ) {
-        this.selectedOption = 'start';
-      } else {
-        this.selectedOption = 'help';
-      }
-    }
-
-    if (this.data.code === GameNameEnum.fallingStars) {
-      if (
-        JSON.parse(
-          this.localStorageService.load(
-            LocalStorageHelper.showHelpForFallingStars
-          )
-        )
-      ) {
-        this.selectedOption = 'start';
-      } else {
-        this.selectedOption = 'help';
-      }
-    }
+    this.selectedOption = 'start';
+    // Todo, comment below
+    // this.submit();
   }
 
   showSection(item: string): void {

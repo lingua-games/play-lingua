@@ -132,7 +132,7 @@ describe('StartGameDialogComponent', () => {
 
     fixture.detectChanges();
 
-    expect(component.selectedOption).toBe('help');
+    expect(component.selectedOption).toBe('start');
   });
 
   it('should set selectedOption to help if showHelp if OFF for Falling stars', () => {
@@ -158,7 +158,7 @@ describe('StartGameDialogComponent', () => {
 
     fixture.detectChanges();
 
-    expect(component.selectedOption).toBe('help');
+    expect(component.selectedOption).toBe('start');
   });
 
   it('should set selectedOption with 100ms timeOut when calling showSection', () => {

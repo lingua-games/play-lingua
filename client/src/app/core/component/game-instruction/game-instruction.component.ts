@@ -1,7 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { GameNameEnum } from '../../models/game-name.enum';
-import { LocalStorageHelper } from '../../models/local-storage.enum';
-import { LocalStorageService } from '../../service/local-storage.service';
 
 @Component({
   selector: 'app-game-instruction',
@@ -11,21 +9,8 @@ import { LocalStorageService } from '../../service/local-storage.service';
 export class GameInstructionComponent implements OnInit {
   @Input() gameName: GameNameEnum = -1;
   textTemplate = '';
-  showHelp = true;
-
-  constructor(private localStorageService: LocalStorageService) {}
 
   ngOnInit(): void {
-    if (!this.localStorageService.load(LocalStorageHelper.showHelpForMario)) {
-      this.localStorageService.save(
-        LocalStorageHelper.showHelpForMario,
-        'true'
-      );
-    }
-    this.showHelp = !!JSON.parse(
-      this.localStorageService.load(LocalStorageHelper.showHelpForMario) ||
-        'true'
-    );
     if (this.gameName === GameNameEnum.supperMario) {
       this.textTemplate = `
       <p>
@@ -51,12 +36,5 @@ export class GameInstructionComponent implements OnInit {
       </p>
       `;
     }
-  }
-
-  changeShowHelp(): void {
-    this.localStorageService.save(
-      LocalStorageHelper.showHelpForMario,
-      this.showHelp.toString()
-    );
   }
 }

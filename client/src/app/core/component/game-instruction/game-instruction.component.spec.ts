@@ -33,30 +33,11 @@ describe('GameInstructionComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set showHelpForMario if it has not set yet on initial time', () => {
-    mockLocalStorageService.load.and.callFake(() => {
-      return false;
-    });
-
-    fixture.detectChanges();
-
-    expect(mockLocalStorageService.save).toHaveBeenCalledWith(
-      LocalStorageHelper.showHelpForMario,
-      'true'
-    );
-  });
-
   it('should fill text into template if any game is selected', () => {
     component.gameName = 1;
 
     fixture.detectChanges();
 
     expect(component.textTemplate === '').toBeFalsy();
-  });
-
-  it('should save new status into localstorage when calling changeShowHelp', () => {
-    component.changeShowHelp();
-
-    expect(mockLocalStorageService.save).toHaveBeenCalled();
   });
 });
