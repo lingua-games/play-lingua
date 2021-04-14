@@ -10,23 +10,6 @@
   <div class="col-sm-2">
     <div
       [ngClass]="{
-        'icon-container-selected': selectedOption === 'help',
-        'icon-container-not-selected': selectedOption !== 'help'
-      }"
-      class="icon-container"
-      (mouseenter)="showHover('help')"
-      (mouseleave)="hoveredOption = ''"
-      (click)="showSection('help')"
-    >
-      <fa-icon [icon]="['fas', 'question']"></fa-icon>
-      <span
-        class="ml-2"
-        *ngIf="hoveredOption === 'help' || selectedOption === 'help'"
-        >Help</span
-      >
-    </div>
-    <div
-      [ngClass]="{
         'icon-container-selected': selectedOption === 'start',
         'icon-container-not-selected': selectedOption !== 'start'
       }"
@@ -40,6 +23,23 @@
         class="ml-2"
         *ngIf="hoveredOption === 'start' || selectedOption === 'start'"
         >Start</span
+      >
+    </div>
+    <div
+      [ngClass]="{
+        'icon-container-selected': selectedOption === 'help',
+        'icon-container-not-selected': selectedOption !== 'help'
+      }"
+      class="icon-container"
+      (mouseenter)="showHover('help')"
+      (mouseleave)="hoveredOption = ''"
+      (click)="showSection('help')"
+    >
+      <fa-icon [icon]="['fas', 'question']"></fa-icon>
+      <span
+        class="ml-2"
+        *ngIf="hoveredOption === 'help' || selectedOption === 'help'"
+        >Help</span
       >
     </div>
     <div

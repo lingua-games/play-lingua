@@ -172,12 +172,15 @@ export class FallingStarsComponent implements OnInit {
         data: {
           name: 'Falling stars',
           code: GameNameEnum.fallingStars,
+          gameNameForRanking: 'falling-stars',
           hints: this.basicInformationService.gameHints(
             GameNameEnum.fallingStars
           ),
         } as GameInformationInterface,
         disableClose: true,
-        width: '30%',
+        width: '60%',
+        height: '62vh',
+        maxHeight: '95vh',
       })
       .afterClosed()
       .subscribe((res: GameStartInformation<WordKeyValueModel<string[]>[]>) => {

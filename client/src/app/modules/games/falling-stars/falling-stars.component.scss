@@ -50,14 +50,13 @@
 }
 
 .answer-item-container {
-  display: inline-block;
-  border: solid .2rem rgba(0, 128, 0, .8);
-  color: rgba(0, 128, 0, .8);
-  margin-top: 1rem;
-  width: 10%;
+  display: inline-flex;
+  border: solid 0.2rem rgba(0, 128, 0, 0.8);
+  color: rgba(0, 128, 0, 0.8);
+  min-width: 10%;
+  max-width: 20%;
   background-color: white;
   font-size: 1vw;
-
   border-bottom-right-radius: 20px;
   border-top-left-radius: 20px;
 }
@@ -76,6 +75,8 @@
 }
 
 .answer-text-container {
+  text-align: center;
+  width: 100%;
   padding: 1rem .5rem;
 }
 
@@ -83,8 +84,6 @@
   height: 100%;
   padding-top: .5rem
 }
-
-
 
 .guid-box-header-container {
   color: red;
