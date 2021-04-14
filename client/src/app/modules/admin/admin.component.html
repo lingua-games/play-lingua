@@ -1,7 +1,20 @@
 <div>
   <div class="left-container side-container">
-    <div *ngFor="let menu of menus" class="menu-container" [routerLink]="menu.url">
-      {{menu.label}}
+    <div
+      *ngFor="let menu of menus"
+      class="menu-container"
+      [routerLink]="menu.url"
+    >
+      <button
+        class="btn"
+        [ngClass]="{ 'selected-menu': currentMenu === menu.url }"
+      >
+        {{ menu.label }}
+      </button>
+    </div>
+    <hr />
+    <div>
+      <button class="btn" routerLink="../">Exit</button>
     </div>
   </div>
   <div class="right-container side-container">

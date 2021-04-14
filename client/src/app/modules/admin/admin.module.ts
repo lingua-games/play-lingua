@@ -9,6 +9,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AddEditBookDialogComponent } from './books/add-edit-book.dialog/add-edit-book.dialog.component';
 import { MaterialModule } from '../common/material/material.module';
 import { FormsModule } from '@angular/forms';
+import { SendInvitationComponent } from './send-invitation/send-invitation.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { FormsModule } from '@angular/forms';
     ChaptersComponent,
     BooksComponent,
     AddEditBookDialogComponent,
+    SendInvitationComponent,
   ],
   imports: [
     CommonModule,

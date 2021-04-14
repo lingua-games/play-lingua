@@ -18,6 +18,7 @@ namespace PlayLingua.Domain.Entities
         public DateTime EmailVerifiedDate { get; set; }
         public int DefaultBaseLanguage { get; set; }
         public int DefaultTargetLanguage { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }
 
