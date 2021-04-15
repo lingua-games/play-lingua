@@ -159,3 +159,39 @@ GO
 ALTER TABLE [dbo].[GameScores] ADD CONSTRAINT [FK_GameScores_ChapterId]
 FOREIGN KEY ([ChapterId]) REFERENCES [dbo].[Chapter] ([Id])
 GO
+
+
+
+CREATE TABLE [dbo].[Invitations] (
+		[Id] int IDENTITY(1,1) PRIMARY KEY,
+		[Email] nvarchar(200) NOT NULL,
+		[BaseLanguageId]   int NOT NULL,
+		[TargetLanguageId] int NOT NULL,
+		[Bookid] int,
+		[ChapterId] int,
+		GeneratedLink nvarchar(Max) NOT NULL,
+		Count int,
+		PlayerName nvarchar(200) NOT NULL,
+		Game nvarchar(200) NOT NULL,
+		HtmlText nvarchar(Max) NOT NULL,
+		IsOpened bit,
+		OpenedDate datetime,
+		[AddedBy]   int NOT NULL,
+		[AddedDate] datetime NOT NULL,
+		[LastUpdateDate] datetime,
+)
+ALTER TABLE [dbo].[Invitations] ADD CONSTRAINT [FK_Invitations_BaseLanguageId]
+FOREIGN KEY ([BaseLanguageId]) REFERENCES [dbo].[Language] ([Id])
+GO
+ALTER TABLE [dbo].[Invitations] ADD CONSTRAINT [FK_Invitations_TargetLanguageId]
+FOREIGN KEY ([TargetLanguageId]) REFERENCES [dbo].[Language] ([Id])
+GO
+ALTER TABLE [dbo].[Invitations] ADD CONSTRAINT [FK_Invitations_Bookid]
+FOREIGN KEY ([BookId]) REFERENCES [dbo].[Book] ([Id])
+GO
+ALTER TABLE [dbo].[Invitations] ADD CONSTRAINT [FK_Invitations_ChapterId]
+FOREIGN KEY ([ChapterId]) REFERENCES [dbo].[Chapter] ([Id])
+GO
+ALTER TABLE [dbo].[Invitations] ADD CONSTRAINT [FK_Invitations_AddedBy]
+FOREIGN KEY ([AddedBy]) REFERENCES [dbo].[Users] ([Id])
+GO

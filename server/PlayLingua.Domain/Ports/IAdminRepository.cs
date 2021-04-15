@@ -8,5 +8,7 @@ namespace PlayLingua.Domain.Ports
     {
         List<Invitation> GetInvitations();
         Invitation AddInvitation(Invitation invitation);
+        void UpdateInvitation(Invitation invitation);
+        void SetInvitationToOpen(Invitation invitation);
     }
 }

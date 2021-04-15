@@ -30,6 +30,7 @@ export class SendInvitationComponent implements OnInit {
     private localStorageService: LocalStorageService,
     private invitationService: InvitationService
   ) {}
+
   allLanguages: ApiResult<LanguageModel[]> = new ApiResult<LanguageModel[]>();
   form = {} as InvitationForm;
   books: ApiResult<BookModel[]> = new ApiResult<BookModel[]>();
@@ -128,6 +129,14 @@ export class SendInvitationComponent implements OnInit {
       result = false;
     }
 
+    if (!this.form.playerName) {
+      this.notificationService.showMessage(
+        'Player name is empty',
+        Severity.error
+      );
+      result = false;
+    }
+
     return result;
   }
 
@@ -136,26 +145,29 @@ export class SendInvitationComponent implements OnInit {
       return;
     }
 
+    this.form.generatedLink = this.generateLink();
     this.form.htmlText = `
       <h1>Hello, Im Arash and here I am inviting you to play my web-base game and give me feedback</h1>
-      <h3>Dear <strong>${
-        this.form.playerName
-      }</strong>, thanks for joining to our feedback session</h3>
+      <h3>Dear <strong>${this.form.playerName}</strong>, thanks for joining to our feedback session</h3>
       <p>In this session you will play
         <strong>${this.form.gameObj.name}</strong> game.
         <strong>${this.form.gameObj.name}</strong> assums that you know
-        <strong>${
-          this.form.baseLanguage.name
-        }</strong> very well and you want to learn
+        <strong>${this.form.baseLanguage.name}</strong> very well and you want to learn
         <strong>${this.form.targetLanguage.name}</strong> language.
       </p>
-      <p>
+      `;
+    if (this.form.count && this.form.count > 0) {
+      this.form.htmlText += `<p>
         In this session you will play only
         <strong>${this.form.count}</strong> words and you can
-        <a href='${this.generateLink()}'>join via This Link</a>
-      </p>
-      <p>
-        Please send back your comments, feedbacks and etc with <strong>repling</strong> this email or if you want to
+        <a href='${this.form.generatedLink}'>join via This Link</a>
+      </p>`;
+    } else {
+      this.form.htmlText += `<p>You can <a href='${this.generateLink()}'>join via This Link</a></p>`;
+    }
+    this.form.htmlText += `
+          <p>
+        Please send back your comments, feedbacks and etc with <strong>replying</strong> this email or if you want to
         talk more about it, you can always give me a call through my phone number i.e <strong>+31-6-4524-1080</strong>
       </p>
       <p>

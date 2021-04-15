@@ -27,6 +27,29 @@ namespace PlayLingua.Host.Controllers
                 AddedBy = GetUser().Id,
                 AddedDate = DateTime.Now,
                 BaseLanguageId = model.BaseLanguage.Id,
+                BookId = model.Book?.Id,
+                ChapterId = model.Chapter?.Id,
+                Count = model.Count,
+                Email = model.Email,
+                Game = model.Game,
+                GeneratedLink = model.GeneratedLink,
+                HtmlText = model.HtmlText,
+                IsOpened = false,
+                OpenedDate = null,
+                PlayerName = model.PlayerName,
+                LastUpdateDate = DateTime.Now,
+                TargetLanguageId = model.TargetLanguage.Id
+            }));
+        }
+
+        [HttpPost("edit-invitation")]
+        public ActionResult<InvitationViewModel> EditInvitation(InvitationViewModel model)
+        {
+            _adminRepository.UpdateInvitation(new Invitation
+            {
+                AddedBy = GetUser().Id,
+                AddedDate = DateTime.Now,
+                BaseLanguageId = model.BaseLanguage.Id,
                 BookId = model.Book.Id,
                 ChapterId = model.Chapter.Id,
                 Count = model.Count,
@@ -39,7 +62,19 @@ namespace PlayLingua.Host.Controllers
                 PlayerName = model.PlayerName,
                 LastUpdateDate = DateTime.Now,
                 TargetLanguageId = model.TargetLanguage.Id
-            }));
+            });
+
+            return Ok();
+        }
+
+        [HttpPost("set-invitation-open")]
+        public ActionResult<InvitationViewModel> SetInvitationToOpen(InvitationViewModel model)
+        {
+            _adminRepository.SetInvitationToOpen(new Invitation
+            {
+                Id = model.Id
+            });
+            return Ok();
         }
 
     }
