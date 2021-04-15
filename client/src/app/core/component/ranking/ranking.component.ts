@@ -7,7 +7,7 @@ import { ScoreStoreInterface } from '../../models/score-store.interface';
 import { environment } from '../../../../environments/environment';
 import { GameInformationInterface } from '../../models/game-information.interface';
 import { RanksResultInterface } from '../../models/ranks-result.interface';
-import { ResultModel } from '../../models/result-model';
+import { ApiResult } from '../../models/api-result.model';
 
 @Component({
   selector: 'app-ranking',
@@ -20,7 +20,7 @@ export class RankingComponent implements OnInit {
     selectedChapter: {} as ChapterModel,
   };
   @Input() data: GameInformationInterface = {} as GameInformationInterface;
-  ranks: ResultModel<RanksResultInterface[]> = new ResultModel<
+  ranks: ApiResult<RanksResultInterface[]> = new ApiResult<
     RanksResultInterface[]
   >();
   @Output() goToStart = new EventEmitter();
@@ -32,7 +32,7 @@ export class RankingComponent implements OnInit {
   }
 
   getRanks(): void {
-    this.ranks.setLoading();
+    this.ranks.setLoading(true);
     this.scoreStorageService
       .getTopRanks({
         bookId: this.form.selectedBook.id || null,

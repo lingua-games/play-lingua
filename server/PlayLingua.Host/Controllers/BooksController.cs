@@ -32,10 +32,10 @@ namespace PlayLingua.Host.Controllers
             }).ToList());
         }
 
-        [HttpGet("by-language/{id}")]
-        public ActionResult<List<BookViewModel>> GetByLanguageId(int id)
+        [HttpGet("by-language/{targetLanguageId}/{baseLanguageId}")]
+        public ActionResult<List<BookViewModel>> GetByLanguageId(int targetLanguageId, int baseLanguageId)
         {
-            return Ok(_bookRepository.GetByLanguage(id).Select(x => new BookViewModel
+            return Ok(_bookRepository.GetByLanguage(targetLanguageId, baseLanguageId).Select(x => new BookViewModel
             {
                 Id = x.Id,
                 Name = x.Name,

@@ -10,6 +10,7 @@ import { AddEditBookDialogComponent } from './books/add-edit-book.dialog/add-edi
 import { MaterialModule } from '../common/material/material.module';
 import { FormsModule } from '@angular/forms';
 import { SendInvitationComponent } from './send-invitation/send-invitation.component';
+import { PrimengModule } from '../common/primeng/primeng.module';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { SendInvitationComponent } from './send-invitation/send-invitation.compo
     AdminRoutingModule,
     FontAwesomeModule,
     MaterialModule,
+    PrimengModule,
   ],
 })
 export class AdminModule {}

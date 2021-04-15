@@ -11,12 +11,18 @@ export class LocalStorageService {
   constructor() {}
 
   save(item: LocalStorageHelper, value?: string): void {
-    localStorage.setItem(item, this.encryptData(value as {}));
+    localStorage.setItem(
+      item,
+      this.encryptData(value as {}, secretKeys.localStoragePrivateKey)
+    );
   }
 
   load(item: LocalStorageHelper): string {
     if (localStorage.getItem(item)) {
-      return this.decryptData(localStorage.getItem(item) || '{}');
+      return this.decryptData(
+        localStorage.getItem(item) || '{}',
+        secretKeys.localStoragePrivateKey
+      );
     } else {
       return '';
     }
@@ -30,15 +36,12 @@ export class LocalStorageService {
     localStorage.clear();
   }
 
-  encryptData(data: {}): string {
-    return CryptoJS.AES.encrypt(
-      JSON.stringify(data),
-      secretKeys.localStoragePrivateKey
-    ).toString();
+  encryptData(data?: {}, privateKey?: string): string {
+    return CryptoJS.AES.encrypt(JSON.stringify(data), privateKey).toString();
   }
 
-  decryptData(data: string): string {
-    const bytes = CryptoJS.AES.decrypt(data, secretKeys.localStoragePrivateKey);
+  decryptData(data: string, privateKey: string): string {
+    const bytes = CryptoJS.AES.decrypt(data, privateKey);
     const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
     return decryptedData;
   }

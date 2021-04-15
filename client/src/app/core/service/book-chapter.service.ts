@@ -20,9 +20,12 @@ export class BookChapterService {
     return this.http.post<{}>(`${this.wordUrl}/submit-word-series`, form);
   }
 
-  getBooksByLanguage(languageId: number): Observable<BookModel[]> {
+  getBooksByLanguage(
+    targetLanguage: number,
+    baseLanguage: number
+  ): Observable<BookModel[]> {
     return this.http.get<BookModel[]>(
-      `${this.bookUrl}/by-language/${languageId}`
+      `${this.bookUrl}/by-language/${targetLanguage}/${baseLanguage}`
     );
   }
 

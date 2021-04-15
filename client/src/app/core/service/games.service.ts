@@ -4,6 +4,7 @@ import { WordKeyValueModel } from '../models/word-key-value.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { GetGameWordsRequestModel } from '../models/get-game-words-request.model';
+import { GameInformationInterface } from '../models/game-information.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -20,5 +21,20 @@ export class GamesService {
       `${this.gameUrl}/get-words-for-game`,
       getGameWordsRequestModel
     );
+  }
+
+  getGames(): GameInformationInterface[] {
+    return [
+      {
+        name: 'Super Mario',
+        code: 1,
+        gameNameForRanking: 'super-mario',
+      } as GameInformationInterface,
+      {
+        name: 'Falling Stars',
+        code: 0,
+        gameNameForRanking: 'falling-stars',
+      } as GameInformationInterface,
+    ];
   }
 }

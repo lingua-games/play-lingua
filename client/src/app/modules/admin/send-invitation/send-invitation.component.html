@@ -1,1 +1,126 @@
-<p>send-invitation works!</p>
+<div class="row">
+  <div class="col-sm-6">
+    <div class="alert alert-primary text-center" role="alert">
+      Here we invite a person to play a part of a game in a particular condition
+    </div>
+    <form>
+      <div class="form-group">
+        <h3>Email</h3>
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          aria-describedby="emailHelp"
+          placeholder="Enter email"
+          name="email"
+          [(ngModel)]="form.email"
+        />
+      </div>
+      <div class="form-group">
+        <h3>Player name</h3>
+        <input
+          type="text"
+          class="form-control"
+          id="fullName"
+          placeholder="Enter full name of receiver"
+          name="fullName"
+          [(ngModel)]="form.playerName"
+        />
+      </div>
+      <div class="mb-2">
+        <h3>Base language</h3>
+        <p-dropdown
+          [options]="allLanguages.data"
+          [(ngModel)]="form.baseLanguage"
+          [filter]="true"
+          (ngModelChange)="
+            getBooks({
+              targetLanguage: form.targetLanguage,
+              baseLanguage: $event
+            })
+          "
+          name="base-language"
+          filterBy="name"
+          optionLabel="fullName"
+          placeholder="Select Base language"
+        ></p-dropdown>
+      </div>
+      <div class="mb-2">
+        <h3>Target language</h3>
+        <p-dropdown
+          [options]="allLanguages.data"
+          name="target-language"
+          [(ngModel)]="form.targetLanguage"
+          (ngModelChange)="
+            getBooks({
+              targetLanguage: $event,
+              baseLanguage: form.baseLanguage
+            })
+          "
+          [filter]="true"
+          filterBy="name"
+          optionLabel="fullName"
+          placeholder="Select Target language"
+        ></p-dropdown>
+      </div>
+      <div class="mb-2">
+        <h3>Book</h3>
+        <p-dropdown
+          [options]="books.data"
+          [disabled]="!books.data || books.isLoading"
+          name="Book"
+          [(ngModel)]="form.book"
+          (ngModelChange)="getChapters($event.id)"
+          [filter]="true"
+          filterBy="name"
+          optionLabel="name"
+          placeholder="Select book"
+        ></p-dropdown>
+      </div>
+      <div class="mb-2">
+        <h3>Chapter</h3>
+        <p-dropdown
+          [disabled]="!chapters.data || chapters.isLoading"
+          [options]="chapters.data"
+          name="chapter"
+          [(ngModel)]="form.chapter"
+          [filter]="true"
+          filterBy="name"
+          optionLabel="name"
+          placeholder="Select chapter"
+        ></p-dropdown>
+      </div>
+      <div class="mb-2">
+        <h3>Game</h3>
+        <p-dropdown
+          [options]="games"
+          name="games"
+          [(ngModel)]="form.game"
+          optionLabel="name"
+          placeholder="Select game"
+        ></p-dropdown>
+      </div>
+      <div class="form-group">
+        <h3>Count</h3>
+        <input
+          type="number"
+          class="form-control"
+          id="count"
+          placeholder="Enter count"
+          name="email"
+          [(ngModel)]="form.count"
+        />
+      </div>
+      <button type="submit" class="btn btn-success mr-2" (click)="submit()">
+        Submit
+      </button>
+      <button type="submit" class="btn btn-primary" (click)="preview()">
+        Generate preview
+      </button>
+    </form>
+  </div>
+
+  <div class="col-sm-5">
+    <div [innerHTML]="form.htmlText" class="mt-5"></div>
+  </div>
+</div>
