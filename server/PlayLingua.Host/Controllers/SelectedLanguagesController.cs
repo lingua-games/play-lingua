@@ -23,6 +23,7 @@ namespace PlayLingua.Host.Controllers
         public ActionResult<SelectedLanguagesViewModel> Add([FromBody] SelectedLanguagesViewModel model)
         {
             var addedSelection = new SelectedLanguages();
+            model.UserId = GetUser().Id;
             var selectedLanguageByUserId = _selectedLanguagesRepository.GetByUserId(GetUser().Id);
             if (selectedLanguageByUserId == null)
             {

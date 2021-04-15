@@ -78,6 +78,14 @@ export class SecurityService {
     return !!this.localStorageService.load(LocalStorageHelper.token);
   }
 
+  isAdmin(): boolean {
+    const token = this.getTokenInformation();
+    if (token) {
+      return JSON.parse(token.isAdmin);
+    }
+    return false;
+  }
+
   isGuest(): boolean {
     return !!this.localStorageService.load(LocalStorageHelper.isGuest);
   }

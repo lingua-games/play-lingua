@@ -10,4 +10,5 @@ export interface SecurityTokenInterface {
   role: string;
   sub: string;
   name: string;
+  isAdmin: string;
 }

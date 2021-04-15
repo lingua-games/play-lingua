@@ -62,6 +62,7 @@ namespace PlayLingua.Data
                         TargetLanguages = selectedUser.TargetLanguages,
                         DefaultBaseLanguage = selectedUser.DefaultBaseLanguage,
                         DefaultTargetLanguage = selectedUser.DefaultTargetLanguage,
+                        IsAdmin = selectedUser.IsAdmin,
                         TotalScore = selectedUser.TotalScore,
                         IsSelectedLanguages =
                             !string.IsNullOrWhiteSpace(selectedUser.TargetLanguages) && !string.IsNullOrWhiteSpace(selectedUser.BaseLanguages)
@@ -104,6 +105,7 @@ namespace PlayLingua.Data
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                         new Claim(ClaimTypes.Email, user.Email.ToString()),
                         new Claim("displayName", user.DisplayName.ToString()),
+                        new Claim("isAdmin", user.IsAdmin.ToString().ToLower()),
                         // Todo: Work on the roles
                         new Claim(ClaimTypes.Role, ""),
                     }

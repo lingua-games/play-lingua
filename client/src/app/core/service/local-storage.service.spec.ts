@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import * as CryptoJS from 'crypto-js';
 import { LocalStorageService } from './local-storage.service';
 import { LocalStorageHelper } from '../models/local-storage.enum';
+import { secretKeys } from '../../../environments/secret';
 
 describe('LocalStorageService', () => {
   let service: LocalStorageService;
@@ -22,7 +23,10 @@ describe('LocalStorageService', () => {
 
     service.save(LocalStorageHelper.isGuest, expectedValue);
 
-    expect(service.encryptData).toHaveBeenCalledWith(expectedValue);
+    expect(service.encryptData).toHaveBeenCalledWith(
+      expectedValue,
+      secretKeys.localStoragePrivateKey
+    );
   });
 
   it('should store value into localStorage on save() method', () => {
@@ -44,7 +48,10 @@ describe('LocalStorageService', () => {
 
     service.load(LocalStorageHelper.isGuest);
 
-    expect(service.decryptData).toHaveBeenCalledWith('something');
+    expect(service.decryptData).toHaveBeenCalledWith(
+      'something',
+      secretKeys.localStoragePrivateKey
+    );
   });
 
   it('should return empty string if there is nothing in storage', () => {

@@ -48,7 +48,7 @@ describe('BookChapterService', () => {
   });
 
   it('should call getBooksByLanguage API when getBooksByLanguage() method hit', () => {
-    service.getBooksByLanguage(1);
+    service.getBooksByLanguage(1, 1);
     expect(httpClientSpy.get).toHaveBeenCalled();
   });
 

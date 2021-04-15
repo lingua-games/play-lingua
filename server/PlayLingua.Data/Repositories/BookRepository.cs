@@ -43,9 +43,9 @@ namespace PlayLingua.Data
             return db.Query<Book>("select * from dbo.Book").ToList();
         }
 
-        public List<Book> GetByLanguage(int languageId)
+        public List<Book> GetByLanguage(int languageId, int baseLanguage)
         {
-            return db.Query<Book>("select * from dbo.Book where TargetLanguageId = @languageId", new { languageId }).ToList();
+            return db.Query<Book>("select * from dbo.Book where TargetLanguageId = @languageId and SourceLanguageId = @baseLanguage", new { languageId, baseLanguage }).ToList();
         }
 
         public void Update(Book book)

@@ -116,6 +116,10 @@ export class GameMenuComponent implements OnInit {
     return this.securityService.isLoggedIn();
   }
 
+  isAdmin(): boolean {
+    return this.securityService.isAdmin();
+  }
+
   getSelectedLanguagesInformation(): void {
     this.inquiryResult.setLoading(true);
     this.wordService

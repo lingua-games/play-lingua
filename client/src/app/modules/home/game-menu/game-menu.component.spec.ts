@@ -39,8 +39,13 @@ describe('GameMenuComponent', () => {
         'load',
         'delete',
         'save',
+        'isAdmin',
       ]);
-      mockSecurityService = jasmine.createSpyObj(['isGuest', 'isLoggedIn']);
+      mockSecurityService = jasmine.createSpyObj([
+        'isGuest',
+        'isLoggedIn',
+        'isAdmin',
+      ]);
       mockRouter = {
         navigate: jasmine
           .createSpy('navigate')

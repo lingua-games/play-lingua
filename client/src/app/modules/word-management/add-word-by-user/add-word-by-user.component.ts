@@ -229,7 +229,10 @@ export class AddWordByUserComponent implements OnInit {
     this.selectBookRandom?.setValue('book');
     this.isBookLoading = true;
     this.bookChapterService
-      .getBooksByLanguage(this.targetLanguage?.value.id)
+      .getBooksByLanguage(
+        this.targetLanguage?.value.id,
+        this.baseLanguage?.value.id
+      )
       .subscribe(
         (res: BookModel[]) => {
           this.books = [

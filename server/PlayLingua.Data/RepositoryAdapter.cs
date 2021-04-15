@@ -18,6 +18,7 @@ namespace PlayLingua.Data
             services.AddTransient<IGameRepository, GameRepository>(x => new GameRepository(connectionString));
             services.AddTransient<IScoreRepository, ScoreRepository>(x => new ScoreRepository(connectionString));
             services.AddTransient<IRequeustLogRepository, RequestLogRepository>(x => new RequestLogRepository(connectionString));
+            services.AddTransient<IAdminRepository, AdminRepository>(x => new AdminRepository(connectionString));
         }
     }
 }

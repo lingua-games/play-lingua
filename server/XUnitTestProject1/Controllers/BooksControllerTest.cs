@@ -47,10 +47,10 @@ namespace PlayLingua.Unit.Test.Controllers
         public void GetByLanguageId_Should_Return_Books_By_Language()
         {
             // Arrange
-            _mockRepo.Setup(repo => repo.GetByLanguage(1)).Returns(_fakeBookList.Where(x => x.TargetLanguageId == 1).ToList());
+            _mockRepo.Setup(repo => repo.GetByLanguage(1, 1)).Returns(_fakeBookList.Where(x => x.TargetLanguageId == 1).ToList());
 
             // Act
-            var methodResult = _mockController.GetByLanguageId(1);
+            var methodResult = _mockController.GetByLanguageId(1, 1);
 
             // Assert
             var testResult = methodResult.Result as OkObjectResult;
