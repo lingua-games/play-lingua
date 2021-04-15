@@ -14,6 +14,7 @@ import { GamesService } from '../../../core/service/games.service';
 import { GameInformationInterface } from '../../../core/models/game-information.interface';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
 import { secretKeys } from '../../../../environments/secret';
+import { InvitationService } from '../../../core/service/invitation.service';
 
 @Component({
   selector: 'app-send-invitation',
@@ -26,7 +27,8 @@ export class SendInvitationComponent implements OnInit {
     private notificationService: NotificationService,
     private bookChapterService: BookChapterService,
     private gameService: GamesService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private invitationService: InvitationService
   ) {}
   allLanguages: ApiResult<LanguageModel[]> = new ApiResult<LanguageModel[]>();
   form = {} as InvitationForm;
@@ -34,6 +36,7 @@ export class SendInvitationComponent implements OnInit {
   chapters: ApiResult<ChapterModel[]> = new ApiResult<ChapterModel[]>();
   previewText = '';
   games: GameInformationInterface[] = [];
+  isFormLoading = false;
 
   ngOnInit(): void {
     this.getLanguages();
@@ -120,7 +123,7 @@ export class SendInvitationComponent implements OnInit {
       result = false;
     }
 
-    if (!this.form.game) {
+    if (!this.form.gameObj) {
       this.notificationService.showMessage('Game is empty', Severity.error);
       result = false;
     }
@@ -129,10 +132,9 @@ export class SendInvitationComponent implements OnInit {
   }
 
   preview(): void {
-    // Todo, uncomment below
-    // if (!this.isFormValid()) {
-    //   return;
-    // }
+    if (!this.isFormValid()) {
+      return;
+    }
 
     this.form.htmlText = `
       <h1>Hello, Im Arash and here I am inviting you to play my web-base game and give me feedback</h1>
@@ -140,8 +142,8 @@ export class SendInvitationComponent implements OnInit {
         this.form.playerName
       }</strong>, thanks for joining to our feedback session</h3>
       <p>In this session you will play
-        <strong>${this.form.game.name}</strong> game.
-        <strong>${this.form.game.name}</strong> assums that you know
+        <strong>${this.form.gameObj.name}</strong> game.
+        <strong>${this.form.gameObj.name}</strong> assums that you know
         <strong>${
           this.form.baseLanguage.name
         }</strong> very well and you want to learn
@@ -167,7 +169,7 @@ export class SendInvitationComponent implements OnInit {
       this.form,
       secretKeys.feedbackInvitationPrivateKey
     );
-    return `http://localhost:4000/#/games/${this.form.game.gameNameForRanking}/${encryptedForm}`;
+    return `http://localhost:4000/#/games/${this.form.gameObj.gameNameForRanking}/${encryptedForm}`;
   }
 
   submit(): void {
@@ -178,5 +180,21 @@ export class SendInvitationComponent implements OnInit {
     if (!this.isFormValid()) {
       return;
     }
+
+    this.isFormLoading = true;
+    this.form.game = this.form.gameObj.gameNameForRanking;
+    this.invitationService.send(this.form).subscribe(
+      () => {
+        this.notificationService.showMessage('successful', Severity.success);
+        this.isFormLoading = false;
+      },
+      () => {
+        this.notificationService.showMessage(
+          'Failed to send invitation',
+          Severity.error
+        );
+        this.isFormLoading = false;
+      }
+    );
   }
 }

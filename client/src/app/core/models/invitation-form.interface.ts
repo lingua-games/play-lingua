@@ -12,7 +12,8 @@ export interface InvitationForm {
   generatedLink: string;
   count: number;
   playerName: string;
-  game: GameInformationInterface;
+  gameObj: GameInformationInterface;
+  game: string;
   htmlText: string;
   // isOpened: boolean
   // openedDate: date
