@@ -21,12 +21,82 @@ namespace PlayLingua.Data
 
         public Invitation AddInvitation(Invitation invitation)
         {
-            throw new NotImplementedException();
+            var sql =
+                @"insert into dbo.Invitations 
+(
+                AddedBy,
+                AddedDate,
+                BaseLanguageId,
+                BookId,
+                ChapterId,
+                Count,
+                Email,
+                Game,
+                GeneratedLink,
+                HtmlText,
+                IsOpened,
+                OpenedDate,
+                PlayerName,
+                LastUpdateDate,
+                TargetLanguageId
+) VALUES (
+                @AddedBy,
+                @AddedDate,
+                @BaseLanguageId,
+                @BookId,
+                @ChapterId,
+                @Count,
+                @Email,
+                @Game,
+                @GeneratedLink,
+                @HtmlText,
+                @IsOpened,
+                @OpenedDate,
+                @PlayerName,
+                @LastUpdateDate,
+                @TargetLanguageId
+);" +
+                "SELECT CAST(SCOPE_IDENTITY() as int)";
+
+            var id = db.Query<int>(sql, invitation).Single();
+            invitation.Id = id;
+            return invitation;
         }
 
         public List<Invitation> GetInvitations()
         {
-            throw new NotImplementedException();
+            return db.Query<Invitation>("select * from dbo.Invitations").ToList();
+        }
+
+        public void UpdateInvitation(Invitation invitation)
+        {
+            invitation.LastUpdateDate = DateTime.Now;
+            db.Query(@"update dbo.Invitations SET 
+                BaseLanguageId = @BaseLanguageId,
+                BookId = @BookId,
+                ChapterId = @ChapterId,
+                Count = @Count,
+                Email= @Email,
+                Game = @Game,
+                GeneratedLink = @GeneratedLink,
+                HtmlText = @HtmlText,
+                IsOpened = @IsOpened,
+                OpenedDate = @OpenedDate,
+                PlayerName = @PlayerName,
+                LastUpdateDate = @LastUpdateDate,
+                TargetLanguageId = @TargetLanguageId
+WHERE Id = @Id", invitation);
+        }
+
+        public void SetInvitationToOpen(Invitation invitation)
+        {
+            invitation.IsOpened = true;
+            invitation.OpenedDate = DateTime.Now;
+            invitation.LastUpdateDate = DateTime.Now;
+            db.Query(@"update dbo.Invitations SET 
+                IsOpened = @IsOpened,
+                OpenedDate = @OpenedDate,
+WHERE Id = @Id", invitation);
         }
     }
 }

@@ -4,6 +4,7 @@ namespace PlayLingua.Contract.ViewModels
 {
     public class InvitationViewModel: BaseViewModel
     {
+        public long Id { get; set; }
         public string Email { get; set; }
         public LanguageViewModel TargetLanguage { get; set; }
         public LanguageViewModel BaseLanguage { get; set; }

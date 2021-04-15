@@ -8,7 +8,7 @@ export class NotificationService {
   public showMessage(
     message: string,
     severity: Severity,
-    header: string = 'Error',
+    header: string = '',
     key: string = ''
   ): void {
     switch (key) {

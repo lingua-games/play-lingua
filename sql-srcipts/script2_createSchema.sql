@@ -175,8 +175,10 @@ CREATE TABLE [dbo].[Invitations] (
 		Game nvarchar(200) NOT NULL,
 		HtmlText nvarchar(Max) NOT NULL,
 		IsOpened bit,
-		OpenedDate datetime
-
+		OpenedDate datetime,
+		[AddedBy]   int NOT NULL,
+		[AddedDate] datetime NOT NULL,
+		[LastUpdateDate] datetime,
 )
 ALTER TABLE [dbo].[Invitations] ADD CONSTRAINT [FK_Invitations_BaseLanguageId]
 FOREIGN KEY ([BaseLanguageId]) REFERENCES [dbo].[Language] ([Id])
@@ -189,4 +191,7 @@ FOREIGN KEY ([BookId]) REFERENCES [dbo].[Book] ([Id])
 GO
 ALTER TABLE [dbo].[Invitations] ADD CONSTRAINT [FK_Invitations_ChapterId]
 FOREIGN KEY ([ChapterId]) REFERENCES [dbo].[Chapter] ([Id])
+GO
+ALTER TABLE [dbo].[Invitations] ADD CONSTRAINT [FK_Invitations_AddedBy]
+FOREIGN KEY ([AddedBy]) REFERENCES [dbo].[Users] ([Id])
 GO

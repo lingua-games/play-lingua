@@ -145,6 +145,7 @@ export class SendInvitationComponent implements OnInit {
       return;
     }
 
+    this.form.generatedLink = this.generateLink();
     this.form.htmlText = `
       <h1>Hello, Im Arash and here I am inviting you to play my web-base game and give me feedback</h1>
       <h3>Dear <strong>${this.form.playerName}</strong>, thanks for joining to our feedback session</h3>
@@ -159,7 +160,7 @@ export class SendInvitationComponent implements OnInit {
       this.form.htmlText += `<p>
         In this session you will play only
         <strong>${this.form.count}</strong> words and you can
-        <a href='${this.generateLink()}'>join via This Link</a>
+        <a href='${this.form.generatedLink}'>join via This Link</a>
       </p>`;
     } else {
       this.form.htmlText += `<p>You can <a href='${this.generateLink()}'>join via This Link</a></p>`;
