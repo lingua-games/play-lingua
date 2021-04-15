@@ -4,6 +4,7 @@ namespace PlayLingua.Domain.Entities
 {
     public class Invitation : BaseModel
     {
+        public long Id { get; set; }
         public string Email { get; set; }
         public long TargetLanguageId { get; set; }
         public long BaseLanguageId { get; set; }
