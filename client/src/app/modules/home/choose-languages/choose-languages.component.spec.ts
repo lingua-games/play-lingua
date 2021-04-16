@@ -233,7 +233,7 @@ describe('ChooseLanguagesComponent', () => {
       });
     });
 
-    it('should show message is targetLanguages is empty', () => {
+    it('should show message if targetLanguages is empty', () => {
       component.baseLanguages = [];
 
       component.submit();
@@ -245,7 +245,7 @@ describe('ChooseLanguagesComponent', () => {
       });
     });
 
-    it('should show message is targetLanguages has more than 5 items', () => {
+    it('should show message if targetLanguages has more than 5 items', () => {
       component.targetLanguages = [
         {} as LanguageModel,
         {} as LanguageModel,
