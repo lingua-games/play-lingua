@@ -163,7 +163,7 @@ export class SendInvitationComponent implements OnInit {
         <a href='${this.form.generatedLink}'>join via This Link</a>
       </p>`;
     } else {
-      this.form.htmlText += `<p>You can <a href='${this.generateLink()}'>join via This Link</a></p>`;
+      this.form.htmlText += `<p>You can <a href='${this.form.generatedLink}'>join via This Link</a></p>`;
     }
     this.form.htmlText += `
           <p>
