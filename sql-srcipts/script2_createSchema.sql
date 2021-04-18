@@ -20,7 +20,8 @@ CREATE TABLE [dbo].[Users] (
 	[TotalScore] float,
 	[EmailVerificationCode] UNIQUEIDENTIFIER,
 	[IsEmailVerified] BIT,
-	[EmailVerifiedDate] datetime
+	[EmailVerifiedDate] datetime,
+	NeedsResetPassword BIT
 )
 GO
 ALTER TABLE [dbo].[Users] ADD CONSTRAINT [FK_User_DefaultTargetLanguage]

@@ -10,4 +10,5 @@ export interface ScoreStoreInterface {
   gameDisplayName: string;
   isFeedback: boolean;
   feedbackForm: InvitationForm;
+  email: string;
 }

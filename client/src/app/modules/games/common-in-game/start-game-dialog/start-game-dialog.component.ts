@@ -58,7 +58,12 @@ export class StartGameDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.selectedOption = 'start';
+    if (this.data.isGameFinished) {
+      this.selectedOption = 'ranking';
+    } else {
+      this.selectedOption = 'start';
+    }
+
     if (this.data.isFeedback) {
       this.isFeedbackLoading = true;
       this.getInvitationInformation();

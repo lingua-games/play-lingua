@@ -21,7 +21,7 @@ namespace PlayLingua.Data
 
         public Invitation AddInvitation(Invitation invitation)
         {
-            var sql =
+            var invitationSql =
                 @"insert into dbo.Invitations 
 (
                 AddedBy,
@@ -60,8 +60,31 @@ namespace PlayLingua.Data
 );" +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
-            var id = db.Query<int>(sql, invitation).Single();
+            var id = db.Query<int>(invitationSql, invitation).Single();
             invitation.Id = id;
+
+            var userSql = "SELECT * from[PlayLingua].[dbo].[Users] where Email = @Email";
+            if (!db.Query<int>(userSql, invitation).Any())
+            {
+                var addUserSql =
+                     @"insert into dbo.Users 
+                        (
+                            Email, 
+                            AddedDate, 
+                            NeedsResetPassword,
+                            Password,
+                            IsEmailVerified
+                        ) VALUES (
+                            @Email, 
+                            @AddedDate, 
+                            1,
+                            ' ',
+                            1
+                        ); 
+                        SELECT CAST(SCOPE_IDENTITY() as int)
+                    ";
+                db.Query<int>(addUserSql, new { invitation.Email, invitation.AddedDate }).Single();
+            }
             return invitation;
         }
 

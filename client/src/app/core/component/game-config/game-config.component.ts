@@ -26,12 +26,13 @@ export class GameConfigComponent implements OnInit {
   bookListLoading = false;
   chapters: ChapterModel[] = [];
   chapterListLoading = false;
-  defaultLanguages: {
+  defaultLanguages?: {
     defaultBaseLanguage: LanguageModel;
     defaultTargetLanguage: LanguageModel;
-  } = JSON.parse(
-    this.localStorageService.load(LocalStorageHelper.defaultLanguages)
-  );
+  } = {
+    defaultBaseLanguage: {} as LanguageModel,
+    defaultTargetLanguage: {} as LanguageModel,
+  };
   books: BookModel[] = [];
 
   constructor(
@@ -41,11 +42,17 @@ export class GameConfigComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.data.isFeedback) {
+      this.defaultLanguages = JSON.parse(
+        this.localStorageService.load(LocalStorageHelper.defaultLanguages)
+      );
       this.getBooks();
     }
   }
 
   getBooks(): void {
+    if (!this.defaultLanguages) {
+      return;
+    }
     this.bookListLoading = true;
     this.bookChapterService
       .getBooksBySourceAndTargetLanguageId(
