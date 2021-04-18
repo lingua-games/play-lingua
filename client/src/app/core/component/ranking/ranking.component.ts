@@ -35,13 +35,26 @@ export class RankingComponent implements OnInit {
     this.ranks.setLoading(true);
     this.scoreStorageService
       .getTopRanks({
-        bookId: this.form.selectedBook.id || null,
-        chapterId: this.form.selectedChapter.id || null,
-        count: environment.rankCount,
-        gameName: this.data.gameNameForRanking,
+        bookId: this.data.isFeedback
+          ? this.data.feedbackForm.book.id
+          : this.form.selectedBook.id || null,
+        chapterId: this.data.isFeedback
+          ? this.data.feedbackForm.chapter.id
+          : this.form.selectedChapter.id || null,
+        count:
+          this.data.isFeedback && this.data.feedbackForm?.count
+            ? this.data.feedbackForm.count
+            : environment.rankCount,
+        gameName: this.data.isFeedback
+          ? this.data.feedbackForm.game
+          : this.data.gameNameForRanking,
       } as ScoreStoreInterface)
       .subscribe(
         (res: RanksResultInterface[]) => {
+          if (res.length === 0) {
+            this.ranks.setError('Nobody played yet.');
+            return;
+          }
           setTimeout(() => {
             this.ranks.setData(res);
             this.ranks.data.sort((a, b) => {

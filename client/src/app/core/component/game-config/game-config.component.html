@@ -20,7 +20,7 @@
     <mat-form-field
       appearance="fill"
       class="select-book-input"
-      *ngIf="!bookListLoading"
+      *ngIf="!bookListLoading && !data.isFeedback"
     >
       <mat-label>Select a book</mat-label>
       <mat-select

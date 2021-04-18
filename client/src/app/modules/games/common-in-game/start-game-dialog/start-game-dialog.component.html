@@ -1,12 +1,23 @@
 <p-toast></p-toast>
 <div class="dialog-title-container">
-  <div class="back-container" (click)="backToMenu()">
+  <div class="back-container" (click)="backToMenu()" *ngIf="!data.isFeedback">
     <fa-icon [icon]="['fas', 'arrow-circle-left']"></fa-icon>
     Back
   </div>
   {{ data.name }}
 </div>
-<div class="row">
+<div *ngIf="isFeedbackLoading" class="text-center p-5">
+  <div
+    class="spinner-grow text-success"
+    style="width: 3rem; height: 3rem"
+    role="status"
+  >
+    <span class="sr-only">Loading...</span>
+  </div>
+  <hr />
+  <h1>Preparing</h1>
+</div>
+<div class="row" *ngIf="!isFeedbackLoading">
   <div class="col-sm-2">
     <div
       [ngClass]="{

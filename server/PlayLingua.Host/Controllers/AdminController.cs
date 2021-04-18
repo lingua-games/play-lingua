@@ -32,6 +32,7 @@ namespace PlayLingua.Host.Controllers
                 Count = model.Count,
                 Email = model.Email,
                 Game = model.Game,
+                UniqueKey = model.UniqueKey,
                 GeneratedLink = model.GeneratedLink,
                 HtmlText = model.HtmlText,
                 IsOpened = false,
@@ -40,6 +41,26 @@ namespace PlayLingua.Host.Controllers
                 LastUpdateDate = DateTime.Now,
                 TargetLanguageId = model.TargetLanguage.Id
             }));
+        }
+
+        [HttpGet("get-invitation-by-unique-key/{uniqueCode}")]
+        public ActionResult<InvitationViewModel> GetInvitationByUniqueKey(string uniqueCode)
+        {
+            var result = _adminRepository.GetInvitationByUniqueKey(uniqueCode);
+            return Ok(new InvitationViewModel
+            {
+                UniqueKey = result.UniqueKey,
+                BaseLanguage = new LanguageViewModel { Id = result.BaseLanguageId },
+                Email = result.Email,
+                Count = result.Count,
+                Game = result.Game,
+                Book = new BookViewModel { Id = result.BookId != null ? (int)result.BookId : 0 },
+                IsOpened = result.IsOpened,
+                OpenedDate = result.OpenedDate,
+                PlayerName = result.PlayerName,
+                Chapter = new ChapterViewModel { Id = result.ChapterId != null ? (int)result.ChapterId : 0 },
+                TargetLanguage = new LanguageViewModel { Id = result.TargetLanguageId },
+            });
         }
 
         [HttpPost("edit-invitation")]
@@ -70,10 +91,13 @@ namespace PlayLingua.Host.Controllers
         [HttpPost("set-invitation-open")]
         public ActionResult<InvitationViewModel> SetInvitationToOpen(InvitationViewModel model)
         {
-            _adminRepository.SetInvitationToOpen(new Invitation
+            if (!model.IsOpened)
             {
-                Id = model.Id
-            });
+                _adminRepository.SetInvitationToOpen(new Invitation
+                {
+                    UniqueKey = model.UniqueKey
+                });
+            }
             return Ok();
         }
 

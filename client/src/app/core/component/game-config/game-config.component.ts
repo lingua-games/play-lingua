@@ -40,7 +40,9 @@ export class GameConfigComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getBooks();
+    if (!this.data.isFeedback) {
+      this.getBooks();
+    }
   }
 
   getBooks(): void {

@@ -179,6 +179,7 @@ CREATE TABLE [dbo].[Invitations] (
 		[AddedBy]   int NOT NULL,
 		[AddedDate] datetime NOT NULL,
 		[LastUpdateDate] datetime,
+		UniqueKey uniqueidentifier NOT NULL,
 )
 ALTER TABLE [dbo].[Invitations] ADD CONSTRAINT [FK_Invitations_BaseLanguageId]
 FOREIGN KEY ([BaseLanguageId]) REFERENCES [dbo].[Language] ([Id])

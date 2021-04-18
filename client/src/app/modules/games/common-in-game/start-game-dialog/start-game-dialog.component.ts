@@ -17,6 +17,8 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { GameConfigModel } from '../../../../core/models/game-config-model';
 import { BookModel } from '../../../../core/models/book.model';
 import { ChapterModel } from '../../../../core/models/chapter.model';
+import { InvitationService } from '../../../../core/service/invitation.service';
+import { InvitationForm } from '../../../../core/models/invitation-form.interface';
 
 @Component({
   selector: 'app-start-game-dialog',
@@ -43,6 +45,7 @@ export class StartGameDialogComponent implements OnInit {
     selectedBook: {} as BookModel,
     selectedChapter: {} as ChapterModel,
   };
+  isFeedbackLoading = false;
 
   constructor(
     private router: Router,
@@ -50,13 +53,40 @@ export class StartGameDialogComponent implements OnInit {
     private gamesService: GamesService,
     private notificationService: NotificationService,
     private localStorageService: LocalStorageService,
-    @Inject(MAT_DIALOG_DATA) public data: GameInformationInterface
+    @Inject(MAT_DIALOG_DATA) public data: GameInformationInterface,
+    private invitationService: InvitationService
   ) {}
 
   ngOnInit(): void {
     this.selectedOption = 'start';
+    if (this.data.isFeedback) {
+      this.isFeedbackLoading = true;
+      this.getInvitationInformation();
+    }
     // Todo, comment below
     // this.submit();
+  }
+
+  getInvitationInformation(): void {
+    this.invitationService
+      .getInvitation(this.data.feedbackForm.uniqueKey)
+      .subscribe(
+        (res: InvitationForm) => {
+          this.data.feedbackForm = res;
+          setTimeout(() => {
+            this.isFeedbackLoading = false;
+          }, 1000);
+        },
+        () => {
+          // Todo, handle error
+          this.notificationService.showMessage(
+            'Failed to get information, please try again',
+            Severity.error
+          );
+          this.isFeedbackLoading = false;
+        }
+      );
+    this.invitationService.setAsOpen(this.data.feedbackForm).subscribe();
   }
 
   showSection(item: string): void {
@@ -80,26 +110,51 @@ export class StartGameDialogComponent implements OnInit {
 
   submit(): void {
     this.isPreparing = true;
-    const result: GameStartInformation<WordKeyValueModel<string[]>[]> = {
-      bookId: this.form.selectedBook ? this.form.selectedBook.id : 0,
-      chapterId: this.form.selectedChapter ? this.form.selectedChapter.id : 0,
-      words: [],
-    };
+    let result: GameStartInformation<WordKeyValueModel<string[]>[]>;
+
+    if (this.data.isFeedback) {
+      result = {
+        bookId: this.data.feedbackForm.book.id,
+        chapterId: this.data.feedbackForm.chapter.id,
+        words: [],
+      };
+    } else {
+      result = {
+        bookId: this.form.selectedBook ? this.form.selectedBook.id : 0,
+        chapterId: this.form.selectedChapter ? this.form.selectedChapter.id : 0,
+        words: [],
+      };
+    }
 
     this.gamesService
       .getGameWords({
         bookId: result.bookId,
         chapterId: result.chapterId,
-        count: environment.startGameCount,
-        defaultTargetLanguage: JSON.parse(
-          this.localStorageService.load(LocalStorageHelper.defaultLanguages)
-        ).defaultTargetLanguage.id,
-        defaultBaseLanguage: JSON.parse(
-          this.localStorageService.load(LocalStorageHelper.defaultLanguages)
-        ).defaultBaseLanguage.id,
+        count:
+          this.data.isFeedback && this.data.feedbackForm?.count
+            ? this.data.feedbackForm.count
+            : environment.startGameCount,
+        defaultTargetLanguage: this.data.isFeedback
+          ? this.data.feedbackForm.targetLanguage.id
+          : JSON.parse(
+              this.localStorageService.load(LocalStorageHelper.defaultLanguages)
+            ).defaultTargetLanguage.id,
+        defaultBaseLanguage: this.data.isFeedback
+          ? this.data.feedbackForm.baseLanguage.id
+          : JSON.parse(
+              this.localStorageService.load(LocalStorageHelper.defaultLanguages)
+            ).defaultBaseLanguage.id,
       } as GetGameWordsRequestModel)
       .subscribe(
         (res: WordKeyValueModel<string[]>[]) => {
+          if (res.length === 0) {
+            this.notificationService.showMessage(
+              'No word has added with this condition yet',
+              Severity.error
+            );
+            this.isPreparing = false;
+            return;
+          }
           setTimeout(() => {
             result.words = res;
             this.dialogRef.close(result);

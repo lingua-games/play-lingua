@@ -38,7 +38,8 @@ namespace PlayLingua.Data
                 OpenedDate,
                 PlayerName,
                 LastUpdateDate,
-                TargetLanguageId
+                TargetLanguageId,
+                UniqueKey
 ) VALUES (
                 @AddedBy,
                 @AddedDate,
@@ -54,7 +55,8 @@ namespace PlayLingua.Data
                 @OpenedDate,
                 @PlayerName,
                 @LastUpdateDate,
-                @TargetLanguageId
+                @TargetLanguageId,
+                @UniqueKey
 );" +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
@@ -95,8 +97,13 @@ WHERE Id = @Id", invitation);
             invitation.LastUpdateDate = DateTime.Now;
             db.Query(@"update dbo.Invitations SET 
                 IsOpened = @IsOpened,
-                OpenedDate = @OpenedDate,
-WHERE Id = @Id", invitation);
+                OpenedDate = @OpenedDate
+WHERE UniqueKey = @UniqueKey", invitation);
+        }
+
+        public Invitation GetInvitationByUniqueKey(string UniqueKey)
+        {
+            return db.Query<Invitation>("select * from dbo.Invitations where UniqueKey = @UniqueKey", new { UniqueKey }).FirstOrDefault();
         }
     }
 }

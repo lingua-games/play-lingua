@@ -12,9 +12,8 @@ import { BookChapterService } from '../../../core/service/book-chapter.service';
 import { ChapterModel } from '../../../core/models/chapter.model';
 import { GamesService } from '../../../core/service/games.service';
 import { GameInformationInterface } from '../../../core/models/game-information.interface';
-import { LocalStorageService } from '../../../core/service/local-storage.service';
-import { secretKeys } from '../../../../environments/secret';
 import { InvitationService } from '../../../core/service/invitation.service';
+import { UUID } from 'angular2-uuid';
 
 @Component({
   selector: 'app-send-invitation',
@@ -27,7 +26,6 @@ export class SendInvitationComponent implements OnInit {
     private notificationService: NotificationService,
     private bookChapterService: BookChapterService,
     private gameService: GamesService,
-    private localStorageService: LocalStorageService,
     private invitationService: InvitationService
   ) {}
 
@@ -177,11 +175,12 @@ export class SendInvitationComponent implements OnInit {
   }
 
   generateLink(): string {
-    const encryptedForm = this.localStorageService.encryptData(
-      this.form,
-      secretKeys.feedbackInvitationPrivateKey
-    );
-    return `http://localhost:4000/#/games/${this.form.gameObj.gameNameForRanking}/${encryptedForm}`;
+    this.form.htmlText = '';
+    this.form.generatedLink = '';
+    this.form.uniqueKey = UUID.UUID();
+
+    // Todo, change localhost to real domain
+    return `http://localhost:4000/#/games/feedback/${this.form.gameObj.gameNameForRanking}/${this.form.uniqueKey}`;
   }
 
   submit(): void {
