@@ -1,13 +1,12 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { FallingStarsWord } from '../../../core/models/falling-stars-word.interface';
 import { FallingStarsComponent } from './falling-stars.component';
 import { MatDialog } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Store } from '@ngrx/store';
-import { FinishGameActionEnum } from '../../../core/models/finish-game-action.enum';
 import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
 import { GameStartInformation } from '../../../core/models/game-start-information';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
@@ -314,52 +313,16 @@ describe('FallingStarsComponent', () => {
       spyOn(component, 'setGameWords');
       mockMatDialog.open.and.callFake(() => {
         return {
-          afterClosed: () => of(FinishGameActionEnum.retry),
+          afterClosed: () =>
+            of({ words: [{}, {}] } as GameStartInformation<
+              WordKeyValueModel<string[]>[]
+            >),
         };
       });
 
       component.showEndGameDialog();
 
       expect(component.setGameWords).toHaveBeenCalled();
-    });
-
-    it('should call setGameWords when dialog close with retry', () => {
-      spyOn(component, 'setGameWords');
-      mockMatDialog.open.and.callFake(() => {
-        return {
-          afterClosed: () => of(FinishGameActionEnum.retry),
-        };
-      });
-
-      component.showEndGameDialog();
-
-      expect(component.setGameWords).toHaveBeenCalled();
-    });
-
-    it('should call startGame when dialog close with retry', () => {
-      spyOn(component, 'startGame');
-      mockMatDialog.open.and.callFake(() => {
-        return {
-          afterClosed: () => of(FinishGameActionEnum.retry),
-        };
-      });
-
-      component.showEndGameDialog();
-
-      expect(component.startGame).toHaveBeenCalled();
-    });
-
-    it('should call showStartDialog when dialog close with changeMode', () => {
-      spyOn(component, 'showStartDialog');
-      mockMatDialog.open.and.callFake(() => {
-        return {
-          afterClosed: () => of(FinishGameActionEnum.changeMode),
-        };
-      });
-
-      component.showEndGameDialog();
-
-      expect(component.showStartDialog).toHaveBeenCalled();
     });
   });
 

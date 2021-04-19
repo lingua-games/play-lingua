@@ -35,7 +35,7 @@ CREATE TABLE [dbo].[Book] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
     [Name]   varchar(100) NOT NULL,
 	[TargetLanguageId]   int NOT NULL,
-	[SourceLanguageId]   int NOT NULL,
+	[BaseLanguageId]   int NOT NULL,
 	[AddedBy]   int NOT NULL,
 	[AddedDate] datetime NOT NULL,
 	[LastUpdateDate] datetime,
@@ -44,8 +44,8 @@ GO
 ALTER TABLE [dbo].[Book] ADD CONSTRAINT [FK_Book_TargetLanguageId]
 FOREIGN KEY ([TargetLanguageId]) REFERENCES [dbo].[Language] ([Id])
 GO
-ALTER TABLE [dbo].[Book] ADD CONSTRAINT [FK_Book_SourceLanguageId]
-FOREIGN KEY ([SourceLanguageId]) REFERENCES [dbo].[Language] ([Id])
+ALTER TABLE [dbo].[Book] ADD CONSTRAINT [FK_Book_BaseLanguageId]
+FOREIGN KEY ([BaseLanguageId]) REFERENCES [dbo].[Language] ([Id])
 GO
 ALTER TABLE [dbo].[Book] ADD CONSTRAINT [FK_Book_AddedBy]
 FOREIGN KEY ([AddedBy]) REFERENCES [dbo].[Users] ([Id])

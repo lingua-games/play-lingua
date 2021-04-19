@@ -27,6 +27,9 @@
     . You can always change this filter in
     <a (click)="goToStart.emit()">Start</a> tab.
   </div>
+  <div class="alert alert-success mt-2" *ngIf="data.isGameFinished">
+    This time you earned <strong>{{ data.scoreStore.score }}</strong>
+  </div>
   <div class="alert alert-warning mt-2 text-center" *ngIf="ranks.hasError">
     {{ ranks.errorMessage }}
   </div>
@@ -34,6 +37,7 @@
     <thead>
       <tr>
         <th></th>
+        <!--        test-->
         <th>Player</th>
         <th>Score</th>
       </tr>

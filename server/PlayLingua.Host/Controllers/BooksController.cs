@@ -27,7 +27,7 @@ namespace PlayLingua.Host.Controllers
             {
                 Id = x.Id,
                 Name = x.Name,
-                SourceLanguageId = x.SourceLanguageId,
+                BaseLanguageId = x.BaseLanguageId,
                 TargetLanguageId = x.TargetLanguageId
             }).ToList());
         }
@@ -39,19 +39,19 @@ namespace PlayLingua.Host.Controllers
             {
                 Id = x.Id,
                 Name = x.Name,
-                SourceLanguageId = x.SourceLanguageId,
+                BaseLanguageId = x.BaseLanguageId,
                 TargetLanguageId = x.TargetLanguageId
             }).ToList());
         }
 
-        [HttpGet("by-source-and-target-language/{sourceLanguageId}/{targetLanguageId}")]
-        public ActionResult<List<BookViewModel>> GetBySourceAndTargetLanguageId(int sourceLanguageId, int targetLanguageId)
+        [HttpGet("by-source-and-target-language/{baseLanguageId}/{targetLanguageId}")]
+        public ActionResult<List<BookViewModel>> GetBySourceAndTargetLanguageId(int baseLanguageId, int targetLanguageId)
         {
-            return Ok(_bookRepository.GetBySourceAndTargetLanguageId(sourceLanguageId, targetLanguageId).Select(x => new BookViewModel
+            return Ok(_bookRepository.GetBySourceAndTargetLanguageId(baseLanguageId, targetLanguageId).Select(x => new BookViewModel
             {
                 Id = x.Id,
                 Name = x.Name,
-                SourceLanguageId = x.SourceLanguageId,
+                BaseLanguageId = x.BaseLanguageId,
                 TargetLanguageId = x.TargetLanguageId
             }).ToList());
         }
@@ -62,7 +62,7 @@ namespace PlayLingua.Host.Controllers
             var addedBook = _bookRepository.Add(new Book
             {
                 Name = model.Name,
-                SourceLanguageId = model.SourceLanguageId,
+                BaseLanguageId = model.BaseLanguageId,
                 TargetLanguageId = model.TargetLanguageId
             }, GetUser().Id);
             return Ok(addedBook);
@@ -82,7 +82,7 @@ namespace PlayLingua.Host.Controllers
             {
                 Id = id,
                 Name = model.Name,
-                SourceLanguageId = model.SourceLanguageId,
+                BaseLanguageId = model.BaseLanguageId,
                 TargetLanguageId = model.TargetLanguageId
             });
             return Ok(model);

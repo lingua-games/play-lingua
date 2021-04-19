@@ -20,7 +20,6 @@ import { BasicInformationService } from '../../../core/service/basic-information
 import { GameNameEnum } from '../../../core/models/game-name.enum';
 import { ElementStyle } from '../../../core/models/element-style.model';
 import { ScoreStorageService } from '../../../core/service/score-storage.service';
-import { FinishGameActionEnum } from '../../../core/models/finish-game-action.enum';
 import { InvitationForm } from '../../../core/models/invitation-form.interface';
 
 @Component({
@@ -222,15 +221,16 @@ export class SuperMarioComponent implements OnInit {
       } as GameInformationInterface,
     });
 
-    dialog.afterClosed().subscribe((res: FinishGameActionEnum) => {
-      if (res) {
-        if (res === FinishGameActionEnum.retry) {
+    dialog
+      .afterClosed()
+      .subscribe((res: GameStartInformation<WordKeyValueModel<string[]>[]>) => {
+        if (res && res.words && res.words.length) {
+          this.allEnemies = JSON.parse(JSON.stringify(res));
+          this.bookId = res.bookId;
+          this.chapterId = res.chapterId;
           this.startGame();
-        } else if (res === FinishGameActionEnum.changeMode) {
-          this.showStartDialog();
         }
-      }
-    });
+      });
   }
 
   prepareTheWord(enemy?: WordKeyValueModel<string[]>): void {

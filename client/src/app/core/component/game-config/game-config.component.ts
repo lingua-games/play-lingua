@@ -66,7 +66,7 @@ export class GameConfigComponent implements OnInit {
             id: 0,
             name: 'No book, just random',
             targetLanguageId: 0,
-            sourceLanguageId: 0,
+            baseLanguageId: 0,
           });
           this.books = this.books.concat(res);
           this.form.selectedBook = this.books[0];

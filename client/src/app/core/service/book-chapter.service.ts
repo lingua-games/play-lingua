@@ -30,11 +30,11 @@ export class BookChapterService {
   }
 
   getBooksBySourceAndTargetLanguageId(
-    sourceLanguageId: number,
+    baseLanguageId: number,
     targetLanguageId: number
   ): Observable<BookModel[]> {
     return this.http.get<BookModel[]>(
-      `${this.bookUrl}/by-source-and-target-language/${sourceLanguageId}/${targetLanguageId}`
+      `${this.bookUrl}/by-source-and-target-language/${baseLanguageId}/${targetLanguageId}`
     );
   }
 

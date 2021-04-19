@@ -42,7 +42,7 @@ describe('BasicInformationService', () => {
   it('should call addBook API when addBook() method hit', () => {
     const mockBook: BookModel = {
       id: 1,
-      sourceLanguageId: 1,
+      baseLanguageId: 1,
       targetLanguageId: 1,
       name: '',
     };
@@ -61,7 +61,7 @@ describe('BasicInformationService', () => {
   it('should call addBook API when addBook() method hit', () => {
     const mockBook: BookModel = {
       id: 1,
-      sourceLanguageId: 1,
+      baseLanguageId: 1,
       targetLanguageId: 1,
       name: '',
     };

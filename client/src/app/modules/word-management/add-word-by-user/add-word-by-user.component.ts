@@ -155,7 +155,7 @@ export class AddWordByUserComponent implements OnInit {
             const itemToAdd = {
               id: 0,
               targetLanguageId: this.targetLanguage?.value.id,
-              sourceLanguageId: this.baseLanguage?.value.id,
+              baseLanguageId: this.baseLanguage?.value.id,
               name: res.bookName,
             };
             this.books = [...this.books, itemToAdd];
@@ -239,7 +239,7 @@ export class AddWordByUserComponent implements OnInit {
             {
               targetLanguageId: 0,
               name: 'Add new book',
-              sourceLanguageId: 0,
+              baseLanguageId: 0,
               id: -1,
             },
           ];

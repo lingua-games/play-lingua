@@ -46,7 +46,7 @@ namespace PlayLingua.Host.Controllers
                     {
                         Name = model.Book.Name,
                         TargetLanguageId = model.Book.TargetLanguageId,
-                        SourceLanguageId = model.Book.SourceLanguageId
+                        BaseLanguageId = model.Book.BaseLanguageId
                     }, userId).Id;
 
                     if (model.Chapter != null)

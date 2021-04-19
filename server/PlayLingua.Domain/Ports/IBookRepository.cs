@@ -8,7 +8,7 @@ namespace PlayLingua.Domain.Ports
     {
         List<Book> List();
         List<Book> GetByLanguage(int languageId, int baseLanguage);
-        List<Book> GetBySourceAndTargetLanguageId(int sourceLanguageId, int targetLanguageId);
+        List<Book> GetBySourceAndTargetLanguageId(int baseLanguageId, int targetLanguageId);
         Book Add(Book book, int userId);
         void Delete(string id);
         void Update(Book book);
