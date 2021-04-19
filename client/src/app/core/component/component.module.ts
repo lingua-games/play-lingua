@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { TopNavbarComponent } from '../../modules/home/top-navbar/top-navbar.component';
 import { RouterModule } from '@angular/router';
 import { StartGameDialogComponent } from '../../modules/games/common-in-game/start-game-dialog/start-game-dialog.component';
-import { FinishGameDialogComponent } from '../../modules/games/common-in-game/finish-game-dialog/finish-game-dialog.component';
 import { MaterialModule } from '../../modules/common/material/material.module';
 import { PrimengModule } from '../../modules/common/primeng/primeng.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -20,7 +19,6 @@ import { RankingComponent } from './ranking/ranking.component';
     GameOptionsComponent,
     TopNavbarComponent,
     StartGameDialogComponent,
-    FinishGameDialogComponent,
     GameInstructionComponent,
     GameConfigComponent,
     RankingComponent,
@@ -38,7 +36,6 @@ import { RankingComponent } from './ranking/ranking.component';
     GameOptionsComponent,
     TopNavbarComponent,
     StartGameDialogComponent,
-    FinishGameDialogComponent,
   ],
 })
 export class ComponentModule {}

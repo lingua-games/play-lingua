@@ -18,4 +18,14 @@ export class InvitationService {
       form
     );
   }
+
+  getInvitation(uniqueKey: string): Observable<InvitationForm> {
+    return this.http.get<InvitationForm>(
+      this.adminApi + '/get-invitation-by-unique-key/' + uniqueKey
+    );
+  }
+
+  setAsOpen(form: InvitationForm): Observable<{}> {
+    return this.http.post(this.adminApi + '/set-invitation-open', form);
+  }
 }

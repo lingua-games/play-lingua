@@ -84,10 +84,15 @@ namespace PlayLingua.Data
 
         public User GetUserInformation(int userId)
         {
-            return db.Query<User>("select top 1 * from dbo.Users").Select(x => new User
+            return db.Query<User>("select top 1 * from dbo.Users where id = @userId", new { userId }).Select(x => new User
             {
                 TotalScore = x.TotalScore,
             }).FirstOrDefault();
+        }
+
+        public User GetUserInformationByEmail(string email)
+        {
+            return db.Query<User>("select top 1 * from dbo.Users where Email = @email", new { email }).FirstOrDefault();
         }
 
         public List<User> List()

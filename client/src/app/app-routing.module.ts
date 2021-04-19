@@ -24,6 +24,13 @@ const routes: Routes = [
     canActivate: [UserAndGuestAllowService],
   },
   {
+    path: 'games/feedback/falling-stars/:code',
+    loadChildren: () =>
+      import('./modules/games/falling-stars/falling-stars.module').then(
+        (x) => x.FallingStarsModule
+      ),
+  },
+  {
     path: 'games/super-mario',
     loadChildren: () =>
       import('./modules/games/super-mario/super-mario.module').then(

@@ -20,9 +20,8 @@ import { BasicInformationService } from '../../../core/service/basic-information
 import { GameNameEnum } from '../../../core/models/game-name.enum';
 import { ElementStyle } from '../../../core/models/element-style.model';
 import { ScoreStorageService } from '../../../core/service/score-storage.service';
-import { FinishGameDialogComponent } from '../common-in-game/finish-game-dialog/finish-game-dialog.component';
-import { ScoreStoreInterface } from '../../../core/models/score-store.interface';
 import { FinishGameActionEnum } from '../../../core/models/finish-game-action.enum';
+import { InvitationForm } from '../../../core/models/invitation-form.interface';
 
 @Component({
   selector: 'app-super-mario',
@@ -70,6 +69,7 @@ export class SuperMarioComponent implements OnInit {
     nativeElement: {} as ElementRef,
   } as ElementRef;
 
+  feedbackForm: InvitationForm = {} as InvitationForm;
   mario: MarioModel = new MarioModel();
   enemies: MarioEnemy[] = [];
   currentEnemy: WordKeyValueModel<string[]> = {} as WordKeyValueModel<string[]>;
@@ -205,17 +205,21 @@ export class SuperMarioComponent implements OnInit {
 
   showEndGameDialog(): void {
     this.isGameFinished = true;
-    const dialog = this.dialog.open(FinishGameDialogComponent, {
+    const dialog = this.dialog.open(StartGameDialogComponent, {
       disableClose: true,
       width: '30%',
       autoFocus: false,
       data: {
-        bookId: this.bookId,
-        chapterId: this.chapterId,
-        gameName: 'super-mario',
-        score: this.scoreStorageService.getCachedScores(),
-        gameDisplayName: 'Super Mario',
-      } as ScoreStoreInterface,
+        name: 'Super Mario',
+        code: GameNameEnum.fallingStars,
+        gameNameForRanking: 'super-mario',
+        hints: this.basicInformationService.gameHints(
+          GameNameEnum.fallingStars
+        ),
+        isFeedback: !!this.feedbackForm,
+        feedbackForm: this.feedbackForm,
+        isGameFinished: true,
+      } as GameInformationInterface,
     });
 
     dialog.afterClosed().subscribe((res: FinishGameActionEnum) => {

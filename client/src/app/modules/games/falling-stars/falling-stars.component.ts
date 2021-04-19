@@ -7,14 +7,15 @@ import { Store } from '@ngrx/store';
 import { NotificationState } from '../../../core/component/score-notification/state/score-notification.reducer';
 import { toggleNotification } from '../../../core/component/score-notification/state/score-notification.actions';
 import { ScoreStorageService } from '../../../core/service/score-storage.service';
-import { ScoreStoreInterface } from '../../../core/models/score-store.interface';
 import { GameStartInformation } from '../../../core/models/game-start-information';
 import { FinishGameActionEnum } from '../../../core/models/finish-game-action.enum';
-import { FinishGameDialogComponent } from '../common-in-game/finish-game-dialog/finish-game-dialog.component';
 import { StartGameDialogComponent } from '../common-in-game/start-game-dialog/start-game-dialog.component';
 import { GameInformationInterface } from '../../../core/models/game-information.interface';
 import { BasicInformationService } from '../../../core/service/basic-information.service';
 import { GameNameEnum } from '../../../core/models/game-name.enum';
+import { ActivatedRoute } from '@angular/router';
+import { InvitationForm } from '../../../core/models/invitation-form.interface';
+import { ScoreStoreInterface } from '../../../core/models/score-store.interface';
 
 const secondsForTraver = 5000;
 const bufferBeforeStart = 1000;
@@ -60,6 +61,8 @@ export class FallingStarsComponent implements OnInit {
   bookId?: number;
   chapterId?: number;
   isGameFinished = false;
+  feedbackForm: InvitationForm = {} as InvitationForm;
+
   @HostListener('document:keyup ', ['$event'])
   keyUpEvent(event: KeyboardEvent): void {
     this.pressedNumber = 0;
@@ -127,10 +130,18 @@ export class FallingStarsComponent implements OnInit {
     private dialog: MatDialog,
     private store: Store<{}>,
     private scoreStorageService: ScoreStorageService,
-    private basicInformationService: BasicInformationService
+    private basicInformationService: BasicInformationService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.route.paramMap.subscribe((paramMap) => {
+      const invitationCode = paramMap.get('code');
+      if (invitationCode) {
+        this.feedbackForm.uniqueKey = invitationCode;
+      }
+    });
+
     this.showStartDialog();
     this.scoreStorageService.clearCatch();
     // this.showEndGameDialog();
@@ -138,17 +149,27 @@ export class FallingStarsComponent implements OnInit {
 
   showEndGameDialog(): void {
     this.isGameFinished = true;
-    const dialog = this.dialog.open(FinishGameDialogComponent, {
+    const dialog = this.dialog.open(StartGameDialogComponent, {
       disableClose: true,
-      width: '30%',
+      width: '60%',
+      height: '62vh',
+      maxHeight: '95vh',
       autoFocus: false,
       data: {
-        bookId: this.bookId,
-        chapterId: this.chapterId,
-        gameName: 'falling-stars',
-        score: this.scoreStorageService.getCachedScores(),
-        gameDisplayName: 'Falling stars',
-      } as ScoreStoreInterface,
+        name: 'Falling stars',
+        code: GameNameEnum.fallingStars,
+        gameNameForRanking: 'falling-stars',
+        hints: this.basicInformationService.gameHints(
+          GameNameEnum.fallingStars
+        ),
+        isFeedback: !!this.feedbackForm,
+        scoreStore: {
+          score: this.scoreStorageService.getCachedScores(),
+        } as ScoreStoreInterface,
+        // score: this.scoreStorageService.getCachedScores(),
+        feedbackForm: this.feedbackForm,
+        isGameFinished: true,
+      } as GameInformationInterface,
     });
 
     dialog.afterClosed().subscribe((res: FinishGameActionEnum) => {
@@ -176,6 +197,8 @@ export class FallingStarsComponent implements OnInit {
           hints: this.basicInformationService.gameHints(
             GameNameEnum.fallingStars
           ),
+          isFeedback: !!this.feedbackForm,
+          feedbackForm: this.feedbackForm,
         } as GameInformationInterface,
         disableClose: true,
         width: '60%',

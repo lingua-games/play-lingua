@@ -10,6 +10,7 @@ export interface InvitationForm {
   book: BookModel;
   chapter: ChapterModel;
   generatedLink: string;
+  uniqueKey: string;
   count: number;
   playerName: string;
   gameObj: GameInformationInterface;

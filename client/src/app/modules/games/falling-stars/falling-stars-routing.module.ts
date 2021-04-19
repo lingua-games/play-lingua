@@ -9,6 +9,11 @@ const routes: Routes = [
     component: FallingStarsComponent,
     canActivate: [UserAndGuestAllowService],
   },
+  {
+    path: '/:code',
+    component: FallingStarsComponent,
+    canActivate: [UserAndGuestAllowService],
+  },
 ];
 
 @NgModule({

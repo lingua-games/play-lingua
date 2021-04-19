@@ -16,6 +16,7 @@ namespace PlayLingua.Contract.ViewModels
         public string Game { get; set; }
         public string HtmlText { get; set; }
         public bool IsOpened { get; set; }
-        public DateTime OpenedDate { get; set; }
+        public DateTime? OpenedDate { get; set; }
+        public Guid UniqueKey { get; set; }
     }
 }

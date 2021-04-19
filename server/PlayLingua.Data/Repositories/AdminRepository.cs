@@ -21,7 +21,7 @@ namespace PlayLingua.Data
 
         public Invitation AddInvitation(Invitation invitation)
         {
-            var sql =
+            var invitationSql =
                 @"insert into dbo.Invitations 
 (
                 AddedBy,
@@ -38,7 +38,8 @@ namespace PlayLingua.Data
                 OpenedDate,
                 PlayerName,
                 LastUpdateDate,
-                TargetLanguageId
+                TargetLanguageId,
+                UniqueKey
 ) VALUES (
                 @AddedBy,
                 @AddedDate,
@@ -54,12 +55,38 @@ namespace PlayLingua.Data
                 @OpenedDate,
                 @PlayerName,
                 @LastUpdateDate,
-                @TargetLanguageId
+                @TargetLanguageId,
+                @UniqueKey
 );" +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
-            var id = db.Query<int>(sql, invitation).Single();
+            var id = db.Query<int>(invitationSql, invitation).Single();
             invitation.Id = id;
+
+            var userSql = "SELECT * from[PlayLingua].[dbo].[Users] where Email = @Email";
+            if (!db.Query<int>(userSql, invitation).Any())
+            {
+                var addUserSql =
+                     @"insert into dbo.Users 
+                        (
+                            Email, 
+                            AddedDate, 
+                            NeedsResetPassword,
+                            Password,
+                            IsEmailVerified,
+                            DisplayName
+                        ) VALUES (
+                            @Email, 
+                            @AddedDate, 
+                            1,
+                            ' ',
+                            1,
+                            @PlayerName
+                        ); 
+                        SELECT CAST(SCOPE_IDENTITY() as int)
+                    ";
+                db.Query<int>(addUserSql, new { invitation.Email, invitation.AddedDate, invitation.PlayerName }).Single();
+            }
             return invitation;
         }
 
@@ -95,8 +122,13 @@ WHERE Id = @Id", invitation);
             invitation.LastUpdateDate = DateTime.Now;
             db.Query(@"update dbo.Invitations SET 
                 IsOpened = @IsOpened,
-                OpenedDate = @OpenedDate,
-WHERE Id = @Id", invitation);
+                OpenedDate = @OpenedDate
+WHERE UniqueKey = @UniqueKey", invitation);
+        }
+
+        public Invitation GetInvitationByUniqueKey(string UniqueKey)
+        {
+            return db.Query<Invitation>("select * from dbo.Invitations where UniqueKey = @UniqueKey", new { UniqueKey }).FirstOrDefault();
         }
     }
 }

@@ -14,6 +14,7 @@ namespace PlayLingua.Domain.Entities
         public int Count { get; set; }
         public string PlayerName { get; set; }
         public string Game { get; set; }
+        public Guid UniqueKey{ get; set; }
         public string HtmlText { get; set; }
         public bool IsOpened { get; set; }
         public DateTime? OpenedDate { get; set; }
