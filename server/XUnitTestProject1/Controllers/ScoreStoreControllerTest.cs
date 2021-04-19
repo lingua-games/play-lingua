@@ -18,6 +18,7 @@ namespace PlayLingua.Unit.Test.Controllers
     {
         private readonly List<RankResultModel> _fakeRankList = new List<RankResultModel>();
         private readonly Mock<IScoreRepository> _mockRepo;
+        private readonly Mock<IUserRepository> _mockUserRepo;
         private readonly ScoreStoreController _mockController;
 
         public ScoreStoreControllerTest()
@@ -31,7 +32,7 @@ namespace PlayLingua.Unit.Test.Controllers
             _fakeRankList.Add(new RankResultModel { Email = "Fake Email 1"});
             _fakeRankList.Add(new RankResultModel { Email = "Fake Email 2" });
             _mockRepo = new Mock<IScoreRepository>();
-            _mockController = new ScoreStoreController(_mockRepo.Object);
+            _mockController = new ScoreStoreController(_mockRepo.Object, _mockUserRepo.Object);
         }
 
         [Fact]
