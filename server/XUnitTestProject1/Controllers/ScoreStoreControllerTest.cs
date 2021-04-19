@@ -23,15 +23,10 @@ namespace PlayLingua.Unit.Test.Controllers
 
         public ScoreStoreControllerTest()
         {
-            _fakeRankList.Add(new RankResultModel
-            {
-                Email = "You",
-                DisplayName = "You",
-                Score = 100
-            });
             _fakeRankList.Add(new RankResultModel { Email = "Fake Email 1"});
             _fakeRankList.Add(new RankResultModel { Email = "Fake Email 2" });
             _mockRepo = new Mock<IScoreRepository>();
+            _mockUserRepo = new Mock<IUserRepository>();
             _mockController = new ScoreStoreController(_mockRepo.Object, _mockUserRepo.Object);
         }
 
