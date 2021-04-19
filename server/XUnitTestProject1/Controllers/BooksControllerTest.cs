@@ -21,10 +21,10 @@ namespace PlayLingua.Unit.Test.Controllers
 
         public BooksControllerTest()
         {
-            _fakeBookList.Add(new Book { Id = 1, TargetLanguageId = 1, SourceLanguageId = 1 });
-            _fakeBookList.Add(new Book { Id = 2, TargetLanguageId = 1, SourceLanguageId = 2 });
-            _fakeBookListViewModel.Add(new BookViewModel { Id = 1, TargetLanguageId = 1, SourceLanguageId = 1 });
-            _fakeBookListViewModel.Add(new BookViewModel { Id = 2, TargetLanguageId = 1, SourceLanguageId = 2 });
+            _fakeBookList.Add(new Book { Id = 1, TargetLanguageId = 1, BaseLanguageId = 1 });
+            _fakeBookList.Add(new Book { Id = 2, TargetLanguageId = 1, BaseLanguageId = 2 });
+            _fakeBookListViewModel.Add(new BookViewModel { Id = 1, TargetLanguageId = 1, BaseLanguageId = 1 });
+            _fakeBookListViewModel.Add(new BookViewModel { Id = 2, TargetLanguageId = 1, BaseLanguageId = 2 });
             _mockRepo = new Mock<IBookRepository>();
             _mockController = new BooksController(_mockRepo.Object);
         }
@@ -61,14 +61,14 @@ namespace PlayLingua.Unit.Test.Controllers
         public void GetBySourceAndTargetLanguageId_Should_Get_Books_By_Their_SourceTargets()
         {
             // Arrange
-            _mockRepo.Setup(repo => repo.GetBySourceAndTargetLanguageId(1, 1)).Returns(_fakeBookList.Where(x => x.TargetLanguageId == 1 && x.SourceLanguageId == 1).ToList());
+            _mockRepo.Setup(repo => repo.GetBySourceAndTargetLanguageId(1, 1)).Returns(_fakeBookList.Where(x => x.TargetLanguageId == 1 && x.BaseLanguageId == 1).ToList());
 
             // Act
             var methodResult = _mockController.GetBySourceAndTargetLanguageId(1, 1);
 
             // Assert
             var testResult = methodResult.Result as OkObjectResult;
-            Assert.Equal(_fakeBookList.Where(x => x.TargetLanguageId == 1 && x.SourceLanguageId == 1).Count(), (testResult.Value as List<BookViewModel>).Count());
+            Assert.Equal(_fakeBookList.Where(x => x.TargetLanguageId == 1 && x.BaseLanguageId == 1).Count(), (testResult.Value as List<BookViewModel>).Count());
         }
 
         [Fact]

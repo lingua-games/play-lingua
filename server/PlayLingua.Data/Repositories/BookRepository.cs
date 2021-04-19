@@ -25,7 +25,7 @@ namespace PlayLingua.Data
             book.AddedDate = DateTime.Now;
 
             var sql =
-                "insert into dbo.Book (Name, TargetLanguageId, SourceLanguageId,AddedBy, AddedDate) VALUES(@Name, @TargetLanguageId,@SourceLanguageId, @AddedBy, @AddedDate);" +
+                "insert into dbo.Book (Name, TargetLanguageId, BaseLanguageId,AddedBy, AddedDate) VALUES(@Name, @TargetLanguageId,@BaseLanguageId, @AddedBy, @AddedDate);" +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var id = db.Query<int>(sql, book).Single();
@@ -45,7 +45,7 @@ namespace PlayLingua.Data
 
         public List<Book> GetByLanguage(int languageId, int baseLanguage)
         {
-            return db.Query<Book>("select * from dbo.Book where TargetLanguageId = @languageId and SourceLanguageId = @baseLanguage", new { languageId, baseLanguage }).ToList();
+            return db.Query<Book>("select * from dbo.Book where TargetLanguageId = @languageId and BaseLanguageId = @baseLanguage", new { languageId, baseLanguage }).ToList();
         }
 
         public void Update(Book book)
@@ -54,14 +54,14 @@ namespace PlayLingua.Data
             db.Query("update dbo.Book SET Name = @Name WHERE Id = @Id", book);
         }
 
-        public List<Book> GetBySourceAndTargetLanguageId(int sourceLanguageId, int targetLanguageId)
+        public List<Book> GetBySourceAndTargetLanguageId(int baseLanguageId, int targetLanguageId)
         {
             return db.Query<Book>(@"
                             select * from dbo.Book 
                                 where 
                             TargetLanguageId = @targetLanguageId AND 
-                            SourceLanguageId = @sourceLanguageId
-                                ", new { targetLanguageId, sourceLanguageId }).ToList();
+                            BaseLanguageId = @baseLanguageId
+                                ", new { targetLanguageId, baseLanguageId }).ToList();
         }
     }
 }

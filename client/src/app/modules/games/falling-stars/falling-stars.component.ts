@@ -8,7 +8,6 @@ import { NotificationState } from '../../../core/component/score-notification/st
 import { toggleNotification } from '../../../core/component/score-notification/state/score-notification.actions';
 import { ScoreStorageService } from '../../../core/service/score-storage.service';
 import { GameStartInformation } from '../../../core/models/game-start-information';
-import { FinishGameActionEnum } from '../../../core/models/finish-game-action.enum';
 import { StartGameDialogComponent } from '../common-in-game/start-game-dialog/start-game-dialog.component';
 import { GameInformationInterface } from '../../../core/models/game-information.interface';
 import { BasicInformationService } from '../../../core/service/basic-information.service';
@@ -61,7 +60,7 @@ export class FallingStarsComponent implements OnInit {
   bookId?: number;
   chapterId?: number;
   isGameFinished = false;
-  feedbackForm: InvitationForm = {} as InvitationForm;
+  feedbackForm?: InvitationForm;
 
   @HostListener('document:keyup ', ['$event'])
   keyUpEvent(event: KeyboardEvent): void {
@@ -138,7 +137,7 @@ export class FallingStarsComponent implements OnInit {
     this.route.paramMap.subscribe((paramMap) => {
       const invitationCode = paramMap.get('code');
       if (invitationCode) {
-        this.feedbackForm.uniqueKey = invitationCode;
+        this.feedbackForm = { uniqueKey: invitationCode } as InvitationForm;
       }
     });
 
@@ -164,6 +163,9 @@ export class FallingStarsComponent implements OnInit {
         ),
         isFeedback: !!this.feedbackForm,
         scoreStore: {
+          gameName: 'falling-stars',
+          bookId: this.bookId,
+          chapterId: this.chapterId,
           score: this.scoreStorageService.getCachedScores(),
         } as ScoreStoreInterface,
         // score: this.scoreStorageService.getCachedScores(),
@@ -172,17 +174,17 @@ export class FallingStarsComponent implements OnInit {
       } as GameInformationInterface,
     });
 
-    dialog.afterClosed().subscribe((res: FinishGameActionEnum) => {
-      if (res) {
-        if (res === FinishGameActionEnum.retry) {
-          // @ts-ignore
-          this.setGameWords(this.copyOfWords);
+    dialog
+      .afterClosed()
+      .subscribe((res: GameStartInformation<WordKeyValueModel<string[]>[]>) => {
+        if (res && res.words && res.words.length) {
+          this.copyOfWords = JSON.parse(JSON.stringify(res.words));
+          this.bookId = res.bookId;
+          this.chapterId = res.chapterId;
+          this.setGameWords(res.words);
           this.startGame();
-        } else if (res === FinishGameActionEnum.changeMode) {
-          this.showStartDialog();
         }
-      }
-    });
+      });
   }
 
   showStartDialog(): void {

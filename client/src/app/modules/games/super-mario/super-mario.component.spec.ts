@@ -304,32 +304,6 @@ describe('SuperMarioComponent', () => {
     expect(component.startGame).toHaveBeenCalled();
   });
 
-  it('should start new game if user wants to retry after finishing one game', () => {
-    mockMatDialog.open.and.callFake(() => {
-      return {
-        afterClosed: () => of(FinishGameActionEnum.retry),
-      };
-    });
-    spyOn(component, 'startGame');
-
-    component.showEndGameDialog();
-
-    expect(component.startGame).toHaveBeenCalled();
-  });
-
-  it('should show game menu if user wants to change settings after finishing one game', () => {
-    mockMatDialog.open.and.callFake(() => {
-      return {
-        afterClosed: () => of(FinishGameActionEnum.changeMode),
-      };
-    });
-    spyOn(component, 'showStartDialog');
-
-    component.showEndGameDialog();
-
-    expect(component.showStartDialog).toHaveBeenCalled();
-  });
-
   describe('prepareTheWord', () => {
     beforeEach(() => {
       spyOn(component, 'generateRandomNumber').and.returnValue([1]);
