@@ -21,6 +21,7 @@ import { GameNameEnum } from '../../../core/models/game-name.enum';
 import { ElementStyle } from '../../../core/models/element-style.model';
 import { ScoreStorageService } from '../../../core/service/score-storage.service';
 import { InvitationForm } from '../../../core/models/invitation-form.interface';
+import { ScoreStoreInterface } from '../../../core/models/score-store.interface';
 
 @Component({
   selector: 'app-super-mario',
@@ -68,7 +69,7 @@ export class SuperMarioComponent implements OnInit {
     nativeElement: {} as ElementRef,
   } as ElementRef;
 
-  feedbackForm: InvitationForm = {} as InvitationForm;
+  feedbackForm?: InvitationForm;
   mario: MarioModel = new MarioModel();
   enemies: MarioEnemy[] = [];
   currentEnemy: WordKeyValueModel<string[]> = {} as WordKeyValueModel<string[]>;
@@ -206,7 +207,9 @@ export class SuperMarioComponent implements OnInit {
     this.isGameFinished = true;
     const dialog = this.dialog.open(StartGameDialogComponent, {
       disableClose: true,
-      width: '30%',
+      width: '60%',
+      height: '62vh',
+      maxHeight: '95vh',
       autoFocus: false,
       data: {
         name: 'Super Mario',
@@ -217,6 +220,12 @@ export class SuperMarioComponent implements OnInit {
         ),
         isFeedback: !!this.feedbackForm,
         feedbackForm: this.feedbackForm,
+        scoreStore: {
+          gameName: 'super-mario',
+          bookId: this.bookId,
+          chapterId: this.chapterId,
+          score: this.scoreStorageService.getCachedScores(),
+        } as ScoreStoreInterface,
         isGameFinished: true,
       } as GameInformationInterface,
     });
