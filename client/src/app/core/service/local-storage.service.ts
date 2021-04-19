@@ -44,7 +44,7 @@ export class LocalStorageService {
     return data.split(char).join('***');
   }
 
-  decryptData<T>(data: string, privateKey: string): T {
+  decryptData<T>(data: string, privateKey?: string): T {
     const bytes = CryptoJS.AES.decrypt(data, privateKey);
     const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
     return decryptedData;

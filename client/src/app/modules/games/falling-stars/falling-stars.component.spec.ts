@@ -1,6 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { FallingStarsWord } from '../../../core/models/falling-stars-word.interface';
 import { FallingStarsComponent } from './falling-stars.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { FinishGameActionEnum } from '../../../core/models/finish-game-action.enum';
 import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
 import { GameStartInformation } from '../../../core/models/game-start-information';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 
 describe('FallingStarsComponent', () => {
   let component: FallingStarsComponent;
@@ -17,6 +18,7 @@ describe('FallingStarsComponent', () => {
   let mockMatDialog;
   let mockStore;
   let sampleWords;
+  let mockActivatedRoute;
 
   beforeEach(
     waitForAsync(() => {
@@ -28,6 +30,9 @@ describe('FallingStarsComponent', () => {
         { key: 'Pineapple', value: ['ananas'] },
         { key: 'Cherry', value: ['kers'] },
       ];
+      mockActivatedRoute = {
+        paramMap: of(convertToParamMap({})),
+      };
       mockMatDialog = jasmine.createSpyObj('dialog', {
         open: {
           afterClosed: () => {
@@ -46,6 +51,10 @@ describe('FallingStarsComponent', () => {
           {
             provide: Store,
             useValue: mockStore,
+          },
+          {
+            provide: ActivatedRoute,
+            useValue: mockActivatedRoute,
           },
         ],
         schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],

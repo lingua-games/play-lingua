@@ -1,28 +1,35 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { RankingComponent } from './ranking.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ScoreStorageService } from '../../service/score-storage.service';
 import { of, throwError } from 'rxjs';
-import { NotificationState } from '../score-notification/state/score-notification.reducer';
 import { RanksResultInterface } from '../../models/ranks-result.interface';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MatDialog } from '@angular/material/dialog';
 
 describe('RankingComponent', () => {
   let component: RankingComponent;
   let fixture: ComponentFixture<RankingComponent>;
   let mockScoreStorageService;
+  let mockMatDialogRef;
+
   beforeEach(async () => {
+    mockMatDialogRef = jasmine.createSpyObj(['close']);
     mockScoreStorageService = jasmine.createSpyObj('scoreStorageService', {
       getTopRanks: of(),
     });
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule],
       declarations: [RankingComponent],
       providers: [
         {
           provide: ScoreStorageService,
           useValue: mockScoreStorageService,
+        },
+        {
+          provide: MatDialog,
+          useValue: mockMatDialogRef,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
