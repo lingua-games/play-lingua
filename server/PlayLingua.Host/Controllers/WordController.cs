@@ -58,6 +58,15 @@ namespace PlayLingua.Host.Controllers
                         }, userId).Id;
                     }
                 }
+
+                if (model.Chapter?.Id == 0)
+                {
+                    model.Chapter.Id = _chapterRepository.Add(new Chapter
+                    {
+                        Name = model.Chapter.Name,
+                        BookId = model.Book.Id,
+                    }, userId).Id;
+                }
             }
             _wordRepository.SubmitWordSeries(new SubmitWordsModel
             {
