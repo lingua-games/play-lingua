@@ -72,6 +72,11 @@
     </div>
   </div>
   <div class="col-sm-10 section-right">
+    <div class="alert alert-success mt-2" *ngIf="data.isFeedback">
+      Hello
+      <strong>{{ data.feedbackForm.playerName }} </strong> Thanks for accepting
+      our feedback form. Please play and enjoy
+    </div>
     <app-game-instruction
       @fadeIn
       style="display: block"

@@ -73,17 +73,19 @@ namespace PlayLingua.Data
                             AddedDate, 
                             NeedsResetPassword,
                             Password,
-                            IsEmailVerified
+                            IsEmailVerified,
+                            DisplayName
                         ) VALUES (
                             @Email, 
                             @AddedDate, 
                             1,
                             ' ',
-                            1
+                            1,
+                            @PlayerName
                         ); 
                         SELECT CAST(SCOPE_IDENTITY() as int)
                     ";
-                db.Query<int>(addUserSql, new { invitation.Email, invitation.AddedDate }).Single();
+                db.Query<int>(addUserSql, new { invitation.Email, invitation.AddedDate, invitation.PlayerName }).Single();
             }
             return invitation;
         }
