@@ -1,36 +1,21 @@
 trigger:
 - play-lingua
 
-variables:
-  backendDirName: 'server'
-  frontDirName: 'client'
+pool:
+  vmImage: ubuntu-latest
 
-jobs:
-- job: Linux
-  pool:
-    vmImage: 'ubuntu-16.04'
-    
-  steps:
-  - task: DotNetCoreInstaller@0
-    inputs:
-      packageType: 'sdk' 
-      version: '2.2.100' 
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '3.1'
 
-  - script: 'npm --prefix ./$(frontDirName) install ./$(frontDirName)'
-    displayName: Client - installation
-
-  - script: 'npm run build:prod --prefix ./$(frontDirName)'
-    displayName: Client - Build        
-
-  - script: 'dotnet clean $(backendDirName)/PlayLingua.Server.sln'
-    displayName: Server - Clean
-
-  - script: 'dotnet build $(backendDirName)/PlayLingua.Server.sln'
-    displayName: Server - Build
-
-  - script: 'dotnet test $(backendDirName)'
-    displayName: Server - Test
-
+- script: '--prefix ./client install ./client'
+  displayName: 'npm install and build'
 
 
 
