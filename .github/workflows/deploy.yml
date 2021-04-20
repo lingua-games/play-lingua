@@ -1,6 +1,9 @@
 name: Deploy to production
 
-on: [push]
+on:
+  push:
+    branches:
+      - "main"
 
 env:
   AZURE_WEBAPP_NAME: play-lingua
