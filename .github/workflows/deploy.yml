@@ -19,7 +19,6 @@ jobs:
       - uses: actions/checkout@main
 
       # Setup nodejs
-      - uses: actions/checkout@v2
       - name: Use Node.js 12
         uses: actions/setup-node@v1
         with:
