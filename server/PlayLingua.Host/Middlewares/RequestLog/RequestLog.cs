@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
 using PlayLingua.Host.Controllers;
-using PlayLingua.Host.Helpers;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -68,7 +68,7 @@ namespace PlayLingua.Host.Middlewares
             try
             {
                 requestLog.ResponseStatusCode = httpContext.Response.StatusCode;
-                requestLog.ExceptionMessage = ex.GetFullMessage();
+                requestLog.ExceptionMessage = JsonConvert.SerializeObject(ex);
                 requestLog.ExceptionTitle = ex.Message;
                 requestLog.HadException = true;
                 requestLog.Failed = true;
