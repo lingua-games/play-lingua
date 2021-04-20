@@ -14,6 +14,7 @@ import { GamesService } from '../../../core/service/games.service';
 import { GameInformationInterface } from '../../../core/models/game-information.interface';
 import { InvitationService } from '../../../core/service/invitation.service';
 import { UUID } from 'angular2-uuid';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-send-invitation',
@@ -180,7 +181,7 @@ export class SendInvitationComponent implements OnInit {
     this.form.uniqueKey = UUID.UUID();
 
     // Todo, change localhost to real domain
-    return `http://localhost:4000/#/games/feedback/${this.form.gameObj.gameNameForRanking}/${this.form.uniqueKey}`;
+    return `${environment.productionUrl}/#/games/feedback/${this.form.gameObj.gameNameForRanking}/${this.form.uniqueKey}`;
   }
 
   submit(): void {
