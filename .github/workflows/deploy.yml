@@ -1,0 +1,35 @@
+name: Angular
+
+on:
+  push:
+    paths:
+      - "client/**"
+      - ".github/**"
+    branches:
+      - "feature/**"
+  # pull_request:
+  #   branches: [main  ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12"
+      - name: Install dependencies
+        run: npm ci
+        working-directory: client
+      - name: Check lint
+        run: npm run lint
+        working-directory: client
+      - name: Run unit tests
+        run: npm run test:ci
+        working-directory: client
+      - name: Build code
+        run: npm run build:prod
+        working-directory: client
+
