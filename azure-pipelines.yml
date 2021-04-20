@@ -1,0 +1,42 @@
+trigger:
+- master
+
+variables:
+  backendDirName: 'server'
+  frontDirName: 'client'
+
+jobs:
+- job: Linux
+  pool:
+    vmImage: 'ubuntu-16.04'
+  strategy:
+    maxParallel: 2    
+    matrix:
+      Debug:
+        configuration: debug
+      Release:
+        configuration: release
+  steps:
+  - task: DotNetCoreInstaller@0
+    inputs:
+      packageType: 'sdk' 
+      version: '2.2.100' 
+
+  - script: 'npm --prefix ./client install ./client'
+    displayName: Client - installation
+
+  - script: 'npm run build:prod --prefix ./client'
+    displayName: Client - Build        
+
+  - script: 'dotnet clean server/PlayLingua.Server.sln'
+    displayName: Server - Clean
+
+  - script: 'dotnet build server/PlayLingua.Server.sln'
+    displayName: Server - Build
+
+  - script: 'dotnet test $(backendDirName)'
+    displayName: Server - Test
+
+
+
+
