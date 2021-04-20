@@ -1,26 +1,30 @@
 ﻿using Dapper;
+using MailKit.Net.Smtp;
+using MimeKit;
 using PlayLingua.Domain.Entities;
+using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Net.WebSockets;
 
 namespace PlayLingua.Data
 {
     public class AdminRepository : IAdminRepository
     {
         private readonly IDbConnection db;
-
-        public AdminRepository(string connectionString)
+        public readonly EmailModel _email;
+        public AdminRepository(string connectionString, EmailModel email)
         {
             db = new SqlConnection(connectionString);
+            _email = email;
         }
 
         public Invitation AddInvitation(Invitation invitation)
         {
+            SendFeedbackMail(invitation);
             var invitationSql =
                 @"insert into dbo.Invitations 
 (
@@ -63,7 +67,7 @@ namespace PlayLingua.Data
             var id = db.Query<int>(invitationSql, invitation).Single();
             invitation.Id = id;
 
-            var userSql = "SELECT * from[PlayLingua].[dbo].[Users] where Email = @Email";
+            var userSql = "SELECT * from [dbo].[Users] where Email = @Email";
             if (!db.Query<int>(userSql, invitation).Any())
             {
                 var addUserSql =
@@ -129,6 +133,30 @@ WHERE UniqueKey = @UniqueKey", invitation);
         public Invitation GetInvitationByUniqueKey(string UniqueKey)
         {
             return db.Query<Invitation>("select * from dbo.Invitations where UniqueKey = @UniqueKey", new { UniqueKey }).FirstOrDefault();
+        }
+
+        public void SendFeedbackMail(Invitation invitation)
+        {
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("Play lingua", _email.Username));
+            message.To.Add(new MailboxAddress(invitation.PlayerName, invitation.Email));
+
+            message.Subject = "Play Lingua - play and react :D ";
+
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = invitation.HtmlText,
+            };
+            message.Body = bodyBuilder.ToMessageBody();
+
+            using (var client = new SmtpClient())
+            {
+                client.Connect("smtp.gmail.com", 587, false);
+                client.Authenticate(_email.Username, _email.Password);
+
+                client.Send(message);
+                client.Disconnect(true);
+            }
         }
     }
 }
