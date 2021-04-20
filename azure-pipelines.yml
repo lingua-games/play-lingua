@@ -1,5 +1,5 @@
 trigger:
-- play-lingua
+- azure-pipelines
 
 pool:
   vmImage: ubuntu-latest
@@ -9,13 +9,9 @@ steps:
   inputs:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '3.1'
 
-- script: '--prefix ./client install ./client'
+- script: |
+    npm install -g @angular/cli
+    npm install
+    ng build --prod
   displayName: 'npm install and build'
-
-
-
