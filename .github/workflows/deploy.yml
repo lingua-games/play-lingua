@@ -16,7 +16,7 @@ jobs:
 
     steps:
       # Checkout the repo
-      - uses: actions/checkout@pipeline-for-main
+#      - uses: actions/checkout@pipeline-for-main
 
       # Setup nodejs
       - uses: actions/checkout@v2
