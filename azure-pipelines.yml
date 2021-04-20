@@ -1,5 +1,5 @@
 trigger:
-- master
+- play-lingua
 
 variables:
   backendDirName: 'server'
@@ -12,8 +12,6 @@ jobs:
   strategy:
     maxParallel: 2    
     matrix:
-      Debug:
-        configuration: debug
       Release:
         configuration: release
   steps:
