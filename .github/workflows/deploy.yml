@@ -15,6 +15,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout the repo
+      - uses: actions/checkout@v2
+      
       # Setup nodejs
       - name: Use Node.js 12
         uses: actions/setup-node@v1
