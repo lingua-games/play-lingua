@@ -40,13 +40,13 @@ jobs:
 #        working-directory: client
 
       # Set backend secrets
-      - name: Set backend secrets
-        run: |
-          dotnet user-secrets set "secret" "A2FDE657-D8B6-4D67-AF0B-CE6A11002C50"
-          dotnet user-secrets set "hashKey" "CDEA4B71-6D51-492F-8EB6-1E17AC8BBBC6"
-          dotnet user-secrets set "email:username" "noreply.playlingua@gmail.com"
-          dotnet user-secrets set "email:password" "CA7E6AA9-C272-4F7A-AE42-E4A37654FB80"        
-        working-directory: server/PlayLingua.Host
+#      - name: Set backend secrets
+#        run: |
+#          dotnet user-secrets set "secret" "A2FDE657-D8B6-4D67-AF0B-CE6A11002C50"
+#          dotnet user-secrets set "hashKey" "CDEA4B71-6D51-492F-8EB6-1E17AC8BBBC6"
+#          dotnet user-secrets set "email:username" "noreply.playlingua@gmail.com"
+#          dotnet user-secrets set "email:password" "CA7E6AA9-C272-4F7A-AE42-E4A37654FB80"
+#        working-directory: server/PlayLingua.Host
 
       # Run dotnet build and publish
       - name: dotnet build and publish
@@ -62,7 +62,7 @@ jobs:
           files: 'server/${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp/appsettings.json'
         env:
           ConnectionStrings.Default: 'I am connection string'
-          App.ServerRootAddress: 'server'
+          App.ServerRootAddress: './server'
 
 
       # Deploy to Azure Web apps
