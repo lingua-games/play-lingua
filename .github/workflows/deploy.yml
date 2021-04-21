@@ -53,7 +53,7 @@ jobs:
         with:
           files: 'server/PlayLingua.Host/appsettings.json'
         env:
-          var1: "I am value"
+          var1: 'I am value'
 
 
       # Run dotnet build and publish
