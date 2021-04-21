@@ -17,19 +17,20 @@ jobs:
     steps:
       # Checkout the repo
       - uses: actions/checkout@v2
-      
+
       # Setup nodejs
       - name: Use Node.js 12
         uses: actions/setup-node@v1
         with:
           node-version: "12"
-          
+
       # Setup .NET Core SDK
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
+      # Setup Front end dependencies
       - name: Install dependencies
         run: npm ci
         working-directory: client
@@ -38,7 +39,20 @@ jobs:
       - name: front end build
         run: npm run build:prod
         working-directory: client
-        
+
+      # Set backend secrets
+      - name: App Settings Variable Substitution
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: './server/PlayLingua.Host/appsettings.json'
+        env:
+          secret: ${{ secrets.SECRET  }}
+          ConnectionStrings.playLinguaConnection: ${{ secrets.PLAYLINGUACONNECTION  }}
+          hashKey: ${{ secrets.HASHKEY  }}
+          email.username: ${{ secrets.EMAIL_USERNAME }}
+          email.password: ${{ secrets.EMAIL_PASSWORD }}
+
+
       # Run dotnet build and publish
       - name: dotnet build and publish
         run: |
@@ -46,7 +60,7 @@ jobs:
           dotnet build --configuration Release
           dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
         working-directory: server
-        
+
       # Deploy to Azure Web apps
       - name: 'Azure webapp deploy'
         uses: azure/webapps-deploy@v2
