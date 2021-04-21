@@ -56,6 +56,8 @@ jobs:
           secret: ${{ secrets.SECRET  }}
           ConnectionStrings.playLinguaConnection: ${{ secrets.PLAYLINGUACONNECTION  }}
           hashKey: ${{ secrets.HASHKEY  }}
+          email.username: ${{ secrets.EMAIL_USERNAME }}
+          email.password: ${{ secrets.EMAIL_PASSWORD }}
 
 
       # Run dotnet build and publish
