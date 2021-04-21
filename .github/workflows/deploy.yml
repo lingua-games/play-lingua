@@ -52,7 +52,6 @@ jobs:
           email.username: ${{ secrets.EMAIL_USERNAME }}
           email.password: ${{ secrets.EMAIL_PASSWORD }}
 
-
       # Run dotnet build and publish
       - name: dotnet build and publish
         run: |
