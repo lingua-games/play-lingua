@@ -35,6 +35,31 @@ export class GameInstructionComponent implements OnInit {
       <strong>mushroom</strong> with pressing <strong>[Q]</strong>
       </p>
       `;
+    } else if (this.gameName === GameNameEnum.fallingStars) {
+      this.textTemplate = `
+<ul class='mt-4'>
+  <li>
+    <strong>Mission</strong><p>Prevent stars to reach to the earth.</p>
+  </li>
+  <li>
+    <strong>How to play</strong>
+    <p>Select the correct word which is most related to the word written on the falling star.</p>
+  </li>
+  <li>
+    <strong>Scores</strong>
+    <p>As much as you hit the correct answer faster, you get more score. <br>
+       Choosing a wrong answer has no score.</p>
+  </li>
+  <li>
+    <strong>Movements / keys</strong>
+    <p>For selecting right answer, you can press 1,2,3,4 keys or select the word by mouse.</p>
+  </li>
+  <li>
+    <strong>Extra pints</strong>
+    <p>If you choose a wrong answer for a word, that word will be asked again at the end of the game with half score.</p>
+  </li>
+</ul>
+      `;
     }
   }
 }

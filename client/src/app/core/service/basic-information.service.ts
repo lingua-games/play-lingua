@@ -313,7 +313,7 @@ export class BasicInformationService {
     if (game === GameNameEnum.fallingStars) {
       result.push({
         key: 'ESC',
-        description: 'Pause the game and show menus',
+        description: 'Exit the game and show menus',
       });
       result.push({
         key: 'NUM 1',
