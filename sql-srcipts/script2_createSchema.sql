@@ -2,17 +2,17 @@ use [PlayLingua]
 
 CREATE TABLE [dbo].[Language] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
-    [Code]   varchar(10) NOT NULL,
-	[Name]   varchar(200) NOT NULL,
+    [Code]   nvarchar(10) NOT NULL,
+	[Name]   nvarchar(200) NOT NULL,
 	[NativeName]   nvarchar(200) NOT NULL,
 )
 GO
 
 CREATE TABLE [dbo].[Users] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
-    [Email]   varchar(100) NOT NULL,
-	[DisplayName] varchar(200) NOT NULL,
-	[Password]   varchar(200) NOT NULL,
+    [Email]   nvarchar(100) NOT NULL,
+	[DisplayName] nvarchar(200) NOT NULL,
+	[Password]   nvarchar(200) NOT NULL,
 	[DefaultTargetLanguage]   int,
 	[DefaultBaseLanguage]   int,
 	[AddedDate] datetime NOT NULL,
@@ -33,7 +33,7 @@ GO
 
 CREATE TABLE [dbo].[Book] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
-    [Name]   varchar(100) NOT NULL,
+    [Name]   nvarchar(100) NOT NULL,
 	[TargetLanguageId]   int NOT NULL,
 	[BaseLanguageId]   int NOT NULL,
 	[AddedBy]   int NOT NULL,
@@ -54,8 +54,8 @@ GO
 
 CREATE TABLE [dbo].[Chapter] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
-    [Name]        varchar(50) NOT NULL,
-    [Description] varchar(200),
+    [Name]        nvarchar(50) NOT NULL,
+    [Description] nvarchar(200),
 	[BookId]        int NOT NULL,
 	[AddedBy]   int NOT NULL,
 	[AddedDate] datetime NOT NULL,
@@ -71,9 +71,9 @@ GO
 CREATE TABLE [dbo].[Word] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
     [BaseLanguageId]   int                NOT NULL,
-    [BaseWord]         varchar(100)     NOT NULL,
+    [BaseWord]         nvarchar(100)     NOT NULL,
     [TargetLanguageId] int                NOT NULL,
-    [Translate]        varchar(100)     NOT NULL,
+    [Translate]        nvarchar(100)     NOT NULL,
 	[BookId]           int			          NULL,
 	[ChapterId]        int					  NULL,
 	[AddedBy]   int NOT NULL,

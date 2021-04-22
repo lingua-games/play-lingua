@@ -84,6 +84,7 @@ export class ChooseLanguagesComponent implements OnInit {
     );
     if (storedData && storedData.base) {
       this.baseLanguages = [];
+      this.targetLanguages = [];
       this.allLanguages.data.forEach((element: LanguageModel) => {
         if (
           storedData &&
