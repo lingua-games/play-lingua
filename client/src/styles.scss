@@ -7,14 +7,21 @@ body {
 
 @font-face {
   font-family: 'Poppins';
-  font-style: normal;
-  font-weight: normal;
   src: local('Poppins'), url("/assets/fonts/Poppins/Poppins-Medium.ttf") format('truetype');
+  unicode-range: U+000-5FF; /* Latin glyphs */
 }
+
+@font-face {
+  font-family: 'Poppins';
+  src: local('B_NAZANIN'), url("/assets/fonts/B_NAZANIN/B-NAZANIN.TTF") format('truetype');
+  unicode-range: U+0600-9FFF, U+ff??; /* Japanese glyphs */
+}
+
 
 * {
   font-family: 'Poppins', Arial, sans-serif;
 }
+
 
 *:focus {
   outline:none;
