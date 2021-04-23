@@ -1,11 +1,11 @@
-import { Component, Input } from '@angular/core';
-import { GameHint } from '../../models/game-hint.interface';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-game-hint',
   templateUrl: './game-hint.component.html',
   styleUrls: ['./game-hint.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class GameHintComponent {
-  @Input() hints: GameHint[] = [];
+  @Input() hints?: string;
 }

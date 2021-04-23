@@ -13,6 +13,9 @@ describe('BasicInformationService', () => {
     put: jasmine.Spy;
     delete: jasmine.Spy;
   };
+  let sanitizerSpy: {
+    bypassSecurityTrustHtml: jasmine.Spy;
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -25,8 +28,17 @@ describe('BasicInformationService', () => {
       'delete',
       'put',
     ]);
+
+    sanitizerSpy = jasmine.createSpyObj('DomSanitizer', [
+      'bypassSecurityTrustHtml',
+    ]);
     // tslint:disable-next-line:no-any
-    service = new BasicInformationService(httpClientSpy as any);
+    service = new BasicInformationService(
+      // tslint:disable-next-line:no-any
+      httpClientSpy as any,
+      // tslint:disable-next-line:no-any
+      sanitizerSpy as any
+    );
   });
 
   it('should be created', () => {
@@ -79,11 +91,5 @@ describe('BasicInformationService', () => {
 
   it('should return array of menus when calling getGameMenus', () => {
     expect(service.getGameMenus().length).toBeGreaterThan(0);
-  });
-
-  it('should return array of GameHint when calling gameHints with falling stars', () => {
-    expect(service.gameHints(GameNameEnum.fallingStars).length).toBeGreaterThan(
-      0
-    );
   });
 });

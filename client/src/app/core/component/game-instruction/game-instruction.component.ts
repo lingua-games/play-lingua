@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { GameNameEnum } from '../../models/game-name.enum';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-game-instruction',
@@ -8,11 +9,14 @@ import { GameNameEnum } from '../../models/game-name.enum';
 })
 export class GameInstructionComponent implements OnInit {
   @Input() gameName: GameNameEnum = -1;
-  textTemplate = '';
+  textTemplate: SafeHtml = {} as SafeHtml;
+
+  constructor(private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
+    let template = '';
     if (this.gameName === GameNameEnum.supperMario) {
-      this.textTemplate = `
+      template = `
       <p>
       In <strong>Super Mario game</strong> You have control over Mario character and can move to
       <strong>left</strong>, <strong>right</strong> and even
@@ -36,30 +40,18 @@ export class GameInstructionComponent implements OnInit {
       </p>
       `;
     } else if (this.gameName === GameNameEnum.fallingStars) {
-      this.textTemplate = `
-<ul class='mt-4'>
-  <li>
-    <strong>Mission</strong><p>Prevent stars to reach to the earth.</p>
-  </li>
-  <li>
-    <strong>How to play</strong>
-    <p>Select the correct word which is most related to the word written on the falling star.</p>
-  </li>
-  <li>
-    <strong>Scores</strong>
-    <p>As much as you hit the correct answer faster, you get more score. <br>
-       Choosing a wrong answer has no score.</p>
-  </li>
-  <li>
-    <strong>Movements / keys</strong>
-    <p>For selecting right answer, you can press 1,2,3,4 keys or select the word by mouse.</p>
-  </li>
-  <li>
-    <strong>Extra pints</strong>
-    <p>If you choose a wrong answer for a word, that word will be asked again at the end of the game with half score.</p>
-  </li>
-</ul>
+      template = `
+<div class='alert alert-info'>
+  <ul>
+    <li style='margin-bottom: 1rem'><a>Choose the correct translate for the falling word!</a></li>
+    <li style='margin: 1rem 0'><a>Select correct answer using your mouse or numbers on your keyboard</a></li>
+    <li style='margin: 1rem 0'><a>Wrongly answered questions, will show up again with less score</a></li>
+    <li style='margin: 1rem 0'><strong>Tip: </strong><a>Be fast and boost your score!</a></li>
+  </ul>
+</div>
       `;
     }
+
+    this.textTemplate = this.sanitizer.bypassSecurityTrustHtml(template);
   }
 }

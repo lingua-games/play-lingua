@@ -5,8 +5,8 @@ import { environment } from '../../../environments/environment';
 import { LanguageModel } from '../models/language.model';
 import { GameMenu } from '../models/game.menu.model';
 import { GameNameEnum } from '../models/game-name.enum';
-import { GameHint } from '../models/game-hint.interface';
 import { BookModel } from '../models/book.model';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +15,7 @@ export class BasicInformationService {
   bookUrl = environment.apiUrl + 'books';
   languageUrl = environment.apiUrl + 'Language';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private sanitizer: DomSanitizer) {}
 
   getBooks(): Observable<BookModel[]> {
     return this.http.get<BookModel[]>(this.bookUrl);
@@ -308,49 +308,51 @@ export class BasicInformationService {
     return this.http.get<LanguageModel[]>(`${this.languageUrl}`);
   }
 
-  gameHints(game: GameNameEnum): GameHint[] {
-    const result: GameHint[] = [];
+  gameHints(game: GameNameEnum): SafeHtml {
+    let result = '';
     if (game === GameNameEnum.fallingStars) {
-      result.push({
-        key: 'ESC',
-        description: 'Exit the game and show menus',
-      });
-      result.push({
-        key: 'NUM 1',
-        description: 'Choose option number 1',
-      });
-      result.push({
-        key: 'NUM 2',
-        description: 'Choose option number 2',
-      });
-      result.push({
-        key: 'NUM 3',
-        description: 'Choose option number 3',
-      });
-      result.push({
-        key: 'NUM 4',
-        description: 'Choose option number 4',
-      });
+      result = `
+        <div class='mt-3' style='display: table; width: 100%'>
+           <div style='display: table-cell; width: 30%'>
+            <div style='border: solid 1px gray; padding: 5px; width: fit-content'>ESC</div>
+          </div>
+           <div style='display: table-cell; width: 70%'>
+            Exit game and go back to menu
+           </div>
+        </div>
+        <div class='mt-3' style='display: table; width: 100%'>
+           <div style='display: table-cell; width: 30%'>
+              <a style='border: solid 1px gray; padding: 5px 1rem;'>1</a>
+              <a style='border: solid 1px gray; padding: 5px 1rem; margin-left: 1%'>2</a>
+              <a style='border: solid 1px gray; padding: 5px 1rem; margin-left: 1%'>3</a>
+              <a style='border: solid 1px gray; padding: 5px 1rem; margin-left: 1%'>4</a>
+          </div>
+           <div style='display: table-cell; width: 70%'>
+            Choose an answer
+           </div>
+        </div>
+
+      `;
     }
 
-    if (game === GameNameEnum.supperMario) {
-      result.push({
-        key: '← / A',
-        description: 'Move left',
-      });
-      result.push({
-        key: '→ / D',
-        description: 'Move right',
-      });
-      result.push({
-        key: '[Q]',
-        description: 'Skip answer',
-      });
-      result.push({
-        key: '[Space]',
-        description: 'Jump',
-      });
-    }
-    return result;
+    // if (game === GameNameEnum.supperMario) {
+    //   result.push({
+    //     key: '← / A',
+    //     description: 'Move left',
+    //   });
+    //   result.push({
+    //     key: '→ / D',
+    //     description: 'Move right',
+    //   });
+    //   result.push({
+    //     key: '[Q]',
+    //     description: 'Skip answer',
+    //   });
+    //   result.push({
+    //     key: '[Space]',
+    //     description: 'Jump',
+    //   });
+
+    return this.sanitizer.bypassSecurityTrustHtml(result);
   }
 }

@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { BookModel } from '../../models/book.model';
 import { BookChapterService } from '../../service/book-chapter.service';
 import { LanguageModel } from '../../models/language.model';
@@ -21,6 +28,7 @@ export class GameConfigComponent implements OnInit {
     selectedChapter: {} as ChapterModel,
   };
 
+  @Output() goToHelp = new EventEmitter();
   @Output() submitEmitter = new EventEmitter();
 
   bookListLoading = false;
@@ -34,6 +42,13 @@ export class GameConfigComponent implements OnInit {
     defaultTargetLanguage: {} as LanguageModel,
   };
   books: BookModel[] = [];
+
+  @HostListener('document:keydown ', ['$event'])
+  keyDownEvent(event: KeyboardEvent): void {
+    if (event.code === 'Enter' || event.code === 'NumpadEnter') {
+      this.submitEmitter.emit(this.form);
+    }
+  }
 
   constructor(
     private bookChapterService: BookChapterService,
