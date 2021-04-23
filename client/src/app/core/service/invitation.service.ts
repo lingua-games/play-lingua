@@ -28,4 +28,14 @@ export class InvitationService {
   setAsOpen(form: InvitationForm): Observable<{}> {
     return this.http.post(this.adminApi + '/set-invitation-open', form);
   }
+
+  getInvitations(): Observable<InvitationForm[]> {
+    return this.http.get<InvitationForm[]>(this.adminApi + '/get-invitations');
+  }
+
+  resendInvitationMail(uniqueKey: string): Observable<boolean> {
+    return this.http.get<boolean>(
+      this.adminApi + `/resend-invitation-email/${uniqueKey}`
+    );
+  }
 }

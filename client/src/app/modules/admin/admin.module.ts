@@ -11,6 +11,7 @@ import { MaterialModule } from '../common/material/material.module';
 import { FormsModule } from '@angular/forms';
 import { SendInvitationComponent } from './send-invitation/send-invitation.component';
 import { PrimengModule } from '../common/primeng/primeng.module';
+import { ViewInvitationsComponent } from './view-invitations/view-invitations.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { PrimengModule } from '../common/primeng/primeng.module';
     BooksComponent,
     AddEditBookDialogComponent,
     SendInvitationComponent,
+    ViewInvitationsComponent,
   ],
   imports: [
     CommonModule,

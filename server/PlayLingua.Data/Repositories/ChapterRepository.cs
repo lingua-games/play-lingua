@@ -44,7 +44,7 @@ namespace PlayLingua.Data
 
         public List<Chapter> List()
         {
-            throw new NotImplementedException();
+            return db.Query<Chapter>("select * from [dbo].[Chapter]").ToList();
         }
 
         public void Update(Chapter book)

@@ -16,6 +16,10 @@ export interface InvitationForm {
   gameObj: GameInformationInterface;
   game: string;
   htmlText: string;
-  // isOpened: boolean
-  // openedDate: date
+  isOpened: boolean;
+  openedDate: Date;
+  addedDate: Date;
+  emailErrorMessage: string;
+  isEmailSent: boolean;
+  isSendingInvitationLoading?: boolean;
 }

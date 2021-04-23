@@ -6,6 +6,7 @@ import { ChaptersComponent } from './chapters/chapters.component';
 import { BooksComponent } from './books/books.component';
 import { SendInvitationComponent } from './send-invitation/send-invitation.component';
 import { OnlyAdminAllowService } from '../../core/service/guards/only-admin-allow.service';
+import { ViewInvitationsComponent } from './view-invitations/view-invitations.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
       {
         path: 'send-invitation',
         component: SendInvitationComponent,
+      },
+      {
+        path: 'view-invitations',
+        component: ViewInvitationsComponent,
       },
       {
         path: 'words',
