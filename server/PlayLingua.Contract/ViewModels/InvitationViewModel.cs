@@ -18,5 +18,7 @@ namespace PlayLingua.Contract.ViewModels
         public bool IsOpened { get; set; }
         public DateTime? OpenedDate { get; set; }
         public Guid UniqueKey { get; set; }
+        public bool IsEmailSent { get; set; }
+        public string EmailErrorMessage { get; set; }
     }
 }

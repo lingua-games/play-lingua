@@ -16,6 +16,10 @@ export class AdminComponent implements OnInit {
   ngOnInit(): void {
     this.menus = [];
     this.menus.push({
+      label: 'View invitations',
+      url: './view-invitations',
+    } as AdminMenu);
+    this.menus.push({
       label: 'Send invitation',
       url: './send-invitation',
     } as AdminMenu);
@@ -24,7 +28,7 @@ export class AdminComponent implements OnInit {
     this.menus.push({ label: 'Word', url: './words' } as AdminMenu);
 
     if (this.router.url === '/admin') {
-      this.router.navigate(['/admin/send-invitation']).then();
+      this.router.navigate(['/admin/view-invitations']).then();
     }
 
     this.currentMenu = this.router.url.replace('/admin', '.');

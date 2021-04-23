@@ -9,8 +9,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {
   faArrowCircleLeft,
+  faCheck,
   faPlus,
   faQuestion,
+  faTimes,
   faTrash,
   faTrophy,
 } from '@fortawesome/free-solid-svg-icons';
@@ -73,7 +75,9 @@ export class AppModule {
       faQuestion,
       faGooglePlay,
       faTrophy,
-      faArrowCircleLeft
+      faArrowCircleLeft,
+      faCheck,
+      faTimes
     );
   }
 }
