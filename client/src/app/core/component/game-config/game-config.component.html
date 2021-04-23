@@ -10,6 +10,12 @@
   <h1>Preparing game data</h1>
 </div>
 <div *ngIf="!isPreparing" class="main-container">
+  <div class="alert alert-success mt-2" *ngIf="data.isFeedback">
+    Hi <strong>{{ data.feedbackForm.playerName }}</strong
+    >! Thanks for accepting my invitation. You can take a look at
+    <strong (click)="goToHelp.emit()" class="help-option">help</strong> tab to
+    learn more about the game. Hit start to play!
+  </div>
   <div class="body-container">
     <app-game-hint [hints]="data.hints"></app-game-hint>
     <hr />
