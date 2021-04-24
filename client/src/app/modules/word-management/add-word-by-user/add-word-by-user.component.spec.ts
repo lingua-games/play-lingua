@@ -21,6 +21,7 @@ import {
 } from '../../../core/models/word-to-add.model';
 import { AddWordFormModel } from '../../../core/models/add-word-form.model';
 import { Router } from '@angular/router';
+import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 
 describe('AddWordByUserComponent', () => {
   let component: AddWordByUserComponent;
@@ -324,6 +325,32 @@ describe('AddWordByUserComponent', () => {
       );
     });
 
+    it('should show error if user is adding less than 4 words', () => {
+      component.selectBookRandom?.setValue('something else');
+      component.chapter?.setValue('something else');
+      component.formData = {
+        words: [
+          {
+            base: { value: 'fakeBase', isValid: true },
+            targets: [{ value: 'fakeTarget', isValid: true }],
+          } as WordToAddModel,
+          {
+            base: { value: 'fakeBase', isValid: true },
+            targets: [{ value: 'fakeTarget', isValid: true }],
+          } as WordToAddModel,
+        ],
+      } as AddWordFormModel;
+
+      component.submitForm();
+
+      expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+        'You should add more than 4 words in each session',
+        Severity.error,
+        '',
+        'bc'
+      );
+    });
+
     it('should show error if chapter is invalid', () => {
       component.chapter.setErrors([]);
       component.selectBookRandom?.setValue('book');
@@ -376,6 +403,22 @@ describe('AddWordByUserComponent', () => {
             base: { value: 'fakeBase', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
           } as WordToAddModel,
+          {
+            base: { value: 'fakeBase', isValid: true },
+            targets: [{ value: 'fakeTarget', isValid: true }],
+          } as WordToAddModel,
+          {
+            base: { value: 'fakeBase', isValid: true },
+            targets: [{ value: 'fakeTarget', isValid: true }],
+          } as WordToAddModel,
+          {
+            base: { value: 'fakeBase', isValid: true },
+            targets: [{ value: 'fakeTarget', isValid: true }],
+          } as WordToAddModel,
+          {
+            base: { value: 'fakeBase', isValid: true },
+            targets: [{ value: 'fakeTarget', isValid: true }],
+          } as WordToAddModel,
         ],
       } as AddWordFormModel;
       spyOn(component, 'saveInformationInfoForm');
@@ -396,22 +439,56 @@ describe('AddWordByUserComponent', () => {
             base: { value: 'fakeBase', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
           } as WordToAddModel,
+          {
+            base: { value: 'fakeBase', isValid: true },
+            targets: [{ value: 'fakeTarget', isValid: true }],
+          } as WordToAddModel,
+          {
+            base: { value: 'fakeBase', isValid: true },
+            targets: [{ value: 'fakeTarget', isValid: true }],
+          } as WordToAddModel,
+          {
+            base: { value: 'fakeBase', isValid: true },
+            targets: [{ value: 'fakeTarget', isValid: true }],
+          } as WordToAddModel,
+          {
+            base: { value: 'fakeBase', isValid: true },
+            targets: [{ value: 'fakeTarget', isValid: true }],
+          } as WordToAddModel,
         ],
       } as AddWordFormModel;
       spyOn(component, 'saveInformationInfoForm');
       mockBookChapterService.submitForm.and.callFake(() => {
-        return of({});
+        return of(true);
       });
 
       component.submitForm();
 
-      expect(mockLocalStorageService.delete).toHaveBeenCalled();
+      expect(mockLocalStorageService.delete).toHaveBeenCalledWith(
+        LocalStorageHelper.addWordDraft
+      );
     });
 
-    it('should stop page loading ig API fail', () => {
+    it('should stop page loading if API fail', () => {
       component.selectBookRandom?.setValue('something else');
       component.formData = {
         words: [
+          {
+            base: { value: 'fakeBase', isValid: true },
+            targets: [{ value: 'fakeTarget', isValid: true }],
+          } as WordToAddModel,
+          {
+            base: { value: 'fakeBase', isValid: true },
+            targets: [{ value: 'fakeTarget', isValid: true }],
+          } as WordToAddModel,
+          {
+            base: { value: 'fakeBase', isValid: true },
+            targets: [{ value: 'fakeTarget', isValid: true }],
+          } as WordToAddModel,
+          {
+            base: { value: 'fakeBase', isValid: true },
+            targets: [{ value: 'fakeTarget', isValid: true }],
+          } as WordToAddModel,
           {
             base: { value: 'fakeBase', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
