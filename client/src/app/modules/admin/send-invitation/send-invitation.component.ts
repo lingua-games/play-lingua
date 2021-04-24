@@ -14,7 +14,8 @@ import { GamesService } from '../../../core/service/games.service';
 import { GameInformationInterface } from '../../../core/models/game-information.interface';
 import { InvitationService } from '../../../core/service/invitation.service';
 import { UUID } from 'angular2-uuid';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.prod';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-send-invitation',
@@ -27,7 +28,8 @@ export class SendInvitationComponent implements OnInit {
     private notificationService: NotificationService,
     private bookChapterService: BookChapterService,
     private gameService: GamesService,
-    private invitationService: InvitationService
+    private invitationService: InvitationService,
+    private sanitizer: DomSanitizer
   ) {}
 
   allLanguages: ApiResult<LanguageModel[]> = new ApiResult<LanguageModel[]>();
@@ -45,6 +47,16 @@ export class SendInvitationComponent implements OnInit {
 
   getGames(): void {
     this.games = this.gameService.getGames();
+
+    // this.form = {
+    //   playerName: 'Arash Bahreini',
+    //   email: 'vbhost@gmail.com',
+    //   baseLanguage: { name: 'English', id: 1 },
+    //   targetLanguage: { name: 'Dutch', id: 1 },
+    //   game: 'Falling stars',
+    //   gameObj: { name: 'something' },
+    // } as InvitationForm;
+    // this.preview();
   }
 
   getLanguages(): void {
@@ -143,36 +155,51 @@ export class SendInvitationComponent implements OnInit {
     if (!this.isFormValid()) {
       return;
     }
-
     this.form.generatedLink = this.generateLink();
-    this.form.htmlText = `
-      <h1>Hello, Im Arash and here I am inviting you to play my web-base game and give me feedback</h1>
-      <h3>Dear <strong>${this.form.playerName}</strong>, thanks for joining to our feedback session</h3>
-      <p>In this session you will play
-        <strong>${this.form.gameObj.name}</strong> game.
-        <strong>${this.form.gameObj.name}</strong> assums that you know
-        <strong>${this.form.baseLanguage.name}</strong> very well and you want to learn
-        <strong>${this.form.targetLanguage.name}</strong> language.
-      </p>
-      `;
-    if (this.form.count && this.form.count > 0) {
-      this.form.htmlText += `<p>
-        In this session you will play only
-        <strong>${this.form.count}</strong> words and you can
-        <a href='${this.form.generatedLink}'>join via This Link</a>
-      </p>`;
-    } else {
-      this.form.htmlText += `<p>You can <a href='${this.form.generatedLink}'>join via This Link</a></p>`;
-    }
-    this.form.htmlText += `
-          <p>
-        Please send back your comments, feedbacks and etc with <strong>replying</strong> this email or if you want to
-        talk more about it, you can always give me a call through my phone number i.e <strong>+31-6-4524-1080</strong>
+    const template = `
+<div style='
+            background-color: #229954;
+            border: 1px solid #E5E7E9;
+            border-radius: 10px;
+            padding: 20px;
+            color: #E5E7E9;
+            margin: 5vh 30%;
+            width: 40%;
+            font-size: 1vw'>
+      <p>Dear ${this.form.playerName},</p>
+      <hr>
+      <p>
+        This is Arash and I am happy to invite you to play my web based game <span style='font-style: italic'>"${this.form.gameObj.name}"</span>
+        <a style='text-decoration: underline' href='${this.form.generatedLink}'>via this link</a>
+        and I would be really grateful if you let me have your opinion for further improvements.
       </p>
       <p>
-        PS, please remember that you are helping me a lot to progress my project. Thanks :-)
+        In this game, the initial assumption is that you know ${this.form.baseLanguage.name} as your base language and you would like to
+        practice ${this.form.targetLanguage.name} as your target language.
       </p>
-    `;
+      <p>
+        Please send me your feedback by replying to this email or simply give me a call.
+      </p>
+      <p>
+        Thanks in advance for your time and valuable feedback.
+      </p>
+      <p>
+        The source code can be found on
+        <a style='text-decoration: underline; color: #E5E7E9' href='https://github.com/lingua-games/play-lingua'>Github</a>
+      </p>
+      <hr>
+      <p>
+      Best regards, <br>Arash<br> +31645241080 <br>
+      <a style='text-decoration: underline; color: #E5E7E9' href='https://github.com/arashbahreini'>Github</a>,
+      <a style='text-decoration: underline; color: #E5E7E9' href='https://www.linkedin.com/in/arash-bahreini-100296139/'>Linkedin</a>,
+      <a style='text-decoration: underline; color: #E5E7E9' href='https://stackoverflow.com/users/3773888/arash'>Stackoverflow</a>
+</p>
+</div>
+
+      `;
+
+    this.form.html = this.sanitizer.bypassSecurityTrustHtml(template);
+    this.form.htmlText = template;
   }
 
   generateLink(): string {

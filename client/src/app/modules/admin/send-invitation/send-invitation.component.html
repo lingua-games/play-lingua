@@ -120,7 +120,7 @@
         Submit
       </button>
       <button
-        type="submit"
+        type="button"
         class="btn btn-primary"
         (click)="preview()"
         [disabled]="isFormLoading"
@@ -131,6 +131,6 @@
   </div>
 
   <div class="col-sm-5">
-    <div [innerHTML]="form.htmlText" class="mt-5"></div>
+    <div [innerHTML]="form.html" class="mt-5"></div>
   </div>
 </div>
