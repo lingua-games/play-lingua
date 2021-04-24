@@ -419,6 +419,10 @@ describe('AddWordByUserComponent', () => {
             base: { value: 'fakeBase', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
           } as WordToAddModel,
+          {
+            base: { value: 'fakeBase', isValid: true },
+            targets: [{ value: 'fakeTarget', isValid: true }],
+          } as WordToAddModel,
         ],
       } as AddWordFormModel;
       spyOn(component, 'saveInformationInfoForm');
