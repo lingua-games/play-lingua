@@ -384,6 +384,16 @@ export class AddWordByUserComponent implements OnInit {
       return;
     }
 
+    if (this.formData.words.length <= 4) {
+      this.notificationService.showMessage(
+        'You should add more than 4 words in each session',
+        Severity.error,
+        '',
+        'bc'
+      );
+      return;
+    }
+
     this.isPageLoading = true;
     this.saveInformationInfoForm();
     this.bookChapterService.submitForm(this.formData).subscribe(
