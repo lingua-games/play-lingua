@@ -10,9 +10,9 @@ Runs only if any change apply to `./client` folder in a feature branch.
 
 Runs only if any change apply to `./server` folder in a feature branch.
 
-#### Main (Not created yet)
+#### Master (Not created yet)
 
-Runs when any branch merge to `Main` branch. This pipeline is responsible to
+Runs when any branch merge to `Master` branch. This pipeline is responsible to
 
 1. Integrate both front-end and backend and run e2e and integration tests
 2. Build both front-end and backend and make a container with the result (Create a deployable container)
@@ -21,4 +21,4 @@ Runs when any branch merge to `Main` branch. This pipeline is responsible to
 #### Merge rules
 
 Front-end and backend pipelines runs only of the branch name start with `feature/` prefix, Ex `feature/improvement-in-foo-and-baar`
-Each merge to `Main` branch needs at least one success build.
+Each merge to `Master` branch needs at least one success build.
