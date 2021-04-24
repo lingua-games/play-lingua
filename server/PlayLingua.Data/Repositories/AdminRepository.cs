@@ -154,7 +154,7 @@ WHERE UniqueKey = @UniqueKey", invitation);
                 message.From.Add(new MailboxAddress("Play lingua", _email.Username));
                 message.To.Add(new MailboxAddress(invitation.PlayerName, invitation.Email));
 
-                message.Subject = "Play Lingua - play and react :D ";
+                message.Subject = "You are invited to Play Lingua!";
 
                 var bodyBuilder = new BodyBuilder
                 {

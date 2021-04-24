@@ -2,6 +2,7 @@ import { LanguageModel } from './language.model';
 import { BookModel } from './book.model';
 import { ChapterModel } from './chapter.model';
 import { GameInformationInterface } from './game-information.interface';
+import { SafeHtml } from '@angular/platform-browser';
 
 export interface InvitationForm {
   email: string;
@@ -15,6 +16,7 @@ export interface InvitationForm {
   playerName: string;
   gameObj: GameInformationInterface;
   game: string;
+  html: SafeHtml;
   htmlText: string;
   isOpened: boolean;
   openedDate: Date;
