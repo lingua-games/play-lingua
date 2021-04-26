@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
 import { GameStartInformation } from '../../../core/models/game-start-information';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ElementStyle } from '../../../core/models/element-style.model';
 
 describe('FallingStarsComponent', () => {
   let component: FallingStarsComponent;
@@ -519,8 +520,14 @@ describe('FallingStarsComponent', () => {
   it('should animate next waiting work when playNextStar hits', () => {
     spyOn(component, 'showEndGameDialog');
     component.words.push(
-      { animating: false } as FallingStarsWord,
-      { animating: false } as FallingStarsWord
+      {
+        animating: false,
+        style: { animation: '' } as ElementStyle,
+      } as FallingStarsWord,
+      {
+        animating: false,
+        style: { animation: '' } as ElementStyle,
+      } as FallingStarsWord
     );
     component.currentWord = component.words[0];
     component.playNextStar();

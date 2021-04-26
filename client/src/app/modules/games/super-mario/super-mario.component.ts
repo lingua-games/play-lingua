@@ -310,8 +310,7 @@ export class SuperMarioComponent implements OnInit {
         (
           Math.floor(Math.random() * (this.jumpHeight + Math.abs(1) + 1)) + 10
         ).toString() + '%';
-      enemy.mushroomImageUrl =
-        'url(../../../../assets/mario/question-mushroom.png)';
+      enemy.mushroomImage = 'question';
       enemy.style = {
         position: 'absolute',
         // random number between floor and max top of the Mario
@@ -352,6 +351,9 @@ export class SuperMarioComponent implements OnInit {
       if (this.currentEnemy.wrongCount && this.currentEnemy.wrongCount > 0) {
         earnedScore = earnedScore / (this.currentEnemy.wrongCount + 1);
       }
+      // To show only 2 decimal numbers
+      earnedScore = parseFloat(earnedScore.toFixed(2));
+
       this.scoreStorageService.catchScores(earnedScore);
       enemy.valueToAsk = '+ ' + earnedScore.toString();
       this.animationOnCorrectAnswer(enemy);
@@ -360,8 +362,7 @@ export class SuperMarioComponent implements OnInit {
 
   animationOnWrongAnswer(enemy: MarioEnemy): void {
     if (enemy) {
-      enemy.mushroomImageUrl =
-        'url(../../../../assets/mario/wrong-mushroom.png)';
+      enemy.mushroomImage = 'wrong';
       if (enemy.style) {
         enemy.style.opacity = '1';
         enemy.style.transition = '2s';
@@ -374,8 +375,7 @@ export class SuperMarioComponent implements OnInit {
   }
 
   animationOnCorrectAnswer(enemy: MarioEnemy): void {
-    enemy.mushroomImageUrl =
-      'url(../../../../assets/mario/success-mushroom.png)';
+    enemy.mushroomImage = 'success';
     enemy.style.transition = '2s';
     enemy.style.bottom =
       (parseInt(enemy.style.bottom, 0) + 20).toString() + '%';

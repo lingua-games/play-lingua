@@ -102,7 +102,7 @@ describe('HomeComponent', () => {
 
     fixture.detectChanges();
 
-    expect(component.style['transform']).toBe('rotate(0deg)');
+    expect(component.style['transform']).toBe('rotate(360deg)');
   });
 
   it('should finish animation if navigation is reach to the end', () => {

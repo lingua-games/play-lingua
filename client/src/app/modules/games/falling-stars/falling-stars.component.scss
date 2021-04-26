@@ -1,7 +1,7 @@
 .game-board-container {
   width: 100%;
   height: 100vh;
-  background-image: url("../../../../assets/images/background/falling-stars-bg.jpeg");
+  background-image: url("../../../../assets/falling-stars/falling-stars-bg.jpeg");
 }
 
 .falling-container {
@@ -11,13 +11,13 @@
 }
 
 .ground-container {
-  background-image: url("../../../../assets/images/background/falling-stars-ground-bg.png");
+  background-image: url("../../../../assets/falling-stars/falling-stars-ground-bg.png");
   background-size: contain;
   height: 10%;
 }
 
 .box {
-  background-image: url("../../../../assets/images/background/star-bg.png");
+  background-image: url("../../../../assets/falling-stars/star-bg.png");
   height: 10rem;
   text-align: center;
   background-size: cover;
