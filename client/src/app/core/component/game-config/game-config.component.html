@@ -47,7 +47,7 @@
       class="select-book-input"
       *ngIf="form.selectedBook.id && chapters && chapters.length"
     >
-      <mat-label>Select a chapter</mat-label>
+      <mat-label>Select a chapter/reference</mat-label>
       <mat-select [(ngModel)]="form.selectedChapter">
         <mat-option *ngFor="let chapter of chapters" [value]="chapter">
           {{ chapter.name }}

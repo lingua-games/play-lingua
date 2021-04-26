@@ -302,7 +302,7 @@ describe('AddWordByUserComponent', () => {
       component.submitSelectedBooks();
 
       expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
-        'Please select a chapter',
+        'Please select a chapter/reference',
         Severity.error,
         '',
         'bc'
@@ -358,7 +358,7 @@ describe('AddWordByUserComponent', () => {
       component.submitForm();
 
       expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
-        'Please select a chapter',
+        'Please select a chapter/reference',
         Severity.error,
         '',
         'bc'

@@ -276,7 +276,7 @@ export class AddWordByUserComponent implements OnInit {
       } else {
         if (this.chapter?.invalid) {
           this.notificationService.showMessage(
-            'Please select a chapter',
+            'Please select a chapter/reference name',
             Severity.error,
             '',
             'bc'
@@ -338,7 +338,7 @@ export class AddWordByUserComponent implements OnInit {
       }
       if (this.chapter?.invalid) {
         this.notificationService.showMessage(
-          'Please select a chapter',
+          'Please select a chapter/reference',
           Severity.error,
           '',
           'bc'
