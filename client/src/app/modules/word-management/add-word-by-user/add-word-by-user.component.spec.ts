@@ -302,7 +302,7 @@ describe('AddWordByUserComponent', () => {
       component.submitSelectedBooks();
 
       expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
-        'Please select a chapter/reference',
+        'Please select a chapter/reference name',
         Severity.error,
         '',
         'bc'
