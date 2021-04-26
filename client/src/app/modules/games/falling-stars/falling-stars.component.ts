@@ -15,9 +15,11 @@ import { GameNameEnum } from '../../../core/models/game-name.enum';
 import { ActivatedRoute } from '@angular/router';
 import { InvitationForm } from '../../../core/models/invitation-form.interface';
 import { ScoreStoreInterface } from '../../../core/models/score-store.interface';
+import { ElementStyle } from '../../../core/models/element-style.model';
 
 const secondsForTraver = 5000;
-const bufferBeforeStart = 1000;
+const bufferBeforeStart = 2000;
+
 @Component({
   selector: 'app-falling-stars',
   templateUrl: './falling-stars.component.html',
@@ -25,8 +27,8 @@ const bufferBeforeStart = 1000;
   animations: [
     trigger('fade', [
       transition('void => true', [
-        style({ opacity: '0', top: '-20%' }),
-        animate(bufferBeforeStart, style({ opacity: '1', top: '-20%' })),
+        style({ top: '2%' }),
+        animate(bufferBeforeStart, style({ top: '2%' })),
         animate(secondsForTraver, style({ top: '100%' })),
       ]),
     ]),
@@ -225,13 +227,17 @@ export class FallingStarsComponent implements OnInit {
       this.words.push({
         key: element.key,
         correctAnswers: element.values,
-        style: { left: `${this.getRandomNumber()}%` },
+        style: {
+          left: `${this.getRandomNumber()}%`,
+          animation: 'loading-star-animation 300ms linear infinite',
+        } as ElementStyle,
         selectedAnswer: '',
         correctShowingAnswer: '',
         animating: false,
         possibleAnswers: this.generateRandomOptions(element, res),
         keyIsPressing: false,
         wrongCount: 0,
+        isBlinking: true,
       });
     });
   }
@@ -294,6 +300,10 @@ export class FallingStarsComponent implements OnInit {
     this.isGameFinished = false;
     this.startTime = Date.now();
     if (this.words[0]) {
+      setTimeout(() => {
+        this.words[0].style.animation = '';
+        this.words[0].isBlinking = false;
+      }, bufferBeforeStart);
       this.words[0].animating = true;
     }
   }
@@ -313,6 +323,11 @@ export class FallingStarsComponent implements OnInit {
     if (!word.selectedAnswer) {
       this.showGuidBox();
       word.wrongCount++;
+      word.style = {
+        left: `${this.getRandomNumber()}%`,
+        animation: 'loading-star-animation 300ms linear infinite',
+      } as ElementStyle;
+      word.isBlinking = true;
       this.words.push(JSON.parse(JSON.stringify(word)));
     } else {
       if (word.correctAnswers.find((x: string) => x === word.selectedAnswer)) {
@@ -332,6 +347,11 @@ export class FallingStarsComponent implements OnInit {
       } else {
         this.showGuidBox();
         word.wrongCount++;
+        word.style = {
+          left: `${this.getRandomNumber()}%`,
+          animation: 'loading-star-animation 300ms linear infinite',
+        } as ElementStyle;
+        word.isBlinking = true;
         this.words.push(JSON.parse(JSON.stringify(word)));
       }
     }
@@ -371,11 +391,19 @@ export class FallingStarsComponent implements OnInit {
       }, 1000);
     } else {
       this.words[this.words.indexOf(this.currentWord) + 1].animating = true;
+      setTimeout(() => {
+        this.words[this.words.indexOf(this.currentWord) + 1].isBlinking = false;
+        this.words[this.words.indexOf(this.currentWord) + 1].style.animation =
+          '';
+      }, bufferBeforeStart);
     }
   }
 
   checkSelectedAnswer(item: string): void {
     const activeWord = this.words.find((x: FallingStarsWord) => x.animating);
+    if (activeWord?.isBlinking) {
+      return;
+    }
     (activeWord || ({} as FallingStarsWord)).selectedAnswer = item;
     this.boxAnimationDone(activeWord as FallingStarsWord);
   }

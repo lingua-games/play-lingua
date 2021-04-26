@@ -110,3 +110,9 @@
   border-color: rgba(0, 128, 0, .4);
   color: rgba(0, 128, 0, .4);
 }
+
+@keyframes loading-star-animation {
+  0% { opacity: .9 }
+  50% { opacity: .5 }
+  100% { opacity: .9 }
+}
