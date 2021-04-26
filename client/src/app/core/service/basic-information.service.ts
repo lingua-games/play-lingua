@@ -42,7 +42,7 @@ export class BasicInformationService {
       id: 'falling-stars',
       isDesigned: true,
       gifUrl: './../../../../assets/GIFs/falling-stars-demo.gif',
-    });
+    } as GameMenu);
     menus.push({
       name: 'Super Mario',
       image: './../../../../assets/images/GameMenu/super-mario.png',
@@ -50,7 +50,7 @@ export class BasicInformationService {
       id: 'super-mario',
       isDesigned: true,
       gifUrl: './../../../../assets/GIFs/super-mario.gif',
-    });
+    } as GameMenu);
     menus.push({
       name: 'Game',
       image: './../../../../assets/images/GameMenu/game.jpg',

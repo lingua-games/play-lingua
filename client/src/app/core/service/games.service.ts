@@ -17,10 +17,23 @@ export class GamesService {
   getGameWords(
     getGameWordsRequestModel: GetGameWordsRequestModel
   ): Observable<WordKeyValueModel<string[]>[]> {
+    // Todo, uncomment
     return this.http.post<WordKeyValueModel<string[]>[]>(
       `${this.gameUrl}/get-words-for-game`,
       getGameWordsRequestModel
     );
+
+    // const result: WordKeyValueModel<string[]>[] = [];
+    // result.push({
+    //   key: 'abcd efgh ijkl opqr abcd efgh ijkl opqr ',
+    //   values: ['abcd efgh ijkl opqr '],
+    //   wrongCount: 0,
+    // });
+    // result.push({ key: 'key 2', values: ['value 2'], wrongCount: 0 });
+    // result.push({ key: 'key 3', values: ['value 3'], wrongCount: 0 });
+    // result.push({ key: 'key 4', values: ['value 4'], wrongCount: 0 });
+    // result.push({ key: 'key 4', values: ['value 4'], wrongCount: 0 });
+    // return of(result);
   }
 
   getGames(): GameInformationInterface[] {

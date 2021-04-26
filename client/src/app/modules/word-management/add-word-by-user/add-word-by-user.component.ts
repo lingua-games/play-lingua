@@ -384,7 +384,31 @@ export class AddWordByUserComponent implements OnInit {
       return;
     }
 
-    if (this.formData.words.length <= 4) {
+    this.formData.words.forEach((word: WordToAddModel) => {
+      if (word.base.value && word.base.value.length > 15) {
+        word.base.isValid = false;
+        isWordFormValid = false;
+      }
+
+      word.targets.forEach((target: SourceTargetModel) => {
+        if (target.value && target.value.length > 15) {
+          target.isValid = false;
+          isWordFormValid = false;
+        }
+      });
+    });
+
+    if (!isWordFormValid) {
+      this.notificationService.showMessage(
+        'The word(s) are too long, acceptable length is less than 15',
+        Severity.error,
+        '',
+        'bc'
+      );
+      return;
+    }
+
+    if (this.formData.words.length < 5) {
       this.notificationService.showMessage(
         'You should add more than 4 words in each session',
         Severity.error,

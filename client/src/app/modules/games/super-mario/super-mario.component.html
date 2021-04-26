@@ -57,8 +57,29 @@
       *ngIf="enemy?.status === 0 || enemy?.status === 1"
       class="enemy-container"
     >
+      <!--      <div-->
+      <!--        [style.background-image]="enemy.mushroomImageUrl"-->
+      <!--        class="mushroom-image-container"-->
+      <!--      ></div>-->
       <div
-        [style.background-image]="enemy.mushroomImageUrl"
+        *ngIf="enemy.mushroomImage === 'question'"
+        style="
+          background-image: url(../../../../assets/mario/question-mushroom.png);
+        "
+        class="mushroom-image-container"
+      ></div>
+      <div
+        *ngIf="enemy.mushroomImage === 'wrong'"
+        style="
+          background-image: url(../../../../assets/mario/wrong-mushroom.png);
+        "
+        class="mushroom-image-container"
+      ></div>
+      <div
+        *ngIf="enemy.mushroomImage === 'success'"
+        style="
+          background-image: url(../../../../assets/mario/success-mushroom.png);
+        "
         class="mushroom-image-container"
       ></div>
       <span style="display: table-cell">  </span>

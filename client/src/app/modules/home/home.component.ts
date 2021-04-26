@@ -27,7 +27,8 @@ export class HomeComponent implements OnInit {
       if (val instanceof NavigationStart) {
         if (
           val.url.indexOf('games/') > -1 ||
-          val.url.indexOf('word-management') > -1
+          val.url.indexOf('word-management') > -1 ||
+          val.url.indexOf('admin') > -1
         ) {
           this.isLoading = true;
           return;
@@ -41,11 +42,11 @@ export class HomeComponent implements OnInit {
         newRouteValue = newRouteValue === 0 ? 360 : 0;
         this.style.transition =
           environment.intervalForRoundMainPage.toString() + 'ms';
-        this.style.transition = `rotate(${newRouteValue}deg)`;
+        this.style.transform = `rotate(${newRouteValue}deg)`;
       }
 
       if (val instanceof NavigationEnd) {
-        if (val.url.indexOf('games/') > -1) {
+        if (val.url.indexOf('games/') > -1 || val.url.indexOf('admin') > -1) {
           this.isLoading = false;
           return;
         }
