@@ -1,9 +1,10 @@
-.main-container {
-  height: 100vh;
+.mario-main-container {
+  height: 101vh;
   width: 100%;
+  top: -2vh;
   position: relative;
   background: url("../../../../assets/mario/up-mid.png") no-repeat;
-  background-size: 100% 90vh;
+  background-size: 100% 91vh;
 }
 
 .ground {
