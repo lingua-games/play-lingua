@@ -167,7 +167,8 @@ export class SuperMarioComponent implements OnInit {
       transition: '10ms',
     } as ElementStyle);
     this.scoreStorageService.clearCatch();
-    this.showStartDialog();
+    // Todo, uncomment
+    // this.showStartDialog();
   }
 
   showStartDialog(): void {
@@ -503,12 +504,14 @@ export class SuperMarioComponent implements OnInit {
   }
 
   stopMovingLeft(): void {
+    this.mario.style.transition = 'left 0ms';
     this.stopMoving();
     clearInterval(this.movingLeftInterval);
     this.movingLeftInterval = undefined;
   }
 
   stopMovingRight(): void {
+    this.mario.style.transition = 'left 0ms';
     this.stopMoving();
     clearInterval(this.movingRightInterval);
     this.movingRightInterval = undefined;
@@ -522,6 +525,9 @@ export class SuperMarioComponent implements OnInit {
     clearInterval(this.movingRightInterval);
     if (!this.movingLeftInterval) {
       this.movingLeftInterval = +setInterval(() => {
+        if (this.mario.isJumping) {
+          this.mario.style.transition = 'left 30ms';
+        }
         this.mario.moveLeft(1);
       }, 30);
     }
@@ -531,6 +537,10 @@ export class SuperMarioComponent implements OnInit {
     clearInterval(this.movingLeftInterval);
     if (!this.movingRightInterval) {
       this.movingRightInterval = +setInterval(() => {
+        if (this.mario.isJumping) {
+          this.mario.style.transition = 'left 30ms';
+        }
+
         this.mario.moveRight(1);
       }, 30);
     }
