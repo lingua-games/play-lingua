@@ -50,49 +50,24 @@ export class MarioModel {
     height = height || 30;
     this.originalBottom = this.style.bottom;
     this.isJumping = true;
-    let intervalStep = 0;
-    let counter = 0;
     const interval = setInterval(() => {
-      if (parseInt(this.style.bottom, 0) > 35) {
-        intervalStep = 4;
-        this.style.transition = 'bottom 20ms';
-      } else {
-        this.style.transition = 'bottom 10ms';
-      }
-
-      if (counter >= intervalStep) {
-        counter = 0;
-        this.style.bottom =
-          (parseInt(this.style.bottom || '0', 0) + 1).toString() + '%';
-        if (
-          parseInt(this.style.bottom || '0', 0) >=
-          (height || 0) + parseInt(this.originalBottom || '0', 0)
-        ) {
-          clearInterval(interval);
+      this.style.bottom =
+        (parseInt(this.style.bottom || '0', 0) + 1).toString() + '%';
+      if (
+        parseInt(this.style.bottom || '0', 0) >=
+        (height || 0) + parseInt(this.originalBottom || '0', 0)
+      ) {
+        clearInterval(interval);
+        setTimeout(() => {
           this.comeDown();
-        }
+        }, 150);
       }
-      counter++;
     }, 10);
   }
 
   comeDown(): void {
     this.style.transition = '0ms';
-    let intervalStep = 0;
-    let counter = 0;
     const interval = setInterval(() => {
-      if (
-        parseInt(this.style.bottom, 0) > 20 &&
-        parseInt(this.style.bottom, 0) < 30
-      ) {
-        intervalStep = 0;
-        // this.style.transition = 'bottom 10ms';
-      } else if (parseInt(this.style.bottom, 0) > 38) {
-        intervalStep = 1;
-        // this.style.transition = 'bottom 20ms';
-      } else {
-        // this.style.transition = 'bottom 10ms';
-      }
       if (
         parseInt(this.style.bottom || '0', 0) <=
         parseInt(this.originalBottom || '0', 0)
@@ -103,12 +78,8 @@ export class MarioModel {
           'url("../../../../assets/mario/mario-movement.png") 0 0 no-repeat';
         return;
       }
-      if (counter >= intervalStep) {
-        counter = 0;
-        this.style.bottom =
-          (parseInt(this.style?.bottom || '0', 0) - 1).toString() + '%';
-      }
-      counter++;
+      this.style.bottom =
+        (parseInt(this.style?.bottom || '0', 0) - 1).toString() + '%';
     }, 10);
   }
 }
