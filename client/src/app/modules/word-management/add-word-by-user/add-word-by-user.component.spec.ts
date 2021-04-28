@@ -469,7 +469,7 @@ describe('AddWordByUserComponent', () => {
       );
     });
 
-    xit('should stop page loading if API fail', () => {
+    it('should stop page loading if API fail', () => {
       component.selectBookRandom?.setValue('something else');
       component.formData = {
         words: [

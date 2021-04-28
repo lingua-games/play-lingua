@@ -356,7 +356,7 @@ export class BasicInformationService {
     return this.sanitizer.bypassSecurityTrustHtml(result);
   }
 
-  loadImage(url: string): Observable<ArrayBuffer> {
+  loadFile(url: string): Observable<ArrayBuffer> {
     return this.http.get<ArrayBuffer>(url, { responseType: 'blob' as 'json' });
   }
 }

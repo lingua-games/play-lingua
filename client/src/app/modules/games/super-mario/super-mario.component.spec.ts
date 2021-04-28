@@ -16,6 +16,9 @@ import {
   MarioEnemy,
   MarioEnemyStatus,
 } from '../../../core/models/mario-enemy.model';
+import { SoundService } from '../../../core/service/sound.service';
+import { BasicInformationService } from '../../../core/service/basic-information.service';
+import { retry } from 'rxjs/operators';
 
 describe('SuperMarioComponent', () => {
   let component: SuperMarioComponent;
@@ -25,10 +28,28 @@ describe('SuperMarioComponent', () => {
   let mockStore;
   let mockMatDialog;
   let mockScoreStorageService;
+  let mockSoundService;
+  let mockBasicInformationService;
 
   beforeEach(
     waitForAsync(() => {
+      mockBasicInformationService = jasmine.createSpyObj(
+        'basicInformationService',
+        {
+          loadFile: () => {
+            return of('something');
+          },
+          gameHints: () => {
+            return '';
+          },
+        }
+      );
       mockStore = jasmine.createSpyObj(['select', 'dispatch']);
+      mockSoundService = jasmine.createSpyObj([
+        'playActionSong',
+        'stopGameSong',
+        'loadSounds',
+      ]);
       mockScoreStorageService = jasmine.createSpyObj([
         'clearCatch',
         'getCachedScores',
@@ -46,6 +67,14 @@ describe('SuperMarioComponent', () => {
         declarations: [SuperMarioComponent],
         imports: [HttpClientTestingModule],
         providers: [
+          {
+            provide: BasicInformationService,
+            useValue: mockBasicInformationService,
+          },
+          {
+            provide: SoundService,
+            useValue: mockSoundService,
+          },
           {
             provide: ScoreStorageService,
             useValue: mockScoreStorageService,
@@ -86,16 +115,51 @@ describe('SuperMarioComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should call loadImages for all the images of game', () => {
+    mockBasicInformationService.loadFile.and.callFake(() => {
+      return of('something');
+    });
+
+    component.loadImages();
+
+    expect(mockBasicInformationService.loadFile).toHaveBeenCalledTimes(5);
+  });
+
   describe('ngOnInit', () => {
     it('should initial mario style', () => {
       spyOn(component.mario, 'setStyle');
+      mockBasicInformationService.loadFile.and.callFake(() => {
+        return of('something');
+      });
 
       fixture.detectChanges();
 
       expect(component.mario.setStyle).toHaveBeenCalled();
     });
 
+    it('should call loadImages', () => {
+      spyOn(component, 'loadImages');
+
+      fixture.detectChanges();
+
+      expect(component.loadImages).toHaveBeenCalled();
+    });
+
+    it('should call loadSounds', () => {
+      mockBasicInformationService.loadFile.and.callFake(() => {
+        return of('something');
+      });
+
+      fixture.detectChanges();
+
+      expect(mockSoundService.loadSounds).toHaveBeenCalled();
+    });
+
     it('should clear catch for scores', () => {
+      mockBasicInformationService.loadFile.and.callFake(() => {
+        return of('something');
+      });
+
       fixture.detectChanges();
 
       expect(mockScoreStorageService.clearCatch).toHaveBeenCalled();
@@ -103,6 +167,9 @@ describe('SuperMarioComponent', () => {
 
     it('should call showStartDialog', () => {
       spyOn(component, 'showStartDialog');
+      mockBasicInformationService.loadFile.and.callFake(() => {
+        return of('something');
+      });
 
       fixture.detectChanges();
 

@@ -188,40 +188,35 @@ export class SuperMarioComponent implements OnInit {
 
   loadImages(): void {
     this.basicInformationService
-      .loadImage('/mario-jumping.png')
+      .loadFile('/mario-jumping.png')
       .subscribe((res) => {
-        const urlCreator = window.URL;
-        this.mario.jumpBackground = `url(${urlCreator.createObjectURL(res)})`;
+        this.mario.jumpBackground = `url(${window.URL.createObjectURL(res)})`;
       });
 
     this.basicInformationService
-      .loadImage('/mario-movement.png')
+      .loadFile('/mario-movement.png')
       .subscribe((res) => {
-        const urlCreator = window.URL;
-        this.mario.movementBackground = `url(${urlCreator.createObjectURL(
+        this.mario.movementBackground = `url(${window.URL.createObjectURL(
           res
         )})`;
       });
 
     this.basicInformationService
-      .loadImage('/assets/mario/question-mushroom.png')
+      .loadFile('/assets/mario/question-mushroom.png')
       .subscribe((res) => {
-        const urlCreator = window.URL;
-        this.mushrooms.question = `url(${urlCreator.createObjectURL(res)})`;
+        this.mushrooms.question = `url(${window.URL.createObjectURL(res)})`;
       });
 
     this.basicInformationService
-      .loadImage('/assets/mario/wrong-mushroom.png')
+      .loadFile('/assets/mario/wrong-mushroom.png')
       .subscribe((res) => {
-        const urlCreator = window.URL;
-        this.mushrooms.wrong = `url(${urlCreator.createObjectURL(res)})`;
+        this.mushrooms.wrong = `url(${window.URL.createObjectURL(res)})`;
       });
 
     this.basicInformationService
-      .loadImage('/assets/mario/success-mushroom.png')
+      .loadFile('/assets/mario/success-mushroom.png')
       .subscribe((res) => {
-        const urlCreator = window.URL;
-        this.mushrooms.success = `url(${urlCreator.createObjectURL(res)})`;
+        this.mushrooms.success = `url(${window.URL.createObjectURL(res)})`;
       });
   }
 
