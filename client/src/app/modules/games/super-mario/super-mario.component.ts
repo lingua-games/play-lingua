@@ -254,10 +254,12 @@ export class SuperMarioComponent implements OnInit {
   }
 
   startGame(): void {
+    this.isSoundOn = true;
     this.prepareTheWord(this.allEnemies.words[0]);
   }
 
   showEndGameDialog(): void {
+    this.stopSound(false);
     this.isGameFinished = true;
     const dialog = this.dialog.open(StartGameDialogComponent, {
       disableClose: true,
@@ -267,7 +269,7 @@ export class SuperMarioComponent implements OnInit {
       autoFocus: false,
       data: {
         name: 'Super Mario',
-        code: GameNameEnum.fallingStars,
+        code: GameNameEnum.supperMario,
         gameNameForRanking: 'super-mario',
         hints: this.basicInformationService.gameHints(
           GameNameEnum.fallingStars
@@ -621,7 +623,7 @@ export class SuperMarioComponent implements OnInit {
   }
 
   jump(): void {
-    if (!this.mario.isJumping) {
+    if (!this.mario.isJumping && !this.isGameFinished) {
       this.soundService.playActionSong(GameActionEnum.jump, this.isSoundOn);
     }
     this.mario.jump(this.jumpHeight);
