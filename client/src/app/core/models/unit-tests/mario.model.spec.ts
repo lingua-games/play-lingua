@@ -111,7 +111,7 @@ describe('MarioModel', () => {
       spyOn(model, 'comeDown');
 
       model.jump(5);
-      jasmine.clock().tick(50);
+      jasmine.clock().tick(200);
 
       expect(clearInterval).toHaveBeenCalled();
       expect(model.comeDown).toHaveBeenCalled();

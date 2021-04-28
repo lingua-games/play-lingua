@@ -15,6 +15,7 @@ import {
   faTimes,
   faTrash,
   faTrophy,
+  faVolumeUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
@@ -77,7 +78,8 @@ export class AppModule {
       faTrophy,
       faArrowCircleLeft,
       faCheck,
-      faTimes
+      faTimes,
+      faVolumeUp
     );
   }
 }

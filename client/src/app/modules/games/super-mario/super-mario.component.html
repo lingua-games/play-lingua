@@ -4,6 +4,9 @@
   (exit)="showStartDialog()"
   (skip)="skipEnemy()"
   [hasSkip]="true"
+  [hasSound]="true"
+  [gameName]="1"
+  (stopSound)="stopSound($event)"
 ></app-game-options>
 <div *ngIf="guidBoxShowing" class="guid-box-container" @fadeIn>
   <div class="guid-box-header-container">
