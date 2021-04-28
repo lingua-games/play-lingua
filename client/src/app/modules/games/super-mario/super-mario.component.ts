@@ -88,6 +88,15 @@ export class SuperMarioComponent implements OnInit {
   isGameFinished = false;
   enemyAnimateInterval?: number;
   isSoundOn = true;
+  mushrooms: {
+    question: string;
+    success: string;
+    wrong: string;
+  } = {
+    question: '',
+    success: '',
+    wrong: '',
+  };
 
   constructor(
     private dialog: MatDialog,
@@ -171,8 +180,49 @@ export class SuperMarioComponent implements OnInit {
       transition: '10ms',
     } as ElementStyle);
     this.scoreStorageService.clearCatch();
+    this.loadImages();
+    this.soundService.loadSounds(GameNameEnum.supperMario);
     // Todo, uncomment
     this.showStartDialog();
+  }
+
+  loadImages(): void {
+    this.basicInformationService
+      .loadImage('/mario-jumping.png')
+      .subscribe((res) => {
+        const urlCreator = window.URL;
+        this.mario.jumpBackground = `url(${urlCreator.createObjectURL(res)})`;
+      });
+
+    this.basicInformationService
+      .loadImage('/mario-movement.png')
+      .subscribe((res) => {
+        const urlCreator = window.URL;
+        this.mario.movementBackground = `url(${urlCreator.createObjectURL(
+          res
+        )})`;
+      });
+
+    this.basicInformationService
+      .loadImage('/assets/mario/question-mushroom.png')
+      .subscribe((res) => {
+        const urlCreator = window.URL;
+        this.mushrooms.question = `url(${urlCreator.createObjectURL(res)})`;
+      });
+
+    this.basicInformationService
+      .loadImage('/assets/mario/wrong-mushroom.png')
+      .subscribe((res) => {
+        const urlCreator = window.URL;
+        this.mushrooms.wrong = `url(${urlCreator.createObjectURL(res)})`;
+      });
+
+    this.basicInformationService
+      .loadImage('/assets/mario/success-mushroom.png')
+      .subscribe((res) => {
+        const urlCreator = window.URL;
+        this.mushrooms.success = `url(${urlCreator.createObjectURL(res)})`;
+      });
   }
 
   showStartDialog(): void {
@@ -199,8 +249,8 @@ export class SuperMarioComponent implements OnInit {
           this.allEnemies = JSON.parse(JSON.stringify(res));
           this.bookId = res.bookId;
           this.chapterId = res.chapterId;
-          this.soundService.playGameSong(
-            GameNameEnum.supperMario,
+          this.soundService.playActionSong(
+            GameActionEnum.backGroundSond,
             this.isSoundOn
           );
           this.startGame();
@@ -253,7 +303,10 @@ export class SuperMarioComponent implements OnInit {
 
   prepareTheWord(enemy?: WordKeyValueModel<string[]>): void {
     if (this.guidBoxShowing) {
-      this.soundService.playGameSong(GameNameEnum.supperMario, this.isSoundOn);
+      this.soundService.playActionSong(
+        GameActionEnum.backGroundSond,
+        this.isSoundOn
+      );
     }
     this.isGameFinished = false;
     this.guidBoxShowing = false;
@@ -358,11 +411,7 @@ export class SuperMarioComponent implements OnInit {
   }
 
   showPointNotification(enemy: MarioEnemy): void {
-    this.soundService.playActionSong(
-      GameNameEnum.supperMario,
-      GameActionEnum.success,
-      this.isSoundOn
-    );
+    this.soundService.playActionSong(GameActionEnum.success, this.isSoundOn);
     if (enemy && enemy.style && enemy.style.right) {
       let earnedScore = (100 - parseInt(enemy.style.right, 0)) / 10;
       if (this.currentEnemy.wrongCount && this.currentEnemy.wrongCount > 0) {
@@ -400,12 +449,8 @@ export class SuperMarioComponent implements OnInit {
   }
 
   showGuidBox(enemy: MarioEnemy): void {
-    this.soundService.stopGameSong();
-    this.soundService.playActionSong(
-      GameNameEnum.supperMario,
-      GameActionEnum.fail,
-      this.isSoundOn
-    );
+    this.soundService.stopGameSong(GameActionEnum.backGroundSond);
+    this.soundService.playActionSong(GameActionEnum.fail, this.isSoundOn);
     clearInterval(this.enemyAnimateInterval);
     this.animationOnWrongAnswer(enemy);
     this.stopMovingLeft();
@@ -420,9 +465,12 @@ export class SuperMarioComponent implements OnInit {
   stopSound(value: boolean): void {
     this.isSoundOn = value;
     if (value) {
-      this.soundService.playGameSong(GameNameEnum.supperMario, this.isSoundOn);
+      this.soundService.playActionSong(
+        GameActionEnum.backGroundSond,
+        this.isSoundOn
+      );
     } else {
-      this.soundService.stopGameSong();
+      this.soundService.stopGameSong(GameActionEnum.backGroundSond);
     }
   }
 
@@ -579,11 +627,7 @@ export class SuperMarioComponent implements OnInit {
 
   jump(): void {
     if (!this.mario.isJumping) {
-      this.soundService.playActionSong(
-        GameNameEnum.supperMario,
-        GameActionEnum.jump,
-        this.isSoundOn
-      );
+      this.soundService.playActionSong(GameActionEnum.jump, this.isSoundOn);
     }
     this.mario.jump(this.jumpHeight);
   }

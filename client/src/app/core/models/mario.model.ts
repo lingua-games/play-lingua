@@ -7,6 +7,8 @@ export class MarioModel {
   isMovingLeft?: boolean;
   style: ElementStyle = {} as ElementStyle;
   originalBottom?: string;
+  jumpBackground?: string;
+  movementBackground?: string;
 
   constructor() {}
 
@@ -42,8 +44,7 @@ export class MarioModel {
   }
 
   jump(height?: number): void {
-    this.style.background =
-      'url("../../../../assets/mario/mario-jumping.png") 0 0 no-repeat';
+    this.style.background = this.jumpBackground;
     if (this.isJumping) {
       return;
     }
@@ -74,8 +75,7 @@ export class MarioModel {
       ) {
         clearInterval(interval);
         this.isJumping = false;
-        this.style.background =
-          'url("../../../../assets/mario/mario-movement.png") 0 0 no-repeat';
+        this.style.background = this.movementBackground;
         return;
       }
       this.style.bottom =
