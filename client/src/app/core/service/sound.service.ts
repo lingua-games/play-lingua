@@ -49,12 +49,5 @@ export class SoundService {
     }
     this.songs[action].play();
     this.songs[action].volume = 0.03;
-
-    // if (action === GameActionEnum.backGroundSond) {
-    //
-    //   this.songs[action].volume = 0.1;
-    // } else {
-    //   this.songs[action].volume = 0.03;
-    // }
   }
 }
