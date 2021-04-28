@@ -67,7 +67,6 @@ export class MarioModel {
   }
 
   comeDown(): void {
-    this.style.transition = '0ms';
     const interval = setInterval(() => {
       if (
         parseInt(this.style.bottom || '0', 0) <=
