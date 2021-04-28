@@ -6,6 +6,7 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { GameNameEnum } from '../../models/game-name.enum';
 
 @Component({
   selector: 'app-game-options',
@@ -22,11 +23,15 @@ import {
 })
 export class GameOptionsComponent {
   isDetailsShowing = false;
+  soundOn = true;
 
   @Input() hasSkip?: boolean;
+  @Input() hasSound?: boolean;
+  @Input() gameName: GameNameEnum = 0;
 
   @Output() exit = new EventEmitter();
   @Output() skip = new EventEmitter();
+  @Output() stopSound = new EventEmitter();
 
   showDetails(): void {
     this.isDetailsShowing = true;
@@ -34,5 +39,10 @@ export class GameOptionsComponent {
 
   hideDetails(): void {
     this.isDetailsShowing = false;
+  }
+
+  soundTrigger(): void {
+    this.soundOn = !this.soundOn;
+    this.stopSound.emit(this.soundOn);
   }
 }

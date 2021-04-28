@@ -4,6 +4,9 @@
   (exit)="showStartDialog()"
   (skip)="skipEnemy()"
   [hasSkip]="true"
+  [hasSound]="true"
+  [gameName]="1"
+  (stopSound)="stopSound($event)"
 ></app-game-options>
 <div *ngIf="guidBoxShowing" class="guid-box-container" @fadeIn>
   <div class="guid-box-header-container">
@@ -45,6 +48,7 @@
     [ngStyle]="mario.style"
     [ngClass]="{
       isMoving: mario.isMoving,
+      isJumping: mario.isJumping,
       movingRight: mario.isMovingRight,
       movingLeft: mario.isMovingLeft
     }"
@@ -63,23 +67,17 @@
       <!--      ></div>-->
       <div
         *ngIf="enemy.mushroomImage === 'question'"
-        style="
-          background-image: url(../../../../assets/mario/question-mushroom.png);
-        "
+        [ngStyle]="{ 'background-image': mushrooms.question }"
         class="mushroom-image-container"
       ></div>
       <div
         *ngIf="enemy.mushroomImage === 'wrong'"
-        style="
-          background-image: url(../../../../assets/mario/wrong-mushroom.png);
-        "
+        [ngStyle]="{ 'background-image': mushrooms.wrong }"
         class="mushroom-image-container"
       ></div>
       <div
         *ngIf="enemy.mushroomImage === 'success'"
-        style="
-          background-image: url(../../../../assets/mario/success-mushroom.png);
-        "
+        [ngStyle]="{ 'background-image': mushrooms.success }"
         class="mushroom-image-container"
       ></div>
       <span style="display: table-cell">  </span>

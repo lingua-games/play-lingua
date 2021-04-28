@@ -22,6 +22,8 @@ import { ElementStyle } from '../../../core/models/element-style.model';
 import { ScoreStorageService } from '../../../core/service/score-storage.service';
 import { InvitationForm } from '../../../core/models/invitation-form.interface';
 import { ScoreStoreInterface } from '../../../core/models/score-store.interface';
+import { SoundService } from '../../../core/service/sound.service';
+import { GameActionEnum } from '../../../core/models/game-action.enum';
 
 @Component({
   selector: 'app-super-mario',
@@ -85,11 +87,22 @@ export class SuperMarioComponent implements OnInit {
   chapterId?: number;
   isGameFinished = false;
   enemyAnimateInterval?: number;
+  isSoundOn = true;
+  mushrooms: {
+    question: string;
+    success: string;
+    wrong: string;
+  } = {
+    question: '',
+    success: '',
+    wrong: '',
+  };
 
   constructor(
     private dialog: MatDialog,
     private basicInformationService: BasicInformationService,
-    private scoreStorageService: ScoreStorageService
+    private scoreStorageService: ScoreStorageService,
+    private soundService: SoundService
   ) {}
 
   @HostListener('window:resize', ['$event'])
@@ -167,7 +180,44 @@ export class SuperMarioComponent implements OnInit {
       transition: '10ms',
     } as ElementStyle);
     this.scoreStorageService.clearCatch();
+    this.loadImages();
+    this.soundService.loadSounds(GameNameEnum.supperMario);
+    // Todo, uncomment
     this.showStartDialog();
+  }
+
+  loadImages(): void {
+    this.basicInformationService
+      .loadFile('/mario-jumping.png')
+      .subscribe((res) => {
+        this.mario.jumpBackground = `url(${window.URL.createObjectURL(res)})`;
+      });
+
+    this.basicInformationService
+      .loadFile('/mario-movement.png')
+      .subscribe((res) => {
+        this.mario.movementBackground = `url(${window.URL.createObjectURL(
+          res
+        )})`;
+      });
+
+    this.basicInformationService
+      .loadFile('/assets/mario/question-mushroom.png')
+      .subscribe((res) => {
+        this.mushrooms.question = `url(${window.URL.createObjectURL(res)})`;
+      });
+
+    this.basicInformationService
+      .loadFile('/assets/mario/wrong-mushroom.png')
+      .subscribe((res) => {
+        this.mushrooms.wrong = `url(${window.URL.createObjectURL(res)})`;
+      });
+
+    this.basicInformationService
+      .loadFile('/assets/mario/success-mushroom.png')
+      .subscribe((res) => {
+        this.mushrooms.success = `url(${window.URL.createObjectURL(res)})`;
+      });
   }
 
   showStartDialog(): void {
@@ -194,6 +244,10 @@ export class SuperMarioComponent implements OnInit {
           this.allEnemies = JSON.parse(JSON.stringify(res));
           this.bookId = res.bookId;
           this.chapterId = res.chapterId;
+          this.soundService.playActionSong(
+            GameActionEnum.backGroundSond,
+            this.isSoundOn
+          );
           this.startGame();
         }
       });
@@ -243,6 +297,12 @@ export class SuperMarioComponent implements OnInit {
   }
 
   prepareTheWord(enemy?: WordKeyValueModel<string[]>): void {
+    if (this.guidBoxShowing) {
+      this.soundService.playActionSong(
+        GameActionEnum.backGroundSond,
+        this.isSoundOn
+      );
+    }
     this.isGameFinished = false;
     this.guidBoxShowing = false;
 
@@ -346,6 +406,7 @@ export class SuperMarioComponent implements OnInit {
   }
 
   showPointNotification(enemy: MarioEnemy): void {
+    this.soundService.playActionSong(GameActionEnum.success, this.isSoundOn);
     if (enemy && enemy.style && enemy.style.right) {
       let earnedScore = (100 - parseInt(enemy.style.right, 0)) / 10;
       if (this.currentEnemy.wrongCount && this.currentEnemy.wrongCount > 0) {
@@ -383,6 +444,8 @@ export class SuperMarioComponent implements OnInit {
   }
 
   showGuidBox(enemy: MarioEnemy): void {
+    this.soundService.stopGameSong(GameActionEnum.backGroundSond);
+    this.soundService.playActionSong(GameActionEnum.fail, this.isSoundOn);
     clearInterval(this.enemyAnimateInterval);
     this.animationOnWrongAnswer(enemy);
     this.stopMovingLeft();
@@ -392,6 +455,18 @@ export class SuperMarioComponent implements OnInit {
       : 1;
     this.allEnemies.words.push(JSON.parse(JSON.stringify(this.currentEnemy)));
     this.guidBoxShowing = true;
+  }
+
+  stopSound(value: boolean): void {
+    this.isSoundOn = value;
+    if (value) {
+      this.soundService.playActionSong(
+        GameActionEnum.backGroundSond,
+        this.isSoundOn
+      );
+    } else {
+      this.soundService.stopGameSong(GameActionEnum.backGroundSond);
+    }
   }
 
   showMovingEnemy(playingEnemy: MarioEnemy): void {
@@ -503,12 +578,14 @@ export class SuperMarioComponent implements OnInit {
   }
 
   stopMovingLeft(): void {
+    this.mario.style.transition = 'left 0ms';
     this.stopMoving();
     clearInterval(this.movingLeftInterval);
     this.movingLeftInterval = undefined;
   }
 
   stopMovingRight(): void {
+    this.mario.style.transition = 'left 0ms';
     this.stopMoving();
     clearInterval(this.movingRightInterval);
     this.movingRightInterval = undefined;
@@ -522,6 +599,9 @@ export class SuperMarioComponent implements OnInit {
     clearInterval(this.movingRightInterval);
     if (!this.movingLeftInterval) {
       this.movingLeftInterval = +setInterval(() => {
+        if (this.mario.isJumping) {
+          this.mario.style.transition = 'left 30ms';
+        }
         this.mario.moveLeft(1);
       }, 30);
     }
@@ -531,12 +611,19 @@ export class SuperMarioComponent implements OnInit {
     clearInterval(this.movingLeftInterval);
     if (!this.movingRightInterval) {
       this.movingRightInterval = +setInterval(() => {
+        if (this.mario.isJumping) {
+          this.mario.style.transition = 'left 30ms';
+        }
+
         this.mario.moveRight(1);
       }, 30);
     }
   }
 
   jump(): void {
+    if (!this.mario.isJumping) {
+      this.soundService.playActionSong(GameActionEnum.jump, this.isSoundOn);
+    }
     this.mario.jump(this.jumpHeight);
   }
 }

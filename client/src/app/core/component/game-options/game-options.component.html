@@ -30,4 +30,18 @@
       <span>Skip [Q]</span>
     </div>
   </div>
+  <div
+    class="skip-container action-container"
+    *ngIf="hasSound"
+    [style.width]="isDetailsShowing ? '10rem' : '2.5rem'"
+    (click)="soundTrigger()"
+  >
+    <fa-icon
+      [@iconAnimation]="!isDetailsShowing"
+      [icon]="['fas', 'volume-up']"
+    ></fa-icon>
+    <div *ngIf="isDetailsShowing" class="text-container">
+      <span>{{ soundOn ? 'Sound off' : 'Sound on' }}</span>
+    </div>
+  </div>
 </div>

@@ -19,6 +19,10 @@
   animation: walk 1s steps(7) infinite;
 }
 
+.isJumping {
+  animation: none;
+}
+
 .movingRight {
   -webkit-transform: scaleX(1);
   transform: scaleX(1);
@@ -32,6 +36,10 @@
 .mario {
   background: url("../../../../assets/mario/mario-movement.png") 0 0 no-repeat;
   margin: 60px auto 0;
+}
+
+.is-mario-jumping {
+  background : url("../../../../assets/mario/mario-jumping.png") 0 0 no-repeat;
 }
 
 /* Don't forget: You'll need an @keyframes block to change the background image's position! */
