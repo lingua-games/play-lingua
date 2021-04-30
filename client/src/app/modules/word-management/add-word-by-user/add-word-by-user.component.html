@@ -1,5 +1,4 @@
 <p-toast position="bottom-center" key="bc"></p-toast>
-
 <div appLoading [loadingFlag]="isPageLoading || isPreparingForEdit">
   <form [formGroup]="selectLanguageForm" class="select-language-container">
     <div class="row">
@@ -38,7 +37,7 @@
         >
         </p-dropdown>
       </div>
-      <div class="col-sm-1 text-right">
+      <div class="col-sm-1 text-right" *ngIf="!isEditing">
         <button
           class="btn ml-2"
           [ngClass]="

@@ -30,6 +30,7 @@ import { environment } from '../../../../environments/environment';
 import { WordOverviewsModel } from '../../../core/models/word-overviews.model';
 import { forkJoin } from 'rxjs';
 import { WordDetails } from '../../../core/models/word-details.model';
+import { BasicInformationService } from '../../../core/service/basic-information.service';
 
 @Component({
   selector: 'app-add-word-by-user',
@@ -105,7 +106,8 @@ export class AddWordByUserComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private localStorageService: LocalStorageService,
-    private wordManagementService: WordManagementService
+    private wordManagementService: WordManagementService,
+    private basicInformationService: BasicInformationService
   ) {}
 
   ngOnInit(): void {
@@ -140,20 +142,59 @@ export class AddWordByUserComponent implements OnInit {
     this.isPreparingForEdit = true;
     const urls = [];
     if (this.wordsForEdit.bookId) {
-      urls[0] = this.bookChapterService.getBooksBySourceAndTargetLanguageId(
-        this.wordsForEdit.baseLanguageId,
-        this.wordsForEdit.targetLanguageId
+      urls.push(
+        this.bookChapterService.getBooksBySourceAndTargetLanguageId(
+          this.wordsForEdit.baseLanguageId,
+          this.wordsForEdit.targetLanguageId
+        )
       );
     }
     if (this.wordsForEdit.chapterId) {
-      urls[1] = this.bookChapterService.getChaptersByBookId(
-        this.wordsForEdit.bookId
+      urls.push(
+        this.bookChapterService.getChaptersByBookId(this.wordsForEdit.bookId)
       );
     }
-    urls[2] = this.wordManagementService.getWordDetails(this.wordsForEdit);
+    urls.push(this.wordManagementService.getWordDetails(this.wordsForEdit));
+
+    if (
+      !this.targetLanguages.find(
+        (x) => x.id === this.wordsForEdit.targetLanguageId
+      ) ||
+      !this.baseLanguages.find((x) => x.id === this.wordsForEdit.baseLanguageId)
+    ) {
+      urls.push(this.basicInformationService.getAllLanguages());
+    }
 
     forkJoin(urls).subscribe(
-      (res: (BookModel[] | ChapterModel[] | WordDetails[])[]) => {
+      (
+        res: (BookModel[] | ChapterModel[] | WordDetails[] | LanguageModel[])[]
+      ) => {
+        if (
+          !this.targetLanguages.find(
+            (x) => x.id === this.wordsForEdit.targetLanguageId
+          )
+        ) {
+          const itemToAdd = (res[3] as LanguageModel[]).find(
+            (x) => x.id === this.wordsForEdit.targetLanguageId
+          );
+          if (itemToAdd) {
+            this.targetLanguages.push(itemToAdd);
+          }
+        }
+
+        if (
+          !this.baseLanguages.find(
+            (x) => x.id === this.wordsForEdit.baseLanguageId
+          )
+        ) {
+          const itemToAdd = (res[3] as LanguageModel[])?.find(
+            (x) => x.id === this.wordsForEdit.baseLanguageId
+          );
+          if (itemToAdd) {
+            this.baseLanguages.push(itemToAdd);
+          }
+        }
+
         this.baseLanguage?.setValue(
           this.baseLanguages.find(
             (x) => x.id === this.wordsForEdit.baseLanguageId
