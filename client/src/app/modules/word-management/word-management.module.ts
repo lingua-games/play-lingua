@@ -10,6 +10,7 @@ import { DirectiveModule } from '../../core/directives/directive.module';
 import { AddBookDialogComponent } from './add-book-dialog/add-book-dialog.component';
 import { MaterialModule } from '../common/material/material.module';
 import { AddChapterDialogComponent } from './add-chapter-dialog/add-chapter-dialog.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { AddChapterDialogComponent } from './add-chapter-dialog/add-chapter-dial
     ReactiveFormsModule,
     DirectiveModule,
     MaterialModule,
+    FontAwesomeModule,
   ],
 })
 export class WordManagementModule {}

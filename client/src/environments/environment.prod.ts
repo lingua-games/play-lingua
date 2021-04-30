@@ -6,4 +6,9 @@ export const environment = {
   startGameCount: 50,
   recordCount: 5,
   rankCount: 10,
+  secretKeys: {
+    localStoragePrivateKey: '',
+    feedbackInvitationPrivateKey: '',
+    queryParameters: '',
+  },
 };

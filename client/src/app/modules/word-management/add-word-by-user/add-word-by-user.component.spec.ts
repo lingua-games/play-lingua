@@ -9,7 +9,6 @@ import { FormBuilder } from '@angular/forms';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
 import { of, throwError } from 'rxjs';
 import { ChapterModel } from '../../../core/models/chapter.model';
@@ -20,8 +19,13 @@ import {
   WordToAddModel,
 } from '../../../core/models/word-to-add.model';
 import { AddWordFormModel } from '../../../core/models/add-word-form.model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
+import { WordManagementService } from '../../../core/service/word-management.service';
+import { WordOverviewsModel } from '../../../core/models/word-overviews.model';
+import { LanguageModel } from '../../../core/models/language.model';
+import { BasicInformationService } from '../../../core/service/basic-information.service';
+import { WordDetails } from '../../../core/models/word-details.model';
 
 describe('AddWordByUserComponent', () => {
   let component: AddWordByUserComponent;
@@ -30,15 +34,26 @@ describe('AddWordByUserComponent', () => {
   let mockMatDialog;
   let mockLocalStorageService;
   let mockBookChapterService;
+  let mockWordManagementService;
+  let mockActivatedRoute;
+  let mockBasicInformationService;
 
   beforeEach(
     waitForAsync(() => {
+      mockBasicInformationService = jasmine.createSpyObj(['getAllLanguages']);
       mockNotificationService = jasmine.createSpyObj(['showMessage']);
       mockBookChapterService = jasmine.createSpyObj([
         'getChaptersByBookId',
         'getBooksByLanguage',
-        'submitForm',
+        'getBooksBySourceAndTargetLanguageId',
       ]);
+      mockWordManagementService = jasmine.createSpyObj([
+        'submitForm',
+        'getWordDetails',
+      ]);
+      mockActivatedRoute = {
+        params: of(convertToParamMap({})),
+      };
       mockMatDialog = jasmine.createSpyObj('dialog', {
         open: {
           afterClosed: () => {
@@ -50,11 +65,24 @@ describe('AddWordByUserComponent', () => {
         'load',
         'delete',
         'save',
+        'decryptData',
       ]);
       TestBed.configureTestingModule({
         declarations: [AddWordByUserComponent],
-        imports: [HttpClientTestingModule, RouterTestingModule],
+        imports: [HttpClientTestingModule],
         providers: [
+          {
+            provide: ActivatedRoute,
+            useValue: mockActivatedRoute,
+          },
+          {
+            provide: BasicInformationService,
+            useValue: mockBasicInformationService,
+          },
+          {
+            provide: WordManagementService,
+            useValue: mockWordManagementService,
+          },
           {
             provide: Router,
             useValue: {
@@ -91,20 +119,106 @@ describe('AddWordByUserComponent', () => {
     component = fixture.componentInstance;
   });
 
-  describe('onInit', () => {
+  describe('prepareEditForm', () => {
+    it('should call getBooksBySourceAndTargetLanguageId if book id has value', () => {
+      component.wordsForEdit = { bookId: 10 } as WordOverviewsModel;
+
+      component.prepareEditForm();
+
+      expect(
+        mockBookChapterService.getBooksBySourceAndTargetLanguageId
+      ).toHaveBeenCalled();
+    });
+
+    it('should call getChaptersByBookId if chapter id has value', () => {
+      component.wordsForEdit = { chapterId: 10 } as WordOverviewsModel;
+
+      component.prepareEditForm();
+
+      expect(mockBookChapterService.getChaptersByBookId).toHaveBeenCalled();
+    });
+
+    it('should call getAllLanguages if target language is not in the list of target languages in local storage', () => {
+      component.targetLanguages = [{ id: 90 } as LanguageModel];
+      component.wordsForEdit = { targetLanguageId: 100 } as WordOverviewsModel;
+
+      component.prepareEditForm();
+
+      expect(mockBasicInformationService.getAllLanguages).toHaveBeenCalled();
+    });
+
+    it('should call getAllLanguages if base language is not in the list of base languages in local storage', () => {
+      component.baseLanguages = [{ id: 90 } as LanguageModel];
+      component.targetLanguages = [{ id: 10 } as LanguageModel];
+      component.wordsForEdit = {
+        baseLanguageId: 100,
+        targetLanguageId: 10,
+      } as WordOverviewsModel;
+
+      component.prepareEditForm();
+
+      expect(mockBasicInformationService.getAllLanguages).toHaveBeenCalled();
+    });
+
+    describe('forkJoin', () => {
+      beforeEach(() => {});
+    });
+    it('should add new target or base languages after calling API and if word for edit does not have them', () => {
+      component.wordsForEdit = {
+        baseLanguageId: 10,
+        targetLanguageId: 10,
+        bookId: 1,
+        chapterId: 1,
+      } as WordOverviewsModel;
+      component.baseLanguages = [{ id: 90 } as LanguageModel];
+      component.targetLanguages = [{ id: 90 } as LanguageModel];
+      mockBasicInformationService.getAllLanguages.and.callFake(() => {
+        return of([{ id: 10, name: 'fake name' } as LanguageModel]);
+      });
+      mockBookChapterService.getBooksBySourceAndTargetLanguageId.and.callFake(
+        () => {
+          return of([{ id: 10, name: 'fake name' } as BookModel]);
+        }
+      );
+      mockBookChapterService.getChaptersByBookId.and.callFake(() => {
+        return of([{ id: 10, name: 'fake name' } as ChapterModel]);
+      });
+      mockWordManagementService.getWordDetails.and.callFake(() => {
+        return of([{ id: 1 } as WordDetails]);
+      });
+      spyOn(component, 'submitSelectedLanguages');
+
+      component.prepareEditForm();
+
+      expect(component.baseLanguages[1].name).toBe('fake name');
+    });
+  });
+
+  describe('ngOnInit', () => {
     beforeEach(() => {
       mockLocalStorageService.load.and.callFake(() => {
         return '{"base": [], "target": []}';
       });
-
-      fixture.detectChanges();
     });
 
     it('should create', () => {
+      fixture.detectChanges();
       expect(component).toBeTruthy();
     });
 
+    it('should call preparedEditForm if wordsForEdit?.baseLanguageId has value', () => {
+      spyOn(component, 'prepareEditForm');
+      mockLocalStorageService.decryptData.and.callFake(() => {
+        return { baseLanguageId: 10 } as WordOverviewsModel;
+      });
+
+      fixture.detectChanges();
+
+      expect(component.prepareEditForm).toHaveBeenCalled();
+    });
+
     it('should disable base and target languages when subscribe true', () => {
+      fixture.detectChanges();
       spyOn(component.baseLanguage, 'disable');
       spyOn(component.targetLanguage, 'disable');
       component.isSelectedLanguageSubmit?.setValue(true);
@@ -114,6 +228,8 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should enable base and target languages when subscribe false', () => {
+      fixture.detectChanges();
+
       spyOn(component.baseLanguage, 'enable');
       spyOn(component.targetLanguage, 'enable');
       component.isSelectedLanguageSubmit?.setValue(false);
@@ -422,7 +538,7 @@ describe('AddWordByUserComponent', () => {
         ],
       } as AddWordFormModel;
       spyOn(component, 'saveInformationInfoForm');
-      mockBookChapterService.submitForm.and.callFake(() => {
+      mockWordManagementService.submitForm.and.callFake(() => {
         return of();
       });
 
@@ -433,6 +549,7 @@ describe('AddWordByUserComponent', () => {
 
     it('should delete draft if API can store data into backend', () => {
       component.selectBookRandom?.setValue('something else');
+      component.isEditing = false;
       component.formData = {
         words: [
           {
@@ -458,7 +575,7 @@ describe('AddWordByUserComponent', () => {
         ],
       } as AddWordFormModel;
       spyOn(component, 'saveInformationInfoForm');
-      mockBookChapterService.submitForm.and.callFake(() => {
+      mockWordManagementService.submitForm.and.callFake(() => {
         return of(true);
       });
 
@@ -471,6 +588,7 @@ describe('AddWordByUserComponent', () => {
 
     it('should stop page loading if API fail', () => {
       component.selectBookRandom?.setValue('something else');
+      component.isEditing = false;
       component.formData = {
         words: [
           {
@@ -496,7 +614,7 @@ describe('AddWordByUserComponent', () => {
         ],
       } as AddWordFormModel;
       spyOn(component, 'saveInformationInfoForm');
-      mockBookChapterService.submitForm.and.callFake(() => {
+      mockWordManagementService.submitForm.and.callFake(() => {
         return throwError('some errors');
       });
 

@@ -32,21 +32,6 @@ describe('BookChapterService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should call getBooks API when getBooks() method hit', () => {
-    const expectedForm: AddWordFormModel = {
-      words: [],
-      isRandom: 'true',
-      book: {} as BookModel,
-      chapter: {} as ChapterModel,
-      targetLanguage: 1,
-      baseLanguage: 1,
-    };
-
-    service.submitForm(expectedForm);
-
-    expect(httpClientSpy.post).toHaveBeenCalled();
-  });
-
   it('should call getBooksByLanguage API when getBooksByLanguage() method hit', () => {
     service.getBooksByLanguage(1, 1);
     expect(httpClientSpy.get).toHaveBeenCalled();

@@ -22,9 +22,15 @@ import {
 import { ChapterModel } from '../../../core/models/chapter.model';
 import { AddBookDialogComponent } from '../add-book-dialog/add-book-dialog.component';
 import { AddChapterDialogComponent } from '../add-chapter-dialog/add-chapter-dialog.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
+import { WordManagementService } from '../../../core/service/word-management.service';
+import { environment } from '../../../../environments/environment';
+import { WordOverviewsModel } from '../../../core/models/word-overviews.model';
+import { forkJoin } from 'rxjs';
+import { WordDetails } from '../../../core/models/word-details.model';
+import { BasicInformationService } from '../../../core/service/basic-information.service';
 
 @Component({
   selector: 'app-add-word-by-user',
@@ -40,6 +46,9 @@ export class AddWordByUserComponent implements OnInit {
   isBookLoading?: boolean;
   isPageLoading?: boolean;
   formData: AddWordFormModel = {} as AddWordFormModel;
+  wordsForEdit: WordOverviewsModel = {} as WordOverviewsModel;
+  isPreparingForEdit = false;
+  isEditing = false;
 
   selectLanguageForm = this.formBuilder.group({
     baseLanguage: ['', Validators.required],
@@ -95,12 +104,28 @@ export class AddWordByUserComponent implements OnInit {
     private bookChapterService: BookChapterService,
     private dialog: MatDialog,
     private router: Router,
-    private localStorageService: LocalStorageService
+    private activatedRoute: ActivatedRoute,
+    private localStorageService: LocalStorageService,
+    private wordManagementService: WordManagementService,
+    private basicInformationService: BasicInformationService
   ) {}
 
   ngOnInit(): void {
+    this.activatedRoute.params.subscribe((params: Params) => {
+      this.wordsForEdit = this.localStorageService.decryptData(
+        params['code'],
+        environment.secretKeys.queryParameters
+      );
+    });
+
     this.getBaseAndTargetLanguages();
-    this.checkDraft();
+    if (this.wordsForEdit?.baseLanguageId) {
+      this.isEditing = true;
+      this.prepareEditForm();
+    } else {
+      this.isEditing = false;
+      this.checkDraft();
+    }
 
     this.isSelectedLanguageSubmit?.valueChanges.subscribe((value) => {
       if (value) {
@@ -111,6 +136,133 @@ export class AddWordByUserComponent implements OnInit {
         this.targetLanguage?.enable();
       }
     });
+  }
+
+  prepareEditForm(): void {
+    this.isPreparingForEdit = true;
+    const servicesToCall = [];
+    if (this.wordsForEdit.bookId) {
+      servicesToCall.push(
+        this.bookChapterService.getBooksBySourceAndTargetLanguageId(
+          this.wordsForEdit.baseLanguageId,
+          this.wordsForEdit.targetLanguageId
+        )
+      );
+    }
+    if (this.wordsForEdit.chapterId) {
+      servicesToCall.push(
+        this.bookChapterService.getChaptersByBookId(this.wordsForEdit.bookId)
+      );
+    }
+    servicesToCall.push(
+      this.wordManagementService.getWordDetails(this.wordsForEdit)
+    );
+
+    if (
+      !this.targetLanguages.find(
+        (x) => x.id === this.wordsForEdit.targetLanguageId
+      ) ||
+      !this.baseLanguages.find((x) => x.id === this.wordsForEdit.baseLanguageId)
+    ) {
+      servicesToCall.push(this.basicInformationService.getAllLanguages());
+    }
+
+    forkJoin(servicesToCall).subscribe(
+      (
+        res: (BookModel[] | ChapterModel[] | WordDetails[] | LanguageModel[])[]
+      ) => {
+        if (
+          !this.targetLanguages.find(
+            (x) => x.id === this.wordsForEdit.targetLanguageId
+          )
+        ) {
+          const itemToAdd = (res[3] as LanguageModel[]).find(
+            (x) => x.id === this.wordsForEdit.targetLanguageId
+          );
+          if (itemToAdd) {
+            this.targetLanguages.push(itemToAdd);
+          }
+        }
+
+        if (
+          !this.baseLanguages.find(
+            (x) => x.id === this.wordsForEdit.baseLanguageId
+          )
+        ) {
+          const itemToAdd = (res[3] as LanguageModel[])?.find(
+            (x) => x.id === this.wordsForEdit.baseLanguageId
+          );
+          if (itemToAdd) {
+            this.baseLanguages.push(itemToAdd);
+          }
+        }
+
+        this.baseLanguage?.setValue(
+          this.baseLanguages.find(
+            (x) => x.id === this.wordsForEdit.baseLanguageId
+          )
+        );
+        this.targetLanguage?.setValue(
+          this.targetLanguages.find(
+            (x) => x.id === this.wordsForEdit.targetLanguageId
+          )
+        );
+        this.submitSelectedLanguages();
+
+        this.books = [];
+        this.books = [
+          {
+            targetLanguageId: 0,
+            name: 'Add new book',
+            baseLanguageId: 0,
+            id: -1,
+          },
+        ];
+        (res[0] as BookModel[]).forEach((element: BookModel) => {
+          this.books.push(element);
+        });
+        this.book?.setValue(
+          this.books.find((x) => x.id === this.wordsForEdit.bookId)
+        );
+
+        this.chapters = [];
+        this.chapters = [
+          {
+            id: -1,
+            name: 'Add new chapter',
+          },
+        ];
+        (res[1] as ChapterModel[]).forEach((chapter: ChapterModel) => {
+          this.chapters.push(chapter);
+        });
+        this.chapter?.setValue(
+          this.chapters.find((x) => x.id === this.wordsForEdit.chapterId)
+        );
+
+        (res[2] as WordDetails[]).forEach((element: WordDetails) => {
+          const filteredElement = (res[2] as WordDetails[]).filter(
+            (x) => x.baseWord === element.baseWord
+          );
+          if (
+            this.formData.words &&
+            !this.formData.words.find((x) => x.base.value === element.baseWord)
+          ) {
+            const targetsToAdd = filteredElement.map((x) => {
+              return { value: x.translate, isValid: true };
+            });
+
+            this.formData.words.push({
+              base: { value: filteredElement[0].baseWord, isValid: true },
+              targets: targetsToAdd,
+            });
+          }
+        });
+
+        this.isPreparingForEdit = false;
+      },
+      () => {},
+      () => {}
+    );
   }
 
   checkDraft(): void {
@@ -420,7 +572,12 @@ export class AddWordByUserComponent implements OnInit {
 
     this.isPageLoading = true;
     this.saveInformationInfoForm();
-    this.bookChapterService.submitForm(this.formData).subscribe(
+
+    const apiService = this.isEditing
+      ? this.wordManagementService.editForm(this.formData)
+      : this.wordManagementService.submitForm(this.formData);
+
+    apiService.subscribe(
       () => {
         this.isPageLoading = false;
         this.localStorageService.delete(LocalStorageHelper.addWordDraft);
