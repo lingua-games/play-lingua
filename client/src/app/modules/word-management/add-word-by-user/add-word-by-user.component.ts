@@ -140,9 +140,9 @@ export class AddWordByUserComponent implements OnInit {
 
   prepareEditForm(): void {
     this.isPreparingForEdit = true;
-    const urls = [];
+    const servicesToCall = [];
     if (this.wordsForEdit.bookId) {
-      urls.push(
+      servicesToCall.push(
         this.bookChapterService.getBooksBySourceAndTargetLanguageId(
           this.wordsForEdit.baseLanguageId,
           this.wordsForEdit.targetLanguageId
@@ -150,11 +150,13 @@ export class AddWordByUserComponent implements OnInit {
       );
     }
     if (this.wordsForEdit.chapterId) {
-      urls.push(
+      servicesToCall.push(
         this.bookChapterService.getChaptersByBookId(this.wordsForEdit.bookId)
       );
     }
-    urls.push(this.wordManagementService.getWordDetails(this.wordsForEdit));
+    servicesToCall.push(
+      this.wordManagementService.getWordDetails(this.wordsForEdit)
+    );
 
     if (
       !this.targetLanguages.find(
@@ -162,10 +164,10 @@ export class AddWordByUserComponent implements OnInit {
       ) ||
       !this.baseLanguages.find((x) => x.id === this.wordsForEdit.baseLanguageId)
     ) {
-      urls.push(this.basicInformationService.getAllLanguages());
+      servicesToCall.push(this.basicInformationService.getAllLanguages());
     }
 
-    forkJoin(urls).subscribe(
+    forkJoin(servicesToCall).subscribe(
       (
         res: (BookModel[] | ChapterModel[] | WordDetails[] | LanguageModel[])[]
       ) => {
@@ -242,6 +244,7 @@ export class AddWordByUserComponent implements OnInit {
             (x) => x.baseWord === element.baseWord
           );
           if (
+            this.formData.words &&
             !this.formData.words.find((x) => x.base.value === element.baseWord)
           ) {
             const targetsToAdd = filteredElement.map((x) => {
@@ -574,7 +577,6 @@ export class AddWordByUserComponent implements OnInit {
       ? this.wordManagementService.editForm(this.formData)
       : this.wordManagementService.submitForm(this.formData);
 
-    console.log(apiService);
     apiService.subscribe(
       () => {
         this.isPageLoading = false;

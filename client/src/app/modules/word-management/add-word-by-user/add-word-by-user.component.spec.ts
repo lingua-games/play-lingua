@@ -22,6 +22,10 @@ import { AddWordFormModel } from '../../../core/models/add-word-form.model';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { WordManagementService } from '../../../core/service/word-management.service';
+import { WordOverviewsModel } from '../../../core/models/word-overviews.model';
+import { LanguageModel } from '../../../core/models/language.model';
+import { BasicInformationService } from '../../../core/service/basic-information.service';
+import { WordDetails } from '../../../core/models/word-details.model';
 
 describe('AddWordByUserComponent', () => {
   let component: AddWordByUserComponent;
@@ -32,15 +36,21 @@ describe('AddWordByUserComponent', () => {
   let mockBookChapterService;
   let mockWordManagementService;
   let mockActivatedRoute;
+  let mockBasicInformationService;
 
   beforeEach(
     waitForAsync(() => {
+      mockBasicInformationService = jasmine.createSpyObj(['getAllLanguages']);
       mockNotificationService = jasmine.createSpyObj(['showMessage']);
       mockBookChapterService = jasmine.createSpyObj([
         'getChaptersByBookId',
         'getBooksByLanguage',
+        'getBooksBySourceAndTargetLanguageId',
       ]);
-      mockWordManagementService = jasmine.createSpyObj(['submitForm']);
+      mockWordManagementService = jasmine.createSpyObj([
+        'submitForm',
+        'getWordDetails',
+      ]);
       mockActivatedRoute = {
         params: of(convertToParamMap({})),
       };
@@ -64,6 +74,10 @@ describe('AddWordByUserComponent', () => {
           {
             provide: ActivatedRoute,
             useValue: mockActivatedRoute,
+          },
+          {
+            provide: BasicInformationService,
+            useValue: mockBasicInformationService,
           },
           {
             provide: WordManagementService,
@@ -105,20 +119,106 @@ describe('AddWordByUserComponent', () => {
     component = fixture.componentInstance;
   });
 
-  describe('onInit', () => {
+  describe('prepareEditForm', () => {
+    it('should call getBooksBySourceAndTargetLanguageId if book id has value', () => {
+      component.wordsForEdit = { bookId: 10 } as WordOverviewsModel;
+
+      component.prepareEditForm();
+
+      expect(
+        mockBookChapterService.getBooksBySourceAndTargetLanguageId
+      ).toHaveBeenCalled();
+    });
+
+    it('should call getChaptersByBookId if chapter id has value', () => {
+      component.wordsForEdit = { chapterId: 10 } as WordOverviewsModel;
+
+      component.prepareEditForm();
+
+      expect(mockBookChapterService.getChaptersByBookId).toHaveBeenCalled();
+    });
+
+    it('should call getAllLanguages if target language is not in the list of target languages in local storage', () => {
+      component.targetLanguages = [{ id: 90 } as LanguageModel];
+      component.wordsForEdit = { targetLanguageId: 100 } as WordOverviewsModel;
+
+      component.prepareEditForm();
+
+      expect(mockBasicInformationService.getAllLanguages).toHaveBeenCalled();
+    });
+
+    it('should call getAllLanguages if base language is not in the list of base languages in local storage', () => {
+      component.baseLanguages = [{ id: 90 } as LanguageModel];
+      component.targetLanguages = [{ id: 10 } as LanguageModel];
+      component.wordsForEdit = {
+        baseLanguageId: 100,
+        targetLanguageId: 10,
+      } as WordOverviewsModel;
+
+      component.prepareEditForm();
+
+      expect(mockBasicInformationService.getAllLanguages).toHaveBeenCalled();
+    });
+
+    describe('forkJoin', () => {
+      beforeEach(() => {});
+    });
+    it('should add new target or base languages after calling API and if word for edit does not have them', () => {
+      component.wordsForEdit = {
+        baseLanguageId: 10,
+        targetLanguageId: 10,
+        bookId: 1,
+        chapterId: 1,
+      } as WordOverviewsModel;
+      component.baseLanguages = [{ id: 90 } as LanguageModel];
+      component.targetLanguages = [{ id: 90 } as LanguageModel];
+      mockBasicInformationService.getAllLanguages.and.callFake(() => {
+        return of([{ id: 10, name: 'fake name' } as LanguageModel]);
+      });
+      mockBookChapterService.getBooksBySourceAndTargetLanguageId.and.callFake(
+        () => {
+          return of([{ id: 10, name: 'fake name' } as BookModel]);
+        }
+      );
+      mockBookChapterService.getChaptersByBookId.and.callFake(() => {
+        return of([{ id: 10, name: 'fake name' } as ChapterModel]);
+      });
+      mockWordManagementService.getWordDetails.and.callFake(() => {
+        return of([{ id: 1 } as WordDetails]);
+      });
+      spyOn(component, 'submitSelectedLanguages');
+
+      component.prepareEditForm();
+
+      expect(component.baseLanguages[1].name).toBe('fake name');
+    });
+  });
+
+  describe('ngOnInit', () => {
     beforeEach(() => {
       mockLocalStorageService.load.and.callFake(() => {
         return '{"base": [], "target": []}';
       });
-
-      fixture.detectChanges();
     });
 
     it('should create', () => {
+      fixture.detectChanges();
       expect(component).toBeTruthy();
     });
 
+    it('should call preparedEditForm if wordsForEdit?.baseLanguageId has value', () => {
+      spyOn(component, 'prepareEditForm');
+      mockLocalStorageService.decryptData.and.callFake(() => {
+        return { baseLanguageId: 10 } as WordOverviewsModel;
+      });
+
+      fixture.detectChanges();
+
+      expect(component.prepareEditForm).toHaveBeenCalled();
+    });
+
     it('should disable base and target languages when subscribe true', () => {
+      fixture.detectChanges();
       spyOn(component.baseLanguage, 'disable');
       spyOn(component.targetLanguage, 'disable');
       component.isSelectedLanguageSubmit?.setValue(true);
@@ -128,6 +228,8 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should enable base and target languages when subscribe false', () => {
+      fixture.detectChanges();
+
       spyOn(component.baseLanguage, 'enable');
       spyOn(component.targetLanguage, 'enable');
       component.isSelectedLanguageSubmit?.setValue(false);

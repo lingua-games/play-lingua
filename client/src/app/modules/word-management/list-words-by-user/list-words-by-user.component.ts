@@ -41,6 +41,7 @@ export class ListWordsByUserComponent implements OnInit {
         this.wordOverviews.setData(res);
       },
       () => {
+        // Todo, error handling here and maybe add refresh button etc
         this.wordOverviews.setError(
           'Failed to load overview, please try again'
         );
