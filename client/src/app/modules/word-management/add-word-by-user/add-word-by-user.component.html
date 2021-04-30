@@ -1,6 +1,6 @@
 <p-toast position="bottom-center" key="bc"></p-toast>
 
-<div appLoading [loadingFlag]="isPageLoading">
+<div appLoading [loadingFlag]="isPageLoading || isPreparingForEdit">
   <form [formGroup]="selectLanguageForm" class="select-language-container">
     <div class="row">
       <div class="col-sm-1"></div>
@@ -144,7 +144,7 @@
     [loadingFlag]="isBookLoading"
   >
     <div class="row fill-word-header-container">
-      <div class="col-sm-3 text-center word-header-container">Source word</div>
+      <div class="col-sm-3 text-center word-header-container">Base word</div>
       <div class="col-sm-9 text-center word-header-container">
         Target word(s)
       </div>

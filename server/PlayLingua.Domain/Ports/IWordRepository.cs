@@ -6,11 +6,11 @@ namespace PlayLingua.Domain.Ports
 {
     public interface IWordRepository
     {
-        List<Word> List(int chapterId, int bookId);
-        Word Add(Word book);
-        void Delete(string id);
-        void Update(Word book);
+
         bool InquiryAboutSelectedLanguages(SelectedLanguageModel baseLanguage);
         void SubmitWordSeries(SubmitWordsModel submitWords, int userId);
+        void EditWordSeries(SubmitWordsModel submitWords, int userId);
+        List<WordOverviewModel> GetWordOverviews(int userId);
+        List<Word> GetWordDetails(WordOverviewModel overview);
     }
 }

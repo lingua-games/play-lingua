@@ -30,9 +30,11 @@ describe('AddWordByUserComponent', () => {
   let mockMatDialog;
   let mockLocalStorageService;
   let mockBookChapterService;
+  let mockWordManagementService;
 
   beforeEach(
     waitForAsync(() => {
+      mockWordManagementService = jasmine.createSpyObj(['submitForm']);
       mockNotificationService = jasmine.createSpyObj(['showMessage']);
       mockBookChapterService = jasmine.createSpyObj([
         'getChaptersByBookId',

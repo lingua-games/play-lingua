@@ -18,32 +18,108 @@ namespace PlayLingua.Data
         {
             db = new SqlConnection(connectionString);
         }
-        public Word Add(Word book)
+
+        public void EditWordSeries(SubmitWordsModel submitWords, int userId)
         {
-            throw new NotImplementedException();
+            var modelForDelete = new WordOverviewModel
+            {
+                BookId = submitWords.Book.Id,
+                ChapterId = submitWords.Chapter.Id,
+                AddedBy = userId,
+                BaseLanguageId = submitWords.BaseLanguage.Id,
+                TargetLanguageId = submitWords.TargetLanguage.Id
+            };
+
+            var sql = @"
+                    delete 
+                    FROM [dbo].[Word]
+                    where 
+	                    word.AddedBy = @AddedBy                 and 
+	                    word.BaseLanguageId = @BaseLanguageId	and 
+	                    word.BookId = @BookId    				and 
+	                    word.ChapterId = @ChapterId 			and 
+	                    word.TargetLanguageId = @TargetLanguageId
+                    ";
+            _ = db.Query<Word>(sql, modelForDelete).ToList();
+            SubmitWordSeries(submitWords, userId);
         }
 
-        public void Delete(string id)
+        public List<Word> GetWordDetails(WordOverviewModel overview)
         {
-            throw new NotImplementedException();
-        }
+            var sql = @"
+                    SELECT 
+	                    word.id,
+	                    word.BaseWord,
+	                    word.Translate
+                    FROM [dbo].[Word]
 
+                    left join dbo.Book
+                    on word.BookId = Book.Id
+
+                    left join dbo.Chapter
+                    on word.ChapterId = Chapter.Id
+
+                    left join dbo.Language as BaseLanguage
+                    on word.BaseLanguageId = BaseLanguage.id
+
+                    left join dbo.Language as TargetLanguage
+                    on word.TargetLanguageId = TargetLanguage.id
+
+                    where 
+	                    word.AddedBy = @AddedBy                 and 
+	                    word.BaseLanguageId = @BaseLanguageId	and 
+	                    word.BookId = @BookId    				and 
+	                    word.ChapterId = @ChapterId 			and 
+	                    word.TargetLanguageId = @TargetLanguageId
+                    ";
+            var result = db.Query<Word>(sql, overview).ToList();
+            return result;
+        }
+        public List<WordOverviewModel> GetWordOverviews(int userId)
+        {
+            var sql = @"
+                        SELECT 
+                        word.BookId, 
+                        word.ChapterId, 
+                        word.BaseLanguageId,
+                        word.TargetLanguageId,
+                        max(BaseLanguage.Name) as BaseLanguageName,
+                        max(TargetLanguage.Name) as TargetLanguageName,
+                        COUNT(*) as Count, 
+                        max(book.Name) as BookName,
+                        max(Chapter.Name) as ChapterName,
+                        max(Word.LastUpdateDate) as LastUpdateDate,
+                        max(Word.AddedDate) as AddedDate
+                        FROM [dbo].[Word]
+
+                        left join dbo.Book
+                        on word.BookId = Book.Id
+
+                        left join dbo.Chapter
+                        on word.ChapterId = Chapter.Id
+
+                        left join dbo.Language as BaseLanguage
+                        on word.BaseLanguageId = BaseLanguage.id
+
+                        left join dbo.Language as TargetLanguage
+                        on word.TargetLanguageId = TargetLanguage.id
+
+                        where word.AddedBy = @userId
+                        group by word.BookId ,word.ChapterId,word.BaseLanguageId, word.TargetLanguageId 
+                    ";
+            var result = db.Query<WordOverviewModel>(sql, new { userId }).ToList();
+            return result;
+        }
         public bool InquiryAboutSelectedLanguages(SelectedLanguageModel language)
         {
             var sql =
                 @"SELECT * FROM [dbo].[Word] where BaseLanguageId = @Base and TargetLanguageId = @Target";
-                
+
             db.Close();
             var result = db.Query<LanguageInformation>(sql, language).Any();
-            
+
             return result;
         }
-
-        public List<Word> List(int chapterId, int bookId)
-        {
-            throw new NotImplementedException();
-        }
-
         public void SubmitWordSeries(SubmitWordsModel submitWords, int userId)
         {
             foreach (var word in submitWords.Words)
@@ -84,11 +160,6 @@ insert into [dbo].[Word] (
                     db.Query<int>(sql, wordToAdd).SingleOrDefault();
                 }
             }
-        }
-
-        public void Update(Word book)
-        {
-            throw new NotImplementedException();
         }
     }
 }

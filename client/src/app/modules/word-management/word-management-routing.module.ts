@@ -22,6 +22,10 @@ const routes: Routes = [
         path: 'add',
         component: AddWordByUserComponent,
       },
+      {
+        path: 'edit/:code',
+        component: AddWordByUserComponent,
+      },
     ],
   },
 ];
