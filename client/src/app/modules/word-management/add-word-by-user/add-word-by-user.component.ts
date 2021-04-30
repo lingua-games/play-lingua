@@ -117,7 +117,7 @@ export class AddWordByUserComponent implements OnInit {
     });
 
     this.getBaseAndTargetLanguages();
-    if (this.wordsForEdit.baseLanguageId) {
+    if (this.wordsForEdit?.baseLanguageId) {
       this.isEditing = true;
       this.prepareEditForm();
     } else {
@@ -533,6 +533,7 @@ export class AddWordByUserComponent implements OnInit {
       ? this.wordManagementService.editForm(this.formData)
       : this.wordManagementService.submitForm(this.formData);
 
+    console.log(apiService);
     apiService.subscribe(
       () => {
         this.isPageLoading = false;

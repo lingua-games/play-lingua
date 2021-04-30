@@ -9,7 +9,6 @@ import { FormBuilder } from '@angular/forms';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
 import { of, throwError } from 'rxjs';
 import { ChapterModel } from '../../../core/models/chapter.model';
@@ -20,8 +19,9 @@ import {
   WordToAddModel,
 } from '../../../core/models/word-to-add.model';
 import { AddWordFormModel } from '../../../core/models/add-word-form.model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
+import { WordManagementService } from '../../../core/service/word-management.service';
 
 describe('AddWordByUserComponent', () => {
   let component: AddWordByUserComponent;
@@ -31,16 +31,19 @@ describe('AddWordByUserComponent', () => {
   let mockLocalStorageService;
   let mockBookChapterService;
   let mockWordManagementService;
+  let mockActivatedRoute;
 
   beforeEach(
     waitForAsync(() => {
-      mockWordManagementService = jasmine.createSpyObj(['submitForm']);
       mockNotificationService = jasmine.createSpyObj(['showMessage']);
       mockBookChapterService = jasmine.createSpyObj([
         'getChaptersByBookId',
         'getBooksByLanguage',
-        'submitForm',
       ]);
+      mockWordManagementService = jasmine.createSpyObj(['submitForm']);
+      mockActivatedRoute = {
+        params: of(convertToParamMap({})),
+      };
       mockMatDialog = jasmine.createSpyObj('dialog', {
         open: {
           afterClosed: () => {
@@ -52,11 +55,20 @@ describe('AddWordByUserComponent', () => {
         'load',
         'delete',
         'save',
+        'decryptData',
       ]);
       TestBed.configureTestingModule({
         declarations: [AddWordByUserComponent],
-        imports: [HttpClientTestingModule, RouterTestingModule],
+        imports: [HttpClientTestingModule],
         providers: [
+          {
+            provide: ActivatedRoute,
+            useValue: mockActivatedRoute,
+          },
+          {
+            provide: WordManagementService,
+            useValue: mockWordManagementService,
+          },
           {
             provide: Router,
             useValue: {
@@ -424,7 +436,7 @@ describe('AddWordByUserComponent', () => {
         ],
       } as AddWordFormModel;
       spyOn(component, 'saveInformationInfoForm');
-      mockBookChapterService.submitForm.and.callFake(() => {
+      mockWordManagementService.submitForm.and.callFake(() => {
         return of();
       });
 
@@ -435,6 +447,7 @@ describe('AddWordByUserComponent', () => {
 
     it('should delete draft if API can store data into backend', () => {
       component.selectBookRandom?.setValue('something else');
+      component.isEditing = false;
       component.formData = {
         words: [
           {
@@ -460,7 +473,7 @@ describe('AddWordByUserComponent', () => {
         ],
       } as AddWordFormModel;
       spyOn(component, 'saveInformationInfoForm');
-      mockBookChapterService.submitForm.and.callFake(() => {
+      mockWordManagementService.submitForm.and.callFake(() => {
         return of(true);
       });
 
@@ -473,6 +486,7 @@ describe('AddWordByUserComponent', () => {
 
     it('should stop page loading if API fail', () => {
       component.selectBookRandom?.setValue('something else');
+      component.isEditing = false;
       component.formData = {
         words: [
           {
@@ -498,7 +512,7 @@ describe('AddWordByUserComponent', () => {
         ],
       } as AddWordFormModel;
       spyOn(component, 'saveInformationInfoForm');
-      mockBookChapterService.submitForm.and.callFake(() => {
+      mockWordManagementService.submitForm.and.callFake(() => {
         return throwError('some errors');
       });
 

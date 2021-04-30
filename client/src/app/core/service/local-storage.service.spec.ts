@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import * as CryptoJS from 'crypto-js';
 import { LocalStorageService } from './local-storage.service';
 import { LocalStorageHelper } from '../models/local-storage.enum';
-import { secretKeys } from '../../../environments/secret';
+import { environment } from '../../../environments/environment';
 
 describe('LocalStorageService', () => {
   let service: LocalStorageService;
@@ -25,7 +25,7 @@ describe('LocalStorageService', () => {
 
     expect(service.encryptData).toHaveBeenCalledWith(
       expectedValue,
-      secretKeys.localStoragePrivateKey
+      environment.secretKeys.localStoragePrivateKey
     );
   });
 
@@ -50,7 +50,7 @@ describe('LocalStorageService', () => {
 
     expect(service.decryptData).toHaveBeenCalledWith(
       'something',
-      secretKeys.localStoragePrivateKey
+      environment.secretKeys.localStoragePrivateKey
     );
   });
 
