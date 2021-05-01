@@ -61,12 +61,12 @@ export class GameConfigComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getGameCountWords();
     if (!this.data.isFeedback) {
       this.defaultLanguages = JSON.parse(
         this.localStorageService.load(LocalStorageHelper.defaultLanguages)
       );
       this.getBooks();
-      this.getGameCountWords();
     }
   }
 
@@ -100,19 +100,30 @@ export class GameConfigComponent implements OnInit {
 
   getGameCountWords(): void {
     this.wordCount.setLoading(true);
+    const serviceParameters = {} as GetGameWordsRequestModel;
+
+    if (this.data.isFeedback) {
+      serviceParameters.bookId = this.data.feedbackForm.book.id;
+      serviceParameters.chapterId = this.data.feedbackForm.chapter.id;
+      serviceParameters.defaultTargetLanguage = this.data.feedbackForm.targetLanguage.id;
+      serviceParameters.defaultBaseLanguage = this.data.feedbackForm.baseLanguage.id;
+    } else {
+      if (this.form.selectedBook) {
+        serviceParameters.bookId = this.form.selectedBook.id;
+      }
+      if (this.form.selectedChapter) {
+        serviceParameters.chapterId = this.form.selectedChapter.id;
+      }
+      serviceParameters.defaultTargetLanguage = JSON.parse(
+        this.localStorageService.load(LocalStorageHelper.defaultLanguages)
+      ).defaultTargetLanguage.id;
+      serviceParameters.defaultBaseLanguage = JSON.parse(
+        this.localStorageService.load(LocalStorageHelper.defaultLanguages)
+      ).defaultBaseLanguage.id;
+    }
+
     this.gameService
-      .getGameCountWords({
-        bookId: this.form.selectedBook ? this.form.selectedBook.id : null,
-        chapterId: this.form.selectedChapter
-          ? this.form.selectedChapter.id
-          : null,
-        defaultBaseLanguage: JSON.parse(
-          this.localStorageService.load(LocalStorageHelper.defaultLanguages)
-        ).defaultBaseLanguage.id,
-        defaultTargetLanguage: JSON.parse(
-          this.localStorageService.load(LocalStorageHelper.defaultLanguages)
-        ).defaultTargetLanguage.id,
-      } as GetGameWordsRequestModel)
+      .getGameCountWords(serviceParameters)
       .subscribe((res: number) => {
         this.wordCount.setData(res);
       });
