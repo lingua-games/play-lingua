@@ -6,5 +6,6 @@ namespace PlayLingua.Domain.Ports
     public interface IGameRepository
     {
         List<GetWordsForGameResponseModel> GetWordsForGame(GetWordsForGameInputModel getWordsForGameInputModel);
+        int GetWordsCountForGame(GetWordsForGameInputModel getWordsForGameInputModel);
     }
 }

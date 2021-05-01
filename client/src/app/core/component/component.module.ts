@@ -12,6 +12,7 @@ import { GameOptionsComponent } from './game-options/game-options.component';
 import { GameInstructionComponent } from './game-instruction/game-instruction.component';
 import { GameConfigComponent } from './game-config/game-config.component';
 import { RankingComponent } from './ranking/ranking.component';
+import { DirectiveModule } from '../directives/directive.module';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { RankingComponent } from './ranking/ranking.component';
     MaterialModule,
     PrimengModule,
     FontAwesomeModule,
+    DirectiveModule,
   ],
   exports: [
     GameHintComponent,

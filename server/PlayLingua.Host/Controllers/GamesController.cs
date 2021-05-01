@@ -21,7 +21,21 @@ namespace PlayLingua.Host.Controllers
         [HttpPost("get-words-for-game")]
         public ActionResult<List<GetWordsForGameResponseViewModel>> GetWordsForGame([FromBody] GetWordsForGameInputViewModel model)
         {
-            return Ok(_gameRepository.GetWordsForGame(new GetWordsForGameInputModel { 
+            return Ok(_gameRepository.GetWordsForGame(new GetWordsForGameInputModel
+            {
+                BookId = model.BookId,
+                ChapterId = model.ChapterId,
+                Count = model.Count,
+                DefaultBaseLanguage = model.DefaultBaseLanguage,
+                DefaultTargetLanguage = model.DefaultTargetLanguage
+            }));
+        }
+
+        [HttpPost("get-words-count-for-game")]
+        public ActionResult<int> GetWordsCountForGame([FromBody] GetWordsForGameInputViewModel model)
+        {
+            return Ok(_gameRepository.GetWordsCountForGame(new GetWordsForGameInputModel
+            {
                 BookId = model.BookId,
                 ChapterId = model.ChapterId,
                 Count = model.Count,

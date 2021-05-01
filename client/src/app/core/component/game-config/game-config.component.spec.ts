@@ -6,6 +6,7 @@ import { BookChapterService } from '../../service/book-chapter.service';
 import { ChapterModel } from '../../models/chapter.model';
 import { LocalStorageService } from '../../service/local-storage.service';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('GameConfigComponent', () => {
   let component: GameConfigComponent;
@@ -22,6 +23,7 @@ describe('GameConfigComponent', () => {
     });
 
     await TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
       declarations: [GameConfigComponent],
       providers: [
         {
