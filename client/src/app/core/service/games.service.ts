@@ -36,6 +36,16 @@ export class GamesService {
     // return of(result);
   }
 
+  getGameCountWords(
+    getGameWordsRequestModel: GetGameWordsRequestModel
+  ): Observable<number> {
+    // Todo, uncomment
+    return this.http.post<number>(
+      `${this.gameUrl}/get-words-count-for-game`,
+      getGameWordsRequestModel
+    );
+  }
+
   getGames(): GameInformationInterface[] {
     return [
       {

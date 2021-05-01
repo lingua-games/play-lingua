@@ -1,17 +1,14 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ListWordsByUserComponent } from './list-words-by-user.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WordOverviewsModel } from '../../../core/models/word-overviews.model';
-import { ApiResult } from '../../../core/models/api-result.model';
-import { WordManagementService } from '../../../core/service/word-management.service';
 import { of, throwError } from 'rxjs';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
 import { environment } from '../../../../environments/environment';
 import { Router } from '@angular/router';
+import { WordManagementService } from '../../../core/service/word-management.service';
 
 describe('ListWordsByUserComponent', () => {
   let component: ListWordsByUserComponent;

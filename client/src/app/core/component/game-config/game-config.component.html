@@ -48,15 +48,25 @@
       *ngIf="form.selectedBook.id && chapters && chapters.length"
     >
       <mat-label>Select a chapter/reference</mat-label>
-      <mat-select [(ngModel)]="form.selectedChapter">
+      <mat-select
+        [(ngModel)]="form.selectedChapter"
+        (ngModelChange)="getGameCountWords()"
+      >
         <mat-option *ngFor="let chapter of chapters" [value]="chapter">
           {{ chapter.name }}
         </mat-option>
       </mat-select>
     </mat-form-field>
   </div>
+  <div class="alert alert-info" appLoading [loadingFlag]="wordCount.isLoading">
+    You are going to play {{ wordCount.data }} words
+  </div>
   <div class="action-container">
-    <button class="btn btn-success" (click)="submitEmitter.emit(form)">
+    <button
+      class="btn btn-success"
+      (click)="submitEmitter.emit(form)"
+      [disabled]="wordCount.isLoading"
+    >
       Start!
     </button>
   </div>

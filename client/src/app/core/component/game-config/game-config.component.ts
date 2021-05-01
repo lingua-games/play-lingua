@@ -14,6 +14,9 @@ import { LocalStorageService } from '../../service/local-storage.service';
 import { ChapterModel } from '../../models/chapter.model';
 import { GameConfigModel } from '../../models/game-config-model';
 import { GameInformationInterface } from '../../models/game-information.interface';
+import { GamesService } from '../../service/games.service';
+import { GetGameWordsRequestModel } from '../../models/get-game-words-request.model';
+import { ApiResult } from '../../models/api-result.model';
 
 @Component({
   selector: 'app-game-config',
@@ -31,6 +34,7 @@ export class GameConfigComponent implements OnInit {
   @Output() goToHelp = new EventEmitter();
   @Output() submitEmitter = new EventEmitter();
 
+  wordCount: ApiResult<number> = new ApiResult<number>();
   bookListLoading = false;
   chapters: ChapterModel[] = [];
   chapterListLoading = false;
@@ -52,7 +56,8 @@ export class GameConfigComponent implements OnInit {
 
   constructor(
     private bookChapterService: BookChapterService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private gameService: GamesService
   ) {}
 
   ngOnInit(): void {
@@ -61,6 +66,7 @@ export class GameConfigComponent implements OnInit {
         this.localStorageService.load(LocalStorageHelper.defaultLanguages)
       );
       this.getBooks();
+      this.getGameCountWords();
     }
   }
 
@@ -92,7 +98,28 @@ export class GameConfigComponent implements OnInit {
       );
   }
 
+  getGameCountWords(): void {
+    this.wordCount.setLoading(true);
+    this.gameService
+      .getGameCountWords({
+        bookId: this.form.selectedBook ? this.form.selectedBook.id : null,
+        chapterId: this.form.selectedChapter
+          ? this.form.selectedChapter.id
+          : null,
+        defaultBaseLanguage: JSON.parse(
+          this.localStorageService.load(LocalStorageHelper.defaultLanguages)
+        ).defaultBaseLanguage.id,
+        defaultTargetLanguage: JSON.parse(
+          this.localStorageService.load(LocalStorageHelper.defaultLanguages)
+        ).defaultTargetLanguage.id,
+      } as GetGameWordsRequestModel)
+      .subscribe((res: number) => {
+        this.wordCount.setData(res);
+      });
+  }
+
   getChapters(selectedBook: BookModel): void {
+    this.getGameCountWords();
     if (!selectedBook.id) {
       return;
     }
