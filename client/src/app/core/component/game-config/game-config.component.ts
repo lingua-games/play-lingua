@@ -67,6 +67,7 @@ export class GameConfigComponent implements OnInit {
         this.localStorageService.load(LocalStorageHelper.defaultLanguages)
       );
       this.getBooks();
+      this.getGameCountWords();
     }
   }
 
