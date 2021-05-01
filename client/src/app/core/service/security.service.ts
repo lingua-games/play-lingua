@@ -34,6 +34,9 @@ export class SecurityService {
   }
 
   setTotalScore(newScore: string): void {
+    if (!this.isLoggedIn()) {
+      return;
+    }
     if (this.localStorageService.load(LocalStorageHelper.isGuest)) {
       return;
     }
@@ -57,6 +60,9 @@ export class SecurityService {
   }
 
   initialTotalScore(score: string): void {
+    if (!this.isLoggedIn()) {
+      return;
+    }
     this.localStorageService.save(LocalStorageHelper.totalScore, score);
     this.storageSub.next(score);
   }
@@ -80,7 +86,7 @@ export class SecurityService {
 
   isAdmin(): boolean {
     const token = this.getTokenInformation();
-    if (token) {
+    if (token && token.isAdmin) {
       return JSON.parse(token.isAdmin);
     }
     return false;

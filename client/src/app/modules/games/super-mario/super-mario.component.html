@@ -1,4 +1,4 @@
-<app-top-navbar></app-top-navbar>
+<app-top-navbar *ngIf="isLoggedIn()"></app-top-navbar>
 <app-game-options
   *ngIf="enemies.length && !isGameFinished"
   (exit)="showStartDialog()"

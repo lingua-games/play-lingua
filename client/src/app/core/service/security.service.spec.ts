@@ -10,6 +10,7 @@ import { SecurityTokenInterface } from '../models/security-token.interface';
 import { UserModel } from '../models/user.model';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { compose } from '@ngrx/store';
 
 describe('SecurityService', () => {
   let service: SecurityService;
@@ -92,6 +93,8 @@ describe('SecurityService', () => {
   });
 
   it('should save score into storage when initialTotalScore hits', () => {
+    spyOn(service, 'isLoggedIn').and.returnValue(true);
+
     service.initialTotalScore('1');
 
     expect(mockLocalStorageService.save).toHaveBeenCalledWith(
@@ -113,6 +116,7 @@ describe('SecurityService', () => {
     mockLocalStorageService.load.and.callFake(() => {
       return false;
     });
+    spyOn(service, 'isLoggedIn').and.returnValue(true);
 
     service.setTotalScore('0');
 
