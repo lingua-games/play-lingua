@@ -16,6 +16,7 @@ import { ActivatedRoute } from '@angular/router';
 import { InvitationForm } from '../../../core/models/invitation-form.interface';
 import { ScoreStoreInterface } from '../../../core/models/score-store.interface';
 import { ElementStyle } from '../../../core/models/element-style.model';
+import { SecurityService } from '../../../core/service/security.service';
 
 const secondsForTraver = 5000;
 const bufferBeforeStart = 2000;
@@ -132,7 +133,8 @@ export class FallingStarsComponent implements OnInit {
     private store: Store<{}>,
     private scoreStorageService: ScoreStorageService,
     private basicInformationService: BasicInformationService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private securityService: SecurityService
   ) {}
 
   ngOnInit(): void {
@@ -146,6 +148,10 @@ export class FallingStarsComponent implements OnInit {
     this.showStartDialog();
     this.scoreStorageService.clearCatch();
     // this.showEndGameDialog();
+  }
+
+  isLoggedIn(): boolean {
+    return this.securityService.isLoggedIn();
   }
 
   showEndGameDialog(): void {

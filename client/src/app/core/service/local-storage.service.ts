@@ -48,9 +48,14 @@ export class LocalStorageService {
   }
 
   decryptData<T>(data: string, privateKey?: string): T {
-    const bytes = CryptoJS.AES.decrypt(data, privateKey);
-    const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-    return decryptedData;
+    try {
+      const bytes = CryptoJS.AES.decrypt(data, privateKey);
+      const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+      return decryptedData;
+    } catch (ex) {
+      console.error(ex);
+      return {} as T;
+    }
   }
 
   replaceCharacter(data: string, char: string): string {

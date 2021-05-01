@@ -19,6 +19,7 @@ import {
 import { SoundService } from '../../../core/service/sound.service';
 import { BasicInformationService } from '../../../core/service/basic-information.service';
 import { retry } from 'rxjs/operators';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('SuperMarioComponent', () => {
   let component: SuperMarioComponent;
@@ -65,7 +66,7 @@ describe('SuperMarioComponent', () => {
       });
       TestBed.configureTestingModule({
         declarations: [SuperMarioComponent],
-        imports: [HttpClientTestingModule],
+        imports: [HttpClientTestingModule, RouterTestingModule],
         providers: [
           {
             provide: BasicInformationService,

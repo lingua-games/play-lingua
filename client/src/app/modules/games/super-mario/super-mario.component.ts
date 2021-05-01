@@ -24,6 +24,7 @@ import { InvitationForm } from '../../../core/models/invitation-form.interface';
 import { ScoreStoreInterface } from '../../../core/models/score-store.interface';
 import { SoundService } from '../../../core/service/sound.service';
 import { GameActionEnum } from '../../../core/models/game-action.enum';
+import { SecurityService } from '../../../core/service/security.service';
 
 @Component({
   selector: 'app-super-mario',
@@ -102,7 +103,8 @@ export class SuperMarioComponent implements OnInit {
     private dialog: MatDialog,
     private basicInformationService: BasicInformationService,
     private scoreStorageService: ScoreStorageService,
-    private soundService: SoundService
+    private soundService: SoundService,
+    private securityService: SecurityService
   ) {}
 
   @HostListener('window:resize', ['$event'])
@@ -296,6 +298,10 @@ export class SuperMarioComponent implements OnInit {
           this.startGame();
         }
       });
+  }
+
+  isLoggedIn(): boolean {
+    return this.securityService.isLoggedIn();
   }
 
   prepareTheWord(enemy?: WordKeyValueModel<string[]>): void {

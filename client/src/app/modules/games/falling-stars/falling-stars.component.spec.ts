@@ -11,6 +11,7 @@ import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
 import { GameStartInformation } from '../../../core/models/game-start-information';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { ElementStyle } from '../../../core/models/element-style.model';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('FallingStarsComponent', () => {
   let component: FallingStarsComponent;
@@ -41,7 +42,11 @@ describe('FallingStarsComponent', () => {
         },
       });
       TestBed.configureTestingModule({
-        imports: [BrowserAnimationsModule, HttpClientTestingModule],
+        imports: [
+          BrowserAnimationsModule,
+          HttpClientTestingModule,
+          RouterTestingModule,
+        ],
         declarations: [FallingStarsComponent],
         providers: [
           {
