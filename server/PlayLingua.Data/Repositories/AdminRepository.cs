@@ -164,7 +164,7 @@ WHERE UniqueKey = @UniqueKey", invitation);
 
                 using (var client = new SmtpClient())
                 {
-                    client.Connect("smtp.gmail.com", 587, false);
+                    client.Connect("relay-hosting.secureserver.net", 25);
                     client.Authenticate(_email.Username, _email.Password);
 
                     client.Send(message);
