@@ -195,7 +195,7 @@ WHERE UniqueKey = @UniqueKey", invitation);
 
                 smtp.Send(message);
 
-                return new SendMailResultModel
+                return new SendMailResultModel();
             }
             catch (Exception ex)
             {
