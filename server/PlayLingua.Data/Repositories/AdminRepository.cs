@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 
 namespace PlayLingua.Data
 {
@@ -150,30 +152,51 @@ WHERE UniqueKey = @UniqueKey", invitation);
         {
             try
             {
-                var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("Play lingua", _email.Username));
-                message.To.Add(new MailboxAddress(invitation.PlayerName, invitation.Email));
+                //var message = new MimeMessage();
+                //message.From.Add(new MailboxAddress("Play lingua", _email.Username));
+                //message.To.Add(new MailboxAddress(invitation.PlayerName, invitation.Email));
 
-                message.Subject = "You are invited to Play Lingua!";
+                //message.Subject = "You are invited to Play Lingua!";
 
-                var bodyBuilder = new BodyBuilder
+                //var bodyBuilder = new BodyBuilder
+                //{
+                //    HtmlBody = invitation.HtmlText,
+                //};
+                //message.Body = bodyBuilder.ToMessageBody();
+
+                //using (var client = new SmtpClient())
+                //{
+                //    client.Connect("relay-hosting.secureserver.net", 25, false);
+                //    client.Authenticate(_email.Username, _email.Password);
+
+                //    client.Send(message);
+                //    client.Disconnect(true);
+                //    return new SendMailResultModel
+                //    {
+                //        IsEmailSent = true
+                //    };
+                //}
+
+
+                MailMessage message = new MailMessage();
+                message.From = new MailAddress("admin@playinglingua.com");
+                message.To.Add(new MailAddress("vbhost.ir@gmail.com"));
+
+                message.Subject = " your subject ";
+                message.Body = " content of your email ";
+
+                System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("smtp.office365.com", 587)
                 {
-                    HtmlBody = invitation.HtmlText,
+                    Credentials = new NetworkCredential(_email.Username, _email.Password),
+                    EnableSsl = true,
                 };
-                message.Body = bodyBuilder.ToMessageBody();
 
-                using (var client = new SmtpClient())
+                smtp.Send(message);
+
+                return new SendMailResultModel
                 {
-                    client.Connect("relay-hosting.secureserver.net", 25);
-                    client.Authenticate(_email.Username, _email.Password);
-
-                    client.Send(message);
-                    client.Disconnect(true);
-                    return new SendMailResultModel
-                    {
-                        IsEmailSent = true
-                    };
-                }
+                    IsEmailSent = true
+                };
             }
             catch (Exception ex)
             {
