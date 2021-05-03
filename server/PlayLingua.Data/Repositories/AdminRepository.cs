@@ -178,8 +178,10 @@ WHERE UniqueKey = @UniqueKey", invitation);
                 //}
 
 
-                MailMessage message = new MailMessage();
-                message.From = new MailAddress("admin@playinglingua.com");
+                MailMessage message = new MailMessage
+                {
+                    From = new MailAddress("admin@playinglingua.com")
+                };
                 message.To.Add(new MailAddress("vbhost.ir@gmail.com"));
 
                 message.Subject = " your subject ";
@@ -194,7 +196,6 @@ WHERE UniqueKey = @UniqueKey", invitation);
                 smtp.Send(message);
 
                 return new SendMailResultModel
-                {
             }
             catch (Exception ex)
             {
