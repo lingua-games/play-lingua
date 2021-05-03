@@ -195,8 +195,6 @@ WHERE UniqueKey = @UniqueKey", invitation);
 
                 return new SendMailResultModel
                 {
-                    IsEmailSent = true
-                };
             }
             catch (Exception ex)
             {
