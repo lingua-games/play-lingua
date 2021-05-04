@@ -5,4 +5,5 @@ export interface GameMenu {
   isDesigned: boolean;
   id: string;
   gifUrl: string;
+  isGifLoading: boolean;
 }
