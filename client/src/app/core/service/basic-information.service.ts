@@ -331,28 +331,65 @@ export class BasicInformationService {
             Choose an answer
            </div>
         </div>
-
+      `;
+    } else if (game === GameNameEnum.supperMario) {
+      result = `
+        <div class='row' style='margin: 0'>
+          <div class='col-sm-12 mt-3'>
+            <div class='row'>
+               <div class='col-sm-3'>
+                  <a style='border: solid 1px gray; padding: 5px 1rem;'>ESC</a>
+              </div>
+               <div class='col-sm-6'>
+                Exit game
+               </div>
+            </div>
+          </div>
+          <div class='col-sm-6 mt-3'>
+            <div class='row'>
+               <div class='col-sm-6'>
+                  <a style='border: solid 1px gray; padding: 5px 1rem;'>A</a>
+                  <a style='border: solid 1px gray; padding: 5px 1rem; margin-left: 1%'>←</a>
+              </div>
+               <div class='col-sm-6'>
+                Move left
+               </div>
+            </div>
+          </div>
+          <div class='col-sm-6 mt-3'>
+            <div class='row'>
+               <div class='col-sm-6'>
+                  <a style='border: solid 1px gray; padding: 5px 1rem;'>D</a>
+                  <a style='border: solid 1px gray; padding: 5px 1rem; margin-left: 1%'>→</a>
+              </div>
+               <div class='col-sm-6'>
+                Move right
+               </div>
+            </div>
+          </div>
+          <div class='col-sm-6 mt-3'>
+            <div class='row'>
+               <div class='col-sm-6'>
+                  <a style='border: solid 1px gray; padding: 5px 1rem;'>SPACE</a>
+              </div>
+               <div class='col-sm-6'>
+                Jump
+               </div>
+            </div>
+          </div>
+          <div class='col-sm-6 mt-3'>
+            <div class='row'>
+               <div class='col-sm-6'>
+                  <a style='border: solid 1px gray; padding: 5px 1rem;'>Q</a>
+              </div>
+               <div class='col-sm-6'>
+                Skip mushroom
+               </div>
+            </div>
+          </div>
+        </div>
       `;
     }
-
-    // if (game === GameNameEnum.supperMario) {
-    //   result.push({
-    //     key: '← / A',
-    //     description: 'Move left',
-    //   });
-    //   result.push({
-    //     key: '→ / D',
-    //     description: 'Move right',
-    //   });
-    //   result.push({
-    //     key: '[Q]',
-    //     description: 'Skip answer',
-    //   });
-    //   result.push({
-    //     key: '[Space]',
-    //     description: 'Jump',
-    //   });
-
     return this.sanitizer.bypassSecurityTrustHtml(result);
   }
 

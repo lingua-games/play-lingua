@@ -64,6 +64,7 @@ export class FallingStarsComponent implements OnInit {
   chapterId?: number;
   isGameFinished = false;
   feedbackForm?: InvitationForm;
+  arabicPattern = /[\u0600-\u06FF]/;
 
   @HostListener('document:keyup ', ['$event'])
   keyUpEvent(event: KeyboardEvent): void {
@@ -229,6 +230,7 @@ export class FallingStarsComponent implements OnInit {
 
   setGameWords(res: WordKeyValueModel<string[]>[]): void {
     this.words = [];
+
     res.forEach((element: WordKeyValueModel<string[]>) => {
       this.words.push({
         key: element.key,
@@ -236,6 +238,8 @@ export class FallingStarsComponent implements OnInit {
         style: {
           left: `${this.getRandomNumber()}%`,
           animation: 'loading-star-animation 300ms linear infinite',
+          fontSize: this.arabicPattern.test(element.key) ? '1.4vw' : '1vw',
+          fontWeight: this.arabicPattern.test(element.key) ? '700' : 'normal',
         } as ElementStyle,
         selectedAnswer: '',
         correctShowingAnswer: '',
@@ -332,6 +336,8 @@ export class FallingStarsComponent implements OnInit {
       word.style = {
         left: `${this.getRandomNumber()}%`,
         animation: 'loading-star-animation 300ms linear infinite',
+        fontSize: this.arabicPattern.test(word.key) ? '1.4vw' : '1vw',
+        fontWeight: this.arabicPattern.test(word.key) ? '700' : 'normal',
       } as ElementStyle;
       word.isBlinking = true;
       this.words.push(JSON.parse(JSON.stringify(word)));
@@ -356,6 +362,8 @@ export class FallingStarsComponent implements OnInit {
         word.style = {
           left: `${this.getRandomNumber()}%`,
           animation: 'loading-star-animation 300ms linear infinite',
+          fontSize: this.arabicPattern.test(word.key) ? '1.4vw' : '1vw',
+          fontWeight: this.arabicPattern.test(word.key) ? '700' : 'normal',
         } as ElementStyle;
         word.isBlinking = true;
         this.words.push(JSON.parse(JSON.stringify(word)));

@@ -56,6 +56,10 @@ namespace PlayLingua.Data
 
         public List<Book> GetBySourceAndTargetLanguageId(int baseLanguageId, int targetLanguageId)
         {
+            if (db.State != ConnectionState.Closed)
+            {
+                db.Close();
+            }
             return db.Query<Book>(@"
                             select * from dbo.Book 
                                 where 

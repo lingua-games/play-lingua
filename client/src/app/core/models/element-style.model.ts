@@ -15,6 +15,7 @@ export interface ElementStyle {
   minWidth?: string;
   maxWidth?: string;
   fontSize?: string;
+  fontWeight?: string;
   backgroundColor?: string;
   opacity: string;
   background?: string;
