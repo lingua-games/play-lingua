@@ -159,7 +159,7 @@ WHERE UniqueKey = @UniqueKey", invitation);
                     DeliveryMethod = SmtpDeliveryMethod.Network,
                     Credentials = new NetworkCredential(_email.Username, _email.Password), // you must give a full email address for authentication 
                     TargetName = "STARTTLS/smtp.office365.com", // Set to avoid MustIssueStartTlsFirst exception
-                    EnableSsl = true // Set to avoid secure connection exception
+                    EnableSsl = true // Set to avoid secure connection exception  
                 })
                 {
                     MailMessage message = new MailMessage()
