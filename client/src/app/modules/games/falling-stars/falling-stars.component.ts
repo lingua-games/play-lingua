@@ -336,6 +336,8 @@ export class FallingStarsComponent implements OnInit {
       word.style = {
         left: `${this.getRandomNumber()}%`,
         animation: 'loading-star-animation 300ms linear infinite',
+        fontSize: this.arabicPattern.test(word.key) ? '1.4vw' : '1vw',
+        fontWeight: this.arabicPattern.test(word.key) ? '700' : 'normal',
       } as ElementStyle;
       word.isBlinking = true;
       this.words.push(JSON.parse(JSON.stringify(word)));
@@ -360,6 +362,8 @@ export class FallingStarsComponent implements OnInit {
         word.style = {
           left: `${this.getRandomNumber()}%`,
           animation: 'loading-star-animation 300ms linear infinite',
+          fontSize: this.arabicPattern.test(word.key) ? '1.4vw' : '1vw',
+          fontWeight: this.arabicPattern.test(word.key) ? '700' : 'normal',
         } as ElementStyle;
         word.isBlinking = true;
         this.words.push(JSON.parse(JSON.stringify(word)));
