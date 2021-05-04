@@ -15,6 +15,7 @@ import { SelectDefaultLanguageDialogComponent } from '../../../core/dialogs/sele
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { SetDefaultLanguageModel } from '../../../core/models/set-default-language.model';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-game-menu',
@@ -41,7 +42,8 @@ export class GameMenuComponent implements OnInit {
     private notificationService: NotificationService,
     public securityService: SecurityService,
     private dialog: MatDialog,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -143,8 +145,21 @@ export class GameMenuComponent implements OnInit {
 
   getMenus(): void {
     this.gameMenus = this.basicInformationService.getGameMenus();
+    this.gameMenus.forEach((gameMenu: GameMenu) => {
+      this.loadImages(gameMenu);
+    });
   }
 
+  loadImages(gameMenu: GameMenu): void {
+    gameMenu.isGifLoading = true;
+    this.basicInformationService.loadFile(gameMenu.gifUrl).subscribe((res) => {
+      gameMenu.isGifLoading = false;
+      const objectURL = URL.createObjectURL(res);
+      gameMenu.gifUrl = this.sanitizer.bypassSecurityTrustUrl(
+        objectURL
+      ) as string;
+    });
+  }
   setBackgroundImage(image: string): {} {
     return {
       background: `url("${image}") no-repeat center`,

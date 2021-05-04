@@ -37,11 +37,11 @@ export class BasicInformationService {
     const menus: GameMenu[] = [];
     menus.push({
       name: 'Falling Stars',
-      image: './../../../../assets/images/GameMenu/falling-star.png',
+      image: '/assets/images/GameMenu/falling-star.png',
       route: '../games/falling-stars',
       id: 'falling-stars',
       isDesigned: true,
-      gifUrl: './../../../../assets/GIFs/falling-stars-demo.gif',
+      gifUrl: '/assets/GIFs/falling-stars-demo.gif',
     } as GameMenu);
     menus.push({
       name: 'Super Mario',
@@ -49,13 +49,13 @@ export class BasicInformationService {
       route: '../games/super-mario',
       id: 'super-mario',
       isDesigned: true,
-      gifUrl: './../../../../assets/GIFs/super-mario.gif',
+      gifUrl: '/assets/GIFs/super-mario.gif',
     } as GameMenu);
     menus.push({
       name: 'Game',
       image: './../../../../assets/images/GameMenu/game.jpg',
       isDesigned: false,
-      gifUrl: './../../../../assets/GIFs/coming-soon.gif',
+      gifUrl: '/assets/GIFs/coming-soon.gif',
     } as GameMenu);
     return menus;
   }
