@@ -64,7 +64,7 @@ export class BasicInformationService {
     // below comments are for insert initial data into table when table is empty
     // const items = [
     //   { code: 'ab', name: 'Abkhaz', nativeName: 'аҧсуа' },
-    //   { code: 'aa', name: 'Afar', nativeName: 'Afaraf' },
+    //   { code: 'aa', name: 'Afar', nativeName: 'Afaraf ' },
     //   { code: 'af', name: 'Afrikaans', nativeName: 'Afrikaans' },
     //   { code: 'ak', name: 'Akan', nativeName: 'Akan' },
     //   { code: 'sq', name: 'Albanian', nativeName: 'Shqip' },
