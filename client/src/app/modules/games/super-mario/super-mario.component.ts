@@ -25,6 +25,7 @@ import { ScoreStoreInterface } from '../../../core/models/score-store.interface'
 import { SoundService } from '../../../core/service/sound.service';
 import { GameActionEnum } from '../../../core/models/game-action.enum';
 import { SecurityService } from '../../../core/service/security.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-super-mario',
@@ -104,7 +105,8 @@ export class SuperMarioComponent implements OnInit {
     private basicInformationService: BasicInformationService,
     private scoreStorageService: ScoreStorageService,
     private soundService: SoundService,
-    private securityService: SecurityService
+    private securityService: SecurityService,
+    private route: ActivatedRoute
   ) {}
 
   @HostListener('window:resize', ['$event'])
@@ -173,6 +175,13 @@ export class SuperMarioComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.route.paramMap.subscribe((paramMap) => {
+      const invitationCode = paramMap.get('code');
+      if (invitationCode) {
+        this.feedbackForm = { uniqueKey: invitationCode } as InvitationForm;
+      }
+    });
+
     this.mario.setStyle({
       position: 'absolute',
       bottom: '10%',
@@ -223,6 +232,7 @@ export class SuperMarioComponent implements OnInit {
   }
 
   showStartDialog(): void {
+    this.soundService.stopGameSong(GameActionEnum.backGroundSond);
     this.enemies = [];
     this.guidBoxShowing = false;
     this.dialog
@@ -234,6 +244,8 @@ export class SuperMarioComponent implements OnInit {
           hints: this.basicInformationService.gameHints(
             GameNameEnum.supperMario
           ),
+          isFeedback: !!this.feedbackForm,
+          feedbackForm: this.feedbackForm,
         } as GameInformationInterface,
         disableClose: true,
         width: '60%',
