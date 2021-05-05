@@ -31,6 +31,13 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'games/feedback/super-mario/:code',
+    loadChildren: () =>
+      import('./modules/games/super-mario/super-mario.module').then(
+        (x) => x.SuperMarioModule
+      ),
+  },
+  {
     path: 'games/super-mario',
     loadChildren: () =>
       import('./modules/games/super-mario/super-mario.module').then(
