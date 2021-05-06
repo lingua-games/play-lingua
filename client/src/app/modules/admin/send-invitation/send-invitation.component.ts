@@ -52,24 +52,24 @@ export class SendInvitationComponent implements OnInit {
     this.getGames();
     this.getUserList();
 
-    this.form.email = 'vbhost.ir@gmail.com';
-    this.form.playerName = 'Arash';
-    this.form.baseLanguage = {
-      id: 399,
-      code: 'en',
-      name: 'English',
-      nativeName: 'English',
-      fullName: 'English - English',
-    };
-    this.form.targetLanguage = {
-      code: 'nl',
-      fullName: 'Dutch - Nederlands, Vlaams',
-      id: 398,
-      name: 'Dutch',
-      nativeName: 'Nederlands, Vlaams',
-    };
-    this.form.gameObj = this.games[0];
-    this.preview();
+    // this.form.email = 'vbhost.ir@gmail.com';
+    // this.form.playerName = 'Arash';
+    // this.form.baseLanguage = {
+    //   id: 399,
+    //   code: 'en',
+    //   name: 'English',
+    //   nativeName: 'English',
+    //   fullName: 'English - English',
+    // };
+    // this.form.targetLanguage = {
+    //   code: 'nl',
+    //   fullName: 'Dutch - Nederlands, Vlaams',
+    //   id: 398,
+    //   name: 'Dutch',
+    //   nativeName: 'Nederlands, Vlaams',
+    // };
+    // this.form.gameObj = this.games[0];
+    // this.preview();
   }
 
   getUserList(): void {
