@@ -19,7 +19,6 @@ import { UserModel } from '../../../core/models/user.model';
 import { MatDialog } from '@angular/material/dialog';
 import { InvitationPreviewDialogComponent } from '../invitation-preview-dialog/invitation-preview-dialog.component';
 import { environment } from '../../../../environments/environment';
-import { GameNameEnum } from '../../../core/models/game-name.enum';
 
 @Component({
   selector: 'app-send-invitation',
@@ -52,24 +51,24 @@ export class SendInvitationComponent implements OnInit {
     this.getGames();
     this.getUserList();
 
-    // this.form.email = 'vbhost.ir@gmail.com';
-    // this.form.playerName = 'Arash';
-    // this.form.baseLanguage = {
-    //   id: 399,
-    //   code: 'en',
-    //   name: 'English',
-    //   nativeName: 'English',
-    //   fullName: 'English - English',
-    // };
-    // this.form.targetLanguage = {
-    //   code: 'nl',
-    //   fullName: 'Dutch - Nederlands, Vlaams',
-    //   id: 398,
-    //   name: 'Dutch',
-    //   nativeName: 'Nederlands, Vlaams',
-    // };
-    // this.form.gameObj = this.games[0];
-    // this.preview();
+    this.form.email = 'vbhost.ir@gmail.com';
+    this.form.playerName = 'Arash';
+    this.form.baseLanguage = {
+      id: 399,
+      code: 'en',
+      name: 'English',
+      nativeName: 'English',
+      fullName: 'English - English',
+    };
+    this.form.targetLanguage = {
+      code: 'nl',
+      fullName: 'Dutch - Nederlands, Vlaams',
+      id: 398,
+      name: 'Dutch',
+      nativeName: 'Nederlands, Vlaams',
+    };
+    this.form.gameObj = this.games[0];
+    this.preview();
   }
 
   getUserList(): void {
@@ -203,104 +202,60 @@ export class SendInvitationComponent implements OnInit {
       return;
     }
     this.form.generatedLink = this.generateLink();
-    this.form.gifAddress = `../../../assets/GIFs/email/${this.form.gameObj.gameNameForRanking}.gif`;
 
     let template = '';
-    if (this.form.gameObj.code === GameNameEnum.supperMario) {
-      template = `
+    template = `
       <div style='
             background-color: #EFEEE9;
-            padding: 20px;
             margin: 5vh 30%;
             width: 40%;
             color:#2F4858;
             font-size: .7vw'>
-      <div class='text-center' style='margin: -20px'>
-        <img src='${environment.productionUrl}assets/email/${this.form.gameObj.gameNameForRanking}.jpg'
-        style='height: 15rem;width: 100%;    box-shadow: 0rem 5px 95px 5px lightgrey;margin-bottom: 2rem'>
+      <div class='text-center' style='
+      box-shadow: 0rem 5px 95px 5px lightgrey;
+      height: 15rem;
+      background-image: url(${environment.productionUrl}assets/email/${this.form.gameObj.gameNameForRanking}.jpg);
+      background-position: center center;
+      background-size: 100% 100%;
+      background-repeat: no-repeat'>
       </div>
-      <p>Dear ${this.form.playerName},</p>
-      <hr>
-      <p>
-        This is Arash and I am happy to invite you to play my web based game <span style='font-style: italic'>"${this.form.gameObj.name}"</span>
-        <a style='text-decoration: underline' href='${this.form.generatedLink}'>via this link</a>
-        and I would be really grateful if you let me have your opinion for further improvements.
-      </p>
-      <p>
-        In this game, the initial assumption is that you know ${this.form.baseLanguage.name} as your base language and you would like to
-        practice ${this.form.targetLanguage.name} as your target language.
-      </p>
-      <p>
-        Please send me your feedback by replying to this email or simply give me a call.
-      </p>
-      <p>
-        Thanks in advance for your time and valuable feedback.
-      </p>
-      <p>
-        The source code can be found on
-        <a style='text-decoration: underline' href='https://github.com/lingua-games/play-lingua'>Github</a>
-      </p>
-      <hr>
-      <p>
-        Best regards,
-        <br>
-        Arash
-        <br>
-        +31645241080
-        <br>
-        <a style='text-decoration: underline;' href='https://github.com/arashbahreini'>Github</a>,
-        <a style='text-decoration: underline;' href='https://www.linkedin.com/in/arash-bahreini-100296139/'>Linkedin</a>,
-        <a style='text-decoration: underline;' href='https://stackoverflow.com/users/3773888/arash'>Stackoverflow</a>
-      </p>
-      `;
-    } else if (this.form.gameObj.code === GameNameEnum.fallingStars) {
-      template = `
-      <div style='
-            background-color: #EFEEE9;
-            padding: 20px;
-            margin: 5vh 30%;
-            width: 40%;
-            color:#2F4858;
-            font-size: .7vw'>
-      <div class='text-center' style='margin: -20px'>
-        <img src='${environment.productionUrl}assets/email/${this.form.gameObj.gameNameForRanking}.jpg'
-        style='height: 15rem;width: 100%;box-shadow: 0rem 5px 95px 5px gray;margin-bottom: 2rem'>
+      <div style='margin: 20px'>
+            <p>Dear ${this.form.playerName},</p>
+            <hr>
+            <p>
+              This is Arash and I am happy to invite you to play my web based game <span style='font-style: italic'>"${this.form.gameObj.name}"</span>
+              <a style='text-decoration: underline' href='${this.form.generatedLink}'>via this link</a>
+              and I would be really grateful if you let me have your opinion for further improvements.
+            </p>
+            <p>
+              In this game, the initial assumption is that you know ${this.form.baseLanguage.name} as your base language and you would like to
+              practice ${this.form.targetLanguage.name} as your target language.
+            </p>
+            <p>
+              Please send me your feedback by replying to this email or simply give me a call.
+            </p>
+            <p>
+              Thanks in advance for your time and valuable feedback.
+            </p>
+            <p>
+              The source code can be found on
+              <a style='text-decoration: underline' href='https://github.com/lingua-games/play-lingua'>Github</a>
+            </p>
+            <hr>
+            <p>
+              Best regards,
+              <br>
+              Arash
+              <br>
+              +31645241080
+              <br>
+              <a style='text-decoration: underline;' href='https://github.com/arashbahreini'>Github</a>,
+              <a style='text-decoration: underline;' href='https://www.linkedin.com/in/arash-bahreini-100296139/'>Linkedin</a>,
+              <a style='text-decoration: underline;' href='https://stackoverflow.com/users/3773888/arash'>Stackoverflow</a>
+            </p>
+            <br>
       </div>
-      <p>Dear ${this.form.playerName},</p>
-      <hr>
-      <p>
-        This is Arash and I am happy to invite you to play my web based game <span style='font-style: italic'>"${this.form.gameObj.name}"</span>
-        <a style='text-decoration: underline' href='${this.form.generatedLink}'>via this link</a>
-        and I would be really grateful if you let me have your opinion for further improvements.
-      </p>
-      <p>
-        In this game, the initial assumption is that you know ${this.form.baseLanguage.name} as your base language and you would like to
-        practice ${this.form.targetLanguage.name} as your target language.
-      </p>
-      <p>
-        Please send me your feedback by replying to this email or simply give me a call.
-      </p>
-      <p>
-        Thanks in advance for your time and valuable feedback.
-      </p>
-      <p>
-        The source code can be found on
-        <a style='text-decoration: underline' href='https://github.com/lingua-games/play-lingua'>Github</a>
-      </p>
-      <hr>
-      <p>
-        Best regards,
-        <br>
-        Arash
-        <br>
-        +31645241080
-        <br>
-        <a style='text-decoration: underline;' href='https://github.com/arashbahreini'>Github</a>,
-        <a style='text-decoration: underline;' href='https://www.linkedin.com/in/arash-bahreini-100296139/'>Linkedin</a>,
-        <a style='text-decoration: underline;' href='https://stackoverflow.com/users/3773888/arash'>Stackoverflow</a>
-      </p>
       `;
-    }
 
     this.form.html = this.sanitizer.bypassSecurityTrustHtml(template);
     this.form.htmlText = template;
