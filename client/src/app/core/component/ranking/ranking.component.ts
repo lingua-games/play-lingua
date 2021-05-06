@@ -43,6 +43,7 @@ export class RankingComponent implements OnInit {
     this.ranks.setLoading(true);
     this.scoreStorageService
       .storeScore({
+        feedbackUniqueKey: this.data.feedbackForm.uniqueKey,
         isFeedback: this.data.isFeedback,
         email: this.data.isFeedback ? this.data.feedbackForm.email : '',
         bookId: this.data.isFeedback

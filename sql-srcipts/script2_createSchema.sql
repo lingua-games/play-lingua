@@ -143,6 +143,7 @@ GO
 CREATE TABLE [dbo].[GameScores] (
 		[Id] int IDENTITY(1,1) PRIMARY KEY,
 		[UserId] int,
+		[FeedbackUniqueKey] uniqueidentifier,
 		[GuestCode] nvarchar(100),
 		[GameName] nvarchar(100),
 		[Bookid] int,
