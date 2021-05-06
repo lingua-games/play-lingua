@@ -46,20 +46,20 @@ namespace PlayLingua.Unit.Test.Controllers
             Assert.Equal(_fakeUserListViewModel.Count, (testResult.Value as List<UserViewModel>).Count);
         }
 
-        [Fact]
-        public void GetUserInformation_Should_Get_User_Information()
-        {
-            // Arrange
-            var expectedResult = _fakeUserListViewModel.SingleOrDefault(x => x.Id == 1);
-            _mockUserRepo.Setup(repo => repo.GetUserInformation(0)).Returns(_fakeUserList.SingleOrDefault(x => x.Id == 1));
+        //[Fact]
+        //public void GetUserInformation_Should_Get_User_Information()
+        //{
+        //    // Arrange
+        //    var expectedResult = _fakeUserListViewModel.SingleOrDefault(x => x.Id == 1);
+        //    _mockUserRepo.Setup(repo => repo.GetUserInformation(0)).Returns(_fakeUserList.SingleOrDefault(x => x.Id == 1));
 
-            // Act
-            var methodResult = _mockController.GetUserInformation();
+        //    // Act
+        //    var methodResult = _mockController.GetUserInformation();
 
-            // Assert
-            var testResult = methodResult.Result as OkObjectResult;
-            Assert.Equal(expectedResult.Id, (testResult.Value as UserViewModel).Id);
-        }
+        //    // Assert
+        //    var testResult = methodResult.Result as OkObjectResult;
+        //    Assert.Equal(expectedResult.Id, (testResult.Value as UserViewModel).Id);
+        //}
 
         [Fact]
         public void Add_Should_Return_406_If_Email_Is_Exist()
