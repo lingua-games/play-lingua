@@ -1,12 +1,32 @@
 <div class="row">
-  <div class="col-sm-6">
+  <div class="col-sm-12">
     <div class="alert alert-primary text-center" role="alert">
       Here we invite a person to play a part of a game in a particular condition
     </div>
     <form>
+      <div class="mb-2">
+        <h3>User list</h3>
+        <fa-icon
+          [icon]="['fas', 'trash']"
+          class="btn btn-danger mr-1 mb-1"
+          (click)="clearEmailSelection()"
+        ></fa-icon>
+        <p-dropdown
+          [options]="userList.data"
+          [filter]="true"
+          [(ngModel)]="selectedUser"
+          name="base-language"
+          filterBy="EmailAndDisplayName"
+          optionLabel="EmailAndDisplayName"
+          placeholder="Select a user"
+          (ngModelChange)="fillEmailAndDisplayName($event)"
+        ></p-dropdown>
+      </div>
+      <hr />
       <div class="form-group">
         <h3>Email</h3>
         <input
+          [disabled]="selectedUser.email"
           type="email"
           class="form-control"
           id="email"
@@ -19,6 +39,7 @@
       <div class="form-group">
         <h3>Player name</h3>
         <input
+          [disabled]="selectedUser.displayName"
           type="text"
           class="form-control"
           id="fullName"
@@ -27,6 +48,7 @@
           [(ngModel)]="form.playerName"
         />
       </div>
+
       <div class="mb-2">
         <h3>Base language</h3>
         <p-dropdown

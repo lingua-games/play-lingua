@@ -3,6 +3,7 @@ using PlayLingua.Contract.ViewModels;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Ports;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PlayLingua.Host.Controllers
@@ -57,7 +58,7 @@ namespace PlayLingua.Host.Controllers
         public ActionResult<InvitationViewModel> GetInvitationByUniqueKey(string uniqueCode)
         {
             var result = _adminRepository.GetInvitationByUniqueKey(uniqueCode);
- 
+
             return Ok(new InvitationViewModel
             {
                 UniqueKey = result.UniqueKey,
@@ -95,18 +96,21 @@ namespace PlayLingua.Host.Controllers
                     Id = x.BookId != null ? (int)x.BookId : 0,
                     Name = x.BookId != null ? books.Find(b => b.Id == (int)x.BookId).Name : ""
                 },
-                Chapter = new ChapterViewModel { 
-                    Id = x.ChapterId != null ? (int)x.ChapterId : 0 ,
+                Chapter = new ChapterViewModel
+                {
+                    Id = x.ChapterId != null ? (int)x.ChapterId : 0,
                     Name = x.ChapterId != null ? chapter.Find(b => b.Id == (int)x.ChapterId).Name : ""
                 },
                 IsOpened = x.IsOpened,
                 OpenedDate = x.OpenedDate,
                 PlayerName = x.PlayerName,
-                TargetLanguage = new LanguageViewModel { 
-                    Id = x.TargetLanguageId, 
-                    FullName =  languages.Find(l => l.Id == x.TargetLanguageId).FullName
+                TargetLanguage = new LanguageViewModel
+                {
+                    Id = x.TargetLanguageId,
+                    FullName = languages.Find(l => l.Id == x.TargetLanguageId).FullName
                 },
-                BaseLanguage = new LanguageViewModel { 
+                BaseLanguage = new LanguageViewModel
+                {
                     Id = x.BaseLanguageId,
                     FullName = languages.Find(l => l.Id == x.BaseLanguageId).FullName
                 },
@@ -172,5 +176,14 @@ namespace PlayLingua.Host.Controllers
             return Ok();
         }
 
+        [HttpGet("get-user-list-for-invitations")]
+        public ActionResult<List<UserListForInvitationViewModel>> GetUserListForInvitation()
+        {
+            return _adminRepository.GetUserListForInvitation().Select(x => new UserListForInvitationViewModel
+            {
+                DisplayName = x.DisplayName,
+                Email = x.Email
+            }).ToList();
+        }
     }
 }

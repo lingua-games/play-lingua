@@ -16,6 +16,7 @@ import { InvitationService } from '../../../core/service/invitation.service';
 import { UUID } from 'angular2-uuid';
 import { environment } from '../../../../environments/environment.prod';
 import { DomSanitizer } from '@angular/platform-browser';
+import { UserModel } from '../../../core/models/user.model';
 
 @Component({
   selector: 'app-send-invitation',
@@ -39,10 +40,43 @@ export class SendInvitationComponent implements OnInit {
   previewText = '';
   games: GameInformationInterface[] = [];
   isFormLoading = false;
+  userList: ApiResult<UserModel[]> = new ApiResult<UserModel[]>();
+  selectedUser: UserModel = {} as UserModel;
 
   ngOnInit(): void {
     this.getLanguages();
     this.getGames();
+    this.getUserList();
+  }
+
+  getUserList(): void {
+    this.userList.setLoading(true);
+    this.invitationService.getUserList().subscribe(
+      (res: UserModel[]) => {
+        this.userList.setData(res);
+        this.userList.data = this.userList.data.map((x) => {
+          return {
+            EmailAndDisplayName: x.email + '  |  ' + x.displayName,
+            email: x.email,
+            displayName: x.displayName,
+          } as UserModel;
+        });
+      },
+      (error: string) => {
+        this.userList.setError(error);
+      }
+    );
+  }
+
+  clearEmailSelection(): void {
+    this.selectedUser = {} as UserModel;
+    this.form.email = '';
+    this.form.playerName = '';
+  }
+
+  fillEmailAndDisplayName(event: UserModel): void {
+    this.form.email = event.email;
+    this.form.playerName = event.displayName;
   }
 
   getGames(): void {

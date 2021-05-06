@@ -191,5 +191,10 @@ WHERE UniqueKey = @UniqueKey", invitation);
                 };
             }
         }
+
+        public List<UserListForInvitationModel> GetUserListForInvitation()
+        {
+            return db.Query<UserListForInvitationModel>(@"SELECT [Email],[DisplayName] FROM [dbo].[Users]").ToList();
+        }
     }
 }
