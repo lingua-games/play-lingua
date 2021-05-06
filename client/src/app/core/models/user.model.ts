@@ -10,4 +10,5 @@ export interface UserModel {
   defaultBaseLanguage: number;
   defaultTargetLanguage: number;
   totalScore: number;
+  EmailAndDisplayName: string;
 }

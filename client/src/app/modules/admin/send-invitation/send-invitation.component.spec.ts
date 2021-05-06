@@ -16,24 +16,33 @@ import { InvitationForm } from '../../../core/models/invitation-form.interface';
 import { ChapterModel } from '../../../core/models/chapter.model';
 import { GameInformationInterface } from '../../../core/models/game-information.interface';
 import { InvitationService } from '../../../core/service/invitation.service';
+import { MatDialog } from '@angular/material/dialog';
 
 describe('SendInvitationComponent', () => {
   let component: SendInvitationComponent;
   let mockBookChapterService;
   let fixture: ComponentFixture<SendInvitationComponent>;
   let mockMessageService;
+  let mockMatDialog;
   let mockBasicInformationService;
   let mockActivatedRouteWithGet;
   let mockNotificationService;
   let mockInvitationService;
 
   beforeEach(async () => {
+    mockMatDialog = jasmine.createSpyObj('dialog', {
+      open: {
+        afterClosed: () => {
+          return of();
+        },
+      },
+    });
     mockBookChapterService = jasmine.createSpyObj([
       'getBooksBySourceAndTargetLanguageId',
       'getChaptersByBookId',
       'getBooksByLanguage',
     ]);
-    mockInvitationService = jasmine.createSpyObj(['send']);
+    mockInvitationService = jasmine.createSpyObj(['send', 'getUserList']);
     mockBasicInformationService = jasmine.createSpyObj(['getAllLanguages']);
     mockMessageService = jasmine.createSpyObj(['add']);
     mockNotificationService = jasmine.createSpyObj(['showMessage']);
@@ -54,6 +63,10 @@ describe('SendInvitationComponent', () => {
         {
           provide: BookChapterService,
           useValue: mockBookChapterService,
+        },
+        {
+          provide: MatDialog,
+          useValue: mockMatDialog,
         },
         {
           provide: InvitationService,
@@ -83,6 +96,7 @@ describe('SendInvitationComponent', () => {
 
   it('should create', () => {
     spyOn(component, 'getLanguages');
+    spyOn(component, 'getUserList');
 
     fixture.detectChanges();
 

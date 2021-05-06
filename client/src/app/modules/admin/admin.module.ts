@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { SendInvitationComponent } from './send-invitation/send-invitation.component';
 import { PrimengModule } from '../common/primeng/primeng.module';
 import { ViewInvitationsComponent } from './view-invitations/view-invitations.component';
+import { InvitationPreviewDialogComponent } from './invitation-preview-dialog/invitation-preview-dialog.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { ViewInvitationsComponent } from './view-invitations/view-invitations.co
     AddEditBookDialogComponent,
     SendInvitationComponent,
     ViewInvitationsComponent,
+    InvitationPreviewDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -31,5 +33,6 @@ import { ViewInvitationsComponent } from './view-invitations/view-invitations.co
     MaterialModule,
     PrimengModule,
   ],
+  entryComponents: [InvitationPreviewDialogComponent],
 })
 export class AdminModule {}

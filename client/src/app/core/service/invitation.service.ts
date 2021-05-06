@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { InvitationForm } from '../models/invitation-form.interface';
 import { environment } from '../../../environments/environment';
+import { UserModel } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +23,12 @@ export class InvitationService {
   getInvitation(uniqueKey: string): Observable<InvitationForm> {
     return this.http.get<InvitationForm>(
       this.adminApi + '/get-invitation-by-unique-key/' + uniqueKey
+    );
+  }
+
+  getUserList(): Observable<UserModel[]> {
+    return this.http.get<UserModel[]>(
+      this.adminApi + '/get-user-list-for-invitations/'
     );
   }
 

@@ -24,4 +24,5 @@ export interface InvitationForm {
   emailErrorMessage: string;
   isEmailSent: boolean;
   isSendingInvitationLoading?: boolean;
+  gifAddress: string;
 }

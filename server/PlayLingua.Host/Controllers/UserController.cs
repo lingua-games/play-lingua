@@ -41,7 +41,12 @@ namespace PlayLingua.Host.Controllers
         [HttpGet("get-user-information")]
         public ActionResult<UserViewModel> GetUserInformation()
         {
-            var repositoryResult = _userRepository.GetUserInformation(GetUser().Id);
+            var user = GetUser();
+            if (user.Id == 0)
+            {
+                return Unauthorized();
+            }
+            var repositoryResult = _userRepository.GetUserInformation(user.Id);
             return Ok(new UserViewModel
             {
                 Email = repositoryResult.Email,

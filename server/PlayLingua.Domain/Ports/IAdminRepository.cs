@@ -13,5 +13,6 @@ namespace PlayLingua.Domain.Ports
         Invitation GetInvitationByUniqueKey(string UniqueKey);
         void UpdateInvitation(Invitation invitation);
         void SetInvitationToOpen(Invitation invitation);
+        List<UserListForInvitationModel> GetUserListForInvitation();
     }
 }
