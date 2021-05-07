@@ -218,7 +218,7 @@ export class SendInvitationComponent implements OnInit {
       <div class='text-center' style='
       box-shadow: 0rem 5px 95px 5px lightgrey;
       height: 15rem;
-      background-image: url(${environment.productionUrl}assets/email/${this.form.gameObj.gameNameForRanking}.jpg);
+      background-image: url(${environment.productionUrl}/assets/email/${this.form.gameObj.gameNameForRanking}.jpg);
       background-position: center center;
       background-size: 100% 100%;
       background-repeat: no-repeat'>
