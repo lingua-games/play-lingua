@@ -22,10 +22,13 @@ namespace PlayLingua.Data
 
         public int GetWordsCountForGame(GetWordsForGameInputModel model)
         {
-            var sql = @"select count(*) from [dbo].[Word] 
-                                            WHERE 
-                                            TargetLanguageId = @DefaultTargetLanguage AND
-                                            BaseLanguageId = @DefaultBaseLanguage ";
+            var sql = @"
+                        select Distinct BaseWord from [dbo].[Word] 
+                        WHERE 
+                            TargetLanguageId = @DefaultTargetLanguage AND
+                            BaseLanguageId = @DefaultBaseLanguage 
+                            
+                        ";
             if (model.BookId != 0)
             {
                 sql += "AND BookId = @BookId ";
@@ -34,7 +37,7 @@ namespace PlayLingua.Data
                     sql += "AND ChapterId = @ChapterId";
                 }
             }
-            return db.Query<int>(sql, model).SingleOrDefault();
+            return db.Query<string>(sql, model).Count();
         }
 
         public List<GetWordsForGameResponseModel> GetWordsForGame(GetWordsForGameInputModel model)

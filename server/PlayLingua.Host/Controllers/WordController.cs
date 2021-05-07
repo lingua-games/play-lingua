@@ -148,7 +148,7 @@ namespace PlayLingua.Host.Controllers
                 ChapterName = x.ChapterName,
                 Count = x.Count,
                 TargetLanguageId = x.TargetLanguageId,
-                LastUpdateDate = x.LastUpdateDate != null ? x.LastUpdateDate : x.AddedDate,
+                LastUpdateDate = x.LastUpdateDate ?? x.AddedDate,
                 TargetLanguageName = x.TargetLanguageName
             }).ToList());
         }

@@ -180,35 +180,34 @@ WHERE UniqueKey = @UniqueKey", invitation);
         {
             try
             {
-                using (var client = new System.Net.Mail.SmtpClient() {
+                using var client = new System.Net.Mail.SmtpClient()
+                {
                     Host = "smtp.office365.com",
                     Port = 587,
-                    UseDefaultCredentials = false, 
+                    UseDefaultCredentials = false,
                     DeliveryMethod = SmtpDeliveryMethod.Network,
                     Credentials = new NetworkCredential(_email.Username, _email.Password), // you must give a full email address for authentication 
                     TargetName = "STARTTLS/smtp.office365.com", // Set to avoid MustIssueStartTlsFirst exception
                     EnableSsl = true // Set to avoid secure connection exception   
-                })
+                };
+                MailMessage message = new MailMessage()
                 {
-                    MailMessage message = new MailMessage()
-                    {
-                        From = new MailAddress(_email.Username), // sender must be a full email address
-                        Subject = invitation.Title,
-                        IsBodyHtml = true,
-                        Body = invitation.HtmlText,
-                        BodyEncoding = System.Text.Encoding.UTF8,
-                        SubjectEncoding = System.Text.Encoding.UTF8,
-                        
+                    From = new MailAddress(_email.Username), // sender must be a full email address
+                    Subject = invitation.Title,
+                    IsBodyHtml = true,
+                    Body = invitation.HtmlText,
+                    BodyEncoding = System.Text.Encoding.UTF8,
+                    SubjectEncoding = System.Text.Encoding.UTF8,
 
-                    };
 
-                    message.To.Add(invitation.Email);
-                    client.Send(message);
-                    return new SendMailResultModel
-                    {
-                        IsEmailSent = true
-                    };
-                }
+                };
+
+                message.To.Add(invitation.Email);
+                client.Send(message);
+                return new SendMailResultModel
+                {
+                    IsEmailSent = true
+                };
             }
             catch (Exception ex)
             {

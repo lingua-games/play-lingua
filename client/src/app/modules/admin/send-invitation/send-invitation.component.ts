@@ -233,7 +233,7 @@ export class SendInvitationComponent implements OnInit {
             </p>
             <p>
               In this game, the initial assumption is that you know ${this.form.baseLanguage.name} as your base language and you would like to
-              practice ${this.form.targetLanguage.name} as your target language.
+              improve your ${this.form.targetLanguage.name} as your target language.
             </p>
             <p>
               Please send me your feedback by replying to this email or simply give me a call.

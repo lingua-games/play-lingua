@@ -85,7 +85,7 @@ namespace PlayLingua.Data
                         word.TargetLanguageId,
                         max(BaseLanguage.Name) as BaseLanguageName,
                         max(TargetLanguage.Name) as TargetLanguageName,
-                        COUNT(*) as Count, 
+                        COUNT(Distinct BaseWord) as Count, 
                         max(book.Name) as BookName,
                         max(Chapter.Name) as ChapterName,
                         max(Word.LastUpdateDate) as LastUpdateDate,
@@ -105,7 +105,7 @@ namespace PlayLingua.Data
                         on word.TargetLanguageId = TargetLanguage.id
 
                         where word.AddedBy = @userId
-                        group by word.BookId ,word.ChapterId,word.BaseLanguageId, word.TargetLanguageId 
+                        group by word.BookId ,word.ChapterId,word.BaseLanguageId, word.TargetLanguageId
                     ";
             var result = db.Query<WordOverviewModel>(sql, new { userId }).ToList();
             return result;
