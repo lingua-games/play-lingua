@@ -2,6 +2,7 @@ import {
   Component,
   ElementRef,
   HostListener,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -65,7 +66,7 @@ import { ActivatedRoute } from '@angular/router';
     ]),
   ],
 })
-export class SuperMarioComponent implements OnInit {
+export class SuperMarioComponent implements OnInit, OnDestroy {
   @ViewChild('marioTemplate') marioTemplate?: ElementRef = {
     nativeElement: {} as ElementRef,
   } as ElementRef;
@@ -172,6 +173,10 @@ export class SuperMarioComponent implements OnInit {
         this.stopMovingRight();
         break;
     }
+  }
+
+  ngOnDestroy(): void {
+    this.stopSound(false);
   }
 
   ngOnInit(): void {
