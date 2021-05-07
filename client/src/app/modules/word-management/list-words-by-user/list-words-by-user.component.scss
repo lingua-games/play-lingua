@@ -4,6 +4,8 @@
   border-radius: 20px;
   opacity: .8;
   padding: 3vh 1vh;
+  max-height: 95vh;
+  overflow: auto;
 }
 
 .hyper-link {
@@ -13,3 +15,4 @@
 .hyper-link:hover {
   cursor: pointer;
 }
+
