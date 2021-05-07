@@ -7,6 +7,7 @@ using PlayLingua.Domain.Ports;
 using PlayLingua.Host.Controllers;
 using PlayLingua.WebApi.Controllers;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace PlayLingua.Unit.Test.Controllers
@@ -46,7 +47,7 @@ namespace PlayLingua.Unit.Test.Controllers
 
             // Assert
             var testResult = methodResult.Result as OkObjectResult;
-            Assert.Equal(_fakeGetWordsForGameResponse, testResult.Value);
+            Assert.Equal(_fakeGetWordsForGameResponse.Count(), (testResult.Value as List<GetWordsForGameResponseViewModel>).Count());
         }
     }
 }
