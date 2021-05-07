@@ -27,7 +27,6 @@
         <th>Max score</th>
         <th>Is opened</th>
         <th>Added</th>
-        <th>Opened</th>
         <th>Email status</th>
         <th>Options</th>
       </tr>
@@ -48,9 +47,9 @@
         </td>
         <td>{{ invitation.numberOfPlayed }}</td>
         <td>{{ invitation.score }}</td>
-        <td></td>
         <td>
           <fa-icon
+            [pTooltip]="invitation?.openedDate?.toString()"
             [ngClass]="invitation.isOpened ? 'success-item' : 'danger-item'"
             [icon]="['fas', invitation.isOpened ? 'check' : 'times']"
           ></fa-icon>
@@ -58,16 +57,13 @@
         <td [pTooltip]="invitation?.addedDate?.toString()">
           {{ invitation.addedDate | date: 'shortDate' }}
         </td>
-        <td [pTooltip]="invitation?.openedDate?.toString()">
-          {{ invitation.openedDate | date: 'shortDate' }}
-        </td>
         <td>
           <fa-icon
             [ngClass]="invitation.isEmailSent ? 'success-item' : 'danger-item'"
             [icon]="['fas', invitation.isEmailSent ? 'check' : 'times']"
           ></fa-icon>
         </td>
-        <th>
+        <td>
           <fa-icon
             [icon]="['fas', 'envelope']"
             class="btn btn-success"
@@ -78,7 +74,7 @@
             class="btn btn-danger ml-1"
             (click)="hideInvitation(invitation)"
           ></fa-icon>
-        </th>
+        </td>
       </tr>
     </tbody>
   </table>

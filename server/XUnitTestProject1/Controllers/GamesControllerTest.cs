@@ -47,7 +47,7 @@ namespace PlayLingua.Unit.Test.Controllers
 
             // Assert
             var testResult = methodResult.Result as OkObjectResult;
-            Assert.Equal(_fakeGetWordsForGameResponse.Count(), 2);
+            Assert.Equal(2, _fakeGetWordsForGameResponse.Count());
         }
     }
 }
