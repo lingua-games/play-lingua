@@ -50,7 +50,7 @@ export class SendInvitationComponent implements OnInit {
     this.getLanguages();
     this.getGames();
     this.getUserList();
-
+    this.form.title = 'PlayingLingua.com';
     // this.form.email = 'vbhost.ir@gmail.com';
     // this.form.playerName = 'Arash';
     // this.form.baseLanguage = {
@@ -69,6 +69,10 @@ export class SendInvitationComponent implements OnInit {
     // };
     // this.form.gameObj = this.games[0];
     // this.preview();
+  }
+
+  gameSelectionChange(event: GameInformationInterface): void {
+    this.form.title = `PlayingLingua.com | ${event.name} feedback session`;
   }
 
   getUserList(): void {

@@ -183,7 +183,9 @@ CREATE TABLE [dbo].[Invitations] (
 		[LastUpdateDate] datetime,
 		UniqueKey uniqueidentifier NOT NULL,
 		IsEmailSent bit NOT NULL,
-		EmailErrorMessage nvarchar(max)
+		EmailErrorMessage nvarchar(max),
+		Visible bit,
+		Title nvarchar(max),
 )
 ALTER TABLE [dbo].[Invitations] ADD CONSTRAINT [FK_Invitations_BaseLanguageId]
 FOREIGN KEY ([BaseLanguageId]) REFERENCES [dbo].[Language] ([Id])

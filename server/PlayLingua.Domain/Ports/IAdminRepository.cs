@@ -8,8 +8,9 @@ namespace PlayLingua.Domain.Ports
     public interface IAdminRepository
     {
         SendMailResultModel SendFeedbackMail(Invitation invitation);
-        List<Invitation> GetInvitations();
+        List<Invitation> GetVisibleInvitations();
         Invitation AddInvitation(Invitation invitation);
+        void ChangeInvitationVisibility(Invitation invitation);
         Invitation GetInvitationByUniqueKey(string UniqueKey);
         void UpdateInvitation(Invitation invitation);
         void SetInvitationToOpen(Invitation invitation);

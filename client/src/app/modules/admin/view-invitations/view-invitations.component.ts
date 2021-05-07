@@ -37,6 +37,27 @@ export class ViewInvitationsComponent implements OnInit {
     );
   }
 
+  hideInvitation(invitation: InvitationForm): void {
+    invitation.isHiding = true;
+    this.invitationService
+      .changeInvitationVisibility(invitation.uniqueKey, false)
+      .subscribe(
+        () => {
+          invitation.isHiding = false;
+          this.notificationService.showMessage('Successful', Severity.success);
+          const index = this.invitations.data.indexOf(invitation);
+          this.invitations.data.splice(index, 1);
+        },
+        () => {
+          this.notificationService.showMessage(
+            'Failed to hide invitation',
+            Severity.error
+          );
+          invitation.isHiding = false;
+        }
+      );
+  }
+
   resendInvitationEmail(invitation: InvitationForm): void {
     invitation.isSendingInvitationLoading = true;
     this.invitationService.resendInvitationMail(invitation.uniqueKey).subscribe(

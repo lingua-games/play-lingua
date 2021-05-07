@@ -10,6 +10,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   faArrowCircleLeft,
   faCheck,
+  faEnvelope,
+  faEyeSlash,
   faPlus,
   faQuestion,
   faTimes,
@@ -79,7 +81,9 @@ export class AppModule {
       faArrowCircleLeft,
       faCheck,
       faTimes,
-      faVolumeUp
+      faVolumeUp,
+      faEnvelope,
+      faEyeSlash
     );
   }
 }

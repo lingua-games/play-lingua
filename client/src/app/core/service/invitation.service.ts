@@ -45,4 +45,14 @@ export class InvitationService {
       this.adminApi + `/resend-invitation-email/${uniqueKey}`
     );
   }
+
+  changeInvitationVisibility(
+    uniqueKey: string,
+    visibility: boolean
+  ): Observable<boolean> {
+    return this.http.post<boolean>(
+      this.adminApi + `/change-invitation-visibility/`,
+      { uniqueKey, visibility }
+    );
+  }
 }

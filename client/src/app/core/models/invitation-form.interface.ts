@@ -11,12 +11,15 @@ export interface InvitationForm {
   book: BookModel;
   chapter: ChapterModel;
   generatedLink: string;
+  numberOfPlayed: number;
+  score: number;
   uniqueKey: string;
   count: number;
   playerName: string;
   gameObj: GameInformationInterface;
   game: string;
   html: SafeHtml;
+  title: string;
   htmlText: string;
   isOpened: boolean;
   openedDate: Date;
@@ -24,4 +27,5 @@ export interface InvitationForm {
   emailErrorMessage: string;
   isEmailSent: boolean;
   isSendingInvitationLoading?: boolean;
+  isHiding?: boolean;
 }

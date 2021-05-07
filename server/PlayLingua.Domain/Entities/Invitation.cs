@@ -18,7 +18,11 @@ namespace PlayLingua.Domain.Entities
         public string HtmlText { get; set; }
         public bool IsOpened { get; set; }
         public DateTime? OpenedDate { get; set; }
+        public string Title { get; set; }
         public bool IsEmailSent { get; set; }
         public string EmailErrorMessage { get; set; }
+        public bool Visible { get; set; }
+        public int NumberOfPlayed { get; set; }
+        public float Score { get; set; }
     }
 }

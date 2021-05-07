@@ -20,5 +20,9 @@ namespace PlayLingua.Contract.ViewModels
         public Guid UniqueKey { get; set; }
         public bool IsEmailSent { get; set; }
         public string EmailErrorMessage { get; set; }
+        public bool Visible { get; set; }
+        public string Title { get; set; }
+        public int NumberOfPlayed { get; set; }
+        public float Score { get; set; }
     }
 }
