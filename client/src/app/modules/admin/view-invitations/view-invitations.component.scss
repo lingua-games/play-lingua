@@ -15,3 +15,8 @@ table {
   padding: 3px;
   border-radius: 5px;
 }
+
+.main-container {
+  max-height: 95vh;
+  overflow: auto;
+}

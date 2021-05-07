@@ -52,7 +52,9 @@ namespace PlayLingua.Data
                 TargetLanguageId,
                 UniqueKey,
                 IsEmailSent,
-                EmailErrorMessage
+                EmailErrorMessage,
+                Title,
+                Visible
 ) VALUES (
                 @AddedBy,
                 @AddedDate,
@@ -71,7 +73,9 @@ namespace PlayLingua.Data
                 @TargetLanguageId,
                 @UniqueKey,
                 @IsEmailSent,
-                @EmailErrorMessage
+                @EmailErrorMessage,
+                @Title,
+                1
 );" +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
@@ -105,9 +109,33 @@ namespace PlayLingua.Data
             return invitation;
         }
 
-        public List<Invitation> GetInvitations()
+        public List<Invitation> GetVisibleInvitations()
         {
-            return db.Query<Invitation>("select * from dbo.Invitations").ToList();
+            return db.Query<Invitation>(@"
+select 
+	Invitations.PlayerName,
+	Invitations.Email,
+	Invitations.Game,
+	Invitations.BaseLanguageId,
+	Invitations.TargetLanguageId,
+	Invitations.Bookid,
+	Invitations.ChapterId,
+	Invitations.Count,
+	Invitations.GeneratedLink,
+	Invitations.IsOpened,
+    Invitations.AddedDate,
+	Invitations.AddedBy,
+	Invitations.OpenedDate,
+	Invitations.IsEmailSent,
+	Invitations.UniqueKey,
+	score.NumberOfPlayed,
+	score.Score
+from dbo.Invitations 
+left join (select max(GameScores.FeedbackUniqueKey) as FeedbackUniqueKey,  max(GameScores.Score) as Score, count(*) as NumberOfPlayed from dbo.GameScores group by GameScores.FeedbackUniqueKey) as score
+on Invitations.UniqueKey = score.FeedbackUniqueKey
+where visible = 1
+order by Invitations.id desc
+").ToList();
         }
 
         public void UpdateInvitation(Invitation invitation)
@@ -165,7 +193,7 @@ WHERE UniqueKey = @UniqueKey", invitation);
                     MailMessage message = new MailMessage()
                     {
                         From = new MailAddress(_email.Username), // sender must be a full email address
-                        Subject = "You are invited to Play Lingua!",
+                        Subject = invitation.Title,
                         IsBodyHtml = true,
                         Body = invitation.HtmlText,
                         BodyEncoding = System.Text.Encoding.UTF8,
@@ -195,6 +223,13 @@ WHERE UniqueKey = @UniqueKey", invitation);
         public List<UserListForInvitationModel> GetUserListForInvitation()
         {
             return db.Query<UserListForInvitationModel>(@"SELECT [Email],[DisplayName] FROM [dbo].[Users]").ToList();
+        }
+
+        public void ChangeInvitationVisibility(Invitation invitation)
+        {
+            db.Query(@"update dbo.Invitations SET 
+                        Visible = @Visible
+                        WHERE UniqueKey = @UniqueKey", invitation);
         }
     }
 }

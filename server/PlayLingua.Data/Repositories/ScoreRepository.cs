@@ -31,8 +31,8 @@ namespace PlayLingua.Data
             var sql =
                 @"
 insert into dbo.[GameScores] 
-(UserId, GuestCode, GameName, BookId, ChapterId, AddedDate, Score) 
-VALUES(@UserId, @GuestCode, @GameName, @BookId, @ChapterId, @AddedDate, @Score);";
+(UserId, GuestCode, GameName, BookId, ChapterId, AddedDate, Score, FeedbackUniqueKey) 
+VALUES(@UserId, @GuestCode, @GameName, @BookId, @ChapterId, @AddedDate, @Score, @FeedbackUniqueKey);";
             db.Query<int>(sql, score);
         }
 

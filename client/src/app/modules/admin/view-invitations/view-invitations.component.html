@@ -9,63 +9,77 @@
   <hr />
   <h1>Preparing list</h1>
 </div>
-<table *ngIf="!invitations.isLoading" class="table table-hover text-center">
-  <thead>
-    <tr>
-      <th>No</th>
-      <th>Payer name</th>
-      <th>Email</th>
-      <th>Game</th>
-      <th>Base language</th>
-      <th>Target language</th>
-      <th>Book</th>
-      <th>Chapter</th>
-      <th>Count</th>
-      <th>Link</th>
-      <th>Is opened</th>
-      <th>Added</th>
-      <th>Opened</th>
-      <th>Email status</th>
-      <th>Options</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let invitation of invitations.data; let index = index">
-      <td>{{ index + 1 }}</td>
-      <td>{{ invitation.playerName }}</td>
-      <td>{{ invitation.email }}</td>
-      <td>{{ invitation.game }}</td>
-      <td>{{ invitation.baseLanguage?.fullName }}</td>
-      <td>{{ invitation.targetLanguage?.fullName }}</td>
-      <td>{{ invitation.book?.name }}</td>
-      <td>{{ invitation.chapter?.name }}</td>
-      <td>{{ invitation.count }}</td>
-      <td>
-        <a class="btn btn-info" [href]="invitation.generatedLink">url</a>
-      </td>
-      <td>
-        <fa-icon
-          [ngClass]="invitation.isOpened ? 'success-item' : 'danger-item'"
-          [icon]="['fas', invitation.isOpened ? 'check' : 'times']"
-        ></fa-icon>
-      </td>
-      <td>{{ invitation.addedDate | date: 'medium' }}</td>
-      <td>{{ invitation.openedDate | date: 'medium' }}</td>
-      <td>
-        <fa-icon
-          [ngClass]="invitation.isEmailSent ? 'success-item' : 'danger-item'"
-          [icon]="['fas', invitation.isEmailSent ? 'check' : 'times']"
-        ></fa-icon>
-      </td>
-      <th>
-        <button
-          [disabled]="invitation.isSendingInvitationLoading"
-          class="btn btn-success"
-          (click)="resendInvitationEmail(invitation)"
-        >
-          Resend
-        </button>
-      </th>
-    </tr>
-  </tbody>
-</table>
+<div class="main-container">
+  <table *ngIf="!invitations.isLoading" class="table table-hover text-center">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Payer name</th>
+        <!--      <th>Email</th>-->
+        <th>Game</th>
+        <!--      <th>Base language</th>-->
+        <!--      <th>Target language</th>-->
+        <th>Book</th>
+        <th>Chapter</th>
+        <!--      <th>Count</th>-->
+        <th>Link</th>
+        <th>Played</th>
+        <th>Max score</th>
+        <th>Is opened</th>
+        <th>Added</th>
+        <th>Opened</th>
+        <th>Email status</th>
+        <th>Options</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let invitation of invitations.data; let index = index">
+        <td>{{ index + 1 }}</td>
+        <td>{{ invitation.playerName }}</td>
+        <!--      <td>{{ invitation.email }}</td>-->
+        <td>{{ invitation.game }}</td>
+        <!--      <td>{{ invitation.baseLanguage?.fullName }}</td>-->
+        <!--      <td>{{ invitation.targetLanguage?.fullName }}</td>-->
+        <td>{{ invitation.book?.name }}</td>
+        <td>{{ invitation.chapter?.name }}</td>
+        <!--      <td>{{ invitation.count }}</td>-->
+        <td>
+          <a class="btn btn-info" [href]="invitation.generatedLink">url</a>
+        </td>
+        <td>{{ invitation.numberOfPlayed }}</td>
+        <td>{{ invitation.score }}</td>
+        <td></td>
+        <td>
+          <fa-icon
+            [ngClass]="invitation.isOpened ? 'success-item' : 'danger-item'"
+            [icon]="['fas', invitation.isOpened ? 'check' : 'times']"
+          ></fa-icon>
+        </td>
+        <td [pTooltip]="invitation?.addedDate?.toString()">
+          {{ invitation.addedDate | date: 'shortDate' }}
+        </td>
+        <td [pTooltip]="invitation?.openedDate?.toString()">
+          {{ invitation.openedDate | date: 'shortDate' }}
+        </td>
+        <td>
+          <fa-icon
+            [ngClass]="invitation.isEmailSent ? 'success-item' : 'danger-item'"
+            [icon]="['fas', invitation.isEmailSent ? 'check' : 'times']"
+          ></fa-icon>
+        </td>
+        <th>
+          <fa-icon
+            [icon]="['fas', 'envelope']"
+            class="btn btn-success"
+            (click)="resendInvitationEmail(invitation)"
+          ></fa-icon>
+          <fa-icon
+            [icon]="['fas', 'eye-slash']"
+            class="btn btn-danger ml-1"
+            (click)="hideInvitation(invitation)"
+          ></fa-icon>
+        </th>
+      </tr>
+    </tbody>
+  </table>
+</div>

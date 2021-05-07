@@ -2,7 +2,9 @@
 using PlayLingua.Contract.ViewModels;
 using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PlayLingua.Host.Controllers
 {
@@ -28,7 +30,7 @@ namespace PlayLingua.Host.Controllers
                 Count = model.Count,
                 DefaultBaseLanguage = model.DefaultBaseLanguage,
                 DefaultTargetLanguage = model.DefaultTargetLanguage
-            }));
+            }).OrderBy(a => Guid.NewGuid()).ToList());
         }
 
         [HttpPost("get-words-count-for-game")]

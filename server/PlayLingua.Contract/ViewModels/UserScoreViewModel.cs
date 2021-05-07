@@ -12,5 +12,6 @@
         public float Score { get; set; }
         public int Count { get; set; }
         public bool IsFeedback { get; set; }
+        public string FeedbackUniqueKey { get; set; }
     }
 }

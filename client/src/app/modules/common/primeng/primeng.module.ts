@@ -8,6 +8,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
   exports: [
@@ -18,6 +19,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     CheckboxModule,
     RadioButtonModule,
     ToggleButtonModule,
+    TooltipModule,
   ],
   providers: [MessageService, NotificationService],
 })

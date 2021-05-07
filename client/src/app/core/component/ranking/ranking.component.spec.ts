@@ -9,6 +9,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { GameInformationInterface } from '../../models/game-information.interface';
 import { ScoreStoreInterface } from '../../models/score-store.interface';
+import { InvitationForm } from '../../models/invitation-form.interface';
 
 describe('RankingComponent', () => {
   let component: RankingComponent;
@@ -82,6 +83,7 @@ describe('RankingComponent', () => {
       ]);
     });
     component.data = {
+      feedbackForm: { uniqueKey: 'fake key' } as InvitationForm,
       scoreStore: {
         score: 1,
       } as ScoreStoreInterface,
@@ -97,6 +99,7 @@ describe('RankingComponent', () => {
       return throwError('error message');
     });
     component.data = {
+      feedbackForm: { uniqueKey: 'fake key' } as InvitationForm,
       scoreStore: {
         score: 1,
       } as ScoreStoreInterface,

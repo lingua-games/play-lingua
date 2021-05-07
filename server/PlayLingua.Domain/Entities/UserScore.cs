@@ -12,5 +12,6 @@ namespace PlayLingua.Domain.Entities
         public int? ChapterId { get; set; }
         public float Score { get; set; }
         public int Count { get; set; }
+        public string FeedbackUniqueKey { get; set; }
     }
 }

@@ -65,7 +65,8 @@ namespace PlayLingua.Host.Controllers
                     BookId = model.BookId,
                     ChapterId = model.ChapterId,
                     AddedDate = model.AddedDate,
-                    Score = model.Score
+                    Score = model.Score,
+                    FeedbackUniqueKey = model.FeedbackUniqueKey
                 }, model.UserId);
 
                 _scoreRepository.IncreaseScore(model.Score, model.UserId);

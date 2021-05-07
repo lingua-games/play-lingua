@@ -9,6 +9,8 @@ export interface ScoreStoreInterface {
   count: number;
   gameDisplayName: string;
   isFeedback: boolean;
+  feedbackUniqueKey: string;
   feedbackForm: InvitationForm;
   email: string;
+  feedbackId: string;
 }

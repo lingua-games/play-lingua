@@ -50,8 +50,20 @@ namespace PlayLingua.Host.Controllers
                 OpenedDate = null,
                 PlayerName = model.PlayerName,
                 LastUpdateDate = DateTime.Now,
-                TargetLanguageId = model.TargetLanguage.Id
+                TargetLanguageId = model.TargetLanguage.Id,
+                Title = model.Title
             }));
+        }
+
+        [HttpPost("change-invitation-visibility")]
+        public ActionResult<InvitationViewModel> ChangeInvitationVisibility(InvitationViewModel model)
+        {
+            _adminRepository.ChangeInvitationVisibility(new Invitation
+            {
+                UniqueKey = model.UniqueKey,
+                Visible = model.Visible
+            });
+            return Ok();
         }
 
         [HttpGet("get-invitation-by-unique-key/{uniqueCode}")]
@@ -75,17 +87,19 @@ namespace PlayLingua.Host.Controllers
                 OpenedDate = result.OpenedDate,
                 PlayerName = result.PlayerName,
                 TargetLanguage = new LanguageViewModel { Id = result.TargetLanguageId },
+                Score = result.Score,
+                NumberOfPlayed = result.NumberOfPlayed
             });
         }
 
         [HttpGet("get-invitations")]
-        public ActionResult<InvitationViewModel> GetInvitations()
+        public ActionResult<InvitationViewModel> GetVisibleInvitations()
         {
             var books = _bookRepository.List();
             var chapter = _chapterReposotory.List();
             var languages = _languageRepository.List();
 
-            return Ok(_adminRepository.GetInvitations().Select(x => new InvitationViewModel
+            return Ok(_adminRepository.GetVisibleInvitations().Select(x => new InvitationViewModel
             {
                 UniqueKey = x.UniqueKey,
                 Email = x.Email,
@@ -118,8 +132,10 @@ namespace PlayLingua.Host.Controllers
                 Id = x.Id,
                 IsEmailSent = x.IsEmailSent,
                 EmailErrorMessage = x.EmailErrorMessage,
-                GeneratedLink = x.GeneratedLink
-            }).OrderByDescending(x => x.Id).ToList());
+                GeneratedLink = x.GeneratedLink,
+                Score = x.Score,
+                NumberOfPlayed = x.NumberOfPlayed
+            }).ToList());
         }
 
         [HttpGet("resend-invitation-email/{uniqueCode}")]
