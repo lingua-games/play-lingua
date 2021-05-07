@@ -31,8 +31,12 @@ namespace PlayLingua.Data
             var sql =
                 @"
 insert into dbo.[GameScores] 
-(UserId, GuestCode, GameName, BookId, ChapterId, AddedDate, Score, FeedbackUniqueKey) 
-VALUES(@UserId, @GuestCode, @GameName, @BookId, @ChapterId, @AddedDate, @Score, @FeedbackUniqueKey);";
+(UserId, GuestCode, GameName, BookId, ChapterId, AddedDate, Score" +
+(!string.IsNullOrEmpty(score.FeedbackUniqueKey) ? ", FeedbackUniqueKey" : "")
++ @") 
+VALUES(@UserId, @GuestCode, @GameName, @BookId, @ChapterId, @AddedDate, @Score" +
+(!string.IsNullOrEmpty(score.FeedbackUniqueKey) ? ", @FeedbackUniqueKey" : "")
++ @");";
             db.Query<int>(sql, score);
         }
 
@@ -40,7 +44,7 @@ VALUES(@UserId, @GuestCode, @GameName, @BookId, @ChapterId, @AddedDate, @Score, 
         {
             var user = db.Query<User>("select * from dbo.Users where Id = @userId", new { userId }).FirstOrDefault();
             score += user.TotalScore;
-            db.Query("update dbo.Users SET TotalScore = @score WHERE Id = @Id", new { score, user.Id});
+            db.Query("update dbo.Users SET TotalScore = @score WHERE Id = @Id", new { score, user.Id });
         }
 
         public void Delete(int id)
@@ -59,7 +63,7 @@ VALUES(@UserId, @GuestCode, @GameName, @BookId, @ChapterId, @AddedDate, @Score, 
 SELECT top " + score.Count + @" Email as Email,  max(score) as Score, max(DisplayName) as DisplayName FROM [dbo].[GameScores]
 left join [dbo].[Users]
 on [GameScores].UserId = [Users].Id
-where GameName = @GameName AND " + 
+where GameName = @GameName AND " +
 (score.BookId != null ? "Bookid = @BookId" : "Bookid is null ")
 + @" AND " +
 (score.ChapterId != null ? "ChapterId = @ChapterId" : "ChapterId is null ")
