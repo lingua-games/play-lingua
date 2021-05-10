@@ -22,7 +22,6 @@ import { BookModel } from '../../../../core/models/book.model';
 import { ChapterModel } from '../../../../core/models/chapter.model';
 import { LanguageModel } from '../../../../core/models/language.model';
 import { GetGameWordsRequestModel } from '../../../../core/models/get-game-words-request.model';
-import { ApiResult } from '../../../../core/models/api-result.model';
 
 describe('StartGameDialogComponent', () => {
   let component: StartGameDialogComponent;
@@ -30,7 +29,7 @@ describe('StartGameDialogComponent', () => {
   let mockMatDialogRef;
   let mockNotificationService;
   let mockLocalStorageService;
-  let mockGameService;
+  let mockGamesService;
   let mockInvitationService;
   beforeEach(
     waitForAsync(() => {
@@ -44,7 +43,7 @@ describe('StartGameDialogComponent', () => {
         load: `{ "defaultBaseLanguage": {}, "defaultTargetLanguage": {} }`,
       });
 
-      mockGameService = jasmine.createSpyObj(['getGameWords']);
+      mockGamesService = jasmine.createSpyObj(['getGameWords']);
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule, BrowserAnimationsModule],
         declarations: [StartGameDialogComponent],
@@ -79,7 +78,7 @@ describe('StartGameDialogComponent', () => {
           },
           {
             provide: GamesService,
-            useValue: mockGameService,
+            useValue: mockGamesService,
           },
         ],
         schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
@@ -162,7 +161,7 @@ describe('StartGameDialogComponent', () => {
   });
 
   it('should show message if submit hits but there is no word added yet with the session', () => {
-    mockGameService.getGameWords.and.callFake(() => {
+    mockGamesService.getGameWords.and.callFake(() => {
       return of([]);
     });
 
@@ -175,7 +174,7 @@ describe('StartGameDialogComponent', () => {
   });
 
   it('should set result with feedbackForm if it is feedback and submit hits', () => {
-    mockGameService.getGameWords.and.callFake(() => {
+    mockGamesService.getGameWords.and.callFake(() => {
       return of([]);
     });
     component.data = {
@@ -191,7 +190,7 @@ describe('StartGameDialogComponent', () => {
 
     component.submit();
 
-    expect(mockGameService.getGameWords).toHaveBeenCalledWith({
+    expect(mockGamesService.getGameWords).toHaveBeenCalledWith({
       bookId: 1,
       chapterId: 1,
       count: 1,
@@ -201,7 +200,7 @@ describe('StartGameDialogComponent', () => {
   });
 
   it('should call dialog.close once getGameWords service hits', () => {
-    mockGameService.getGameWords.and.callFake(() => {
+    mockGamesService.getGameWords.and.callFake(() => {
       return of([{}] as WordKeyValueModel<string[]>[]);
     });
 
@@ -215,7 +214,7 @@ describe('StartGameDialogComponent', () => {
   });
 
   it('should show notification if getGameWords API fail', () => {
-    mockGameService.getGameWords.and.callFake(() => {
+    mockGamesService.getGameWords.and.callFake(() => {
       return throwError('I am error');
     });
 

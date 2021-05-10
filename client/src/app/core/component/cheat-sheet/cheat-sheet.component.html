@@ -1,0 +1,32 @@
+<div class="text-center p-5" *ngIf="words.isLoading" @fade>
+  <div
+    class="spinner-grow text-success"
+    style="width: 3rem; height: 3rem"
+    role="status"
+  >
+    <span class="sr-only">Loading...</span>
+  </div>
+  <hr />
+  <h1>Loading list</h1>
+</div>
+<div class="main-container">
+  <table class="table table-hover" *ngIf="!words.isLoading">
+    <thead>
+      <tr>
+        <th>Question</th>
+        <th>Answer(s)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let word of words.data">
+        <td>{{ word.key }}</td>
+        <td>
+          <span *ngFor="let answer of word.values; let index = index"
+            >{{ answer
+            }}<span *ngIf="index !== word.values.length - 1"> , </span></span
+          >
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

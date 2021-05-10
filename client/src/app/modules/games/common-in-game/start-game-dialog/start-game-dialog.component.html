@@ -38,6 +38,25 @@
     </div>
     <div
       [ngClass]="{
+        'icon-container-selected': selectedOption === 'cheatsheet',
+        'icon-container-not-selected': selectedOption !== 'cheatsheet'
+      }"
+      class="icon-container"
+      (mouseenter)="showHover('cheatsheet')"
+      (mouseleave)="hoveredOption = ''"
+      (click)="showSection('cheatsheet')"
+    >
+      <fa-icon [icon]="['fab', 'creative-commons-share']"></fa-icon>
+      <span
+        class="ml-2"
+        *ngIf="
+          hoveredOption === 'cheatsheet' || selectedOption === 'cheatsheet'
+        "
+        >Cheat sheet</span
+      >
+    </div>
+    <div
+      [ngClass]="{
         'icon-container-selected': selectedOption === 'help',
         'icon-container-not-selected': selectedOption !== 'help'
       }"
@@ -99,5 +118,13 @@
       [form]="form"
       (goToStart)="showSection('start')"
     ></app-ranking>
+
+    <app-cheat-sheet
+      @fadeIn
+      *ngIf="selectedOption === 'cheatsheet'"
+      [form]="form"
+      [data]="data"
+    >
+    </app-cheat-sheet>
   </div>
 </div>
