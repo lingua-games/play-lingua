@@ -33,7 +33,10 @@ import { MaterialModule } from './modules/common/material/material.module';
 import { PrimengModule } from './modules/common/primeng/primeng.module';
 import { faPowerOff } from '@fortawesome/free-solid-svg-icons/faPowerOff';
 import { faForward } from '@fortawesome/free-solid-svg-icons/faForward';
-import { faGooglePlay } from '@fortawesome/free-brands-svg-icons';
+import {
+  faCreativeCommonsShare,
+  faGooglePlay,
+} from '@fortawesome/free-brands-svg-icons';
 
 @NgModule({
   declarations: [AppComponent, ScoreNotificationComponent],
@@ -83,7 +86,8 @@ export class AppModule {
       faTimes,
       faVolumeUp,
       faEnvelope,
-      faEyeSlash
+      faEyeSlash,
+      faCreativeCommonsShare
     );
   }
 }

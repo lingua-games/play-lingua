@@ -13,6 +13,7 @@ import { GameInstructionComponent } from './game-instruction/game-instruction.co
 import { GameConfigComponent } from './game-config/game-config.component';
 import { RankingComponent } from './ranking/ranking.component';
 import { DirectiveModule } from '../directives/directive.module';
+import { CheatSheetComponent } from './cheat-sheet/cheat-sheet.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { DirectiveModule } from '../directives/directive.module';
     GameInstructionComponent,
     GameConfigComponent,
     RankingComponent,
+    CheatSheetComponent,
   ],
   imports: [
     CommonModule,
