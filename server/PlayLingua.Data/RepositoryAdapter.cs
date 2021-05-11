@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using PlayLingua.Data.Repositories;
 using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
 
@@ -19,6 +20,7 @@ namespace PlayLingua.Data
             services.AddTransient<IScoreRepository, ScoreRepository>(x => new ScoreRepository(connectionString));
             services.AddTransient<IRequeustLogRepository, RequestLogRepository>(x => new RequestLogRepository(connectionString));
             services.AddTransient<IAdminRepository, AdminRepository>(x => new AdminRepository(connectionString, email));
+            services.AddTransient<ISpeechRepository, SpeechRepository>(x => new SpeechRepository());
         }
     }
 }

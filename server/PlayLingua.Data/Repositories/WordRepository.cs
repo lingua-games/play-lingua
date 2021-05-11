@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Google.Cloud.TextToSpeech.V1;
 using PlayLingua.Domain;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Models;
@@ -43,7 +44,6 @@ namespace PlayLingua.Data
             _ = db.Query<Word>(sql, modelForDelete).ToList();
             SubmitWordSeries(submitWords, userId);
         }
-
         public List<Word> GetWordDetails(WordOverviewModel overview)
         {
             var sql = @"
@@ -122,10 +122,24 @@ namespace PlayLingua.Data
         }
         public void SubmitWordSeries(SubmitWordsModel submitWords, int userId)
         {
+            var baseSpeechModel = new SpeechModel()
+            {
+                Gender = SsmlVoiceGender.Female,
+                AddedDate = DateTime.Now
+            };
+            var targetSpeechModel = new SpeechModel()
+            {
+                Gender = SsmlVoiceGender.Female,
+                AddedDate = DateTime.Now
+            };
+
             foreach (var word in submitWords.Words)
             {
                 foreach (var target in word.Targets)
                 {
+                    // If the speech already exist
+                    //if ()
+
                     var wordToAdd = new Word
                     {
                         BaseLanguageId = submitWords.BaseLanguage.Id,

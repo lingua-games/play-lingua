@@ -14,6 +14,9 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
+    <PackageReference Include="Google.Apis.Discovery.v1" Version="1.51.0" />
+    <PackageReference Include="Google.Apis.Texttospeech.v1" Version="1.51.0.2276" />
+    <PackageReference Include="Google.Cloud.TextToSpeech.V1" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>

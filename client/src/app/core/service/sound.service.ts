@@ -8,7 +8,6 @@ import { GameActionEnum } from '../models/game-action.enum';
 export class SoundService {
   // tslint:disable-next-line:no-any
   songs: any[] = [];
-  actionSound = new Audio();
   constructor() {}
 
   // playGameSong(game: GameNameEnum, isSoundOn: boolean): void {
