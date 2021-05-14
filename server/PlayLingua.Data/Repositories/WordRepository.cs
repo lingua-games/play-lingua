@@ -32,88 +32,100 @@ namespace PlayLingua.Data
             };
 
             var sql = @"
-                    delete 
-                    FROM [dbo].[Word]
+                    delete  WordsToWords
+                    FROM dbo.WordsToWords
+                    left join dbo.words as wordsBase
+                    on WordsToWords.BaseWordId = wordsBase.Id
+                    left join dbo.words as wordsTarget
+                    on WordsToWords.TargetWordId = wordsTarget.Id
                     where 
-	                    word.AddedBy = @AddedBy                 and 
-	                    word.BaseLanguageId = @BaseLanguageId	and 
-	                    word.BookId = @BookId    				and 
-	                    word.ChapterId = @ChapterId 			and 
-	                    word.TargetLanguageId = @TargetLanguageId
+                        WordsToWords.AddedBy = @AddedBy              and 
+                        wordsBase.LanguageId = @BaseLanguageId	     and 
+                        WordsToWords.BookId = @BookId      			 and 
+                        WordsToWords.ChapterId = @ChapterId 		 and 
+                        wordsTarget.LanguageId =  @TargetLanguageId
                     ";
-            _ = db.Query<Word>(sql, modelForDelete).ToList();
+            db.Query(sql, modelForDelete).ToList();
             SubmitWordSeries(submitWords, userId);
         }
-        public List<Word> GetWordDetails(WordOverviewModel overview)
+        public List<WordForEditModel> GetWordDetails(WordOverviewModel overview)
         {
             var sql = @"
-                    SELECT 
-	                    word.id,
-	                    word.BaseWord,
-	                    word.Translate
-                    FROM [dbo].[Word]
+                    select
+                        WordsToWords.id,
+                        wordsBase.Word as BaseWord,
+                        wordsTarget.Word as Translate
+                    from WordsToWords
 
-                    left join dbo.Book
-                    on word.BookId = Book.Id
+                    left join words as wordsBase
+                    on WordsToWords.BaseWordId = wordsBase.id
 
-                    left join dbo.Chapter
-                    on word.ChapterId = Chapter.Id
-
-                    left join dbo.Language as BaseLanguage
-                    on word.BaseLanguageId = BaseLanguage.id
-
-                    left join dbo.Language as TargetLanguage
-                    on word.TargetLanguageId = TargetLanguage.id
+                    left join words as wordsTarget
+                    on WordsToWords.TargetWordId = wordsTarget.id
 
                     where 
-	                    word.AddedBy = @AddedBy                 and 
-	                    word.BaseLanguageId = @BaseLanguageId	and 
-	                    word.BookId = @BookId    				and 
-	                    word.ChapterId = @ChapterId 			and 
-	                    word.TargetLanguageId = @TargetLanguageId
+	                    WordsToWords.AddedBy = @AddedBy and 
+	                    wordsBase.LanguageId = @BaseLanguageId and 
+	                    wordsTarget.LanguageId = @TargetLanguageId and
+	                    WordsToWords.ChapterId = @ChapterId and
+	                    WordsToWords.BookId = @BookId
                     ";
-            var result = db.Query<Word>(sql, overview).ToList();
+            var result = db.Query<WordForEditModel>(sql, overview).ToList();
             return result;
         }
         public List<WordOverviewModel> GetWordOverviews(int userId)
         {
             var sql = @"
-                        SELECT 
-                        word.BookId, 
-                        word.ChapterId, 
-                        word.BaseLanguageId,
-                        word.TargetLanguageId,
-                        max(BaseLanguage.Name) as BaseLanguageName,
-                        max(TargetLanguage.Name) as TargetLanguageName,
-                        COUNT(Distinct BaseWord) as Count, 
-                        max(book.Name) as BookName,
-                        max(Chapter.Name) as ChapterName,
-                        max(Word.LastUpdateDate) as LastUpdateDate,
-                        max(Word.AddedDate) as AddedDate
-                        FROM [dbo].[Word]
+                select 
+	                WordsToWords.BookId, 
+	                WordsToWords.ChapterId,
+	                wordsBase.LanguageId as BaseLanguageId,
+	                wordsTarget.LanguageId as TargetLanguageId,
+	                MAX(BaseLanguage.Name) as BaseLanguageName,
+	                MAX(TargetLanguage.Name) as TargetLanguageName,
+	                COUNT(wordsBase.Word) as Count,
+	                MAX(Book.Name) as BookName,
+	                MAX(Chapter.Name) as ChapterName,
+	                max(WordsToWords.AddedDate) as AddedDate
+                from WordsToWords
 
-                        left join dbo.Book
-                        on word.BookId = Book.Id
+                left join words wordsBase
+                on WordsToWords.BaseWordId = wordsBase.Id
 
-                        left join dbo.Chapter
-                        on word.ChapterId = Chapter.Id
+                left join words wordsTarget
+                on WordsToWords.TargetWordId = wordsTarget.Id
 
-                        left join dbo.Language as BaseLanguage
-                        on word.BaseLanguageId = BaseLanguage.id
+                left join dbo.Book
+                on WordsToWords.BookId = Book.Id
 
-                        left join dbo.Language as TargetLanguage
-                        on word.TargetLanguageId = TargetLanguage.id
+                left join dbo.Chapter
+                on WordsToWords.ChapterId = Chapter.Id
 
-                        where word.AddedBy = @userId
-                        group by word.BookId ,word.ChapterId,word.BaseLanguageId, word.TargetLanguageId
+                left join dbo.Language as BaseLanguage
+                on wordsBase.LanguageId = BaseLanguage.id
+
+                left join dbo.Language as TargetLanguage
+                on wordsTarget.LanguageId = TargetLanguage.id
+
+                where WordsToWords.AddedBy = @userId
+                group by WordsToWords.BookId, WordsToWords.ChapterId, wordsBase.LanguageId, wordsTarget.LanguageId
                     ";
             var result = db.Query<WordOverviewModel>(sql, new { userId }).ToList();
             return result;
         }
         public bool InquiryAboutSelectedLanguages(SelectedLanguageModel language)
         {
-            var sql =
-                @"SELECT * FROM [dbo].[Word] where BaseLanguageId = @Base and TargetLanguageId = @Target";
+            var sql = @"
+                    SELECT * FROM [dbo].[WordsToWords]
+
+                    left join [dbo].[Words] as wordsBase
+                    on WordsToWords.BaseWordId = wordsBase.id
+
+                    left join [dbo].[Words] as wordsTarget
+                    on WordsToWords.TargetWordId = wordsTarget.id
+
+                    where wordsBase.LanguageId = @Base and wordsTarget.LanguageId = @Target
+                        ";
 
             db.Close();
             var result = db.Query<LanguageInformation>(sql, language).Any();
@@ -122,56 +134,78 @@ namespace PlayLingua.Data
         }
         public void SubmitWordSeries(SubmitWordsModel submitWords, int userId)
         {
-            var baseSpeechModel = new SpeechModel()
-            {
-                Gender = SsmlVoiceGender.Female,
-                AddedDate = DateTime.Now
-            };
-            var targetSpeechModel = new SpeechModel()
-            {
-                Gender = SsmlVoiceGender.Female,
-                AddedDate = DateTime.Now
-            };
-
+            var targetIds = new List<int?>();
             foreach (var word in submitWords.Words)
             {
+                targetIds = new List<int?>();
                 foreach (var target in word.Targets)
                 {
-                    // If the speech already exist
-                    //if ()
+                    int? wordId = db.Query<int>(
+                        @"select * from Words where word = '" + target.Value +
+                        @"' and LanguageId = " + submitWords.TargetLanguage.Id)
+                        .SingleOrDefault();
 
-                    var wordToAdd = new Word
+                    // Add word if it is not exist in table
+                    if (wordId == null || wordId == 0)
                     {
-                        BaseLanguageId = submitWords.BaseLanguage.Id,
-                        BaseWord = word.Base.Value,
-                        TargetLanguageId = submitWords.TargetLanguage.Id,
-                        Translate = target.Value,
-                        BookId = submitWords.Book != null ? (int?)submitWords.Book.Id : null,
-                        ChapterId = submitWords.Chapter != null ? (int?)submitWords.Chapter.Id : null,
+                        var wordToAdd = new Words()
+                        {
+                            LanguageId = submitWords.TargetLanguage.Id,
+                            Word = target.Value,
+                            AddedBy = userId,
+                            AddedDate = DateTime.Now,
+                        };
+
+                        var sql = @"
+                            insert into [dbo].[words] (LanguageId, Word, AddedBy, AddedDate)  
+                            VALUES (@LanguageId, @Word, @AddedBy, @AddedDate);SELECT CAST(SCOPE_IDENTITY() as int)";
+
+                        wordId = db.Query<int>(sql, wordToAdd).SingleOrDefault();
+                    }
+                    
+                    targetIds.Add(wordId);
+                }
+
+                int? baseWordId = db.Query<int>(
+                                @"select top 1 * from Words where word = '" + word.Base.Value +
+                                @"' and LanguageId = " + submitWords.BaseLanguage.Id)
+                                .SingleOrDefault();
+
+                // Add word if it is not exist in table
+                if (baseWordId == null || baseWordId == 0)
+                {
+                    var wordToAdd = new Words()
+                    {
+                        LanguageId = submitWords.BaseLanguage.Id,
+                        Word = word.Base.Value,
                         AddedBy = userId,
                         AddedDate = DateTime.Now,
                     };
 
                     var sql = @"
-insert into [dbo].[Word] (
-                        BaseLanguageId,
-                        BaseWord,
-                        TargetLanguageId,
-                        Translate,
-                        BookId,
-                        ChapterId,
-                        AddedBy,
-                        AddedDate) VALUES (
-                        @BaseLanguageId,
-                        @BaseWord,
-                        @TargetLanguageId,
-                        @Translate,
-                        @BookId,
-                        @ChapterId,
-                        @AddedBy,
-                        @AddedDate);";
+                            insert into [dbo].[words] (LanguageId, Word, AddedBy, AddedDate)  
+                            VALUES (@LanguageId, @Word, @AddedBy, @AddedDate);SELECT CAST(SCOPE_IDENTITY() as int)";
 
-                    db.Query<int>(sql, wordToAdd).SingleOrDefault();
+                    baseWordId = db.Query<int>(sql, wordToAdd).SingleOrDefault();
+                }
+
+                foreach (var item in targetIds)
+                {
+                    var modelToAdd = new WordToWord()
+                    {
+                        TargetWordId = (int)item,
+                        BaseWordId = (int)baseWordId,
+                        AddedBy = userId,
+                        AddedDate = DateTime.Now,
+                        ChapterId = submitWords.Chapter.Id,
+                        BookId = submitWords.Book.Id
+                    };
+
+                    var sql = @"
+                            insert into [dbo].[WordsToWords] (BaseWordId, TargetWordId, AddedBy, AddedDate, BookId, ChapterId)  
+                            VALUES (@BaseWordId, @TargetWordId, @AddedBy, @AddedDate, @BookId, @ChapterId)";
+
+                    db.Query<int>(sql, modelToAdd).ToList();
                 }
             }
         }

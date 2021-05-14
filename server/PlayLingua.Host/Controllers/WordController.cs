@@ -157,7 +157,8 @@ namespace PlayLingua.Host.Controllers
         [Authorize]
         public ActionResult<List<WordOverviewViewModel>> GetWordDetails([FromBody] WordOverviewViewModel model)
         {
-            return Ok(_wordRepository.GetWordDetails(new WordOverviewModel {
+            return Ok(_wordRepository.GetWordDetails(new WordOverviewModel
+            {
                 AddedBy = GetUser().Id,
                 BaseLanguageId = model.BaseLanguageId,
                 BookId = model.BookId,
@@ -165,9 +166,9 @@ namespace PlayLingua.Host.Controllers
                 TargetLanguageId = model.TargetLanguageId
             }).Select(x => new WordViewModel
             {
-                 Id = x.Id,
-                 BaseWord = x.BaseWord,
-                 Translate = x.Translate
+                Id = x.Id,
+                BaseWord = x.BaseWord,
+                Translate = x.Translate
             }).ToList());
         }
     }

@@ -43,28 +43,28 @@ namespace PlayLingua.Data
         public List<GetWordsForGameResponseModel> GetWordsForGame(GetWordsForGameInputModel model)
         {
             var result = new List<GetWordsForGameResponseModel>();
-            var sql = @"select top " + model.Count + @" * from [dbo].[Word] 
-                                            WHERE 
-                                            TargetLanguageId = @DefaultTargetLanguage AND
-                                            BaseLanguageId = @DefaultBaseLanguage ";
-            if (model.BookId != 0)
-            {
-                sql += "AND BookId = @BookId ";
-                if (model.ChapterId != 0)
-                {
-                    sql += "AND ChapterId = @ChapterId";
-                }
-            }
-            var words = db.Query<Word>(sql, model).ToList();
+            //var sql = @"select top " + model.Count + @" * from [dbo].[Word] 
+            //                                WHERE 
+            //                                TargetLanguageId = @DefaultTargetLanguage AND
+            //                                BaseLanguageId = @DefaultBaseLanguage ";
+            //if (model.BookId != 0)
+            //{
+            //    sql += "AND BookId = @BookId ";
+            //    if (model.ChapterId != 0)
+            //    {
+            //        sql += "AND ChapterId = @ChapterId";
+            //    }
+            //}
+            //var words = db.Query<Word>(sql, model).ToList();
 
-            foreach (var word in words.GroupBy(x => x.BaseWord))
-            {
-                result.Add(new GetWordsForGameResponseModel
-                {
-                    Key = word.Key,
-                    Values = words.Where(x => x.BaseWord == word.Key).Select(x => x.Translate).ToList()
-                });
-            }
+            //foreach (var word in words.GroupBy(x => x.BaseWord))
+            //{
+            //    result.Add(new GetWordsForGameResponseModel
+            //    {
+            //        Key = word.Key,
+            //        Values = words.Where(x => x.BaseWord == word.Key).Select(x => x.Translate).ToList()
+            //    });
+            //}
             return result;
         }
     }

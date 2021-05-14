@@ -76,12 +76,35 @@ create table [dbo].[words] (
 	[AddedDate] datetime NOT NULL,
 	[SpeechId] int,
 )
-ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_SpeechId]
+ALTER TABLE [dbo].[Words] ADD CONSTRAINT [FK_Words_SpeechId]
 FOREIGN KEY ([SpeechId]) REFERENCES [dbo].[Speech] ([Id])
 GO
-ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_LanguageId]
+ALTER TABLE [dbo].[Words] ADD CONSTRAINT [FK_Words_LanguageId]
 FOREIGN KEY ([LanguageId]) REFERENCES [dbo].[Language] ([Id])
 GO
+
+create table [dbo].[WordsToWords] (
+	[Id] int IDENTITY(1,1) PRIMARY KEY,
+	[BaseWordId]			int                NOT NULL,
+	[TargetWordId]          int      		   NOT NULL,
+	[AddedBy]				int				   NOT NULL,
+	[AddedDate]				datetime		   NOT NULL,
+	[BookId]				int,                
+	[ChapterId]				int				   
+)
+ALTER TABLE [dbo].[wordsToWords] ADD CONSTRAINT [FK_WordsToWords_BookId]
+FOREIGN KEY (BookId) REFERENCES [dbo].Book ([Id])
+GO
+ALTER TABLE [dbo].[wordsToWords] ADD CONSTRAINT [FK_WordsToWords_ChapterId]
+FOREIGN KEY (ChapterId) REFERENCES [dbo].Chapter ([Id])
+GO
+ALTER TABLE [dbo].[wordsToWords] ADD CONSTRAINT [FK_WordsToWords_BaseWordId]
+FOREIGN KEY ([BaseWordId]) REFERENCES [dbo].[Words] ([Id])
+GO
+ALTER TABLE [dbo].[wordsToWords] ADD CONSTRAINT [FK_WordsToWords_TargetWordId]
+FOREIGN KEY ([TargetWordId]) REFERENCES [dbo].[Words] ([Id])
+GO
+
 
 --CREATE TABLE [dbo].[Word_v1] (
 --    [Id] int IDENTITY(1,1) PRIMARY KEY,
