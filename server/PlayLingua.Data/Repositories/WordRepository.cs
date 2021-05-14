@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Google.Cloud.TextToSpeech.V1;
+using Newtonsoft.Json;
 using PlayLingua.Domain;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Models;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 
 namespace PlayLingua.Data
@@ -134,20 +136,27 @@ namespace PlayLingua.Data
         }
         public void SubmitWordSeries(SubmitWordsModel submitWords, int userId)
         {
-            var targetIds = new List<int?>();
+            var baseLanguage = db.Query<Language>(
+                        @"select top 1 * from language where id = @Id", new { submitWords.BaseLanguage.Id })
+                        .SingleOrDefault();
+            var targetLanguage = db.Query<Language>(
+            @"select top 1 * from language where id = @Id", new { submitWords.TargetLanguage.Id })
+            .SingleOrDefault();
+
             foreach (var word in submitWords.Words)
             {
-                targetIds = new List<int?>();
+                List<int?> targetIds = new List<int?>();
                 foreach (var target in word.Targets)
                 {
-                    int? wordId = db.Query<int>(
-                        @"select * from Words where word = '" + target.Value +
+                    var foundTargetWord = db.Query<Words>(
+                        @"select top 1 * from Words where word = '" + target.Value +
                         @"' and LanguageId = " + submitWords.TargetLanguage.Id)
                         .SingleOrDefault();
 
                     // Add word if it is not exist in table
-                    if (wordId == null || wordId == 0)
+                    if (foundTargetWord == null)
                     {
+                        foundTargetWord = new Words();
                         var wordToAdd = new Words()
                         {
                             LanguageId = submitWords.TargetLanguage.Id,
@@ -156,24 +165,46 @@ namespace PlayLingua.Data
                             AddedDate = DateTime.Now,
                         };
 
+                        wordToAdd.SpeechId = GetVoicFromText(new SpeechModel
+                        {
+                            Text = wordToAdd.Word,
+                            Gender = SsmlVoiceGender.Female,
+                            LanguageCode = targetLanguage.Code
+                        }).Id;
                         var sql = @"
-                            insert into [dbo].[words] (LanguageId, Word, AddedBy, AddedDate)  
-                            VALUES (@LanguageId, @Word, @AddedBy, @AddedDate);SELECT CAST(SCOPE_IDENTITY() as int)";
+                            insert into [dbo].[words] (LanguageId, Word, AddedBy, AddedDate, SpeechId)  
+                            VALUES (@LanguageId, @Word, @AddedBy, @AddedDate, @SpeechId);SELECT CAST(SCOPE_IDENTITY() as int)";
 
-                        wordId = db.Query<int>(sql, wordToAdd).SingleOrDefault();
+                        foundTargetWord.Id = db.Query<int>(sql, wordToAdd).SingleOrDefault();
                     }
-                    
-                    targetIds.Add(wordId);
+                    else if (foundTargetWord.SpeechId == 0)
+                    {
+                        var Speech = GetVoicFromText(new SpeechModel
+                        {
+                            Text = target.Value,
+                            Gender = SsmlVoiceGender.Female,
+                            LanguageCode = targetLanguage.Code
+                        });
+                        db.Query("update dbo.Words SET SpeechId = @SpeechId WHERE Id = @Id", new Words()
+                        {
+                            SpeechId = Speech.Id,
+                            Id = foundTargetWord.Id
+                        });
+                    }
+
+
+                    targetIds.Add(foundTargetWord.Id);
                 }
 
-                int? baseWordId = db.Query<int>(
-                                @"select top 1 * from Words where word = '" + word.Base.Value +
-                                @"' and LanguageId = " + submitWords.BaseLanguage.Id)
+                var qry = @"select top 1 * from Words where word = '" + word.Base.Value +
+                                @"' and LanguageId = " + submitWords.BaseLanguage.Id;
+                var foundBaseWord = db.Query<Words>(qry)
                                 .SingleOrDefault();
 
                 // Add word if it is not exist in table
-                if (baseWordId == null || baseWordId == 0)
+                if (foundBaseWord == null)
                 {
+                    foundBaseWord = new Words();
                     var wordToAdd = new Words()
                     {
                         LanguageId = submitWords.BaseLanguage.Id,
@@ -181,12 +212,33 @@ namespace PlayLingua.Data
                         AddedBy = userId,
                         AddedDate = DateTime.Now,
                     };
+                    wordToAdd.SpeechId = GetVoicFromText(new SpeechModel
+                    {
+                        Text = wordToAdd.Word,
+                        Gender = SsmlVoiceGender.Female,
+                        LanguageCode = baseLanguage.Code
+                    }).Id;
 
                     var sql = @"
-                            insert into [dbo].[words] (LanguageId, Word, AddedBy, AddedDate)  
-                            VALUES (@LanguageId, @Word, @AddedBy, @AddedDate);SELECT CAST(SCOPE_IDENTITY() as int)";
+                            insert into [dbo].[words] (LanguageId, Word, AddedBy, AddedDate, SpeechId)  
+                            VALUES (@LanguageId, @Word, @AddedBy, @AddedDate, @SpeechId);
+                            SELECT CAST(SCOPE_IDENTITY() as int)";
 
-                    baseWordId = db.Query<int>(sql, wordToAdd).SingleOrDefault();
+                    foundBaseWord.Id = db.Query<int>(sql, wordToAdd).SingleOrDefault();
+                }
+                else if (foundBaseWord.SpeechId == 0)
+                {
+                    var Speech = GetVoicFromText(new SpeechModel
+                    {
+                        Text = word.Base.Value,
+                        Gender = SsmlVoiceGender.Female,
+                        LanguageCode = baseLanguage.Code
+                    });
+                    db.Query("update dbo.Words SET SpeechId = @SpeechId WHERE Id = @Id", new Words()
+                    {
+                        SpeechId = Speech.Id,
+                        Id = foundBaseWord.Id
+                    });
                 }
 
                 foreach (var item in targetIds)
@@ -194,7 +246,7 @@ namespace PlayLingua.Data
                     var modelToAdd = new WordToWord()
                     {
                         TargetWordId = (int)item,
-                        BaseWordId = (int)baseWordId,
+                        BaseWordId = foundBaseWord.Id,
                         AddedBy = userId,
                         AddedDate = DateTime.Now,
                         ChapterId = submitWords.Chapter.Id,
@@ -209,5 +261,60 @@ namespace PlayLingua.Data
                 }
             }
         }
+
+        public SpeechModel GetVoicFromText(SpeechModel model)
+        {
+            model.Code = Guid.NewGuid();
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../speech-key.json");
+
+            var client = TextToSpeechClient.Create();
+
+            // The input to be synthesized, can be provided as text or SSML.
+            var input = new SynthesisInput
+            {
+                Text = model.Text
+            };
+
+            // Build the voice request.
+            var voiceSelection = new VoiceSelectionParams
+            {
+                LanguageCode = model.LanguageCode,
+                SsmlGender = model.Gender
+            };
+
+            // Specify the type of audio file.
+            var audioConfig = new AudioConfig
+            {
+                AudioEncoding = AudioEncoding.Mp3
+            };
+
+            try
+            {
+                // Perform the text-to-speech request.
+                var response = client.SynthesizeSpeech(input, voiceSelection, audioConfig);
+
+                // Write the response to the output file.
+                using FileStream output = File.Create("wwwroot/assets/speechs/" + model.Code + ".mp3");
+                response.AudioContent.WriteTo(output);
+
+
+                model.Status = SpeechStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                model.Status = SpeechStatus.Error;
+                model.ErrorMessage = ex.Message;
+            }
+
+            model.AddedDate = DateTime.Now;
+            model.Id = db.Query<int>(@"
+                        insert into [dbo].[speech] (Code, AddedDate, Status, ErrorMessage)  
+                        VALUES (@Code, @AddedDate, @Status, @ErrorMessage);
+                        SELECT CAST(SCOPE_IDENTITY() as int)
+                        ", model).SingleOrDefault();
+
+            return model;
+        }
+
     }
 }

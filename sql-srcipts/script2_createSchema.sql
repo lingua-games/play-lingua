@@ -155,6 +155,8 @@ CREATE TABLE [dbo].[Speech] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
     [Code]   int                NOT NULL,
 	[AddedDate] datetime NOT NULL,
+	[Status] int NOT NULL,
+	[ErrorMessage] nvarchar(max)
 )
 Go
 
