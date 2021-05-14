@@ -191,12 +191,21 @@ namespace PlayLingua.Data
                             Id = foundTargetWord.Id
                         });
                     }
+                    else if (foundTargetWord.SpeechId > 0)
+                    {
+                        var speech = db.Query<Speech>("select top 1 * from speech WHERE Id = @Id", new SpeechModel()
+                        {
+                            Id = foundTargetWord.SpeechId
+                        }).SingleOrDefault();
+
+                        CheckForSpeechInDisk(speech, target.Value, targetLanguage.Code, SsmlVoiceGender.Female);
+                    }
 
 
                     targetIds.Add(foundTargetWord.Id);
                 }
 
-                var qry = @"select top 1 * from Words where word = '" + word.Base.Value +
+                var qry = @"select top 1 * from Words where word = N'" + word.Base.Value +
                                 @"' and LanguageId = " + submitWords.BaseLanguage.Id;
                 var foundBaseWord = db.Query<Words>(qry)
                                 .SingleOrDefault();
@@ -240,6 +249,15 @@ namespace PlayLingua.Data
                         Id = foundBaseWord.Id
                     });
                 }
+                else if (foundBaseWord.SpeechId > 0)
+                {
+                    var speech = db.Query<Speech>("select top 1 * from speech WHERE Id = @Id", new SpeechModel()
+                    {
+                        Id = foundBaseWord.SpeechId
+                    }).SingleOrDefault();
+
+                    CheckForSpeechInDisk(speech, word.Base.Value, baseLanguage.Code, SsmlVoiceGender.Female);
+                }
 
                 foreach (var item in targetIds)
                 {
@@ -259,6 +277,37 @@ namespace PlayLingua.Data
 
                     db.Query<int>(sql, modelToAdd).ToList();
                 }
+            }
+        }
+        public void CheckForSpeechInDisk(Speech speech, string word, string languageCode, SsmlVoiceGender gender)
+        {
+            if (!File.Exists("wwwroot/assets/speechs/" + speech.Code + ".mp3"))
+            {
+                Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../speech-key.json");
+                var client = TextToSpeechClient.Create();
+                var input = new SynthesisInput
+                {
+                    Text = word
+                };
+
+                // Build the voice request.
+                var voiceSelection = new VoiceSelectionParams
+                {
+                    LanguageCode = languageCode,
+                    SsmlGender = gender
+                };
+
+                // Specify the type of audio file.
+                var audioConfig = new AudioConfig
+                {
+                    AudioEncoding = AudioEncoding.Mp3
+                };
+                // Perform the text-to-speech request.
+                var response = client.SynthesizeSpeech(input, voiceSelection, audioConfig);
+
+                // Write the response to the output file.
+                using FileStream output = File.Create("wwwroot/assets/speechs/" + speech.Code + ".mp3");
+                response.AudioContent.WriteTo(output);
             }
         }
 
