@@ -6,7 +6,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GamesService } from '../../service/games.service';
 import { of } from 'rxjs';
 import { LocalStorageService } from '../../service/local-storage.service';
-import { WordKeyValueModel } from '../../models/word-key-value.model';
+import {
+  TranslateModel,
+  WordKeyValueModel,
+} from '../../models/word-key-value.model';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('CheatSheetComponent', () => {
   let component: CheatSheetComponent;
@@ -36,6 +40,7 @@ describe('CheatSheetComponent', () => {
           useValue: mockLocalStorageService,
         },
       ],
+      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   });
 
@@ -73,7 +78,7 @@ describe('CheatSheetComponent', () => {
 
   it('should set data into words if api return value successfully', () => {
     mockGamesService.getGameWords.and.callFake(() => {
-      return of([{ key: 'fake key' } as WordKeyValueModel<string[]>]);
+      return of([{ key: 'fake key' } as WordKeyValueModel<TranslateModel[]>]);
     });
     spyOn(component.words, 'setLoading');
     spyOn(component.words, 'setData');
@@ -81,7 +86,7 @@ describe('CheatSheetComponent', () => {
     component.getWords();
 
     expect(component.words.setData).toHaveBeenCalledWith([
-      { key: 'fake key' } as WordKeyValueModel<string[]>,
+      { key: 'fake key' } as WordKeyValueModel<TranslateModel[]>,
     ]);
   });
 });

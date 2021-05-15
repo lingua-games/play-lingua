@@ -351,7 +351,7 @@ export class FallingStarsComponent implements OnInit {
     this.currentWord.correctShowingAnswer =
       this.currentWord.correctAnswers.filter((x: TranslateModel) =>
         this.getAnswers().find((y: string) => x.value === y)
-      )[0].value || '';
+      )[0]?.value || '';
     word.animating = false;
     if (!word.selectedAnswer) {
       this.showGuidBox();

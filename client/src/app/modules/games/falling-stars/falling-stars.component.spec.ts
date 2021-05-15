@@ -7,7 +7,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Store } from '@ngrx/store';
-import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
+import {
+  TranslateModel,
+  WordKeyValueModel,
+} from '../../../core/models/word-key-value.model';
 import { GameStartInformation } from '../../../core/models/game-start-information';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { ElementStyle } from '../../../core/models/element-style.model';
@@ -104,7 +107,7 @@ describe('FallingStarsComponent', () => {
       {
         animating: true,
         style: {},
-        correctAnswers: ['testValue'],
+        correctAnswers: [{ value: 'testValue' } as TranslateModel],
       } as FallingStarsWord,
     ];
     spyOn(component, 'boxAnimationDone');
@@ -373,29 +376,44 @@ describe('FallingStarsComponent', () => {
   });
 
   describe('generateRandomOptions', () => {
-    const allWords: WordKeyValueModel<string[]>[] = [
+    const allWords: WordKeyValueModel<TranslateModel[]>[] = [
       {
-        values: ['something', 'somethings'],
+        translates: [
+          { value: 'something' } as TranslateModel,
+          { value: 'somethings' } as TranslateModel,
+        ],
         key: 'key1',
-      },
+      } as WordKeyValueModel<TranslateModel[]>,
       {
-        values: ['something', 'somethings'],
+        translates: [
+          { value: 'something' } as TranslateModel,
+          { value: 'somethings' } as TranslateModel,
+        ],
         key: 'key12',
-      },
+      } as WordKeyValueModel<TranslateModel[]>,
       {
-        values: ['something', 'somethings'],
+        translates: [
+          { value: 'something' } as TranslateModel,
+          { value: 'somethings' } as TranslateModel,
+        ],
         key: 'key13',
-      },
+      } as WordKeyValueModel<TranslateModel[]>,
       {
-        values: ['something', 'somethings'],
+        translates: [
+          { value: 'something' } as TranslateModel,
+          { value: 'somethings' } as TranslateModel,
+        ],
         key: 'key14',
-      },
+      } as WordKeyValueModel<TranslateModel[]>,
     ];
     it('should call Math.round', () => {
-      const targetWord: WordKeyValueModel<string[]> = {
-        values: ['something', 'somethings'],
+      const targetWord: WordKeyValueModel<TranslateModel[]> = {
+        translates: [
+          { value: 'something' } as TranslateModel,
+          { value: 'somethings' } as TranslateModel,
+        ],
         key: 'key1',
-      };
+      } as WordKeyValueModel<TranslateModel[]>;
       spyOn(Math, 'round').and.returnValue(0);
 
       component.generateRandomOptions(targetWord, allWords);
@@ -404,10 +422,13 @@ describe('FallingStarsComponent', () => {
     });
 
     it('should call Math.round', () => {
-      const targetWord: WordKeyValueModel<string[]> = {
-        values: ['something'],
+      const targetWord: WordKeyValueModel<TranslateModel[]> = {
+        translates: [
+          { value: 'something' } as TranslateModel,
+          { value: 'somethings' } as TranslateModel,
+        ],
         key: 'key1',
-      };
+      } as WordKeyValueModel<TranslateModel[]>;
 
       spyOn(Math, 'round').and.returnValue(0);
 
@@ -447,7 +468,7 @@ describe('FallingStarsComponent', () => {
       fakeWord = {
         animating: false,
         key: '1',
-        correctAnswers: ['somethingCorrect'],
+        correctAnswers: [{ value: 'somethingCorrect' } as TranslateModel],
         selectedAnswer: 'somethingCorrect',
       } as FallingStarsWord;
     });
@@ -483,7 +504,7 @@ describe('FallingStarsComponent', () => {
       fakeWord.correctShowingAnswer = 'test answer';
       component.boxAnimationDone(fakeWord);
 
-      expect(component.currentWord.correctShowingAnswer).toEqual(undefined);
+      expect(component.currentWord.correctShowingAnswer).toEqual('');
     });
 
     it('should show guid box if user answer wrongly', () => {

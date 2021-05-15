@@ -71,12 +71,10 @@ export class CheatSheetComponent implements OnInit {
       } as GetGameWordsRequestModel)
       .subscribe(
         (res: WordKeyValueModel<TranslateModel[]>[]) => {
-          console.log(res);
           if (res && res.length) {
             this.words.setData(res);
             this.words.setLoading(false);
           }
-          console.log(this.words);
         },
         () => {
           // Todo, handle error
