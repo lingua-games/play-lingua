@@ -281,39 +281,18 @@ namespace PlayLingua.Data
         }
         public void CheckForSpeechInDisk(Speech speech, string word, string languageCode, SsmlVoiceGender gender)
         {
-            if (!File.Exists("wwwroot/assets/speechs/" + speech.Code + ".mp3"))
+            if (!File.Exists("wwwroot/assets/speeches/" + speech.Code + ".mp3"))
             {
-                Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../speech-key.json");
-                var client = TextToSpeechClient.Create();
-                var input = new SynthesisInput
-                {
-                    Text = word
-                };
-
-                // Build the voice request.
-                var voiceSelection = new VoiceSelectionParams
-                {
-                    LanguageCode = languageCode,
-                    SsmlGender = gender
-                };
-
-                // Specify the type of audio file.
-                var audioConfig = new AudioConfig
-                {
-                    AudioEncoding = AudioEncoding.Mp3
-                };
-                // Perform the text-to-speech request.
-                var response = client.SynthesizeSpeech(input, voiceSelection, audioConfig);
+                var response = DownloadWord(new SpeechModel { Text = word, LanguageCode = languageCode, Gender = gender}); 
 
                 // Write the response to the output file.
-                using FileStream output = File.Create("wwwroot/assets/speechs/" + speech.Code + ".mp3");
+                using FileStream output = File.Create("wwwroot/assets/speeches/" + speech.Code + ".mp3");
                 response.AudioContent.WriteTo(output);
             }
         }
 
-        public SpeechModel GetVoicFromText(SpeechModel model)
+        public SynthesizeSpeechResponse DownloadWord(SpeechModel model)
         {
-            model.Code = Guid.NewGuid();
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../speech-key.json");
 
             var client = TextToSpeechClient.Create();
@@ -337,13 +316,19 @@ namespace PlayLingua.Data
                 AudioEncoding = AudioEncoding.Mp3
             };
 
+            // Perform the text-to-speech request.
+            return client.SynthesizeSpeech(input, voiceSelection, audioConfig);
+        }
+
+        public SpeechModel GetVoicFromText(SpeechModel model)
+        {
+            model.Code = Guid.NewGuid();
             try
             {
-                // Perform the text-to-speech request.
-                var response = client.SynthesizeSpeech(input, voiceSelection, audioConfig);
+                var response = DownloadWord(model);
 
                 // Write the response to the output file.
-                using FileStream output = File.Create("wwwroot/assets/speechs/" + model.Code + ".mp3");
+                using FileStream output = File.Create("wwwroot/assets/speeches/" + model.Code + ".mp3");
                 response.AudioContent.WriteTo(output);
 
 
@@ -364,6 +349,5 @@ namespace PlayLingua.Data
 
             return model;
         }
-
     }
 }

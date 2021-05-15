@@ -1,0 +1,26 @@
+<div>
+  <div class="guid-box-header-container">
+    <span>Wrong!</span>
+  </div>
+  <div class="guid-box-body-container">
+    <app-speech-player
+      [code]="questionSpeech.code"
+      [status]="questionSpeech.status"
+    ></app-speech-player>
+    <span>
+      {{ question }}
+    </span>
+    <span> = </span>
+    <span>
+      {{ answer }}
+      <app-speech-player
+        [code]="answerSpeech.code"
+        [status]="answerSpeech.status"
+      ></app-speech-player>
+    </span>
+    <hr />
+  </div>
+  <div class="guid-box-action-container text-right">
+    <button class="btn btn-success" (click)="Submit.emit()">Continue</button>
+  </div>
+</div>

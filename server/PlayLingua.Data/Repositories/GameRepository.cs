@@ -22,14 +22,6 @@ namespace PlayLingua.Data
 
         public int GetWordsCountForGame(GetWordsForGameInputModel model)
         {
-            //var sql = @"
-            //            select Distinct BaseWord from [dbo].[Word] 
-            //            WHERE 
-            //                TargetLanguageId = @DefaultTargetLanguage AND
-            //                BaseLanguageId = @DefaultBaseLanguage 
-                            
-            //            ";
-
             var sql = @"
                     select * from WordsToWords
 
@@ -56,28 +48,59 @@ namespace PlayLingua.Data
         public List<GetWordsForGameResponseModel> GetWordsForGame(GetWordsForGameInputModel model)
         {
             var result = new List<GetWordsForGameResponseModel>();
-            //var sql = @"select top " + model.Count + @" * from [dbo].[Word] 
-            //                                WHERE 
-            //                                TargetLanguageId = @DefaultTargetLanguage AND
-            //                                BaseLanguageId = @DefaultBaseLanguage ";
-            //if (model.BookId != 0)
-            //{
-            //    sql += "AND BookId = @BookId ";
-            //    if (model.ChapterId != 0)
-            //    {
-            //        sql += "AND ChapterId = @ChapterId";
-            //    }
-            //}
-            //var words = db.Query<Word>(sql, model).ToList();
+            var sql = @"
+                    select top " + model.Count + @"
+                    wordsBase.Word as BaseWord,
+                    BaseSpeech.Code as BaseWordSpeechCode,
+                    BaseSpeech.Status as BaseWordSpeechStatus,
+                    WordsTarget.Word as Translate,
+                    TargetSpeech.Code as TargetWordSpeechCode,
+                    TargetSpeech.Status as TargetWordSpeechStatus,
+                    WordsToWords.BookId,
+                    WordsToWords.ChapterId,
+                    WordsBase.LanguageId as DefaultBaseLanguage,
+                    WordsTarget.LanguageId as DefaultTargetLanguage
+                    from WordsToWords
 
-            //foreach (var word in words.GroupBy(x => x.BaseWord))
-            //{
-            //    result.Add(new GetWordsForGameResponseModel
-            //    {
-            //        Key = word.Key,
-            //        Values = words.Where(x => x.BaseWord == word.Key).Select(x => x.Translate).ToList()
-            //    });
-            //}
+                    left join Words as WordsBase
+                    on WordsToWords.BaseWordId = WordsBase.Id
+
+                    left join Words as WordsTarget
+                    on WordsToWords.TargetWordId = WordsTarget.Id
+
+                    left join Speech as BaseSpeech
+                    on WordsBase.SpeechId = BaseSpeech.Id
+
+                    left join Speech as TargetSpeech
+                    on WordsTarget.SpeechId = TargetSpeech.Id
+
+                    where WordsBase.LanguageId = @DefaultBaseLanguage and WordsTarget.LanguageId = @DefaultTargetLanguage
+                    ";
+
+            if (model.BookId != 0)
+            {
+                sql += "AND BookId = @BookId ";
+                if (model.ChapterId != 0)
+                {
+                    sql += "AND ChapterId = @ChapterId";
+                }
+            }
+            var words = db.Query<WordForGameModel>(sql, model).ToList();
+
+            foreach (var word in words.GroupBy(x => x.BaseWord))
+            {
+                result.Add(new GetWordsForGameResponseModel
+                {
+                    Key = word.Key,
+                    Translates = words.Where(x => x.BaseWord == word.Key).Select(x => new Translate { 
+                    SpeechCode = x.TargetWordSpeechCode,
+                    SpeechStatus = x.TargetWordSpeechStatus,
+                    Value = x.Translate
+                    }).ToList(),
+                    SpeechCode = words.Where(x => x.BaseWord == word.Key).FirstOrDefault().BaseWordSpeechCode,
+                    SpeechStatus = words.Where(x => x.BaseWord == word.Key).FirstOrDefault().BaseWordSpeechStatus
+                });
+            }
             return result;
         }
     }

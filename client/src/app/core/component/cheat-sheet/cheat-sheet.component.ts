@@ -8,7 +8,10 @@ import { GetGameWordsRequestModel } from '../../models/get-game-words-request.mo
 import { GamesService } from '../../service/games.service';
 import { GameInformationInterface } from '../../models/game-information.interface';
 import { LocalStorageService } from '../../service/local-storage.service';
-import { WordKeyValueModel } from '../../models/word-key-value.model';
+import {
+  TranslateModel,
+  WordKeyValueModel,
+} from '../../models/word-key-value.model';
 import { ApiResult } from '../../models/api-result.model';
 import { animate, style, transition, trigger } from '@angular/animations';
 
@@ -32,8 +35,8 @@ export class CheatSheetComponent implements OnInit {
   };
   @Input() data: GameInformationInterface = {} as GameInformationInterface;
 
-  words: ApiResult<WordKeyValueModel<string[]>[]> = new ApiResult<
-    WordKeyValueModel<string[]>[]
+  words: ApiResult<WordKeyValueModel<TranslateModel[]>[]> = new ApiResult<
+    WordKeyValueModel<TranslateModel[]>[]
   >();
 
   constructor(
@@ -67,7 +70,7 @@ export class CheatSheetComponent implements OnInit {
             ).defaultBaseLanguage.id,
       } as GetGameWordsRequestModel)
       .subscribe(
-        (res: WordKeyValueModel<string[]>[]) => {
+        (res: WordKeyValueModel<TranslateModel[]>[]) => {
           console.log(res);
           if (res && res.length) {
             this.words.setData(res);

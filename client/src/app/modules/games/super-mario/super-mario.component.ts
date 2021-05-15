@@ -12,7 +12,10 @@ import {
   MarioEnemyStatus,
 } from '../../../core/models/mario-enemy.model';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
+import {
+  TranslateModel,
+  WordKeyValueModel,
+} from '../../../core/models/word-key-value.model';
 import { StartGameDialogComponent } from '../common-in-game/start-game-dialog/start-game-dialog.component';
 import { GameInformationInterface } from '../../../core/models/game-information.interface';
 import { GameStartInformation } from '../../../core/models/game-start-information';
@@ -77,10 +80,12 @@ export class SuperMarioComponent implements OnInit, OnDestroy {
   feedbackForm?: InvitationForm;
   mario: MarioModel = new MarioModel();
   enemies: MarioEnemy[] = [];
-  currentEnemy: WordKeyValueModel<string[]> = {} as WordKeyValueModel<string[]>;
+  currentEnemy: WordKeyValueModel<TranslateModel[]> = {} as WordKeyValueModel<
+    TranslateModel[]
+  >;
   allEnemies: GameStartInformation<
-    WordKeyValueModel<string[]>[]
-  > = {} as GameStartInformation<WordKeyValueModel<string[]>[]>;
+    WordKeyValueModel<TranslateModel[]>[]
+  > = {} as GameStartInformation<WordKeyValueModel<TranslateModel[]>[]>;
   randomNumbers: number[] = [];
   movingRightInterval?: number;
   movingLeftInterval?: number;
@@ -258,18 +263,20 @@ export class SuperMarioComponent implements OnInit, OnDestroy {
         maxHeight: '95vh',
       })
       .afterClosed()
-      .subscribe((res: GameStartInformation<WordKeyValueModel<string[]>[]>) => {
-        if (res && res.words && res.words.length) {
-          this.allEnemies = JSON.parse(JSON.stringify(res));
-          this.bookId = res.bookId;
-          this.chapterId = res.chapterId;
-          this.soundService.playActionSong(
-            GameActionEnum.backGroundSond,
-            this.isSoundOn
-          );
-          this.startGame();
+      .subscribe(
+        (res: GameStartInformation<WordKeyValueModel<TranslateModel[]>[]>) => {
+          if (res && res.words && res.words.length) {
+            this.allEnemies = JSON.parse(JSON.stringify(res));
+            this.bookId = res.bookId;
+            this.chapterId = res.chapterId;
+            this.soundService.playActionSong(
+              GameActionEnum.backGroundSond,
+              this.isSoundOn
+            );
+            this.startGame();
+          }
         }
-      });
+      );
   }
 
   startGame(): void {
@@ -307,21 +314,23 @@ export class SuperMarioComponent implements OnInit, OnDestroy {
 
     dialog
       .afterClosed()
-      .subscribe((res: GameStartInformation<WordKeyValueModel<string[]>[]>) => {
-        if (res && res.words && res.words.length) {
-          this.allEnemies = JSON.parse(JSON.stringify(res));
-          this.bookId = res.bookId;
-          this.chapterId = res.chapterId;
-          this.startGame();
+      .subscribe(
+        (res: GameStartInformation<WordKeyValueModel<TranslateModel[]>[]>) => {
+          if (res && res.words && res.words.length) {
+            this.allEnemies = JSON.parse(JSON.stringify(res));
+            this.bookId = res.bookId;
+            this.chapterId = res.chapterId;
+            this.startGame();
+          }
         }
-      });
+      );
   }
 
   isLoggedIn(): boolean {
     return this.securityService.isLoggedIn();
   }
 
-  prepareTheWord(enemy?: WordKeyValueModel<string[]>): void {
+  prepareTheWord(enemy?: WordKeyValueModel<TranslateModel[]>): void {
     if (this.guidBoxShowing) {
       this.soundService.playActionSong(
         GameActionEnum.backGroundSond,
@@ -337,7 +346,7 @@ export class SuperMarioComponent implements OnInit, OnDestroy {
       );
 
       if (this.allEnemies.words[indexOfCurrentEnemy + 1]) {
-        this.currentEnemy = {} as WordKeyValueModel<string[]>;
+        this.currentEnemy = {} as WordKeyValueModel<TranslateModel[]>;
         // Just to fire ngIf in the template
         setTimeout(() => {
           this.currentEnemy = this.allEnemies.words[indexOfCurrentEnemy + 1];
@@ -373,14 +382,15 @@ export class SuperMarioComponent implements OnInit, OnDestroy {
     this.enemies = [];
     // Placing correct answer into a random position
     this.enemies[this.randomNumbers[0]] = {
-      valueToAsk: this.currentEnemy.values[0],
+      valueToAsk: this.currentEnemy.translates[0].value,
       status: MarioEnemyStatus.WaitingForStart,
     } as MarioEnemy;
     this.randomNumbers.splice(0, 1);
 
     this.randomNumbers.forEach((random) => {
       this.enemies[random] = {
-        valueToAsk: this.allEnemies?.words[random || 0]?.values[0] || '',
+        valueToAsk:
+          this.allEnemies?.words[random || 0]?.translates[0].value || '',
         status: MarioEnemyStatus.WaitingForStart,
       } as MarioEnemy;
     });
@@ -509,8 +519,8 @@ export class SuperMarioComponent implements OnInit, OnDestroy {
       if (this.isCrashed()) {
         clearInterval(this.enemyAnimateInterval);
         if (
-          this.currentEnemy?.values?.find(
-            (x: string) => x === playingEnemy?.valueToAsk
+          this.currentEnemy?.translates?.find(
+            (x: TranslateModel) => x.value === playingEnemy?.valueToAsk
           )
         ) {
           this.showPointNotification(playingEnemy as MarioEnemy);
@@ -524,8 +534,8 @@ export class SuperMarioComponent implements OnInit, OnDestroy {
       }
       if (parseInt(playingEnemy?.style?.right || '', 0) >= 105) {
         if (
-          this.currentEnemy?.values?.find(
-            (x: string) => x === playingEnemy?.valueToAsk
+          this.currentEnemy?.translates?.find(
+            (x: TranslateModel) => x.value === playingEnemy?.valueToAsk
           )
         ) {
           this.showGuidBox(playingEnemy);
@@ -573,7 +583,11 @@ export class SuperMarioComponent implements OnInit, OnDestroy {
     if (!movingElement) {
       return;
     }
-    if (this.currentEnemy.values.find((x) => x === movingElement?.valueToAsk)) {
+    if (
+      this.currentEnemy.translates.find(
+        (x: TranslateModel) => x.value === movingElement?.valueToAsk
+      )
+    ) {
       this.showGuidBox(movingElement);
       return;
     }

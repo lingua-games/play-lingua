@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - "master"
+      - "feature/**"
 
 env:
   AZURE_WEBAPP_NAME: play-lingua-eu
@@ -42,6 +43,18 @@ jobs:
 
       # Set backend secrets
       - name: App Settings Variable Substitution
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: './server/PlayLingua.Host/appsettings.json, ./server/PlayLingua.Host/appsettings.production.json'
+        env:
+          secret: ${{ secrets.SECRET  }}
+          ConnectionStrings.playLinguaConnection: ${{ secrets.PLAYLINGUACONNECTION  }}
+          hashKey: ${{ secrets.HASHKEY  }}
+          email.username: ${{ secrets.EMAIL_USERNAME }}
+          email.password: ${{ secrets.EMAIL_PASSWORD }}
+
+      # Set google secrets
+      - name: Google secret Variable Substitution
         uses: microsoft/variable-substitution@v1
         with:
           files: './server/PlayLingua.Host/appsettings.json, ./server/PlayLingua.Host/appsettings.production.json'

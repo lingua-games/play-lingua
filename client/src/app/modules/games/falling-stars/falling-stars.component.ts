@@ -2,7 +2,10 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { FallingStarsWord } from '../../../core/models/falling-stars-word.interface';
 import { MatDialog } from '@angular/material/dialog';
-import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
+import {
+  TranslateModel,
+  WordKeyValueModel,
+} from '../../../core/models/word-key-value.model';
 import { Store } from '@ngrx/store';
 import { NotificationState } from '../../../core/component/score-notification/state/score-notification.reducer';
 import { toggleNotification } from '../../../core/component/score-notification/state/score-notification.actions';
@@ -17,6 +20,7 @@ import { InvitationForm } from '../../../core/models/invitation-form.interface';
 import { ScoreStoreInterface } from '../../../core/models/score-store.interface';
 import { ElementStyle } from '../../../core/models/element-style.model';
 import { SecurityService } from '../../../core/service/security.service';
+import { SpeechModel } from '../../../core/models/speech.model';
 
 const secondsForTraver = 5000;
 const bufferBeforeStart = 2000;
@@ -185,15 +189,17 @@ export class FallingStarsComponent implements OnInit {
 
     dialog
       .afterClosed()
-      .subscribe((res: GameStartInformation<WordKeyValueModel<string[]>[]>) => {
-        if (res && res.words && res.words.length) {
-          this.copyOfWords = JSON.parse(JSON.stringify(res.words));
-          this.bookId = res.bookId;
-          this.chapterId = res.chapterId;
-          this.setGameWords(res.words);
-          this.startGame();
+      .subscribe(
+        (res: GameStartInformation<WordKeyValueModel<TranslateModel[]>[]>) => {
+          if (res && res.words && res.words.length) {
+            this.copyOfWords = JSON.parse(JSON.stringify(res.words));
+            this.bookId = res.bookId;
+            this.chapterId = res.chapterId;
+            this.setGameWords(res.words);
+            this.startGame();
+          }
         }
-      });
+      );
   }
 
   showStartDialog(): void {
@@ -217,24 +223,39 @@ export class FallingStarsComponent implements OnInit {
         maxHeight: '95vh',
       })
       .afterClosed()
-      .subscribe((res: GameStartInformation<WordKeyValueModel<string[]>[]>) => {
-        if (res && res.words && res.words.length) {
-          this.copyOfWords = JSON.parse(JSON.stringify(res.words));
-          this.bookId = res.bookId;
-          this.chapterId = res.chapterId;
-          this.setGameWords(res.words);
-          this.startGame();
+      .subscribe(
+        (res: GameStartInformation<WordKeyValueModel<TranslateModel[]>[]>) => {
+          if (res && res.words && res.words.length) {
+            this.copyOfWords = JSON.parse(JSON.stringify(res.words));
+            this.bookId = res.bookId;
+            this.chapterId = res.chapterId;
+            this.setGameWords(res.words);
+            this.startGame();
+          }
         }
-      });
+      );
   }
 
-  setGameWords(res: WordKeyValueModel<string[]>[]): void {
+  getAnswerSpeech(currentWord: FallingStarsWord): SpeechModel {
+    return {
+      code: currentWord.correctAnswers.find(
+        (x) => x.value === currentWord.correctShowingAnswer
+      )?.speechCode,
+      status: currentWord.correctAnswers.find(
+        (x) => x.value === currentWord.correctShowingAnswer
+      )?.speechStatus,
+    } as SpeechModel;
+  }
+
+  setGameWords(res: WordKeyValueModel<TranslateModel[]>[]): void {
     this.words = [];
 
-    res.forEach((element: WordKeyValueModel<string[]>) => {
+    res.forEach((element: WordKeyValueModel<TranslateModel[]>) => {
       this.words.push({
         key: element.key,
-        correctAnswers: element.values,
+        speechCode: element.speechCode,
+        speechStatus: element.speechStatus,
+        correctAnswers: element.translates,
         style: {
           left: `${this.getRandomNumber()}%`,
           animation: 'loading-star-animation 300ms linear infinite',
@@ -266,30 +287,31 @@ export class FallingStarsComponent implements OnInit {
   }
 
   generateRandomOptions(
-    targetWord: WordKeyValueModel<string[]>,
-    allWords: WordKeyValueModel<string[]>[]
+    targetWord: WordKeyValueModel<TranslateModel[]>,
+    allWords: WordKeyValueModel<TranslateModel[]>[]
   ): string[] {
     const result: string[] = [];
-    const copyOfAllWords: WordKeyValueModel<string[]>[] = JSON.parse(
+    const copyOfAllWords: WordKeyValueModel<TranslateModel[]>[] = JSON.parse(
       JSON.stringify(
         allWords.filter(
-          (x: WordKeyValueModel<string[]>) => x.key !== targetWord.key
+          (x: WordKeyValueModel<TranslateModel[]>) => x.key !== targetWord.key
         )
       )
     );
 
-    if (!targetWord || !targetWord.values || !targetWord.key) {
+    if (!targetWord || !targetWord.translates || !targetWord.key) {
       return [];
     }
     // Filling the correct option
     const answerPlace = Math.round(Math.random() * (3 - 0));
-    const answersLength = targetWord.values.length;
+    const answersLength = targetWord.translates.length;
     if (answersLength === 1) {
-      result[answerPlace] = targetWord.values[0];
+      result[answerPlace] = targetWord.translates[0].value || '';
     } else {
       // if the word has more than 1 answers, get one randomly
       result[answerPlace] =
-        targetWord.values[Math.round(Math.random() * (answersLength - 1))];
+        targetWord.translates[Math.round(Math.random() * (answersLength - 1))]
+          .value || '';
     }
 
     // Filling the rest of options
@@ -298,7 +320,7 @@ export class FallingStarsComponent implements OnInit {
         const randomIndex = Math.round(
           Math.random() * (copyOfAllWords.length - 1)
         );
-        result[i] = copyOfAllWords[randomIndex].values[0];
+        result[i] = copyOfAllWords[randomIndex].translates[0].value || '';
         copyOfAllWords.splice(randomIndex, 1);
       }
     }
@@ -326,9 +348,10 @@ export class FallingStarsComponent implements OnInit {
     if (!this.getAnswers()) {
       return;
     }
-    this.currentWord.correctShowingAnswer = this.currentWord.correctAnswers.filter(
-      (x: string) => this.getAnswers().find((y: string) => x === y)
-    )[0];
+    this.currentWord.correctShowingAnswer =
+      this.currentWord.correctAnswers.filter((x: TranslateModel) =>
+        this.getAnswers().find((y: string) => x.value === y)
+      )[0].value || '';
     word.animating = false;
     if (!word.selectedAnswer) {
       this.showGuidBox();
@@ -342,7 +365,11 @@ export class FallingStarsComponent implements OnInit {
       word.isBlinking = true;
       this.words.push(JSON.parse(JSON.stringify(word)));
     } else {
-      if (word.correctAnswers.find((x: string) => x === word.selectedAnswer)) {
+      if (
+        word.correctAnswers.find(
+          (x: TranslateModel) => x.value === word.selectedAnswer
+        )
+      ) {
         if (!isCalledFromView) {
           this.store.dispatch(
             toggleNotification({

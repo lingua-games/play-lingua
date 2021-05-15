@@ -1,0 +1,26 @@
+:host {
+  position: absolute;
+  width: 40%;
+  left: 30%;
+  top:40vh;
+  background-color: white;
+  z-index: 1;
+}
+
+.guid-box-header-container {
+  text-align: center;
+  border-bottom: 1px solid lightgray;
+  padding: 0.2rem 0;
+  font-size: .7vw;
+  background-color: #BDA69E;
+  color: #BC4B20;
+}
+
+.guid-box-body-container {
+  margin: 2vh;
+  text-align: center;
+}
+
+.guid-box-action-container {
+  margin: 2vh;
+}
