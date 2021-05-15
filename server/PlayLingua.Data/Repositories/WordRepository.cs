@@ -293,7 +293,7 @@ namespace PlayLingua.Data
 
         public SynthesizeSpeechResponse DownloadWord(SpeechModel model)
         {
-            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../speech-key.json");
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "./speech-key.json");
 
             var client = TextToSpeechClient.Create();
 
