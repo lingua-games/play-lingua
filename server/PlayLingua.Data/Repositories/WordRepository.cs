@@ -21,7 +21,6 @@ namespace PlayLingua.Data
         {
             db = new SqlConnection(connectionString);
         }
-
         public void EditWordSeries(SubmitWordsModel submitWords, int userId)
         {
             var modelForDelete = new WordOverviewModel
@@ -290,7 +289,6 @@ namespace PlayLingua.Data
                 response.AudioContent.WriteTo(output);
             }
         }
-
         public SynthesizeSpeechResponse DownloadWord(SpeechModel model)
         {
             if(!File.Exists("wwwroot/assets/speeches/"))
@@ -320,10 +318,15 @@ namespace PlayLingua.Data
                 AudioEncoding = AudioEncoding.Mp3
             };
 
-            // Perform the text-to-speech request.
-            return client.SynthesizeSpeech(input, voiceSelection, audioConfig);
+            try
+            {
+                // Perform the text-to-speech request.
+                return client.SynthesizeSpeech(input, voiceSelection, audioConfig);
+            } catch (Exception)
+            {
+                return new SynthesizeSpeechResponse();
+            }
         }
-
         public SpeechModel GetVoicFromText(SpeechModel model)
         {
             model.Code = Guid.NewGuid();
