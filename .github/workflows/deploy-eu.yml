@@ -57,13 +57,10 @@ jobs:
       - name: Google secret Variable Substitution
         uses: microsoft/variable-substitution@v1
         with:
-          files: './server/PlayLingua.Host/appsettings.json, ./server/PlayLingua.Host/appsettings.production.json'
+          files: './server/speech-key.json'
         env:
-          secret: ${{ secrets.SECRET  }}
-          ConnectionStrings.playLinguaConnection: ${{ secrets.PLAYLINGUACONNECTION  }}
-          hashKey: ${{ secrets.HASHKEY  }}
-          email.username: ${{ secrets.EMAIL_USERNAME }}
-          email.password: ${{ secrets.EMAIL_PASSWORD }}
+          private_key_id: ${{ secrets.GOOGLE_PRIVATE_KEY_ID  }}
+          private_key: ${{ secrets.GOOGLE_PRIVATE_KEY  }}
 
       # Run dotnet build and publish
       - name: dotnet build and publish

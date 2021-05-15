@@ -342,3 +342,4 @@ healthchecksdb
 
 artifact/
 tools/
+/server/speech-key.json
