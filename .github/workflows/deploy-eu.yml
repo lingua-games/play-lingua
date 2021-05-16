@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - "master"
-      - "feature/**"
 env:
   AZURE_WEBAPP_NAME: play-lingua-eu
   AZURE_WEBAPP_PACKAGE_PATH: 'deployed-directory'      # set this to the path to your web app project, defaults to the repository root
