@@ -14,6 +14,8 @@ import { GameConfigComponent } from './game-config/game-config.component';
 import { RankingComponent } from './ranking/ranking.component';
 import { DirectiveModule } from '../directives/directive.module';
 import { CheatSheetComponent } from './cheat-sheet/cheat-sheet.component';
+import { SpeechPlayerComponent } from './speech-player/speech-player.component';
+import { GuidBoxComponent } from './guid-box/guid-box.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { CheatSheetComponent } from './cheat-sheet/cheat-sheet.component';
     GameConfigComponent,
     RankingComponent,
     CheatSheetComponent,
+    SpeechPlayerComponent,
+    GuidBoxComponent,
   ],
   imports: [
     CommonModule,
@@ -40,6 +44,7 @@ import { CheatSheetComponent } from './cheat-sheet/cheat-sheet.component';
     GameOptionsComponent,
     TopNavbarComponent,
     StartGameDialogComponent,
+    GuidBoxComponent,
   ],
 })
 export class ComponentModule {}

@@ -7,7 +7,10 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Store } from '@ngrx/store';
 import { GameStartInformation } from '../../../core/models/game-start-information';
-import { WordKeyValueModel } from '../../../core/models/word-key-value.model';
+import {
+  TranslateModel,
+  WordKeyValueModel,
+} from '../../../core/models/word-key-value.model';
 import { MarioModel } from '../../../core/models/mario.model';
 import { ElementStyle } from '../../../core/models/element-style.model';
 import { ScoreStorageService } from '../../../core/service/score-storage.service';
@@ -281,7 +284,7 @@ describe('SuperMarioComponent', () => {
     spyOn(component, 'prepareTheWord');
     component.allEnemies = {
       words: [],
-    } as GameStartInformation<WordKeyValueModel<string[]>[]>;
+    } as GameStartInformation<WordKeyValueModel<TranslateModel[]>[]>;
 
     component.startGame();
 
@@ -361,7 +364,15 @@ describe('SuperMarioComponent', () => {
       return {
         afterClosed: () =>
           of({
-            words: [{ key: 'foo', values: ['foo', 'bar'] }],
+            words: [
+              {
+                key: 'foo',
+                translates: [
+                  { value: 'foo' } as TranslateModel,
+                  { value: 'bar' } as TranslateModel,
+                ],
+              },
+            ],
           } as GameStartInformation<WordKeyValueModel<string[]>[]>),
       };
     });
@@ -378,8 +389,22 @@ describe('SuperMarioComponent', () => {
       spyOn(component, 'prepareAnswerOptions');
       component.allEnemies = {
         words: [
-          { key: 'foo1', values: ['foo1', 'bar1'], wrongCount: 0 },
-          { key: 'foo2', values: ['foo2', 'bar2'], wrongCount: 0 },
+          {
+            key: 'foo1',
+            translates: [
+              { value: 'foo1' } as TranslateModel,
+              { value: 'bar1' } as TranslateModel,
+            ],
+            wrongCount: 0,
+          } as WordKeyValueModel<TranslateModel[]>,
+          {
+            key: 'foo2',
+            translates: [
+              { value: 'foo2' } as TranslateModel,
+              { value: 'bar2' } as TranslateModel,
+            ],
+            wrongCount: 0,
+          } as WordKeyValueModel<TranslateModel[]>,
         ],
         bookId: 1,
         chapterId: 1,
@@ -418,12 +443,12 @@ describe('SuperMarioComponent', () => {
 
   it('should return random numbers when calling generateRandomNumber', () => {
     component.allEnemies = { words: [] } as GameStartInformation<
-      WordKeyValueModel<string[]>[]
+      WordKeyValueModel<TranslateModel[]>[]
     >;
-    component.allEnemies.words.push({} as WordKeyValueModel<string[]>);
-    component.allEnemies.words.push({} as WordKeyValueModel<string[]>);
-    component.allEnemies.words.push({} as WordKeyValueModel<string[]>);
-    component.allEnemies.words.push({} as WordKeyValueModel<string[]>);
+    component.allEnemies.words.push({} as WordKeyValueModel<TranslateModel[]>);
+    component.allEnemies.words.push({} as WordKeyValueModel<TranslateModel[]>);
+    component.allEnemies.words.push({} as WordKeyValueModel<TranslateModel[]>);
+    component.allEnemies.words.push({} as WordKeyValueModel<TranslateModel[]>);
 
     expect(component.generateRandomNumber().length).toBe(4);
   });
@@ -431,22 +456,25 @@ describe('SuperMarioComponent', () => {
   it('should call setEnemyStyle when calling prepareAnswerOptions', () => {
     component.enemies = [];
     component.randomNumbers = [0, 1, 2, 3];
-    component.currentEnemy = { values: ['foo'] } as WordKeyValueModel<string[]>;
+    component.currentEnemy = {
+      translates: [{ value: 'foo' } as TranslateModel],
+    } as WordKeyValueModel<TranslateModel[]>;
+
     component.allEnemies = { words: [] } as GameStartInformation<
-      WordKeyValueModel<string[]>[]
+      WordKeyValueModel<TranslateModel[]>[]
     >;
-    component.allEnemies.words.push({ values: ['foo'] } as WordKeyValueModel<
-      string[]
-    >);
-    component.allEnemies.words.push({ values: ['foo'] } as WordKeyValueModel<
-      string[]
-    >);
-    component.allEnemies.words.push({ values: ['foo'] } as WordKeyValueModel<
-      string[]
-    >);
-    component.allEnemies.words.push({ values: ['foo'] } as WordKeyValueModel<
-      string[]
-    >);
+    component.allEnemies.words.push({
+      translates: [{ value: 'foo' } as TranslateModel],
+    } as WordKeyValueModel<TranslateModel[]>);
+    component.allEnemies.words.push({
+      translates: [{ value: 'foo' } as TranslateModel],
+    } as WordKeyValueModel<TranslateModel[]>);
+    component.allEnemies.words.push({
+      translates: [{ value: 'foo' } as TranslateModel],
+    } as WordKeyValueModel<TranslateModel[]>);
+    component.allEnemies.words.push({
+      translates: [{ value: 'foo' } as TranslateModel],
+    } as WordKeyValueModel<TranslateModel[]>);
     spyOn(component, 'setEnemyStyle');
 
     component.prepareAnswerOptions();
@@ -535,7 +563,9 @@ describe('SuperMarioComponent', () => {
 
     it('should divide score by 2 answered once wrong', () => {
       spyOn(component, 'animationOnWrongAnswer');
-      component.currentEnemy = { wrongCount: 1 } as WordKeyValueModel<string[]>;
+      component.currentEnemy = { wrongCount: 1 } as WordKeyValueModel<
+        TranslateModel[]
+      >;
 
       component.showPointNotification(enemy);
 
@@ -568,8 +598,8 @@ describe('SuperMarioComponent', () => {
   describe('showGuidBox', () => {
     beforeEach(() => {
       component.allEnemies = {
-        words: [{} as WordKeyValueModel<string[]>],
-      } as GameStartInformation<WordKeyValueModel<string[]>[]>;
+        words: [{} as WordKeyValueModel<TranslateModel[]>],
+      } as GameStartInformation<WordKeyValueModel<TranslateModel[]>[]>;
     });
     it('should call animationOnWrongAnswer', () => {
       spyOn(component, 'animationOnWrongAnswer');
@@ -645,8 +675,8 @@ describe('SuperMarioComponent', () => {
       spyOn(component, 'showGuidBox');
       spyOn(component, 'showPointNotification');
       component.currentEnemy = {
-        values: ['foo'],
-      } as WordKeyValueModel<string[]>;
+        translates: [{ value: 'foo' } as TranslateModel],
+      } as WordKeyValueModel<TranslateModel[]>;
       enemy.valueToAsk = 'foo';
       jasmine.clock().uninstall();
       jasmine.clock().install();
@@ -665,8 +695,8 @@ describe('SuperMarioComponent', () => {
       spyOn(component, 'showPointNotification');
       spyOn(component, 'prepareTheWord');
       component.currentEnemy = {
-        values: ['foo'],
-      } as WordKeyValueModel<string[]>;
+        translates: [{ value: 'foo' } as TranslateModel],
+      } as WordKeyValueModel<TranslateModel[]>;
       enemy.valueToAsk = 'foo';
       jasmine.clock().uninstall();
       jasmine.clock().install();
@@ -683,8 +713,8 @@ describe('SuperMarioComponent', () => {
       spyOn(component, 'isCrashed').and.returnValue(false);
       spyOn(component, 'showGuidBox');
       component.currentEnemy = {
-        values: ['foo'],
-      } as WordKeyValueModel<string[]>;
+        translates: [{ value: 'foo' } as TranslateModel],
+      } as WordKeyValueModel<TranslateModel[]>;
       enemy.valueToAsk = 'foo';
       enemy.style = { right: '150%' } as ElementStyle;
       jasmine.clock().uninstall();
@@ -702,8 +732,8 @@ describe('SuperMarioComponent', () => {
       spyOn(component, 'isCrashed').and.returnValue(false);
       spyOn(component, 'showNextEnemyWhenEnemyReachToEnd');
       component.currentEnemy = {
-        values: ['foo1'],
-      } as WordKeyValueModel<string[]>;
+        translates: [{ value: 'foo1' } as TranslateModel],
+      } as WordKeyValueModel<TranslateModel[]>;
       enemy.valueToAsk = 'foo';
       enemy.style = { right: '150%' } as ElementStyle;
       jasmine.clock().uninstall();
@@ -757,8 +787,8 @@ describe('SuperMarioComponent', () => {
       component.enemies[0].status = MarioEnemyStatus.IsMoving;
       spyOn(component, 'showGuidBox');
       component.currentEnemy = {
-        values: ['foo1'],
-      } as WordKeyValueModel<string[]>;
+        translates: [{ value: 'foo1' } as TranslateModel],
+      } as WordKeyValueModel<TranslateModel[]>;
 
       component.skipEnemy();
 
@@ -768,8 +798,8 @@ describe('SuperMarioComponent', () => {
       component.enemies[0].status = MarioEnemyStatus.IsMoving;
       spyOn(component, 'showNextEnemyWhenEnemyReachToEnd');
       component.currentEnemy = {
-        values: ['foo2'],
-      } as WordKeyValueModel<string[]>;
+        translates: [{ value: 'foo2' } as TranslateModel],
+      } as WordKeyValueModel<TranslateModel[]>;
 
       component.skipEnemy();
 

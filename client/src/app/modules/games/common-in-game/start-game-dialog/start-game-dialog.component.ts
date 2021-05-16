@@ -2,7 +2,10 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GamesService } from '../../../../core/service/games.service';
-import { WordKeyValueModel } from '../../../../core/models/word-key-value.model';
+import {
+  TranslateModel,
+  WordKeyValueModel,
+} from '../../../../core/models/word-key-value.model';
 import { environment } from '../../../../../environments/environment';
 import {
   NotificationService,
@@ -115,7 +118,7 @@ export class StartGameDialogComponent implements OnInit {
 
   submit(): void {
     this.isPreparing = true;
-    let result: GameStartInformation<WordKeyValueModel<string[]>[]>;
+    let result: GameStartInformation<WordKeyValueModel<TranslateModel[]>[]>;
 
     if (this.data.isFeedback) {
       result = {
@@ -151,7 +154,7 @@ export class StartGameDialogComponent implements OnInit {
             ).defaultBaseLanguage.id,
       } as GetGameWordsRequestModel)
       .subscribe(
-        (res: WordKeyValueModel<string[]>[]) => {
+        (res: WordKeyValueModel<TranslateModel[]>[]) => {
           if (res.length === 0) {
             this.notificationService.showMessage(
               'No word has added with this condition yet',

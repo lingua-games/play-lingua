@@ -11,6 +11,6 @@ namespace PlayLingua.Domain.Ports
         void SubmitWordSeries(SubmitWordsModel submitWords, int userId);
         void EditWordSeries(SubmitWordsModel submitWords, int userId);
         List<WordOverviewModel> GetWordOverviews(int userId);
-        List<Word> GetWordDetails(WordOverviewModel overview);
+        List<WordForEditModel> GetWordDetails(WordOverviewModel overview);
     }
 }

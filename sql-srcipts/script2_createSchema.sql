@@ -68,33 +68,79 @@ ALTER TABLE [dbo].[Chapter] ADD CONSTRAINT [FK_Chapter_AddedBy]
 FOREIGN KEY ([AddedBy]) REFERENCES [dbo].[Users] ([Id])
 GO
 
-CREATE TABLE [dbo].[Word] (
-    [Id] int IDENTITY(1,1) PRIMARY KEY,
-    [BaseLanguageId]   int                NOT NULL,
-    [BaseWord]         nvarchar(100)     NOT NULL,
-    [TargetLanguageId] int                NOT NULL,
-    [Translate]        nvarchar(100)     NOT NULL,
-	[BookId]           int			          NULL,
-	[ChapterId]        int					  NULL,
+create table [dbo].[words] (
+	[Id] int IDENTITY(1,1) PRIMARY KEY,
+	[LanguageId]   int                NOT NULL,
+	[Word]         nvarchar(100)     NOT NULL,
 	[AddedBy]   int NOT NULL,
 	[AddedDate] datetime NOT NULL,
-	[LastUpdateDate] datetime,
+	[SpeechId] int,
 )
-ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_BookId]
-FOREIGN KEY ([BookId]) REFERENCES [dbo].[Book] ([Id])
+ALTER TABLE [dbo].[Words] ADD CONSTRAINT [FK_Words_SpeechId]
+FOREIGN KEY ([SpeechId]) REFERENCES [dbo].[Speech] ([Id])
 GO
-ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_ChapterId]
-FOREIGN KEY ([ChapterId]) REFERENCES [dbo].[Chapter] ([Id])
+ALTER TABLE [dbo].[Words] ADD CONSTRAINT [FK_Words_LanguageId]
+FOREIGN KEY ([LanguageId]) REFERENCES [dbo].[Language] ([Id])
 GO
-ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_BaseLanguageId]
-FOREIGN KEY ([BaseLanguageId]) REFERENCES [dbo].[Language] ([Id])
+
+create table [dbo].[WordsToWords] (
+	[Id] int IDENTITY(1,1) PRIMARY KEY,
+	[BaseWordId]			int                NOT NULL,
+	[TargetWordId]          int      		   NOT NULL,
+	[AddedBy]				int				   NOT NULL,
+	[AddedDate]				datetime		   NOT NULL,
+	[BookId]				int,                
+	[ChapterId]				int				   
+)
+ALTER TABLE [dbo].[wordsToWords] ADD CONSTRAINT [FK_WordsToWords_BookId]
+FOREIGN KEY (BookId) REFERENCES [dbo].Book ([Id])
 GO
-ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_TargetLanguageId]
-FOREIGN KEY ([TargetLanguageId]) REFERENCES [dbo].[Language] ([Id])
+ALTER TABLE [dbo].[wordsToWords] ADD CONSTRAINT [FK_WordsToWords_ChapterId]
+FOREIGN KEY (ChapterId) REFERENCES [dbo].Chapter ([Id])
 GO
-ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_AddedBy]
-FOREIGN KEY ([AddedBy]) REFERENCES [dbo].[Users] ([Id])
+ALTER TABLE [dbo].[wordsToWords] ADD CONSTRAINT [FK_WordsToWords_BaseWordId]
+FOREIGN KEY ([BaseWordId]) REFERENCES [dbo].[Words] ([Id])
 GO
+ALTER TABLE [dbo].[wordsToWords] ADD CONSTRAINT [FK_WordsToWords_TargetWordId]
+FOREIGN KEY ([TargetWordId]) REFERENCES [dbo].[Words] ([Id])
+GO
+
+
+--CREATE TABLE [dbo].[Word_v1] (
+--    [Id] int IDENTITY(1,1) PRIMARY KEY,
+--    [BaseLanguageId]   int                NOT NULL,
+--    [BaseWord]         nvarchar(100)     NOT NULL,
+--    [TargetLanguageId] int                NOT NULL,
+--    [Translate]        nvarchar(100)     NOT NULL,
+--	[BookId]           int			          NULL,
+--	[ChapterId]        int					  NULL,
+--	[AddedBy]   int NOT NULL,
+--	[AddedDate] datetime NOT NULL,
+--	[LastUpdateDate] datetime,
+--	[BaseSpeechId] int,
+--	[TargetSpeechId] int
+--)
+--ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_BookId]
+--FOREIGN KEY ([BookId]) REFERENCES [dbo].[Book] ([Id])
+--GO
+--ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_ChapterId]
+--FOREIGN KEY ([ChapterId]) REFERENCES [dbo].[Chapter] ([Id])
+--GO
+--ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_BaseLanguageId]
+--FOREIGN KEY ([BaseLanguageId]) REFERENCES [dbo].[Language] ([Id])
+--GO
+--ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_TargetLanguageId]
+--FOREIGN KEY ([TargetLanguageId]) REFERENCES [dbo].[Language] ([Id])
+--GO
+--ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_AddedBy]
+--FOREIGN KEY ([AddedBy]) REFERENCES [dbo].[Users] ([Id])
+--GO
+--ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_Base_SpeechId]
+--FOREIGN KEY ([BaseSpeechId]) REFERENCES [dbo].[Speech] ([Id])
+--GO
+--ALTER TABLE [dbo].[Word] ADD CONSTRAINT [FK_Word_Target_SpeechId]
+--FOREIGN KEY ([TargetSpeechId]) REFERENCES [dbo].[Speech] ([Id])
+--GO
 
 CREATE TABLE [dbo].[BaseLanguageToTargetLanguage] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
@@ -102,6 +148,15 @@ CREATE TABLE [dbo].[BaseLanguageToTargetLanguage] (
     [TargetLanguageId] int                NOT NULL,
 	[AddedDate] datetime NOT NULL,
 	[LastUpdateDate] datetime,
+)
+Go
+
+CREATE TABLE [dbo].[Speech] (
+    [Id] int IDENTITY(1,1) PRIMARY KEY,
+    [Code]   int                NOT NULL,
+	[AddedDate] datetime NOT NULL,
+	[Status] int NOT NULL,
+	[ErrorMessage] nvarchar(max)
 )
 Go
 

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PlayLingua.Contract.ViewModels
+﻿namespace PlayLingua.Domain.Models
 {
-    public class WordViewModel
+    public class WordForEditModel
     {
         public int Id { get; set; }
         public int BaseLanguageId { get; set; }

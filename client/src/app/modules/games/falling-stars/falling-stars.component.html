@@ -3,25 +3,18 @@
   *ngIf="words.length && !isGameFinished"
   (click)="showStartDialog()"
 ></app-game-options>
-<div *ngIf="guidBoxShowing" class="guid-box-container" @fadeIn>
-  <div class="guid-box-header-container">
-    <span>Wrong!</span>
-  </div>
-  <div class="guid-box-body-container">
-    <span>
-      Correct answer is
-      <span class="guid-box-correct-answer"
-        ><strong>{{ currentWord.correctShowingAnswer }}</strong></span
-      >
-      .
-    </span>
-    <br />
-    <span>{{ currentWord.key }} = {{ currentWord.correctShowingAnswer }}</span>
-  </div>
-  <div class="guid-box-action-container text-right">
-    <button class="btn btn-success" (click)="playNextStar()">Continue</button>
-  </div>
-</div>
+<app-guid-box
+  *ngIf="guidBoxShowing"
+  [question]="currentWord.key"
+  [answer]="currentWord.correctShowingAnswer"
+  [answerSpeech]="getAnswerSpeech(currentWord)"
+  [questionSpeech]="{
+    code: currentWord.speechCode,
+    status: currentWord.speechStatus
+  }"
+  (Submit)="playNextStar()"
+  @fadeIn
+></app-guid-box>
 <div class="game-board-container">
   <div class="falling-container">
     <span *ngFor="let word of words">

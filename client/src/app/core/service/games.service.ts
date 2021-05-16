@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { WordKeyValueModel } from '../models/word-key-value.model';
+import {
+  TranslateModel,
+  WordKeyValueModel,
+} from '../models/word-key-value.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { GetGameWordsRequestModel } from '../models/get-game-words-request.model';
@@ -16,9 +19,9 @@ export class GamesService {
 
   getGameWords(
     getGameWordsRequestModel: GetGameWordsRequestModel
-  ): Observable<WordKeyValueModel<string[]>[]> {
+  ): Observable<WordKeyValueModel<TranslateModel[]>[]> {
     // Todo, uncomment
-    return this.http.post<WordKeyValueModel<string[]>[]>(
+    return this.http.post<WordKeyValueModel<TranslateModel[]>[]>(
       `${this.gameUrl}/get-words-for-game`,
       getGameWordsRequestModel
     );

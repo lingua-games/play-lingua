@@ -1,4 +1,6 @@
 ﻿using Dapper;
+using Google.Cloud.TextToSpeech.V1;
+using Newtonsoft.Json;
 using PlayLingua.Domain;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Models;
@@ -7,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 
 namespace PlayLingua.Data
@@ -18,7 +21,6 @@ namespace PlayLingua.Data
         {
             db = new SqlConnection(connectionString);
         }
-
         public void EditWordSeries(SubmitWordsModel submitWords, int userId)
         {
             var modelForDelete = new WordOverviewModel
@@ -31,89 +33,100 @@ namespace PlayLingua.Data
             };
 
             var sql = @"
-                    delete 
-                    FROM [dbo].[Word]
+                    delete  WordsToWords
+                    FROM dbo.WordsToWords
+                    left join dbo.words as wordsBase
+                    on WordsToWords.BaseWordId = wordsBase.Id
+                    left join dbo.words as wordsTarget
+                    on WordsToWords.TargetWordId = wordsTarget.Id
                     where 
-	                    word.AddedBy = @AddedBy                 and 
-	                    word.BaseLanguageId = @BaseLanguageId	and 
-	                    word.BookId = @BookId    				and 
-	                    word.ChapterId = @ChapterId 			and 
-	                    word.TargetLanguageId = @TargetLanguageId
+                        WordsToWords.AddedBy = @AddedBy              and 
+                        wordsBase.LanguageId = @BaseLanguageId	     and 
+                        WordsToWords.BookId = @BookId      			 and 
+                        WordsToWords.ChapterId = @ChapterId 		 and 
+                        wordsTarget.LanguageId =  @TargetLanguageId
                     ";
-            _ = db.Query<Word>(sql, modelForDelete).ToList();
+            db.Query(sql, modelForDelete).ToList();
             SubmitWordSeries(submitWords, userId);
         }
-
-        public List<Word> GetWordDetails(WordOverviewModel overview)
+        public List<WordForEditModel> GetWordDetails(WordOverviewModel overview)
         {
             var sql = @"
-                    SELECT 
-	                    word.id,
-	                    word.BaseWord,
-	                    word.Translate
-                    FROM [dbo].[Word]
+                    select
+                        WordsToWords.id,
+                        wordsBase.Word as BaseWord,
+                        wordsTarget.Word as Translate
+                    from WordsToWords
 
-                    left join dbo.Book
-                    on word.BookId = Book.Id
+                    left join words as wordsBase
+                    on WordsToWords.BaseWordId = wordsBase.id
 
-                    left join dbo.Chapter
-                    on word.ChapterId = Chapter.Id
-
-                    left join dbo.Language as BaseLanguage
-                    on word.BaseLanguageId = BaseLanguage.id
-
-                    left join dbo.Language as TargetLanguage
-                    on word.TargetLanguageId = TargetLanguage.id
+                    left join words as wordsTarget
+                    on WordsToWords.TargetWordId = wordsTarget.id
 
                     where 
-	                    word.AddedBy = @AddedBy                 and 
-	                    word.BaseLanguageId = @BaseLanguageId	and 
-	                    word.BookId = @BookId    				and 
-	                    word.ChapterId = @ChapterId 			and 
-	                    word.TargetLanguageId = @TargetLanguageId
+	                    WordsToWords.AddedBy = @AddedBy and 
+	                    wordsBase.LanguageId = @BaseLanguageId and 
+	                    wordsTarget.LanguageId = @TargetLanguageId and
+	                    WordsToWords.ChapterId = @ChapterId and
+	                    WordsToWords.BookId = @BookId
                     ";
-            var result = db.Query<Word>(sql, overview).ToList();
+            var result = db.Query<WordForEditModel>(sql, overview).ToList();
             return result;
         }
         public List<WordOverviewModel> GetWordOverviews(int userId)
         {
             var sql = @"
-                        SELECT 
-                        word.BookId, 
-                        word.ChapterId, 
-                        word.BaseLanguageId,
-                        word.TargetLanguageId,
-                        max(BaseLanguage.Name) as BaseLanguageName,
-                        max(TargetLanguage.Name) as TargetLanguageName,
-                        COUNT(Distinct BaseWord) as Count, 
-                        max(book.Name) as BookName,
-                        max(Chapter.Name) as ChapterName,
-                        max(Word.LastUpdateDate) as LastUpdateDate,
-                        max(Word.AddedDate) as AddedDate
-                        FROM [dbo].[Word]
+                select 
+	                WordsToWords.BookId, 
+	                WordsToWords.ChapterId,
+	                wordsBase.LanguageId as BaseLanguageId,
+	                wordsTarget.LanguageId as TargetLanguageId,
+	                MAX(BaseLanguage.Name) as BaseLanguageName,
+	                MAX(TargetLanguage.Name) as TargetLanguageName,
+	                COUNT(wordsBase.Word) as Count,
+	                MAX(Book.Name) as BookName,
+	                MAX(Chapter.Name) as ChapterName,
+	                max(WordsToWords.AddedDate) as AddedDate
+                from WordsToWords
 
-                        left join dbo.Book
-                        on word.BookId = Book.Id
+                left join words wordsBase
+                on WordsToWords.BaseWordId = wordsBase.Id
 
-                        left join dbo.Chapter
-                        on word.ChapterId = Chapter.Id
+                left join words wordsTarget
+                on WordsToWords.TargetWordId = wordsTarget.Id
 
-                        left join dbo.Language as BaseLanguage
-                        on word.BaseLanguageId = BaseLanguage.id
+                left join dbo.Book
+                on WordsToWords.BookId = Book.Id
 
-                        left join dbo.Language as TargetLanguage
-                        on word.TargetLanguageId = TargetLanguage.id
+                left join dbo.Chapter
+                on WordsToWords.ChapterId = Chapter.Id
 
-                        where word.AddedBy = @userId
-                        group by word.BookId ,word.ChapterId,word.BaseLanguageId, word.TargetLanguageId
+                left join dbo.Language as BaseLanguage
+                on wordsBase.LanguageId = BaseLanguage.id
+
+                left join dbo.Language as TargetLanguage
+                on wordsTarget.LanguageId = TargetLanguage.id
+
+                where WordsToWords.AddedBy = @userId
+                group by WordsToWords.BookId, WordsToWords.ChapterId, wordsBase.LanguageId, wordsTarget.LanguageId
                     ";
             var result = db.Query<WordOverviewModel>(sql, new { userId }).ToList();
             return result;
         }
         public bool InquiryAboutSelectedLanguages(SelectedLanguageModel language)
         {
-            var sql =
-                @"SELECT * FROM [dbo].[Word] where BaseLanguageId = @Base and TargetLanguageId = @Target";
+            var sql = @"
+                    SELECT * FROM [dbo].[WordsToWords]
+
+                    left join [dbo].[Words] as wordsBase
+                    on WordsToWords.BaseWordId = wordsBase.id
+
+                    left join [dbo].[Words] as wordsTarget
+                    on WordsToWords.TargetWordId = wordsTarget.id
+
+                    where wordsBase.LanguageId = @Base and wordsTarget.LanguageId = @Target
+                        ";
 
             db.Close();
             var result = db.Query<LanguageInformation>(sql, language).Any();
@@ -122,44 +135,242 @@ namespace PlayLingua.Data
         }
         public void SubmitWordSeries(SubmitWordsModel submitWords, int userId)
         {
+            var baseLanguage = db.Query<Language>(
+                        @"select top 1 * from language where id = @Id", new { submitWords.BaseLanguage.Id })
+                        .SingleOrDefault();
+            var targetLanguage = db.Query<Language>(
+            @"select top 1 * from language where id = @Id", new { submitWords.TargetLanguage.Id })
+            .SingleOrDefault();
+
             foreach (var word in submitWords.Words)
             {
+                List<int?> targetIds = new List<int?>();
                 foreach (var target in word.Targets)
                 {
-                    var wordToAdd = new Word
+                    var foundTargetWord = db.Query<Words>(
+                        @"select top 1 * from Words where word = '" + target.Value +
+                        @"' and LanguageId = " + submitWords.TargetLanguage.Id)
+                        .SingleOrDefault();
+
+                    // Add word if it is not exist in table
+                    if (foundTargetWord == null)
                     {
-                        BaseLanguageId = submitWords.BaseLanguage.Id,
-                        BaseWord = word.Base.Value,
-                        TargetLanguageId = submitWords.TargetLanguage.Id,
-                        Translate = target.Value,
-                        BookId = submitWords.Book != null ? (int?)submitWords.Book.Id : null,
-                        ChapterId = submitWords.Chapter != null ? (int?)submitWords.Chapter.Id : null,
+                        foundTargetWord = new Words();
+                        var wordToAdd = new Words()
+                        {
+                            LanguageId = submitWords.TargetLanguage.Id,
+                            Word = target.Value,
+                            AddedBy = userId,
+                            AddedDate = DateTime.Now,
+                        };
+
+                        wordToAdd.SpeechId = GetVoicFromText(new SpeechModel
+                        {
+                            Text = wordToAdd.Word,
+                            Gender = SsmlVoiceGender.Female,
+                            LanguageCode = targetLanguage.Code
+                        }).Id;
+                        var sql = @"
+                            insert into [dbo].[words] (LanguageId, Word, AddedBy, AddedDate, SpeechId)  
+                            VALUES (@LanguageId, @Word, @AddedBy, @AddedDate, @SpeechId);SELECT CAST(SCOPE_IDENTITY() as int)";
+
+                        foundTargetWord.Id = db.Query<int>(sql, wordToAdd).SingleOrDefault();
+                    }
+                    else if (foundTargetWord.SpeechId == 0)
+                    {
+                        var Speech = GetVoicFromText(new SpeechModel
+                        {
+                            Text = target.Value,
+                            Gender = SsmlVoiceGender.Female,
+                            LanguageCode = targetLanguage.Code
+                        });
+                        db.Query("update dbo.Words SET SpeechId = @SpeechId WHERE Id = @Id", new Words()
+                        {
+                            SpeechId = Speech.Id,
+                            Id = foundTargetWord.Id
+                        });
+                    }
+                    else if (foundTargetWord.SpeechId > 0)
+                    {
+                        var speech = db.Query<Speech>("select top 1 * from speech WHERE Id = @Id", new SpeechModel()
+                        {
+                            Id = foundTargetWord.SpeechId
+                        }).SingleOrDefault();
+
+                        CheckForSpeechInDisk(speech, target.Value, targetLanguage.Code, SsmlVoiceGender.Female);
+                    }
+
+
+                    targetIds.Add(foundTargetWord.Id);
+                }
+
+                var qry = @"select top 1 * from Words where word = N'" + word.Base.Value +
+                                @"' and LanguageId = " + submitWords.BaseLanguage.Id;
+                var foundBaseWord = db.Query<Words>(qry)
+                                .SingleOrDefault();
+
+                // Add word if it is not exist in table
+                if (foundBaseWord == null)
+                {
+                    foundBaseWord = new Words();
+                    var wordToAdd = new Words()
+                    {
+                        LanguageId = submitWords.BaseLanguage.Id,
+                        Word = word.Base.Value,
                         AddedBy = userId,
                         AddedDate = DateTime.Now,
                     };
+                    wordToAdd.SpeechId = GetVoicFromText(new SpeechModel
+                    {
+                        Text = wordToAdd.Word,
+                        Gender = SsmlVoiceGender.Female,
+                        LanguageCode = baseLanguage.Code
+                    }).Id;
 
                     var sql = @"
-insert into [dbo].[Word] (
-                        BaseLanguageId,
-                        BaseWord,
-                        TargetLanguageId,
-                        Translate,
-                        BookId,
-                        ChapterId,
-                        AddedBy,
-                        AddedDate) VALUES (
-                        @BaseLanguageId,
-                        @BaseWord,
-                        @TargetLanguageId,
-                        @Translate,
-                        @BookId,
-                        @ChapterId,
-                        @AddedBy,
-                        @AddedDate);";
+                            insert into [dbo].[words] (LanguageId, Word, AddedBy, AddedDate, SpeechId)  
+                            VALUES (@LanguageId, @Word, @AddedBy, @AddedDate, @SpeechId);
+                            SELECT CAST(SCOPE_IDENTITY() as int)";
 
-                    db.Query<int>(sql, wordToAdd).SingleOrDefault();
+                    foundBaseWord.Id = db.Query<int>(sql, wordToAdd).SingleOrDefault();
+                }
+                else if (foundBaseWord.SpeechId == 0)
+                {
+                    var Speech = GetVoicFromText(new SpeechModel
+                    {
+                        Text = word.Base.Value,
+                        Gender = SsmlVoiceGender.Female,
+                        LanguageCode = baseLanguage.Code
+                    });
+                    db.Query("update dbo.Words SET SpeechId = @SpeechId WHERE Id = @Id", new Words()
+                    {
+                        SpeechId = Speech.Id,
+                        Id = foundBaseWord.Id
+                    });
+                }
+                else if (foundBaseWord.SpeechId > 0)
+                {
+                    var speech = db.Query<Speech>("select top 1 * from speech WHERE Id = @Id", new SpeechModel()
+                    {
+                        Id = foundBaseWord.SpeechId
+                    }).SingleOrDefault();
+
+                    CheckForSpeechInDisk(speech, word.Base.Value, baseLanguage.Code, SsmlVoiceGender.Female);
+                }
+
+                foreach (var item in targetIds)
+                {
+                    var modelToAdd = new WordToWord()
+                    {
+                        TargetWordId = (int)item,
+                        BaseWordId = foundBaseWord.Id,
+                        AddedBy = userId,
+                        AddedDate = DateTime.Now,
+                        ChapterId = submitWords.Chapter.Id,
+                        BookId = submitWords.Book.Id
+                    };
+
+                    var sql = @"
+                            insert into [dbo].[WordsToWords] (BaseWordId, TargetWordId, AddedBy, AddedDate, BookId, ChapterId)  
+                            VALUES (@BaseWordId, @TargetWordId, @AddedBy, @AddedDate, @BookId, @ChapterId)";
+
+                    db.Query<int>(sql, modelToAdd).ToList();
                 }
             }
+        }
+        public void CheckForSpeechInDisk(Speech speech, string word, string languageCode, SsmlVoiceGender gender)
+        {
+            if (!File.Exists("wwwroot/assets/speeches/" + speech.Code + ".mp3"))
+            {
+                var response = DownloadWord(new SpeechModel { Text = word, LanguageCode = languageCode, Gender = gender });
+
+                // Write the response to the output file.
+                using FileStream output = File.Create("wwwroot/assets/speeches/" + speech.Code + ".mp3");
+                response.AudioContent.WriteTo(output);
+            }
+        }
+        public SynthesizeSpeechResponse DownloadWord(SpeechModel model)
+        {
+            // Donnot download speech if it is in Development mode because here we dont have Google credentials
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            {
+                model.Id = 0;
+                return new SynthesizeSpeechResponse();
+            }
+
+            if (!File.Exists("wwwroot/assets/speeches/"))
+            {
+                Directory.CreateDirectory("wwwroot/assets/speeches/");
+            }
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "./speech-key.json");
+
+            var client = TextToSpeechClient.Create();
+
+            // The input to be synthesized, can be provided as text or SSML.
+            var input = new SynthesisInput
+            {
+                Text = model.Text
+            };
+
+            // Build the voice request.
+            var voiceSelection = new VoiceSelectionParams
+            {
+                LanguageCode = model.LanguageCode,
+                SsmlGender = model.Gender
+            };
+
+            // Specify the type of audio file.
+            var audioConfig = new AudioConfig
+            {
+                AudioEncoding = AudioEncoding.Mp3
+            };
+
+            try
+            {
+                // Perform the text-to-speech request.
+                return client.SynthesizeSpeech(input, voiceSelection, audioConfig);
+            }
+            catch (Exception)
+            {
+                return new SynthesizeSpeechResponse();
+            }
+        }
+        public SpeechModel GetVoicFromText(SpeechModel model)
+        {         
+            // Donnot download speech if it is in Development mode because here we dont have Google credentials
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            {
+                model.Id = 0;
+                return model;
+            }
+
+
+            model.Code = Guid.NewGuid();
+            try
+            {
+                var response = DownloadWord(model);
+
+                // Write the response to the output file.
+                using FileStream output = File.Create("wwwroot/assets/speeches/" + model.Code + ".mp3");
+                response.AudioContent.WriteTo(output);
+
+
+                model.Status = SpeechStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                model.Status = SpeechStatus.Error;
+                model.ErrorMessage = ex.Message;
+            }
+
+            model.AddedDate = DateTime.Now;
+            model.Id = db.Query<int>(@"
+                        insert into [dbo].[speech] (Code, AddedDate, Status, ErrorMessage)  
+                        VALUES (@Code, @AddedDate, @Status, @ErrorMessage);
+                        SELECT CAST(SCOPE_IDENTITY() as int)
+                        ", model).SingleOrDefault();
+
+            return model;
         }
     }
 }
