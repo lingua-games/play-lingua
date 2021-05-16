@@ -282,7 +282,7 @@ namespace PlayLingua.Data
         {
             if (!File.Exists("wwwroot/assets/speeches/" + speech.Code + ".mp3"))
             {
-                var response = DownloadWord(new SpeechModel { Text = word, LanguageCode = languageCode, Gender = gender}); 
+                var response = DownloadWord(new SpeechModel { Text = word, LanguageCode = languageCode, Gender = gender });
 
                 // Write the response to the output file.
                 using FileStream output = File.Create("wwwroot/assets/speeches/" + speech.Code + ".mp3");
@@ -291,7 +291,14 @@ namespace PlayLingua.Data
         }
         public SynthesizeSpeechResponse DownloadWord(SpeechModel model)
         {
-            if(!File.Exists("wwwroot/assets/speeches/"))
+            // Donnot download speech if it is in Development mode because here we dont have Google credentials
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            {
+                model.Id = 0;
+                return new SynthesizeSpeechResponse();
+            }
+
+            if (!File.Exists("wwwroot/assets/speeches/"))
             {
                 Directory.CreateDirectory("wwwroot/assets/speeches/");
             }
@@ -322,13 +329,22 @@ namespace PlayLingua.Data
             {
                 // Perform the text-to-speech request.
                 return client.SynthesizeSpeech(input, voiceSelection, audioConfig);
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 return new SynthesizeSpeechResponse();
             }
         }
         public SpeechModel GetVoicFromText(SpeechModel model)
-        {
+        {         
+            // Donnot download speech if it is in Development mode because here we dont have Google credentials
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            {
+                model.Id = 0;
+                return model;
+            }
+
+
             model.Code = Guid.NewGuid();
             try
             {
