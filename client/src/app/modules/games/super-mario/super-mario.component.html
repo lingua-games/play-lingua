@@ -8,25 +8,18 @@
   [gameName]="1"
   (stopSound)="stopSound($event)"
 ></app-game-options>
-<div *ngIf="guidBoxShowing" class="guid-box-container" @fadeIn>
-  <div class="guid-box-header-container">
-    <span>Wrong!</span>
-  </div>
-  <div class="guid-box-body-container">
-    <span>
-      Correct answer is
-      <span class="guid-box-correct-answer"
-        ><strong>{{ currentEnemy.values[0] }}</strong></span
-      >
-      .
-    </span>
-    <br />
-    <span>{{ currentEnemy.key }} = {{ currentEnemy.values[0] }}</span>
-  </div>
-  <div class="guid-box-action-container text-right">
-    <button class="btn btn-success" (click)="prepareTheWord()">Continue</button>
-  </div>
-</div>
+<app-guid-box
+  *ngIf="guidBoxShowing"
+  [question]="currentEnemy.key"
+  [answer]="currentEnemy.translates[0].value"
+  [answerSpeech]="getAnswerSpeech(currentEnemy.translates[0])"
+  [questionSpeech]="{
+    code: currentEnemy.speechCode,
+    status: currentEnemy.speechStatus
+  }"
+  (Submit)="prepareTheWord()"
+  @fadeIn
+></app-guid-box>
 <div class="mario-main-container" style="overflow: hidden">
   <div
     class="question-container"
@@ -59,10 +52,6 @@
       *ngIf="enemy?.status === 0 || enemy?.status === 1"
       class="enemy-container"
     >
-      <!--      <div-->
-      <!--        [style.background-image]="enemy.mushroomImageUrl"-->
-      <!--        class="mushroom-image-container"-->
-      <!--      ></div>-->
       <div
         *ngIf="enemy.mushroomImage === 'question'"
         [ngStyle]="{ 'background-image': mushrooms.question }"

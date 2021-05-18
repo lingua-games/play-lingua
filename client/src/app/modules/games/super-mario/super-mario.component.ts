@@ -30,6 +30,7 @@ import { SoundService } from '../../../core/service/sound.service';
 import { GameActionEnum } from '../../../core/models/game-action.enum';
 import { SecurityService } from '../../../core/service/security.service';
 import { ActivatedRoute } from '@angular/router';
+import { SpeechModel } from '../../../core/models/speech.model';
 
 @Component({
   selector: 'app-super-mario',
@@ -205,6 +206,13 @@ export class SuperMarioComponent implements OnInit, OnDestroy {
     this.soundService.loadSounds(GameNameEnum.supperMario);
     // Todo, uncomment
     this.showStartDialog();
+  }
+
+  getAnswerSpeech(currentWord: TranslateModel): SpeechModel {
+    return {
+      code: currentWord.speechCode,
+      status: currentWord.speechStatus,
+    } as SpeechModel;
   }
 
   loadImages(): void {
