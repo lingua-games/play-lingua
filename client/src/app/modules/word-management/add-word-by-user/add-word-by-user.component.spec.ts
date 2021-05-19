@@ -447,11 +447,11 @@ describe('AddWordByUserComponent', () => {
       component.formData = {
         words: [
           {
-            base: { value: 'fakeBase', isValid: true },
+            base: { value: 'fakeBase 1', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
           } as WordToAddModel,
           {
-            base: { value: 'fakeBase', isValid: true },
+            base: { value: 'fakeBase 2', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
           } as WordToAddModel,
         ],
@@ -516,23 +516,23 @@ describe('AddWordByUserComponent', () => {
       component.formData = {
         words: [
           {
-            base: { value: 'fakeBase', isValid: true },
+            base: { value: 'fakeBase 1', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
           } as WordToAddModel,
           {
-            base: { value: 'fakeBase', isValid: true },
+            base: { value: 'fakeBase 2', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
           } as WordToAddModel,
           {
-            base: { value: 'fakeBase', isValid: true },
+            base: { value: 'fakeBase 3', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
           } as WordToAddModel,
           {
-            base: { value: 'fakeBase', isValid: true },
+            base: { value: 'fakeBase 4', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
           } as WordToAddModel,
           {
-            base: { value: 'fakeBase', isValid: true },
+            base: { value: 'fakeBase 5', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
           } as WordToAddModel,
         ],
@@ -553,23 +553,23 @@ describe('AddWordByUserComponent', () => {
       component.formData = {
         words: [
           {
-            base: { value: 'fakeBase', isValid: true },
+            base: { value: 'fakeBase 1', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
           } as WordToAddModel,
           {
-            base: { value: 'fakeBase', isValid: true },
+            base: { value: 'fakeBase 2', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
           } as WordToAddModel,
           {
-            base: { value: 'fakeBase', isValid: true },
+            base: { value: 'fakeBase 3', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
           } as WordToAddModel,
           {
-            base: { value: 'fakeBase', isValid: true },
+            base: { value: 'fakeBase 4', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
           } as WordToAddModel,
           {
-            base: { value: 'fakeBase', isValid: true },
+            base: { value: 'fakeBase 5', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
           } as WordToAddModel,
         ],
@@ -592,23 +592,23 @@ describe('AddWordByUserComponent', () => {
       component.formData = {
         words: [
           {
-            base: { value: 'fakeBase', isValid: true },
+            base: { value: 'fakeBase 1', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
           } as WordToAddModel,
           {
-            base: { value: 'fakeBase', isValid: true },
+            base: { value: 'fakeBase 2', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
           } as WordToAddModel,
           {
-            base: { value: 'fakeBase', isValid: true },
+            base: { value: 'fakeBase 3', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
           } as WordToAddModel,
           {
-            base: { value: 'fakeBase', isValid: true },
+            base: { value: 'fakeBase 4', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
           } as WordToAddModel,
           {
-            base: { value: 'fakeBase', isValid: true },
+            base: { value: 'fakeBase 5', isValid: true },
             targets: [{ value: 'fakeTarget', isValid: true }],
           } as WordToAddModel,
         ],
