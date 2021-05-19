@@ -73,8 +73,8 @@ export class CheatSheetComponent implements OnInit {
         (res: WordKeyValueModel<TranslateModel[]>[]) => {
           if (res && res.length) {
             this.words.setData(res);
-            this.words.setLoading(false);
           }
+          this.words.setLoading(false);
         },
         () => {
           // Todo, handle error
