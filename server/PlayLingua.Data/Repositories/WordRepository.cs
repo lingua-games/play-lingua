@@ -204,6 +204,10 @@ namespace PlayLingua.Data
                     targetIds.Add(foundTargetWord.Id);
                 }
 
+                if (word.Base.Value == "عادی")
+                {
+                    int a = 1;
+                }
                 var qry = @"select top 1 * from Words where word = @Value and LanguageId = " + submitWords.BaseLanguage.Id;
                 var foundBaseWord = db.Query<Words>(qry, new { word.Base.Value })
                                 .SingleOrDefault();
@@ -283,19 +287,34 @@ namespace PlayLingua.Data
             {
                 var response = DownloadWord(new SpeechModel { Text = word, LanguageCode = languageCode, Gender = gender });
 
-                // Write the response to the output file.
-                using FileStream output = File.Create("wwwroot/assets/speeches/" + speech.Code + ".mp3");
-                response.AudioContent.WriteTo(output);
+                if (!response.Success)
+                {
+                    speech.ErrorMessage = response.ErrorMessage;
+                    speech.Status = SpeechStatus.Error;
+                    db.Query<int>(@"
+                        update [dbo].[speech] SET 
+                            Code = @Code, 
+                            AddedDate = @AddedDate, 
+                            Status = @Status, 
+                            ErrorMessage = @ErrorMessage
+                        Where Id = @Id
+                        ", speech).SingleOrDefault();
+                } else
+                {
+                    // Write the response to the output file.
+                    using FileStream output = File.Create("wwwroot/assets/speeches/" + speech.Code + ".mp3");
+                    response.Data.AudioContent.WriteTo(output);
+                }
             }
         }
-        public SynthesizeSpeechResponse DownloadWord(SpeechModel model)
+        public ResultModel<SynthesizeSpeechResponse> DownloadWord(SpeechModel model)
         {
             // Donnot download speech if it is in Development mode because here we dont have Google credentials
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-            {
-                model.Id = 0;
-                return new SynthesizeSpeechResponse();
-            }
+            //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            //{
+            //    model.Id = 0;
+            //    return new SynthesizeSpeechResponse();
+            //}
 
             if (!File.Exists("wwwroot/assets/speeches/"))
             {
@@ -327,21 +346,21 @@ namespace PlayLingua.Data
             try
             {
                 // Perform the text-to-speech request.
-                return client.SynthesizeSpeech(input, voiceSelection, audioConfig);
+                return new ResultModel<SynthesizeSpeechResponse> { Data = client.SynthesizeSpeech(input, voiceSelection, audioConfig), Success = true };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return new SynthesizeSpeechResponse();
+                return new ResultModel<SynthesizeSpeechResponse> { Success = false, ErrorMessage = ex.Message };
             }
         }
         public SpeechModel GetVoicFromText(SpeechModel model)
-        {         
+        {
             // Donnot download speech if it is in Development mode because here we dont have Google credentials
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-            {
-                model.Id = 0;
-                return model;
-            }
+            //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            //{
+            //    model.Id = 0;
+            //    return model;
+            //}
 
 
             model.Code = Guid.NewGuid();
@@ -349,12 +368,19 @@ namespace PlayLingua.Data
             {
                 var response = DownloadWord(model);
 
-                // Write the response to the output file.
-                using FileStream output = File.Create("wwwroot/assets/speeches/" + model.Code + ".mp3");
-                response.AudioContent.WriteTo(output);
+                if (response.Success)
+                {
+                    // Write the response to the output file.
+                    using FileStream output = File.Create("wwwroot/assets/speeches/" + model.Code + ".mp3");
+                    response.Data.AudioContent.WriteTo(output);
+                    model.Status = SpeechStatus.Success;
+                }
+                else
+                {
+                    model.ErrorMessage = response.ErrorMessage;
+                    model.Status = SpeechStatus.Error;
+                }
 
-
-                model.Status = SpeechStatus.Success;
             }
             catch (Exception ex)
             {
