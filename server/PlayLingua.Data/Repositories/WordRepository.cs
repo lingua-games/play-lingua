@@ -204,9 +204,8 @@ namespace PlayLingua.Data
                     targetIds.Add(foundTargetWord.Id);
                 }
 
-                var qry = @"select top 1 * from Words where word = N'" + word.Base.Value +
-                                @"' and LanguageId = " + submitWords.BaseLanguage.Id;
-                var foundBaseWord = db.Query<Words>(qry)
+                var qry = @"select top 1 * from Words where word = @Value and LanguageId = " + submitWords.BaseLanguage.Id;
+                var foundBaseWord = db.Query<Words>(qry, new { word.Base.Value })
                                 .SingleOrDefault();
 
                 // Add word if it is not exist in table
