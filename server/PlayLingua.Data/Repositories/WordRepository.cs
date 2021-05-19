@@ -310,11 +310,11 @@ namespace PlayLingua.Data
         public ResultModel<SynthesizeSpeechResponse> DownloadWord(SpeechModel model)
         {
             // Donnot download speech if it is in Development mode because here we dont have Google credentials
-            //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-            //{
-            //    model.Id = 0;
-            //    return new SynthesizeSpeechResponse();
-            //}
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            {
+                model.Id = 0;
+                return new ResultModel<SynthesizeSpeechResponse>();
+            }
 
             if (!File.Exists("wwwroot/assets/speeches/"))
             {
@@ -356,11 +356,11 @@ namespace PlayLingua.Data
         public SpeechModel GetVoicFromText(SpeechModel model)
         {
             // Donnot download speech if it is in Development mode because here we dont have Google credentials
-            //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-            //{
-            //    model.Id = 0;
-            //    return model;
-            //}
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            {
+                model.Id = 0;
+                return model;
+            }
 
 
             model.Code = Guid.NewGuid();

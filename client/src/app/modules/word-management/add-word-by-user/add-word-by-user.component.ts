@@ -560,6 +560,26 @@ export class AddWordByUserComponent implements OnInit {
       return;
     }
 
+    this.formData.words.forEach((word: WordToAddModel) => {
+      const foundBaseWords = this.formData.words.filter(
+        (x) => x.base.value === word.base.value
+      );
+      if (foundBaseWords.length > 1) {
+        isWordFormValid = false;
+        foundBaseWords.map((x) => (x.base.isValid = false));
+      }
+    });
+
+    if (!isWordFormValid) {
+      this.notificationService.showMessage(
+        'Duplicate detected in Questions',
+        Severity.error,
+        '',
+        'bc'
+      );
+      return;
+    }
+
     if (this.formData.words.length < 5) {
       this.notificationService.showMessage(
         'You should add more than 4 words in each session',
