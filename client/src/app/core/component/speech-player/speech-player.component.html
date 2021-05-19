@@ -1,5 +1,9 @@
 <fa-icon
   [icon]="['fas', 'volume-up']"
-  class="mr-1 sound-item"
+  class="mr-1"
+  [ngClass]="{
+    'sound-item': status === 1,
+    'disable-sound': status === 2 || status === 3
+  }"
   (click)="playSound()"
 ></fa-icon>

@@ -65,7 +65,7 @@
     <button
       class="btn btn-success"
       (click)="submitEmitter.emit(form)"
-      [disabled]="wordCount.isLoading"
+      [disabled]="wordCount.isLoading || !wordCount.data"
     >
       Start!
     </button>

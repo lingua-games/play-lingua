@@ -165,9 +165,8 @@
           </div>
           <div class="col-sm-10">
             <input
-              type="email"
+              type="text"
               class="form-control"
-              aria-describedby="emailHelp"
               [placeholder]="baseLanguage.value.name + ' word'"
               (ngModelChange)="word.base.isValid = true"
               [(ngModel)]="word.base.value"
@@ -181,7 +180,6 @@
               <input
                 type="text"
                 class="form-control"
-                aria-describedby="emailHelp"
                 [placeholder]="targetLanguage.value.name + ' word'"
                 (ngModelChange)="target.isValid = true"
                 [(ngModel)]="target.value"
