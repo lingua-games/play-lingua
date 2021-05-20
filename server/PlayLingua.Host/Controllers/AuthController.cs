@@ -36,8 +36,8 @@ namespace PlayLingua.Host.Controllers
                     DisplayName = loginResult.User.DisplayName,
                     BaseLanguages = loginResult.User.BaseLanguages,
                     TargetLanguages = loginResult.User.TargetLanguages,
-                    DefaultBaseLanguage = loginResult.User.DefaultBaseLanguage,
-                    DefaultTargetLanguage = loginResult.User.DefaultTargetLanguage,
+                    DefaultBaseLanguageId = loginResult.User.DefaultBaseLanguageId,
+                    DefaultTargetLanguageId = loginResult.User.DefaultTargetLanguageId,
                     TotalScore = loginResult.User.TotalScore,
                     IsSelectedLanguages = loginResult.User.IsSelectedLanguages
                 };

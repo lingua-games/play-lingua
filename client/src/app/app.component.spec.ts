@@ -8,14 +8,18 @@ import { SecurityService } from './core/service/security.service';
 import { of, throwError } from 'rxjs';
 import { UserModel } from './core/models/user.model';
 import { UserService } from './core/service/user.service';
+import { MessageService } from 'primeng/api';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
   let component: AppComponent;
   let mockSecurityService;
   let mockUserService;
+  let mockMessageService;
   beforeEach(
     waitForAsync(() => {
+      mockMessageService = jasmine.createSpyObj(['add']);
       mockSecurityService = jasmine.createSpyObj([
         'isLoggedIn',
         'initialTotalScore',
@@ -26,12 +30,20 @@ describe('AppComponent', () => {
       ]);
 
       TestBed.configureTestingModule({
-        imports: [RouterTestingModule, HttpClientTestingModule],
+        imports: [
+          RouterTestingModule,
+          HttpClientTestingModule,
+          BrowserAnimationsModule,
+        ],
         declarations: [AppComponent],
         providers: [
           {
             provide: MatDialog,
             useValue: {},
+          },
+          {
+            provide: MessageService,
+            useValue: mockMessageService,
           },
           {
             provide: SecurityService,
@@ -44,7 +56,7 @@ describe('AppComponent', () => {
         ],
         schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
       }).compileComponents();
-    }),
+    })
   );
 
   beforeEach(() => {
@@ -76,7 +88,7 @@ describe('AppComponent', () => {
     component.getUserInformation();
 
     expect(mockSecurityService.initialTotalScore).toHaveBeenCalledWith(
-      'loading',
+      'loading'
     );
   });
 
@@ -89,7 +101,7 @@ describe('AppComponent', () => {
     component.getUserInformation();
 
     expect(mockSecurityService.initialTotalScore).toHaveBeenCalledWith(
-      value.totalScore.toString(),
+      value.totalScore.toString()
     );
   });
 

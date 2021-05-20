@@ -113,8 +113,8 @@ describe('LoginComponent', () => {
         email: 'fake email',
         password: 'fake password',
         totalScore: 1,
-        defaultBaseLanguage: 1,
-        defaultTargetLanguage: 1,
+        defaultBaseLanguageId: 1,
+        defaultTargetLanguageId: 1,
       } as UserModel;
       mockSecurityService.login.and.callFake(() => {
         return of({
@@ -138,8 +138,8 @@ describe('LoginComponent', () => {
         email: 'fake email',
         password: 'fake password',
         totalScore: 1,
-        defaultBaseLanguage: 1,
-        defaultTargetLanguage: 1,
+        defaultBaseLanguageId: 1,
+        defaultTargetLanguageId: 1,
       } as UserModel;
       mockSecurityService.login.and.callFake(() => {
         return of({
@@ -166,8 +166,8 @@ describe('LoginComponent', () => {
         email: 'fake email',
         password: 'fake password',
         totalScore: 1,
-        defaultBaseLanguage: 1,
-        defaultTargetLanguage: 1,
+        defaultBaseLanguageId: 1,
+        defaultTargetLanguageId: 1,
       } as UserModel;
       mockSecurityService.login.and.callFake(() => {
         return of({
@@ -193,8 +193,8 @@ describe('LoginComponent', () => {
         email: 'fake email',
         password: 'fake password',
         totalScore: 1,
-        defaultBaseLanguage: 1,
-        defaultTargetLanguage: 1,
+        defaultBaseLanguageId: 1,
+        defaultTargetLanguageId: 1,
       } as UserModel;
       mockSecurityService.login.and.callFake(() => {
         return of({
@@ -222,8 +222,8 @@ describe('LoginComponent', () => {
         email: 'fake email',
         password: 'fake password',
         totalScore: 1,
-        defaultBaseLanguage: 1,
-        defaultTargetLanguage: 1,
+        defaultBaseLanguageId: 1,
+        defaultTargetLanguageId: 1,
       } as UserModel;
       mockSecurityService.login.and.callFake(() => {
         return of({
@@ -242,8 +242,8 @@ describe('LoginComponent', () => {
         email: 'fake email',
         password: 'fake password',
         totalScore: 1,
-        defaultBaseLanguage: 1,
-        defaultTargetLanguage: 1,
+        defaultBaseLanguageId: 1,
+        defaultTargetLanguageId: 1,
       } as UserModel;
       mockSecurityService.login.and.callFake(() => {
         return throwError('some errors');

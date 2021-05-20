@@ -62,10 +62,12 @@ export class LoginComponent implements OnInit {
           );
           const defaultBaseLanguageFromAPI = JSON.parse(
             res?.user?.baseLanguages || '{[]}'
-          ).find((x: NameIdModel) => x.id === res?.user?.defaultBaseLanguage);
+          ).find((x: NameIdModel) => x.id === res?.user?.defaultBaseLanguageId);
           const defaultTargetLanguageFromAPI = JSON.parse(
             res?.user?.targetLanguages || '{[]}'
-          ).find((x: NameIdModel) => x.id === res?.user?.defaultTargetLanguage);
+          ).find(
+            (x: NameIdModel) => x.id === res?.user?.defaultTargetLanguageId
+          );
 
           this.localStorageService.delete(LocalStorageHelper.isGuest);
           this.localStorageService.save(

@@ -60,8 +60,8 @@ namespace PlayLingua.Data
                         DisplayName = selectedUser.DisplayName,
                         BaseLanguages = selectedUser.BaseLanguages,
                         TargetLanguages = selectedUser.TargetLanguages,
-                        DefaultBaseLanguage = selectedUser.DefaultBaseLanguage,
-                        DefaultTargetLanguage = selectedUser.DefaultTargetLanguage,
+                        DefaultBaseLanguageId = selectedUser.DefaultBaseLanguageId,
+                        DefaultTargetLanguageId = selectedUser.DefaultTargetLanguageId,
                         IsAdmin = selectedUser.IsAdmin,
                         TotalScore = selectedUser.TotalScore,
                         IsSelectedLanguages =
