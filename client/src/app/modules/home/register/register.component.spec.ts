@@ -243,8 +243,8 @@ describe('RegisterComponent', () => {
           token: 'fake token',
           user: {
             email: 'fake email',
-            defaultTargetLanguage: 1,
-            defaultBaseLanguage: 1,
+            defaultTargetLanguageId: 1,
+            defaultBaseLanguageId: 1,
           },
         } as LoginResultModel);
       });

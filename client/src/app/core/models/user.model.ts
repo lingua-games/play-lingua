@@ -1,3 +1,5 @@
+import { SelectedLanguageModel } from './selected-language.model';
+
 export interface UserModel {
   id: number;
   email: string;
@@ -7,8 +9,9 @@ export interface UserModel {
   baseLanguages: string;
   targetLanguages: string;
   isSelectedLanguages: boolean;
-  defaultBaseLanguage: number;
-  defaultTargetLanguage: number;
+  defaultBaseLanguageId: number;
+  defaultTargetLanguageId: number;
   totalScore: number;
   EmailAndDisplayName: string;
+  selectedLanguages: SelectedLanguageModel;
 }

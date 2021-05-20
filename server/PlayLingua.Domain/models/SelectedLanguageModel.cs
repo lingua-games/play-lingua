@@ -10,5 +10,7 @@ namespace PlayLingua.Domain.Models
     {
         public int Base { get; set; }
         public int Target { get; set; }
+        public string BaseLanguages { get; set; }
+        public string TargetLanguages { get; set; }
     }
 }

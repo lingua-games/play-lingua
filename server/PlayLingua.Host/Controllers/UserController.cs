@@ -28,8 +28,8 @@ namespace PlayLingua.Host.Controllers
             {
                 Email = x.Email,
                 BaseLanguages = x.BaseLanguages,
-                DefaultTargetLanguage = x.DefaultTargetLanguage,
-                DefaultBaseLanguage = x.DefaultBaseLanguage,
+                DefaultTargetLanguageId = x.DefaultTargetLanguageId,
+                DefaultBaseLanguageId = x.DefaultBaseLanguageId,
                 DisplayName = x.DisplayName,
                 Id = x.Id,
                 TargetLanguages = x.TargetLanguages,
@@ -47,17 +47,31 @@ namespace PlayLingua.Host.Controllers
                 return Unauthorized();
             }
             var repositoryResult = _userRepository.GetUserInformation(user.Id);
-            return Ok(new UserViewModel
+            var result = new UserViewModel
             {
                 Email = repositoryResult.Email,
                 BaseLanguages = repositoryResult.BaseLanguages,
-                DefaultTargetLanguage = repositoryResult.DefaultTargetLanguage,
-                DefaultBaseLanguage = repositoryResult.DefaultBaseLanguage,
+                DefaultTargetLanguage = new LanguageViewModel
+                {
+                    Id = repositoryResult.DefaultTargetLanguage.Id,
+                    Name = repositoryResult.DefaultTargetLanguage.Name
+                },
+                DefaultBaseLanguage = new LanguageViewModel
+                {
+                    Id = repositoryResult.DefaultBaseLanguage.Id,
+                    Name = repositoryResult.DefaultBaseLanguage.Name,
+                },
                 DisplayName = repositoryResult.DisplayName,
                 Id = repositoryResult.Id,
                 TargetLanguages = repositoryResult.TargetLanguages,
-                TotalScore = repositoryResult.TotalScore
-            });
+                TotalScore = repositoryResult.TotalScore,
+                SelectedLanguages = new SelectedLanguagesViewModel
+                {
+                    TargetLanguages = repositoryResult?.SelectedLanguages?.TargetLanguages,
+                    BaseLanguages = repositoryResult?.SelectedLanguages?.BaseLanguages
+                }
+            };
+            return Ok(result);
         }
 
         [HttpPost]

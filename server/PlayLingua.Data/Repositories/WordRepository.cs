@@ -204,10 +204,6 @@ namespace PlayLingua.Data
                     targetIds.Add(foundTargetWord.Id);
                 }
 
-                if (word.Base.Value == "عادی")
-                {
-                    int a = 1;
-                }
                 var qry = @"select top 1 * from Words where word = @Value and LanguageId = " + submitWords.BaseLanguage.Id;
                 var foundBaseWord = db.Query<Words>(qry, new { word.Base.Value })
                                 .SingleOrDefault();

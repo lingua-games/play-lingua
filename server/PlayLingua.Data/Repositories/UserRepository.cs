@@ -58,22 +58,6 @@ namespace PlayLingua.Data
             {
                 throw new ArgumentNullException(nameof(user));
             }
-            //var mailMessage = new MimeMessage();
-            //mailMessage.From.Add(new MailboxAddress("Ghobad", _email.Username));
-            //mailMessage.To.Add(new MailboxAddress("Arash", "vbhost.ir@gmail.com"));
-            //mailMessage.Subject = "subject";
-            //mailMessage.Body = new TextPart("plain")
-            //{
-            //    Text = "Hello"
-            //};
-
-            //using (var smtpClient = new SmtpClient())
-            //{
-            //    smtpClient.Connect("smtp.gmail.com", 587, false);
-            //    smtpClient.Authenticate(_email.Username, _email.Password);
-            //    smtpClient.Send(mailMessage);
-            //    smtpClient.Disconnect(true);
-            //}
         }
 
 
@@ -82,12 +66,23 @@ namespace PlayLingua.Data
             throw new NotImplementedException();
         }
 
-        public User GetUserInformation(int userId)
+        public UserModel GetUserInformation(int userId)
         {
-            return db.Query<User>("select top 1 * from dbo.Users where id = @userId", new { userId }).Select(x => new User
+            var result = new UserModel();
+            var user = db.Query<User>("select top 1 * from dbo.Users where id = @userId", new { userId }).Select(x => new UserModel
             {
                 TotalScore = x.TotalScore,
+                DefaultBaseLanguageId = x.DefaultBaseLanguageId,
+                DefaultTargetLanguageId = x.DefaultTargetLanguageId,
+                Id = x.Id
             }).FirstOrDefault();
+
+            result.TotalScore = user.TotalScore;
+            result.DefaultBaseLanguage = db.Query<LanguageModel>("select top 1 * from dbo.Language where id = @DefaultBaseLanguageId", user).FirstOrDefault();
+            result.DefaultTargetLanguage = db.Query<LanguageModel>("select top 1 * from dbo.Language where id = @DefaultTargetLanguageId", user).FirstOrDefault();
+            result.SelectedLanguages = db.Query<SelectedLanguageModel>("select top 1 * from dbo.SelectedLanguages where userId = @Id", user).FirstOrDefault();
+
+            return result;
         }
 
         public User GetUserInformationByEmail(string email)

@@ -13,8 +13,8 @@ CREATE TABLE [dbo].[Users] (
     [Email]   nvarchar(100) NOT NULL,
 	[DisplayName] nvarchar(200) NOT NULL,
 	[Password]   nvarchar(200) NOT NULL,
-	[DefaultTargetLanguage]   int,
-	[DefaultBaseLanguage]   int,
+	[DefaultTargetLanguageId]   int,
+	[DefaultBaseLanguageId]   int,
 	[AddedDate] datetime NOT NULL,
 	[LastUpdateDate] datetime,
 	[TotalScore] float,
@@ -25,10 +25,10 @@ CREATE TABLE [dbo].[Users] (
 )
 GO
 ALTER TABLE [dbo].[Users] ADD CONSTRAINT [FK_User_DefaultTargetLanguage]
-FOREIGN KEY ([DefaultTargetLanguage]) REFERENCES [dbo].[Language] ([Id])
+FOREIGN KEY ([DefaultTargetLanguageId]) REFERENCES [dbo].[Language] ([Id])
 GO
 ALTER TABLE [dbo].[Users] ADD CONSTRAINT [FK_User_DefaultBaseLanguage]
-FOREIGN KEY ([DefaultBaseLanguage]) REFERENCES [dbo].[Language] ([Id])
+FOREIGN KEY ([DefaultBaseLanguageId]) REFERENCES [dbo].[Language] ([Id])
 GO
 
 CREATE TABLE [dbo].[Book] (

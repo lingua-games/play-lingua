@@ -96,12 +96,12 @@ export class RegisterComponent implements OnInit {
           res?.user?.email
         );
         if (
-          res?.user?.defaultBaseLanguage &&
-          res?.user?.defaultTargetLanguage
+          res?.user?.defaultBaseLanguageId &&
+          res?.user?.defaultTargetLanguageId
         ) {
           this.localStorageService.save(
             LocalStorageHelper.defaultLanguages,
-            `{defaultBaseLanguage: ${res?.user?.defaultBaseLanguage}, defaultBaseLanguage: ${res?.user?.defaultTargetLanguage} }`
+            `{defaultBaseLanguage: ${res?.user?.defaultBaseLanguageId}, defaultBaseLanguage: ${res?.user?.defaultTargetLanguageId} }`
           );
         }
         this.router.navigate(['../game-menu']).then();
