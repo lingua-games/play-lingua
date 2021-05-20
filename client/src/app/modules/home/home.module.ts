@@ -17,6 +17,7 @@ import { StoreModule } from '@ngrx/store';
 import { scoreNotificationReducer } from '../../core/component/score-notification/state/score-notification.reducer';
 import { ProfileComponent } from './profile/profile.component';
 import { ComponentModule } from '../../core/component/component.module';
+import { CompleteRegistrationComponent } from './complete-registration/complete-registration';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { ComponentModule } from '../../core/component/component.module';
     GameMenuComponent,
     PrepareAddWordsComponent,
     ProfileComponent,
+    CompleteRegistrationComponent,
   ],
   imports: [
     CommonModule,
