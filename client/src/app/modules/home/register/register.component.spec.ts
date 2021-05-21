@@ -144,13 +144,13 @@ describe('RegisterComponent', () => {
         rePassword: 'fakePassword',
       } as UserModel;
       mockUserService.add.and.callFake(() => {
-        return throwError('some errors');
+        return throwError('');
       });
 
       component.submit();
 
       expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
-        'some errors',
+        'Server error',
         Severity.error
       );
     });
