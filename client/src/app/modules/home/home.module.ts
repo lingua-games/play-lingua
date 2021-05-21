@@ -18,6 +18,7 @@ import { scoreNotificationReducer } from '../../core/component/score-notificatio
 import { ProfileComponent } from './profile/profile.component';
 import { ComponentModule } from '../../core/component/component.module';
 import { CompleteRegistrationComponent } from './complete-registration/complete-registration';
+import { RecaptchaModule } from 'ng-recaptcha';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { CompleteRegistrationComponent } from './complete-registration/complete-
     MaterialModule,
     DirectiveModule,
     ComponentModule,
+    RecaptchaModule,
     StoreModule.forFeature('notifications', scoreNotificationReducer),
   ],
   providers: [DeactivateWithDelay],

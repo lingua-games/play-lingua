@@ -1,6 +1,5 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RegisterComponent } from './register.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import {
   NotificationService,
@@ -18,10 +17,11 @@ import { of, throwError } from 'rxjs';
 import { LoginResultModel } from '../../../core/models/login-result.model';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
+import { CompleteRegistrationComponent } from './complete-registration';
 
 describe('RegisterComponent', () => {
-  let component: RegisterComponent;
-  let fixture: ComponentFixture<RegisterComponent>;
+  let component: CompleteRegistrationComponent;
+  let fixture: ComponentFixture<CompleteRegistrationComponent>;
   let mockNotificationService;
   let mockSecurityService;
   let mockRouter;
@@ -47,7 +47,7 @@ describe('RegisterComponent', () => {
       mockUserService = jasmine.createSpyObj(['add']);
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule, RouterTestingModule],
-        declarations: [RegisterComponent],
+        declarations: [CompleteRegistrationComponent],
         providers: [
           {
             provide: LocalStorageService,
@@ -86,7 +86,7 @@ describe('RegisterComponent', () => {
   );
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RegisterComponent);
+    fixture = TestBed.createComponent(CompleteRegistrationComponent);
     component = fixture.componentInstance;
   });
 

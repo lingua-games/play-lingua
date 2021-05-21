@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserModel } from '../../../core/models/user.model';
 import { UserService } from '../../../core/service/user.service';
 import {
@@ -8,6 +8,12 @@ import {
 import { Router } from '@angular/router';
 import { SecurityService } from '../../../core/service/security.service';
 import { Location } from '@angular/common';
+import {
+  RegisterApiResultModel,
+  RegisterStatus,
+} from '../../../core/models/register-api-result.model';
+import { ApiResult } from '../../../core/models/api-result.model';
+import { RecaptchaComponent } from 'ng-recaptcha';
 
 @Component({
   selector: 'app-register',
@@ -15,9 +21,11 @@ import { Location } from '@angular/common';
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
+  @ViewChild('captchaView') captchaView?: RecaptchaComponent;
+
   public user: UserModel = {} as UserModel;
-  public isLoading?: boolean;
   public hasEmailError = false;
+  public registerResult: ApiResult<RegisterApiResultModel> = new ApiResult<RegisterApiResultModel>();
 
   constructor(
     private userService: UserService,
@@ -28,6 +36,8 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.registerResult.setLoading(false);
+    this.registerResult.data = new RegisterApiResultModel();
     if (this.securityService.isLoggedIn()) {
       this.router.navigate(['game-menu']).then();
     }
@@ -57,13 +67,25 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    this.isLoading = true;
+    this.registerResult.setLoading(true);
     this.userService.add(this.user).subscribe(
-      () => {},
+      (res: RegisterApiResultModel) => {
+        this.registerResult.setData(res);
+        if (res.status === RegisterStatus.AlreadyRegistered) {
+          if (this.captchaView) {
+            this.captchaView.reset();
+          }
+        }
+      },
       (error: string) => {
-        this.notificationService.showMessage(error, Severity.error);
-        this.isLoading = false;
+        if (this.captchaView) {
+          this.captchaView.reset();
+        }
+        this.notificationService.showMessage('Server error', Severity.error);
+        this.registerResult.setError(error);
       }
     );
   }
+
+  showForgotPassword(): void {}
 }

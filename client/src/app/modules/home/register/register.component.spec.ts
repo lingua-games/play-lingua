@@ -117,7 +117,7 @@ describe('RegisterComponent', () => {
       component.submit();
 
       expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
-        'Email is empty',
+        'Email is a required field',
         Severity.error
       );
     });
