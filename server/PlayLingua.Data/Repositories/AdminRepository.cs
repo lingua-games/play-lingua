@@ -198,8 +198,6 @@ WHERE UniqueKey = @UniqueKey", invitation);
                     Body = invitation.HtmlText,
                     BodyEncoding = System.Text.Encoding.UTF8,
                     SubjectEncoding = System.Text.Encoding.UTF8,
-
-
                 };
 
                 message.To.Add(invitation.Email);

@@ -26,6 +26,7 @@ namespace PlayLingua.Contract.ViewModels
         public int DefaultTargetLanguageId { get; set; }
         public LanguageViewModel DefaultBaseLanguage { get; set; }
         public LanguageViewModel DefaultTargetLanguage { get; set; }
+        public bool NeedsResetPassword { get; set; }
     }
 }
 

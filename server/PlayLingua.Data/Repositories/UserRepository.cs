@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
 
 namespace PlayLingua.Data
@@ -25,19 +27,32 @@ namespace PlayLingua.Data
             _email = email;
         }
 
-        public User Add(User user)
+        public void Add(User user)
         {
             user.EmailVerificationCode = Guid.NewGuid().ToString();
-            SendVerificationCode(user);
-            user.Password = CreateHashPassword(user.Password, _hashKey);
+            var sendEmailResult = SendVerificationCode(user);
+            if (!sendEmailResult)
+            {
+                return;
+            }
             user.AddedDate = DateTime.Now;
             var sql =
-                "insert into dbo.Users (Email, Password, AddedDate, DisplayName, EmailVerificationCode) VALUES(@Email, @Password, @AddedDate, @DisplayName, @EmailVerificationCode);" +
-                "SELECT CAST(SCOPE_IDENTITY() as int)";
-
-            var id = db.Query<int>(sql, user).Single();
-            user.Id = id;
-            return user;
+                @"
+                    insert into dbo.Users (
+                    Email, 
+                    AddedDate, 
+                    EmailVerificationCode, 
+                    IsEmailVerified, 
+                    NeedsResetPassword
+                    ) 
+                    VALUES(
+                    @Email,
+                    @AddedDate, 
+                    @EmailVerificationCode, 
+                    false, 
+                    false
+                    )";
+            db.Query<int>(sql, user).Single();
         }
 
         public static string CreateHashPassword(string value, string salt)
@@ -52,11 +67,69 @@ namespace PlayLingua.Data
             return Convert.ToBase64String(valueBytes);
         }
 
-        public void SendVerificationCode(User user)
+        public bool SendVerificationCode(User user)
         {
-            if (user is null)
+            var activationUrl = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development" ?
+                "http://localhost:4000/#/activation-email/" + user.EmailVerificationCode :
+                "https://playinglingua.com/#/activation-email/" + user.EmailVerificationCode;
+            try
             {
-                throw new ArgumentNullException(nameof(user));
+                using var client = new SmtpClient()
+                {
+                    Host = "smtp.office365.com",
+                    Port = 587,
+                    UseDefaultCredentials = false,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    Credentials = new NetworkCredential(_email.Username, _email.Password), // you must give a full email address for authentication 
+                    TargetName = "STARTTLS/smtp.office365.com", // Set to avoid MustIssueStartTlsFirst exception
+                    EnableSsl = true // Set to avoid secure connection exception   
+                };
+                MailMessage message = new MailMessage()
+                {
+                    From = new MailAddress(_email.Username), // sender must be a full email address
+                    Subject = "PlayingLingua - User Activation",
+                    IsBodyHtml = true,
+                    Body = @"
+<div style='
+    background-color: #EFEEE9;
+    margin: 5vh 30%;
+    width: 40%;
+    color:#2F4858;
+    font-size: .7vw'>
+
+    <div style='margin: 20px; padding-top: 20px;'>
+        <p>Dear " + user.Email + @" ,</p>
+        <hr>
+        <p>
+            Welcome to PlayingLingua, Please activate your email via <a href='" + activationUrl + @"'>This Link</a>
+        </p>
+        <hr>
+        <p>
+            Best regards,
+            <br>
+            Arash
+            <br>
+            +31645241080
+            <br>
+            <a style = 'text-decoration: underline;' href = 'https://github.com/arashbahreini' > Github </a>,
+            <a style = 'text-decoration: underline;' href = 'https://www.linkedin.com/in/arash-bahreini-100296139/' > Linkedin </a>,
+            <a style = 'text-decoration: underline;' href = 'https://stackoverflow.com/users/3773888/arash' > Stackoverflow </a>
+        </p>
+        <br>
+    </div>
+</div>
+",
+                    BodyEncoding = System.Text.Encoding.UTF8,
+                    SubjectEncoding = System.Text.Encoding.UTF8,
+                };
+
+                message.To.Add(user.Email);
+                client.Send(message);
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
 

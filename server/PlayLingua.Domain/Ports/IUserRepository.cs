@@ -8,10 +8,10 @@ namespace PlayLingua.Domain.Ports
     public interface IUserRepository
     {
         List<User> List();
-        User Add(User user);
+        void Add(User user);
         UserModel GetUserInformation(int userId);
         User GetUserInformationByEmail(string email);
-        
+        bool SendVerificationCode(User user);
         void Delete(string id);
         void Update(EditUserModel user);
     }

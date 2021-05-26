@@ -75,19 +75,28 @@ namespace PlayLingua.Host.Controllers
         }
 
         [HttpPost]
-        public ActionResult<UserViewModel> Add([FromBody] UserViewModel model)
+        public ActionResult<RegisterUserViewModel> Add([FromBody] UserViewModel model)
         {
-            if (_userRepository.List().Where(x => x.Email == model.Email).Any())
+            var user = _userRepository.List().Where(x => x.Email == model.Email).FirstOrDefault();
+            if (user != null && user.NeedsResetPassword)
             {
-                return StatusCode(406, "This email is already exist");
+                return Ok(new RegisterUserViewModel { Status = RegisterStatus.NeedsChangePassword });
             }
-            model.Id = _userRepository.Add(new User
+            else if (user != null && (user.IsEmailVerified == null || user.IsEmailVerified == false))
+            {
+                _userRepository.SendVerificationCode(user);
+                return Ok(new RegisterUserViewModel() { Status = RegisterStatus.EmailSent });
+            }
+            else if (user != null)
+            {
+                return Ok(new RegisterUserViewModel() { Status = RegisterStatus.AlreadyRegistered });
+            }
+
+            _userRepository.Add(new User
             {
                 Email = model.Email,
-                Password = model.Password,
-                DisplayName = model.DisplayName
-            }).Id;
-            return Ok(model);
+            });
+            return Ok(new RegisterUserViewModel() { Status = RegisterStatus.EmailSent });
         }
 
         [HttpDelete("{id}")]
