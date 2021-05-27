@@ -94,7 +94,7 @@ namespace PlayLingua.Unit.Test.Controllers
                 Id = 1,
             };
             _mockUserRepo.Setup(repo => repo.List()).Returns(new List<User>());
-            _mockUserRepo.Setup(repo => repo.Add(It.IsAny<User>())).Returns(fakeAddedUser);
+            _mockUserRepo.Setup(repo => repo.Add(It.IsAny<User>()));
 
             // Act
             var methodResult = _mockController.Add(fakeAddedUserViewModel);
