@@ -19,6 +19,9 @@ import { ProfileComponent } from './profile/profile.component';
 import { ComponentModule } from '../../core/component/component.module';
 import { CompleteRegistrationComponent } from './complete-registration/complete-registration';
 import { RecaptchaModule } from 'ng-recaptcha';
+import { ChangePasswordComponent } from './change-password/change-password.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ActivateUserComponent } from './activate-user/activate-user.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +35,9 @@ import { RecaptchaModule } from 'ng-recaptcha';
     PrepareAddWordsComponent,
     ProfileComponent,
     CompleteRegistrationComponent,
+    ChangePasswordComponent,
+    ForgotPasswordComponent,
+    ActivateUserComponent,
   ],
   imports: [
     CommonModule,

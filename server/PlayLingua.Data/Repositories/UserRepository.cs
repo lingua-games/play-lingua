@@ -30,7 +30,11 @@ namespace PlayLingua.Data
         public void Add(User user)
         {
             user.EmailVerificationCode = Guid.NewGuid().ToString();
-            var sendEmailResult = SendVerificationCode(user);
+            var sendEmailResult = SendVerificationCode(new UserModel
+            {
+                EmailVerificationCode = user.EmailVerificationCode,
+                Email = user.Email
+            });
             if (!sendEmailResult)
             {
                 return;
@@ -49,10 +53,10 @@ namespace PlayLingua.Data
                     @Email,
                     @AddedDate, 
                     @EmailVerificationCode, 
-                    false, 
-                    false
+                    0, 
+                    0
                     )";
-            db.Query<int>(sql, user).Single();
+            db.Query<int>(sql, user);
         }
 
         public static string CreateHashPassword(string value, string salt)
@@ -67,7 +71,7 @@ namespace PlayLingua.Data
             return Convert.ToBase64String(valueBytes);
         }
 
-        public bool SendVerificationCode(User user)
+        public bool SendVerificationCode(UserModel user)
         {
             var activationUrl = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development" ?
                 "http://localhost:4000/#/activation-email/" + user.EmailVerificationCode :

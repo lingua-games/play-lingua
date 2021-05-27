@@ -19,6 +19,13 @@ export class UserService {
     return this.http.post<RegisterApiResultModel>(this.userUrl, user);
   }
 
+  public resendActivationCode(user: UserModel): Observable<boolean> {
+    return this.http.post<boolean>(
+      this.userUrl + 'resend-activation-code',
+      user
+    );
+  }
+
   public editUser(user: EditUserModel): Observable<LoginResultModel> {
     return this.http.put<LoginResultModel>(this.userUrl + 'update', user);
   }

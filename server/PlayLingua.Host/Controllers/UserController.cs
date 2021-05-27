@@ -74,6 +74,22 @@ namespace PlayLingua.Host.Controllers
             return Ok(result);
         }
 
+        [HttpPost("resend-activation-code")]
+        public ActionResult<bool> ResendActivationCode([FromBody] UserViewModel model)
+        {
+            var user = _userRepository.List().Where(x => x.Email == model.Email).FirstOrDefault();
+            var emailResult = _userRepository.SendVerificationCode(new UserModel
+            {
+                Email = model.Email,
+                EmailVerificationCode = user.EmailVerificationCode
+            });
+            if (!emailResult)
+            {
+                return Ok(false);
+            }
+            return Ok(true);
+        }
+
         [HttpPost]
         public ActionResult<RegisterUserViewModel> Add([FromBody] UserViewModel model)
         {
@@ -84,7 +100,11 @@ namespace PlayLingua.Host.Controllers
             }
             else if (user != null && (user.IsEmailVerified == null || user.IsEmailVerified == false))
             {
-                _userRepository.SendVerificationCode(user);
+                _userRepository.SendVerificationCode(new UserModel
+                {
+                    Email = user.Email,
+                    EmailVerificationCode = user.EmailVerificationCode
+                });
                 return Ok(new RegisterUserViewModel() { Status = RegisterStatus.EmailSent });
             }
             else if (user != null)

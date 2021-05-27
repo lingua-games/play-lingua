@@ -11,9 +11,21 @@
   </div>
   <div *ngIf="registerResult.data.status === 1">
     <p>
-      And Email has sent to <strong>{{ this.user.email }}</strong>
+      An Email has sent to <strong>{{ this.user.email }}</strong>
     </p>
     <p>Please check your inbox and follow the instruction.</p>
+    <p>
+      Have not received email yet ?
+      <a class="resend-email-de-active" *ngIf="countdown"
+        >You can resend it in {{ countdown }} seconds .</a
+      >
+      <a
+        class="resend-email-active"
+        (click)="resendInvitationCode()"
+        *ngIf="!countdown"
+        >Resend code
+      </a>
+    </p>
   </div>
   <div
     *ngIf="registerResult.data.status === 0 || registerResult.data.status === 2"

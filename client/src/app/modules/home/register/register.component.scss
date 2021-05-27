@@ -40,3 +40,17 @@
     cursor: pointer;
   }
 }
+
+.resend-email-active:hover {
+  cursor: pointer;
+}
+
+.resend-email-de-active {
+  color: gray;
+}
+
+.resend-email-de-active:hover {
+  text-decoration: none;
+}
+
+

@@ -25,7 +25,10 @@ export class RegisterComponent implements OnInit {
 
   public user: UserModel = {} as UserModel;
   public hasEmailError = false;
-  public registerResult: ApiResult<RegisterApiResultModel> = new ApiResult<RegisterApiResultModel>();
+  public registerResult: ApiResult<RegisterApiResultModel> =
+    new ApiResult<RegisterApiResultModel>();
+  canResendEmail = false;
+  countdown = 0;
 
   constructor(
     private userService: UserService,
@@ -71,6 +74,12 @@ export class RegisterComponent implements OnInit {
     this.userService.add(this.user).subscribe(
       (res: RegisterApiResultModel) => {
         this.registerResult.setData(res);
+        if (res.status === RegisterStatus.EmailSent) {
+          this.startCountDown();
+        }
+        if (res.status === RegisterStatus.NeedsChangePassword) {
+          this.router.navigate(['change-password']).then();
+        }
         if (res.status === RegisterStatus.AlreadyRegistered) {
           if (this.captchaView) {
             this.captchaView.reset();
@@ -81,11 +90,45 @@ export class RegisterComponent implements OnInit {
         if (this.captchaView) {
           this.captchaView.reset();
         }
-        this.notificationService.showMessage('Server error', Severity.error);
+        this.notificationService.showMessage(
+          'Server error, please try again',
+          Severity.error
+        );
         this.registerResult.setError(error);
       }
     );
   }
 
-  showForgotPassword(): void {}
+  startCountDown(): void {
+    this.countdown = 60;
+    const interval = setInterval(() => {
+      if (this.countdown <= 0) {
+        clearInterval(interval);
+        return;
+      }
+      this.countdown--;
+    }, 1000);
+  }
+
+  resendInvitationCode(): void {
+    this.startCountDown();
+    this.userService.resendActivationCode(this.user).subscribe(
+      (res: boolean) => {
+        if (!res) {
+          this.notificationService.showMessage(
+            'Server error, please try again',
+            Severity.error
+          );
+        } else {
+          this.notificationService.showMessage('Email sent', Severity.success);
+        }
+      },
+      () => {
+        this.notificationService.showMessage(
+          'Server error, please try again',
+          Severity.error
+        );
+      }
+    );
+  }
 }

@@ -12,6 +12,9 @@ import { ProfileComponent } from './profile/profile.component';
 import { UserAndGuestAllowService } from '../../core/service/guards/user-and-guest-allow.service';
 import { OnlyUserAllowService } from '../../core/service/guards/only-user-allow.service';
 import { OnlyNotSignedAllowService } from '../../core/service/guards/only-not-signed-allow.service';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
+import { ActivateUserComponent } from './activate-user/activate-user.component';
 
 export interface CanComponentDeactivate {
   canDeactivate: () => Promise<boolean>;
@@ -19,7 +22,8 @@ export interface CanComponentDeactivate {
 
 @Injectable()
 export class DeactivateWithDelay
-  implements CanDeactivate<CanComponentDeactivate> {
+  implements CanDeactivate<CanComponentDeactivate>
+{
   canDeactivate(): Promise<true> {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -54,6 +58,21 @@ const routes: Routes = [
       {
         path: 'register',
         component: RegisterComponent,
+        canDeactivate: [DeactivateWithDelay],
+      },
+      {
+        path: 'forget-password',
+        component: ForgotPasswordComponent,
+        canDeactivate: [DeactivateWithDelay],
+      },
+      {
+        path: 'change-password',
+        component: ChangePasswordComponent,
+        canDeactivate: [DeactivateWithDelay],
+      },
+      {
+        path: 'activate-user/:code',
+        component: ActivateUserComponent,
         canDeactivate: [DeactivateWithDelay],
       },
       {

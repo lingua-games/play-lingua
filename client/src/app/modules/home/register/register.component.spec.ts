@@ -150,7 +150,7 @@ describe('RegisterComponent', () => {
       component.submit();
 
       expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
-        'Server error',
+        'Server error, please try again',
         Severity.error
       );
     });
