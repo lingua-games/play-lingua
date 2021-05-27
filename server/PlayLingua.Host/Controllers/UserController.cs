@@ -74,20 +74,49 @@ namespace PlayLingua.Host.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
-        public ActionResult<UserViewModel> Add([FromBody] UserViewModel model)
+        [HttpPost("resend-activation-code")]
+        public ActionResult<bool> ResendActivationCode([FromBody] UserViewModel model)
         {
-            if (_userRepository.List().Where(x => x.Email == model.Email).Any())
-            {
-                return StatusCode(406, "This email is already exist");
-            }
-            model.Id = _userRepository.Add(new User
+            var user = _userRepository.List().Where(x => x.Email == model.Email).FirstOrDefault();
+            var emailResult = _userRepository.SendVerificationCode(new UserModel
             {
                 Email = model.Email,
-                Password = model.Password,
-                DisplayName = model.DisplayName
-            }).Id;
-            return Ok(model);
+                EmailVerificationCode = user.EmailVerificationCode
+            });
+            if (!emailResult)
+            {
+                return Ok(false);
+            }
+            return Ok(true);
+        }
+
+        [HttpPost]
+        public ActionResult<RegisterUserViewModel> Add([FromBody] UserViewModel model)
+        {
+            var user = _userRepository.List().Where(x => x.Email == model.Email).FirstOrDefault();
+            if (user != null && user.NeedsResetPassword)
+            {
+                return Ok(new RegisterUserViewModel { Status = RegisterStatus.NeedsChangePassword });
+            }
+            else if (user != null && (user.IsEmailVerified == null || user.IsEmailVerified == false))
+            {
+                _userRepository.SendVerificationCode(new UserModel
+                {
+                    Email = user.Email,
+                    EmailVerificationCode = user.EmailVerificationCode
+                });
+                return Ok(new RegisterUserViewModel() { Status = RegisterStatus.EmailSent });
+            }
+            else if (user != null)
+            {
+                return Ok(new RegisterUserViewModel() { Status = RegisterStatus.AlreadyRegistered });
+            }
+
+            _userRepository.Add(new User
+            {
+                Email = model.Email,
+            });
+            return Ok(new RegisterUserViewModel() { Status = RegisterStatus.EmailSent });
         }
 
         [HttpDelete("{id}")]

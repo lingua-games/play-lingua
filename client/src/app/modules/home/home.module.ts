@@ -17,6 +17,11 @@ import { StoreModule } from '@ngrx/store';
 import { scoreNotificationReducer } from '../../core/component/score-notification/state/score-notification.reducer';
 import { ProfileComponent } from './profile/profile.component';
 import { ComponentModule } from '../../core/component/component.module';
+import { CompleteRegistrationComponent } from './complete-registration/complete-registration';
+import { RecaptchaModule } from 'ng-recaptcha';
+import { ChangePasswordComponent } from './change-password/change-password.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ActivateUserComponent } from './activate-user/activate-user.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +34,10 @@ import { ComponentModule } from '../../core/component/component.module';
     GameMenuComponent,
     PrepareAddWordsComponent,
     ProfileComponent,
+    CompleteRegistrationComponent,
+    ChangePasswordComponent,
+    ForgotPasswordComponent,
+    ActivateUserComponent,
   ],
   imports: [
     CommonModule,
@@ -38,6 +47,7 @@ import { ComponentModule } from '../../core/component/component.module';
     MaterialModule,
     DirectiveModule,
     ComponentModule,
+    RecaptchaModule,
     StoreModule.forFeature('notifications', scoreNotificationReducer),
   ],
   providers: [DeactivateWithDelay],

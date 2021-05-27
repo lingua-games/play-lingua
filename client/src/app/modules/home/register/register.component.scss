@@ -1,13 +1,56 @@
 .welcome-inner-main-container {
   position: absolute;
   top: -25vh;
-  left: 35%;
+  left: 40%;
   z-index: 1;
   max-height: 50vh;
-  width: 30%;
+  width: 25%;
 }
 
 .btn-back-container {
   position: absolute;
   left: -10%;
 }
+
+.email-container {
+  //width: 304px;
+}
+
+.g-recaptcha{
+  transform:scale(2.77);
+  -webkit-transform:scale(0.77);
+  transform-origin:0 0;
+  -webkit-transform-origin:0 0;
+}
+
+.btn-submit {
+  float: right;
+}
+
+.btn-forgot-password {
+  float: left;
+}
+
+.already-registered-container {
+  a {
+    color: blue
+  }
+
+  a:hover {
+    cursor: pointer;
+  }
+}
+
+.resend-email-active:hover {
+  cursor: pointer;
+}
+
+.resend-email-de-active {
+  color: gray;
+}
+
+.resend-email-de-active:hover {
+  text-decoration: none;
+}
+
+

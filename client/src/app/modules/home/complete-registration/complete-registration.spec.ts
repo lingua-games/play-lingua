@@ -1,6 +1,5 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RegisterComponent } from './register.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import {
   NotificationService,
@@ -18,10 +17,11 @@ import { of, throwError } from 'rxjs';
 import { LoginResultModel } from '../../../core/models/login-result.model';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
+import { CompleteRegistrationComponent } from './complete-registration';
 
 describe('RegisterComponent', () => {
-  let component: RegisterComponent;
-  let fixture: ComponentFixture<RegisterComponent>;
+  let component: CompleteRegistrationComponent;
+  let fixture: ComponentFixture<CompleteRegistrationComponent>;
   let mockNotificationService;
   let mockSecurityService;
   let mockRouter;
@@ -47,7 +47,7 @@ describe('RegisterComponent', () => {
       mockUserService = jasmine.createSpyObj(['add']);
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule, RouterTestingModule],
-        declarations: [RegisterComponent],
+        declarations: [CompleteRegistrationComponent],
         providers: [
           {
             provide: LocalStorageService,
@@ -86,7 +86,7 @@ describe('RegisterComponent', () => {
   );
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RegisterComponent);
+    fixture = TestBed.createComponent(CompleteRegistrationComponent);
     component = fixture.componentInstance;
   });
 
@@ -116,9 +116,16 @@ describe('RegisterComponent', () => {
 
       component.submit();
 
-      expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
-        'Email is a required field',
-        Severity.error
+      expect(component.errors['email']).toBe('Email is a required field');
+    });
+
+    it('should set displayName error if field is empty', () => {
+      component.user = { email: 'fakeEmail' } as UserModel;
+
+      component.submit();
+
+      expect(component.errors['displayName']).toBe(
+        'Display name is a required field'
       );
     });
 
@@ -130,10 +137,53 @@ describe('RegisterComponent', () => {
 
       component.submit();
 
-      expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
-        'Email is not in correct format',
-        Severity.error
+      expect(component.errors['email']).toBe('Email is not in correct format');
+    });
+
+    it('should set password error if field is empty', () => {
+      component.user = {
+        email: 'email@email.com',
+        displayName: 'fakeDisplayName',
+      } as UserModel;
+
+      component.submit();
+
+      expect(component.errors['password']).toBe('Password is a required field');
+    });
+
+    it('should set password error password and re-password are not match', () => {
+      component.user = {
+        email: 'email@email.com',
+        displayName: 'fakeDisplayName',
+        password: 'fakePassword',
+        rePassword: 'fakePassword 1',
+      } as UserModel;
+      mockUserService.add.and.callFake(() => {
+        return of({});
+      });
+
+      component.submit();
+
+      expect(component.errors['password']).toBe(
+        'Password and Re-Password should be the same'
       );
+    });
+
+    it('should call login once the API success', () => {
+      component.user = {
+        email: 'email@email.com',
+        displayName: 'fakeDisplayName',
+        password: 'fakePassword',
+        rePassword: 'fakePassword',
+      } as UserModel;
+      mockUserService.add.and.callFake(() => {
+        return of(component.user);
+      });
+      spyOn(component, 'login');
+
+      component.submit();
+
+      expect(component.login).toHaveBeenCalled();
     });
 
     it('should show error if API fails', () => {
@@ -144,14 +194,80 @@ describe('RegisterComponent', () => {
         rePassword: 'fakePassword',
       } as UserModel;
       mockUserService.add.and.callFake(() => {
-        return throwError('');
+        return throwError('some errors');
       });
 
       component.submit();
 
       expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
-        'Server error, please try again',
+        'some errors',
         Severity.error
+      );
+    });
+  });
+
+  describe('login', () => {
+    it('should show success message once login API return successfully', () => {
+      mockSecurityService.login.and.callFake(() => {
+        return of({
+          token: 'fake token',
+          user: { email: 'fake email' },
+        } as LoginResultModel);
+      });
+
+      component.login();
+
+      expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+        'You registered successfully',
+        Severity.success,
+        'Success'
+      );
+    });
+
+    it('should set token on storage after successful API', () => {
+      mockSecurityService.login.and.callFake(() => {
+        return of({
+          token: 'fake token',
+          user: { email: 'fake email' },
+        } as LoginResultModel);
+      });
+
+      component.login();
+
+      expect(mockSecurityService.setToken).toHaveBeenCalledWith('fake token');
+    });
+
+    it('should save default languages into localStorage', () => {
+      mockSecurityService.login.and.callFake(() => {
+        return of({
+          token: 'fake token',
+          user: {
+            email: 'fake email',
+            defaultTargetLanguageId: 1,
+            defaultBaseLanguageId: 1,
+          },
+        } as LoginResultModel);
+      });
+
+      component.login();
+
+      expect(mockLocalStorageService.save).toHaveBeenCalledWith(
+        LocalStorageHelper.defaultLanguages,
+        `{defaultBaseLanguage: 1, defaultBaseLanguage: 1 }`
+      );
+    });
+
+    it('should show error if API fail', () => {
+      mockSecurityService.login.and.callFake(() => {
+        return throwError('some errors');
+      });
+
+      component.login();
+
+      expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+        'Failed to log in after register',
+        Severity.error,
+        'Error'
       );
     });
   });

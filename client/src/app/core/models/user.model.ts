@@ -14,4 +14,5 @@ export interface UserModel {
   totalScore: number;
   EmailAndDisplayName: string;
   selectedLanguages: SelectedLanguageModel;
+  captchaCode: string;
 }

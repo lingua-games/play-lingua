@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { EditUserModel } from '../models/edit-user.model';
 import { LoginResultModel } from '../models/login-result.model';
+import { RegisterApiResultModel } from '../models/register-api-result.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +15,15 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  public add(user: UserModel): Observable<UserModel> {
-    return this.http.post<UserModel>(this.userUrl, user);
+  public add(user: UserModel): Observable<RegisterApiResultModel> {
+    return this.http.post<RegisterApiResultModel>(this.userUrl, user);
+  }
+
+  public resendActivationCode(user: UserModel): Observable<boolean> {
+    return this.http.post<boolean>(
+      this.userUrl + 'resend-activation-code',
+      user
+    );
   }
 
   public editUser(user: EditUserModel): Observable<LoginResultModel> {

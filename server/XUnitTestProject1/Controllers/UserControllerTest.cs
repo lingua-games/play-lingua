@@ -61,27 +61,8 @@ namespace PlayLingua.Unit.Test.Controllers
         //    Assert.Equal(expectedResult.Id, (testResult.Value as UserViewModel).Id);
         //}
 
-        [Fact]
-        public void Add_Should_Return_406_If_Email_Is_Exist()
-        {
-            // Arrange
-            var fakeAddedUser = new UserViewModel()
-            {
-                Id = 1,
-            };
-            _mockUserRepo.Setup(repo => repo.List()).Returns(_fakeUserList);
-
-            // Act
-            var methodResult = _mockController.Add(fakeAddedUser);
-
-            // Assert
-            var testResult = methodResult.Result as ObjectResult;
-            Assert.Equal("This email is already exist", testResult.Value);
-            Assert.Equal(406, testResult.StatusCode);
-        }
-
-        [Fact]
-        public void Add_Should_Return_Added_User_If_Email_Is_Not_Exist()
+          [Fact]
+        public void Add_Should_Return_EmailSent_Status_User_If_Email_Is_Not_Exist()
         {
             // Arrange
             var fakeAddedUserViewModel = new UserViewModel()
@@ -94,14 +75,14 @@ namespace PlayLingua.Unit.Test.Controllers
                 Id = 1,
             };
             _mockUserRepo.Setup(repo => repo.List()).Returns(new List<User>());
-            _mockUserRepo.Setup(repo => repo.Add(It.IsAny<User>())).Returns(fakeAddedUser);
+            _mockUserRepo.Setup(repo => repo.Add(It.IsAny<User>()));
 
             // Act
             var methodResult = _mockController.Add(fakeAddedUserViewModel);
 
             // Assert
             var testResult = methodResult.Result as OkObjectResult;
-            Assert.Equal(fakeAddedUserViewModel, testResult.Value);
+            Assert.Equal(RegisterStatus.EmailSent, (testResult.Value as RegisterUserViewModel).Status);
         }
 
         [Fact]

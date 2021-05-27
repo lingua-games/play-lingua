@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserModel } from '../../../core/models/user.model';
 import { UserService } from '../../../core/service/user.service';
 import {
@@ -7,11 +7,13 @@ import {
 } from '../../../core/service/notification.service';
 import { Router } from '@angular/router';
 import { SecurityService } from '../../../core/service/security.service';
-import { LoginResultModel } from '../../../core/models/login-result.model';
-import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { Location } from '@angular/common';
-import { LocalStorageService } from '../../../core/service/local-storage.service';
-import { RegisterFormErrors } from '../../../core/models/form-errors.model';
+import {
+  RegisterApiResultModel,
+  RegisterStatus,
+} from '../../../core/models/register-api-result.model';
+import { ApiResult } from '../../../core/models/api-result.model';
+import { RecaptchaComponent } from 'ng-recaptcha';
 
 @Component({
   selector: 'app-register',
@@ -19,20 +21,26 @@ import { RegisterFormErrors } from '../../../core/models/form-errors.model';
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
+  @ViewChild('captchaView') captchaView?: RecaptchaComponent;
+
   public user: UserModel = {} as UserModel;
-  public errors: RegisterFormErrors = {} as RegisterFormErrors;
-  public isLoading?: boolean;
+  public hasEmailError = false;
+  public registerResult: ApiResult<RegisterApiResultModel> =
+    new ApiResult<RegisterApiResultModel>();
+  canResendEmail = false;
+  countdown = 0;
 
   constructor(
     private userService: UserService,
     private notificationService: NotificationService,
     private router: Router,
     private securityService: SecurityService,
-    private location: Location,
-    private localStorageService: LocalStorageService
+    private location: Location
   ) {}
 
   ngOnInit(): void {
+    this.registerResult.setLoading(false);
+    this.registerResult.data = new RegisterApiResultModel();
     if (this.securityService.isLoggedIn()) {
       this.router.navigate(['game-menu']).then();
     }
@@ -43,74 +51,82 @@ export class RegisterComponent implements OnInit {
   }
 
   submit(): void {
-    this.errors = {} as RegisterFormErrors;
-
+    this.hasEmailError = false;
     if (!this.user.email) {
-      this.errors.email = 'Email is a required field';
-      return;
-    }
-
-    if (!this.user.displayName || this.user.displayName === '') {
-      this.errors.displayName = 'Display name is a required field';
+      this.notificationService.showMessage(
+        'Email is a required field',
+        Severity.error
+      );
+      this.hasEmailError = true;
       return;
     }
 
     if (!/\S+@\S+\.\S+/.test(this.user.email)) {
-      this.errors.email = 'Email is not in correct format';
+      this.notificationService.showMessage(
+        'Email is not in correct format',
+        Severity.error
+      );
+      this.hasEmailError = true;
       return;
     }
 
-    if (!this.user.password) {
-      this.errors.password = 'Password is a required field';
-      return;
-    }
-
-    if (this.user.password !== this.user.rePassword) {
-      this.errors.password = 'Password and Re-Password should be the same';
-      return;
-    }
-    this.isLoading = true;
+    this.registerResult.setLoading(true);
     this.userService.add(this.user).subscribe(
-      () => {
-        this.login();
+      (res: RegisterApiResultModel) => {
+        this.registerResult.setData(res);
+        if (res.status === RegisterStatus.EmailSent) {
+          this.startCountDown();
+        }
+        if (res.status === RegisterStatus.NeedsChangePassword) {
+          this.router.navigate(['change-password']).then();
+        }
+        if (res.status === RegisterStatus.AlreadyRegistered) {
+          if (this.captchaView) {
+            this.captchaView.reset();
+          }
+        }
       },
       (error: string) => {
-        this.notificationService.showMessage(error, Severity.error);
-        this.isLoading = false;
+        if (this.captchaView) {
+          this.captchaView.reset();
+        }
+        this.notificationService.showMessage(
+          'Server error, please try again',
+          Severity.error
+        );
+        this.registerResult.setError(error);
       }
     );
   }
 
-  login(): void {
-    this.securityService.login(this.user).subscribe(
-      (res: LoginResultModel) => {
-        this.notificationService.showMessage(
-          'You registered successfully',
-          Severity.success,
-          'Success'
-        );
-        this.securityService.setToken(res.token);
-        this.localStorageService.delete(LocalStorageHelper.isGuest);
-        this.localStorageService.save(
-          LocalStorageHelper.email,
-          res?.user?.email
-        );
-        if (
-          res?.user?.defaultBaseLanguageId &&
-          res?.user?.defaultTargetLanguageId
-        ) {
-          this.localStorageService.save(
-            LocalStorageHelper.defaultLanguages,
-            `{defaultBaseLanguage: ${res?.user?.defaultBaseLanguageId}, defaultBaseLanguage: ${res?.user?.defaultTargetLanguageId} }`
+  startCountDown(): void {
+    this.countdown = 60;
+    const interval = setInterval(() => {
+      if (this.countdown <= 0) {
+        clearInterval(interval);
+        return;
+      }
+      this.countdown--;
+    }, 1000);
+  }
+
+  resendInvitationCode(): void {
+    this.startCountDown();
+    this.userService.resendActivationCode(this.user).subscribe(
+      (res: boolean) => {
+        if (!res) {
+          this.notificationService.showMessage(
+            'Server error, please try again',
+            Severity.error
           );
+        } else {
+          this.notificationService.showMessage('Email sent', Severity.success);
         }
-        this.router.navigate(['../game-menu']).then();
       },
       () => {
         this.notificationService.showMessage(
-          'Failed to log in after register',
-          Severity.error,
-          'Error'
+          'Server error, please try again',
+          Severity.error
         );
       }
     );

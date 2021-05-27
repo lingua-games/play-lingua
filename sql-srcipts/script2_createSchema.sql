@@ -12,7 +12,7 @@ CREATE TABLE [dbo].[Users] (
     [Id] int IDENTITY(1,1) PRIMARY KEY,
     [Email]   nvarchar(100) NOT NULL,
 	[DisplayName] nvarchar(200) NOT NULL,
-	[Password]   nvarchar(200) NOT NULL,
+	[Password]   nvarchar(200),
 	[DefaultTargetLanguageId]   int,
 	[DefaultBaseLanguageId]   int,
 	[AddedDate] datetime NOT NULL,
