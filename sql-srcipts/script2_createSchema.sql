@@ -206,6 +206,8 @@ CREATE TABLE [dbo].[GameScores] (
 		[AddedDate] datetime,
 		[LastUpdateDate] datetime,
 		[Score] float,
+		[BaseLanguageId] int,
+		[TargetLanguageId] int
 )
 ALTER TABLE [dbo].[GameScores] ADD CONSTRAINT [FK_GameScores_UserId]
 FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([Id])
@@ -215,6 +217,12 @@ FOREIGN KEY ([BookId]) REFERENCES [dbo].[Book] ([Id])
 GO
 ALTER TABLE [dbo].[GameScores] ADD CONSTRAINT [FK_GameScores_ChapterId]
 FOREIGN KEY ([ChapterId]) REFERENCES [dbo].[Chapter] ([Id])
+GO
+ALTER TABLE [dbo].[GameScores] ADD CONSTRAINT [FK_GameScores_BaseLanguageId]
+FOREIGN KEY ([BaseLanguageId]) REFERENCES [dbo].[Language] ([Id])
+GO
+ALTER TABLE [dbo].[GameScores] ADD CONSTRAINT [FK_GameScores_TargetLanguageId]
+FOREIGN KEY ([TargetLanguageId]) REFERENCES [dbo].[Language] ([Id])
 GO
 
 
