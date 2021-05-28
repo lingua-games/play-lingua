@@ -55,8 +55,8 @@ namespace PlayLingua.Data
                 @"
                     UPDATE [dbo].[Users] 
                         SET 
-                            [DefaultTargetLanguage] = @DefaultTargetLanguage ,
-                            [DefaultBaseLanguage] = @DefaultBaseLanguage,
+                            [DefaultTargetLanguageId] = @DefaultTargetLanguage ,
+                            [DefaultBaseLanguageId] = @DefaultBaseLanguage,
                             [LastUpdateDate] = @LastUpdateDate
                         where id = @UserId", new { 
                     selectDefaultLanguageModel.DefaultTargetLanguage, 

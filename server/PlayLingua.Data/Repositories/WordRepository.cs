@@ -148,7 +148,7 @@ namespace PlayLingua.Data
                 foreach (var target in word.Targets)
                 {
                     var foundTargetWord = db.Query<Words>(
-                        @"select top 1 * from Words where word = '" + target.Value +
+                        @"select top 1 * from Words where word = N'" + target.Value +
                         @"' and LanguageId = " + submitWords.TargetLanguage.Id)
                         .SingleOrDefault();
 
@@ -204,8 +204,8 @@ namespace PlayLingua.Data
                     targetIds.Add(foundTargetWord.Id);
                 }
 
-                var qry = @"select top 1 * from Words where word = @Value and LanguageId = " + submitWords.BaseLanguage.Id;
-                var foundBaseWord = db.Query<Words>(qry, new { word.Base.Value })
+                var qry = @"select top 1 * from Words where word = N'" + word.Base.Value + "' and LanguageId = " + submitWords.BaseLanguage.Id;
+                var foundBaseWord = db.Query<Words>(qry)
                                 .SingleOrDefault();
 
                 // Add word if it is not exist in table
@@ -295,12 +295,22 @@ namespace PlayLingua.Data
                             ErrorMessage = @ErrorMessage
                         Where Id = @Id
                         ", speech).SingleOrDefault();
-                } else
+                }
+                else
                 {
                     // Write the response to the output file.
                     using FileStream output = File.Create("wwwroot/assets/speeches/" + speech.Code + ".mp3");
                     response.Data.AudioContent.WriteTo(output);
+
+                    // To change status of speech to success
+                    speech.Status = SpeechStatus.Success;
+                    db.Query<Speech>("update dbo.Speech SET Status = @Status where Id = @Id", speech).SingleOrDefault();
                 }
+            } else
+            {
+                // To change status of speech to success
+                speech.Status = SpeechStatus.Success;
+                db.Query<Speech>("update dbo.Speech SET Status = @Status where Id = @Id", speech).SingleOrDefault();
             }
         }
         public ResultModel<SynthesizeSpeechResponse> DownloadWord(SpeechModel model)
