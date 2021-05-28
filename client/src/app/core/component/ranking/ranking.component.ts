@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { GameConfigModel } from '../../models/game-config-model';
 import { BookModel } from '../../models/book.model';
 import { ChapterModel } from '../../models/chapter.model';
@@ -9,13 +16,16 @@ import { GameInformationInterface } from '../../models/game-information.interfac
 import { RanksResultInterface } from '../../models/ranks-result.interface';
 import { ApiResult } from '../../models/api-result.model';
 import { SecurityService } from '../../service/security.service';
+import { LanguageModel } from '../../models/language.model';
+import { LocalStorageHelper } from '../../models/local-storage.enum';
+import { LocalStorageService } from '../../service/local-storage.service';
 
 @Component({
   selector: 'app-ranking',
   templateUrl: './ranking.component.html',
   styleUrls: ['./ranking.component.scss'],
 })
-export class RankingComponent implements OnInit {
+export class RankingComponent implements OnInit, OnChanges {
   @Input() form: GameConfigModel = {
     selectedBook: {} as BookModel,
     selectedChapter: {} as ChapterModel,
@@ -26,16 +36,34 @@ export class RankingComponent implements OnInit {
   >();
   @Output() goToStart = new EventEmitter();
 
+  defaultLanguages?: {
+    defaultBaseLanguage: LanguageModel;
+    defaultTargetLanguage: LanguageModel;
+  } = {
+    defaultBaseLanguage: {} as LanguageModel,
+    defaultTargetLanguage: {} as LanguageModel,
+  };
+
   constructor(
     private scoreStorageService: ScoreStorageService,
-    private securityService: SecurityService
+    private securityService: SecurityService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit(): void {
     if (this.data.isGameFinished) {
       this.storeRanks();
+      this.data.isGameFinished = false;
     } else {
       this.getRanks();
+    }
+  }
+
+  ngOnChanges(): void {
+    if (!this.data.isFeedback) {
+      this.defaultLanguages = JSON.parse(
+        this.localStorageService.load(LocalStorageHelper.defaultLanguages)
+      );
     }
   }
 
@@ -57,6 +85,12 @@ export class RankingComponent implements OnInit {
         gameName: this.data.isFeedback
           ? this.data.feedbackForm.game
           : this.data.scoreStore.gameName,
+        baseLanguageId: this.data.isFeedback
+          ? this.data.feedbackForm.baseLanguage.id
+          : this.defaultLanguages?.defaultBaseLanguage.id,
+        targetLanguageId: this.data.isFeedback
+          ? this.data.feedbackForm.targetLanguage.id
+          : this.defaultLanguages?.defaultTargetLanguage.id,
         count: environment.recordCount,
       } as ScoreStoreInterface)
       .subscribe(
@@ -102,6 +136,12 @@ export class RankingComponent implements OnInit {
         gameName: this.data.isFeedback
           ? this.data.feedbackForm.game
           : this.data.gameNameForRanking,
+        baseLanguageId: this.data.isFeedback
+          ? this.data.feedbackForm.baseLanguage.id
+          : this.defaultLanguages?.defaultBaseLanguage.id,
+        targetLanguageId: this.data.isFeedback
+          ? this.data.feedbackForm.targetLanguage.id
+          : this.defaultLanguages?.defaultTargetLanguage.id,
       } as ScoreStoreInterface)
       .subscribe(
         (res: RanksResultInterface[]) => {
