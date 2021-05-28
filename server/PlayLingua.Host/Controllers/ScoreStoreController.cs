@@ -32,7 +32,9 @@ namespace PlayLingua.Host.Controllers
                 GameName = model.GameName,
                 BookId = model.BookId,
                 ChapterId = model.ChapterId,
-                Count = model.Count
+                Count = model.Count,
+                BaseLanguageId = model.BaseLanguageId,
+                TargetLanguageId = model.TargetLanguageId
             }).Select(x => new RankResultViewModel
             {
                 Score = x.Score,
@@ -66,25 +68,22 @@ namespace PlayLingua.Host.Controllers
                     ChapterId = model.ChapterId,
                     AddedDate = model.AddedDate,
                     Score = model.Score,
-                    FeedbackUniqueKey = model.FeedbackUniqueKey
+                    FeedbackUniqueKey = model.FeedbackUniqueKey,
+                    BaseLanguageId = model.BaseLanguageId,
+                    TargetLanguageId = model.TargetLanguageId
                 }, model.UserId);
 
                 _scoreRepository.IncreaseScore(model.Score, model.UserId);
             }
-
-            //result.Add(new RankResultViewModel
-            //{
-            //    Email = model.UserId != 0 ? GetUser().Email : "You",
-            //    DisplayName = model.UserId != 0 ? GetUser().DisplayName : "You",
-            //    Score = model.Score
-            //});
 
             result.AddRange(_scoreRepository.GetTopRanks(new UserScore
             {
                 GameName = model.GameName,
                 BookId = model.BookId,
                 ChapterId = model.ChapterId,
-                Count = model.Count
+                Count = model.Count,
+                BaseLanguageId = model.BaseLanguageId,
+                TargetLanguageId = model.TargetLanguageId
             }).Select(x => new RankResultViewModel
             {
                 Score = x.Score,

@@ -13,5 +13,7 @@
         public int Count { get; set; }
         public bool IsFeedback { get; set; }
         public string FeedbackUniqueKey { get; set; }
+        public int BaseLanguageId { get; set; }
+        public int TargetLanguageId { get; set; }
     }
 }

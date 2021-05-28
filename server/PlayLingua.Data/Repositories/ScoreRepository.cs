@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Net.WebSockets;
 
 namespace PlayLingua.Data
 {
@@ -31,10 +30,10 @@ namespace PlayLingua.Data
             var sql =
                 @"
 insert into dbo.[GameScores] 
-(UserId, GuestCode, GameName, BookId, ChapterId, AddedDate, Score" +
+(UserId, GuestCode, GameName, BookId, ChapterId, AddedDate, Score, BaseLanguageId, TargetLanguageId" +
 (!string.IsNullOrEmpty(score.FeedbackUniqueKey) ? ", FeedbackUniqueKey" : "")
 + @") 
-VALUES(@UserId, @GuestCode, @GameName, @BookId, @ChapterId, @AddedDate, @Score" +
+VALUES(@UserId, @GuestCode, @GameName, @BookId, @ChapterId, @AddedDate, @Score, @BaseLanguageId, @TargetLanguageId" +
 (!string.IsNullOrEmpty(score.FeedbackUniqueKey) ? ", @FeedbackUniqueKey" : "")
 + @");";
             db.Query<int>(sql, score);
@@ -63,10 +62,10 @@ VALUES(@UserId, @GuestCode, @GameName, @BookId, @ChapterId, @AddedDate, @Score" 
 SELECT top " + score.Count + @" Email as Email,  max(score) as Score, max(DisplayName) as DisplayName FROM [dbo].[GameScores]
 left join [dbo].[Users]
 on [GameScores].UserId = [Users].Id
-where GameName = @GameName AND " +
-(score.BookId != null ? "Bookid = @BookId" : "Bookid is null ")
+where GameName = @GameName AND BaseLanguageId = @BaseLanguageId AND TargetLanguageId = @TargetLanguageId AND " +
+((score.BookId == null || score.BookId == 0)  ? "Bookid is null " : "Bookid = @BookId")
 + @" AND " +
-(score.ChapterId != null ? "ChapterId = @ChapterId" : "ChapterId is null ")
+((score.ChapterId == null || score.ChapterId == 0) ? "ChapterId is null " : "ChapterId = @ChapterId")
 + @" group by GameScores.UserId, users.Email, users.DisplayName
 ";
             var result = db.Query<RankResultModel>(sql, score).ToList();

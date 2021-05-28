@@ -13,4 +13,6 @@ export interface ScoreStoreInterface {
   feedbackForm: InvitationForm;
   email: string;
   feedbackId: string;
+  baseLanguageId: number;
+  targetLanguageId: number;
 }
