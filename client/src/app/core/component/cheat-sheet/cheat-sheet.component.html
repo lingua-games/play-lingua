@@ -27,14 +27,18 @@
           {{ word.key }}
         </td>
         <td>
-          <span *ngFor="let answer of word.translates; let index = index">
-            <app-speech-player
-              [code]="answer.speechCode"
-              [status]="answer.speechStatus"
-            ></app-speech-player>
-            {{ answer.value }}
-            <span *ngIf="index !== word.translates.length - 1"> , </span></span
-          >
+          <div class="row">
+            <div
+              class="col-sm-3"
+              *ngFor="let answer of word.translates; let index = index"
+            >
+              <app-speech-player
+                [code]="answer.speechCode"
+                [status]="answer.speechStatus"
+              ></app-speech-player>
+              {{ answer.value }}
+            </div>
+          </div>
         </td>
       </tr>
     </tbody>

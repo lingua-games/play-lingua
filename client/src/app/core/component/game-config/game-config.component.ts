@@ -106,8 +106,10 @@ export class GameConfigComponent implements OnInit {
     if (this.data.isFeedback) {
       serviceParameters.bookId = this.data.feedbackForm.book.id;
       serviceParameters.chapterId = this.data.feedbackForm.chapter.id;
-      serviceParameters.defaultTargetLanguage = this.data.feedbackForm.targetLanguage.id;
-      serviceParameters.defaultBaseLanguage = this.data.feedbackForm.baseLanguage.id;
+      serviceParameters.defaultTargetLanguage =
+        this.data.feedbackForm.targetLanguage.id;
+      serviceParameters.defaultBaseLanguage =
+        this.data.feedbackForm.baseLanguage.id;
     } else {
       if (this.form.selectedBook) {
         serviceParameters.bookId = this.form.selectedBook.id;

@@ -53,8 +53,8 @@ export class AppComponent implements OnInit {
         this.localStorageService.save(
           LocalStorageHelper.defaultLanguages,
           JSON.stringify({
-            defaultBaseLanguage: res.defaultBaseLanguageId,
-            defaultTargetLanguage: res.defaultTargetLanguageId,
+            defaultBaseLanguage: res.defaultBaseLanguage,
+            defaultTargetLanguage: res.defaultTargetLanguage,
           })
         );
 
