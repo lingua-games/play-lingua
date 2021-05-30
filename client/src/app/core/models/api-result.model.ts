@@ -3,6 +3,7 @@ export class ApiResult<T> {
   hasError?: boolean;
   isLoading?: boolean;
   errorMessage?: string;
+  success?: boolean;
 
   constructor() {
     this.hasError = false;

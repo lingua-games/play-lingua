@@ -11,8 +11,10 @@ namespace PlayLingua.Domain.Ports
         void Add(User user);
         UserModel GetUserInformation(int userId);
         User GetUserInformationByEmail(string email);
+        User GetUserByActivationCode(string emailVerificationCode);
         bool SendVerificationCode(UserModel user);
         void Delete(string id);
         void Update(EditUserModel user);
+        void ActivateUser(UserModel user);
     }
 }

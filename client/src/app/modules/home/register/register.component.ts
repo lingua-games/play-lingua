@@ -27,7 +27,6 @@ export class RegisterComponent implements OnInit {
   public hasEmailError = false;
   public registerResult: ApiResult<RegisterApiResultModel> =
     new ApiResult<RegisterApiResultModel>();
-  canResendEmail = false;
   countdown = 0;
 
   constructor(

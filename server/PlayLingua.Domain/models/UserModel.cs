@@ -20,7 +20,7 @@ namespace PlayLingua.Domain.Models
         public LanguageModel DefaultBaseLanguage { get; set; }
         public LanguageModel DefaultTargetLanguage { get; set; }
         public SelectedLanguageModel SelectedLanguages { get; set; }
-        public int DefaultBaseLanguageId { get; set; }
-        public int DefaultTargetLanguageId { get; set; }
+        public int? DefaultBaseLanguageId { get; set; }
+        public int? DefaultTargetLanguageId { get; set; }
     }
 }
