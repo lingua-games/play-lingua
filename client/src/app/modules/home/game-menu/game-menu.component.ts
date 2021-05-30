@@ -76,9 +76,6 @@ export class GameMenuComponent implements OnInit {
         JSON.stringify(valueToSave)
       );
     }
-    console.log(
-      this.localStorageService.load(LocalStorageHelper.defaultLanguages)
-    );
     const defaultLanguages = this.localStorageService.load(
       LocalStorageHelper.defaultLanguages
     )
