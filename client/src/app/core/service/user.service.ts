@@ -6,6 +6,7 @@ import { environment } from '../../../environments/environment';
 import { EditUserModel } from '../models/edit-user.model';
 import { LoginResultModel } from '../models/login-result.model';
 import { RegisterApiResultModel } from '../models/register-api-result.model';
+import { ApiResult } from '../models/api-result.model';
 
 @Injectable({
   providedIn: 'root',
@@ -32,5 +33,12 @@ export class UserService {
 
   public getUserInformation(): Observable<UserModel> {
     return this.http.get<UserModel>(this.userUrl + 'get-user-information');
+  }
+
+  public activateUser(user: UserModel): Observable<ApiResult<UserModel>> {
+    return this.http.post<ApiResult<UserModel>>(
+      this.userUrl + 'activate-user',
+      user
+    );
   }
 }

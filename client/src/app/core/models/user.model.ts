@@ -18,4 +18,5 @@ export interface UserModel {
   EmailAndDisplayName: string;
   selectedLanguages: SelectedLanguageModel;
   captchaCode: string;
+  emailVerificationCode: string;
 }

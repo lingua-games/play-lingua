@@ -76,7 +76,21 @@ export class GameMenuComponent implements OnInit {
         JSON.stringify(valueToSave)
       );
     }
-    if (!this.localStorageService.load(LocalStorageHelper.defaultLanguages)) {
+    console.log(
+      this.localStorageService.load(LocalStorageHelper.defaultLanguages)
+    );
+    const defaultLanguages = this.localStorageService.load(
+      LocalStorageHelper.defaultLanguages
+    )
+      ? JSON.parse(
+          this.localStorageService.load(LocalStorageHelper.defaultLanguages)
+        )
+      : '{}';
+    if (
+      !defaultLanguages ||
+      !defaultLanguages.defaultBaseLanguage ||
+      !defaultLanguages.defaultTargetLanguage
+    ) {
       this.loadingFullPage = true;
       this.openSelectDefaultLanguageDialog();
       return;

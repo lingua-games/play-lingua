@@ -6,10 +6,7 @@ namespace PlayLingua.Contract.ViewModels
     public class UserViewModel
     {
         public int Id { get; set; }
-        [Required]
-        [MaxLength(100)]
         public string Email { get; set; }
-        [MaxLength(200)]
         public string Password { get; set; }
         public string DisplayName { get; set; }
         public string BaseLanguages { get; set; }
@@ -21,8 +18,8 @@ namespace PlayLingua.Contract.ViewModels
         public string EmailVerificationCode { get; set; }
         public bool IsEmailVerified { get; set; }
         public DateTime EmailVerifiedDate { get; set; }
-        public int DefaultBaseLanguageId { get; set; }
-        public int DefaultTargetLanguageId { get; set; }
+        public int? DefaultBaseLanguageId { get; set; }
+        public int? DefaultTargetLanguageId { get; set; }
         public LanguageViewModel DefaultBaseLanguage { get; set; }
         public LanguageViewModel DefaultTargetLanguage { get; set; }
         public bool NeedsResetPassword { get; set; }

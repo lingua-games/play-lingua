@@ -1,1 +1,47 @@
-<p>activate-user works!</p>
+<form class="welcome-inner-main-container" appLoading [loadingFlag]="isLoading">
+  <div class="form-group email-container">
+    <label for="inputEmail">Display name</label>
+    <input
+      type="text"
+      class="form-control"
+      id="inputEmail"
+      placeholder="Display name"
+      name="displayName"
+      [(ngModel)]="user.displayName"
+    />
+  </div>
+  <div class="form-group email-container">
+    <label for="inputEmail">Password</label>
+    <input
+      type="password"
+      class="form-control"
+      id="password"
+      placeholder="Password"
+      name="password"
+      [(ngModel)]="user.password"
+    />
+  </div>
+  <div class="form-group email-container">
+    <label for="inputEmail">Repeat password</label>
+    <input
+      type="password"
+      class="form-control"
+      id="Repeat_password"
+      placeholder="Repeat password"
+      name="rePassword"
+      [(ngModel)]="user.rePassword"
+    />
+  </div>
+  <div class="alert alert-info">
+    <h4>Password should be:</h4>
+    <span> - More than 6 characters</span>
+    <br />
+    <span> - Contain at least one number and one alphabet</span>
+  </div>
+  <hr />
+  <div class="text-center">
+    <button class="btn btn-success" type="submit" (click)="submit()">
+      Finish
+    </button>
+  </div>
+</form>

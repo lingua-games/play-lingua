@@ -41,37 +41,54 @@ namespace PlayLingua.Host.Controllers
         [HttpGet("get-user-information")]
         public ActionResult<UserViewModel> GetUserInformation()
         {
-            var user = GetUser();
-            if (user.Id == 0)
+            try
             {
+                var user = GetUser();
+                if (user.Id == 0)
+                {
+                    return Unauthorized();
+                }
+                var repositoryResult = _userRepository.GetUserInformation(user.Id);
+                var result = new UserViewModel
+                {
+                    Email = repositoryResult.Email,
+                    BaseLanguages = repositoryResult.BaseLanguages,
+
+                    DisplayName = repositoryResult.DisplayName,
+                    Id = repositoryResult.Id,
+                    TargetLanguages = repositoryResult.TargetLanguages,
+                    TotalScore = repositoryResult.TotalScore,
+                    SelectedLanguages = new SelectedLanguagesViewModel
+                    {
+                        TargetLanguages = repositoryResult?.SelectedLanguages?.TargetLanguages,
+                        BaseLanguages = repositoryResult?.SelectedLanguages?.BaseLanguages
+                    }
+                };
+
+                if (repositoryResult.DefaultTargetLanguage != null)
+                {
+                    result.DefaultTargetLanguage = new LanguageViewModel
+                    {
+                        Id = repositoryResult.DefaultTargetLanguage.Id,
+                        Name = repositoryResult.DefaultTargetLanguage.Name
+                    };
+                }
+                if (repositoryResult.DefaultBaseLanguage != null)
+                {
+                    result.DefaultBaseLanguage = new LanguageViewModel
+                    {
+                        Id = repositoryResult.DefaultBaseLanguage.Id,
+                        Name = repositoryResult.DefaultBaseLanguage.Name,
+                    };
+                }
+
+                return Ok(result);
+            }
+            catch
+            {
+
                 return Unauthorized();
             }
-            var repositoryResult = _userRepository.GetUserInformation(user.Id);
-            var result = new UserViewModel
-            {
-                Email = repositoryResult.Email,
-                BaseLanguages = repositoryResult.BaseLanguages,
-                DefaultTargetLanguage = new LanguageViewModel
-                {
-                    Id = repositoryResult.DefaultTargetLanguage.Id,
-                    Name = repositoryResult.DefaultTargetLanguage.Name
-                },
-                DefaultBaseLanguage = new LanguageViewModel
-                {
-                    Id = repositoryResult.DefaultBaseLanguage.Id,
-                    Name = repositoryResult.DefaultBaseLanguage.Name,
-                },
-                DisplayName = repositoryResult.DisplayName,
-                Id = repositoryResult.Id,
-                TargetLanguages = repositoryResult.TargetLanguages,
-                TotalScore = repositoryResult.TotalScore,
-                SelectedLanguages = new SelectedLanguagesViewModel
-                {
-                    TargetLanguages = repositoryResult?.SelectedLanguages?.TargetLanguages,
-                    BaseLanguages = repositoryResult?.SelectedLanguages?.BaseLanguages
-                }
-            };
-            return Ok(result);
         }
 
         [HttpPost("resend-activation-code")]
@@ -88,6 +105,43 @@ namespace PlayLingua.Host.Controllers
                 return Ok(false);
             }
             return Ok(true);
+        }
+
+        [HttpPost("activate-user")]
+        public ActionResult<ResultModel<UserViewModel>> ActivateUser([FromBody] UserViewModel model)
+        {
+            var result = new ResultModel<UserViewModel>
+            {
+                Success = true
+            };
+            try
+            {
+                var user = _userRepository.GetUserByActivationCode(model.EmailVerificationCode);
+                if (user.IsEmailVerified == true)
+                {
+                    result.Success = false;
+                    result.ErrorMessage = "Your account is already activated";
+                } else
+                {
+                    result.Data = new UserViewModel
+                    {
+                        Email = user.Email
+                    };
+                    _userRepository.ActivateUser(new UserModel
+                    {
+                        EmailVerificationCode = model.EmailVerificationCode,
+                        DisplayName = model.DisplayName,
+                        Password = model.Password
+                    });
+                }
+                return Ok(result);
+            }
+            catch
+            {
+                result.Success = false;
+                result.ErrorMessage = "Server error";
+                return Ok(result);
+            }
         }
 
         [HttpPost]

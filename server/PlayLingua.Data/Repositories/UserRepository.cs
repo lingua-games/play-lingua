@@ -26,7 +26,6 @@ namespace PlayLingua.Data
             _hashKey = hashKey;
             _email = email;
         }
-
         public void Add(User user)
         {
             user.EmailVerificationCode = Guid.NewGuid().ToString();
@@ -58,7 +57,6 @@ namespace PlayLingua.Data
                     )";
             db.Query<int>(sql, user);
         }
-
         public static string CreateHashPassword(string value, string salt)
         {
             var valueBytes = KeyDerivation.Pbkdf2(
@@ -70,12 +68,11 @@ namespace PlayLingua.Data
 
             return Convert.ToBase64String(valueBytes);
         }
-
         public bool SendVerificationCode(UserModel user)
         {
             var activationUrl = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development" ?
-                "http://localhost:4000/#/activation-email/" + user.EmailVerificationCode :
-                "https://playinglingua.com/#/activation-email/" + user.EmailVerificationCode;
+                "http://localhost:4000/#/activate-user/" + user.EmailVerificationCode :
+                "https://playinglingua.com/#/activate-user/" + user.EmailVerificationCode;
             try
             {
                 using var client = new SmtpClient()
@@ -136,13 +133,10 @@ namespace PlayLingua.Data
                 return false;
             }
         }
-
-
         public void Delete(string id)
         {
             throw new NotImplementedException();
         }
-
         public UserModel GetUserInformation(int userId)
         {
             var result = new UserModel();
@@ -161,17 +155,14 @@ namespace PlayLingua.Data
 
             return result;
         }
-
         public User GetUserInformationByEmail(string email)
         {
             return db.Query<User>("select top 1 * from dbo.Users where Email = @email", new { email }).FirstOrDefault();
         }
-
         public List<User> List()
         {
             return db.Query<User>("select * from dbo.Users").ToList();
         }
-
         public void Update(EditUserModel user)
         {
             user.NewPassword = user.IsChangingPassword ? CreateHashPassword(user.NewPassword, _hashKey) : "";
@@ -180,6 +171,26 @@ namespace PlayLingua.Data
 update dbo.Users SET DisplayName = @DisplayName " +
 (user.IsChangingPassword ? @", Password = @newPassword " : "") +
 @" WHERE Id = @Id";
+            db.Query(sql, user);
+        }
+        public User GetUserByActivationCode(string emailVerificationCode)
+        {
+            return db.Query<User>("select top 1 * from dbo.Users where EmailVerificationCode = @emailVerificationCode", new { emailVerificationCode }).FirstOrDefault();
+        }
+        public void ActivateUser(UserModel user)
+        {
+            user.Password = CreateHashPassword(user.Password, _hashKey);
+            user.EmailVerifiedDate = DateTime.Now;
+            var sql = @"
+update 
+    dbo.Users 
+SET 
+    DisplayName = @DisplayName, 
+    Password = @Password, 
+    IsEmailVerified = 1, 
+    EmailVerifiedDate = @EmailVerifiedDate  
+WHERE 
+    EmailVerificationCode = @EmailVerificationCode";
             db.Query(sql, user);
         }
     }
