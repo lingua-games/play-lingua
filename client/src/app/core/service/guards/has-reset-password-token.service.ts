@@ -4,7 +4,7 @@ import { SecurityService } from '../security.service';
 @Injectable({
   providedIn: 'root',
 })
-export class HasResetPasswordToken {
+export class HasResetPasswordTokenService {
   constructor(private securityService: SecurityService) {}
   canActivate(): boolean {
     const needsResetPassword =

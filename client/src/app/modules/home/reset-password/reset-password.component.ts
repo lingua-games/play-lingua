@@ -79,7 +79,7 @@ export class ResetPasswordComponent implements OnInit {
         } else {
           this.isLoading = false;
           this.notificationService.showMessage(
-            res.message || 'Invalid code',
+            res.message || 'Invalid token',
             Severity.error
           );
         }
