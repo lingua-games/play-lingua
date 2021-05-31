@@ -107,6 +107,27 @@ namespace PlayLingua.Host.Controllers
             return Ok(true);
         }
 
+        [HttpPost("reset-password")]
+        public ActionResult<bool> ResetPassword([FromBody] UserViewModel model)
+        {
+            var user = GetUser();
+            try
+            {
+                _userRepository.ResetPassword(new UserModel
+                {
+                    Password = model.Password,
+                    Email = user.Email
+                });
+
+                var loginResult = _authRepository.Login(new Domain.Entities.User { Email = user.Email, Password = model.Password });
+                return Ok(loginResult);
+            }
+            catch 
+            {
+                return Ok(new LoginResult { Message = "", IsLogin = false }); ;
+            }
+        }
+
         [HttpPost("activate-user")]
         public ActionResult<ResultModel<UserViewModel>> ActivateUser([FromBody] UserViewModel model)
         {
@@ -150,7 +171,18 @@ namespace PlayLingua.Host.Controllers
             var user = _userRepository.List().Where(x => x.Email == model.Email).FirstOrDefault();
             if (user != null && user.NeedsResetPassword)
             {
-                return Ok(new RegisterUserViewModel { Status = RegisterStatus.NeedsChangePassword });
+                _userRepository.ResetPassword(new UserModel
+                {
+                    Email = model.Email,
+                    Password = "B49B4745-C694-4674-A7D8-0CA1585AB594"
+                });
+                var loginResult = _authRepository.Login(new User
+                {
+                    Email = model.Email,
+                    Password = "B49B4745-C694-4674-A7D8-0CA1585AB594"
+                });
+                loginResult.Token = _authRepository.GenerateToken(loginResult.User);
+                return Ok(new RegisterUserViewModel { Status = RegisterStatus.NeedsChangePassword, Token = loginResult.Token });
             }
             else if (user != null && (user.IsEmailVerified == null || user.IsEmailVerified == false))
             {

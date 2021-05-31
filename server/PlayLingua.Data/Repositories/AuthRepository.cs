@@ -64,6 +64,7 @@ namespace PlayLingua.Data
                         DefaultTargetLanguageId = selectedUser.DefaultTargetLanguageId,
                         IsAdmin = selectedUser.IsAdmin,
                         TotalScore = selectedUser.TotalScore,
+                        NeedsResetPassword = selectedUser.NeedsResetPassword,
                         IsSelectedLanguages =
                             !string.IsNullOrWhiteSpace(selectedUser.TargetLanguages) && !string.IsNullOrWhiteSpace(selectedUser.BaseLanguages)
 
@@ -104,8 +105,9 @@ namespace PlayLingua.Data
                     {
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                         new Claim(ClaimTypes.Email, user.Email.ToString()),
-                        new Claim("displayName", user.DisplayName.ToString()),
+                        new Claim("displayName", user.DisplayName != null ? user.DisplayName.ToString() : ""),
                         new Claim("isAdmin", user.IsAdmin.ToString().ToLower()),
+                        new Claim("needsResetPassword", user.NeedsResetPassword.ToString().ToLower()),
                         // Todo: Work on the roles
                         new Claim(ClaimTypes.Role, ""),
                     }

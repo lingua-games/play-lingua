@@ -77,7 +77,8 @@ export class RegisterComponent implements OnInit {
           this.startCountDown();
         }
         if (res.status === RegisterStatus.NeedsChangePassword) {
-          this.router.navigate(['change-password']).then();
+          this.securityService.setToken(res.token);
+          this.router.navigate(['reset-password']).then();
         }
         if (res.status === RegisterStatus.AlreadyRegistered) {
           if (this.captchaView) {

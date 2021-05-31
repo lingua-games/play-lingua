@@ -11,4 +11,5 @@ export interface SecurityTokenInterface {
   sub: string;
   name: string;
   isAdmin: string;
+  needsResetPassword: string;
 }

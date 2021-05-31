@@ -13,8 +13,9 @@ import { UserAndGuestAllowService } from '../../core/service/guards/user-and-gue
 import { OnlyUserAllowService } from '../../core/service/guards/only-user-allow.service';
 import { OnlyNotSignedAllowService } from '../../core/service/guards/only-not-signed-allow.service';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
-import { ChangePasswordComponent } from './change-password/change-password.component';
 import { ActivateUserComponent } from './activate-user/activate-user.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { HasResetPasswordTokenService } from '../../core/service/guards/has-reset-password-token.service';
 
 export interface CanComponentDeactivate {
   canDeactivate: () => Promise<boolean>;
@@ -66,8 +67,9 @@ const routes: Routes = [
         canDeactivate: [DeactivateWithDelay],
       },
       {
-        path: 'change-password',
-        component: ChangePasswordComponent,
+        path: 'reset-password',
+        component: ResetPasswordComponent,
+        canActivate: [HasResetPasswordTokenService],
         canDeactivate: [DeactivateWithDelay],
       },
       {

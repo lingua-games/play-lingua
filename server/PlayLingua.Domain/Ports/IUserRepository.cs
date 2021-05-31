@@ -16,5 +16,6 @@ namespace PlayLingua.Domain.Ports
         void Delete(string id);
         void Update(EditUserModel user);
         void ActivateUser(UserModel user);
+        void ResetPassword(UserModel user);
     }
 }

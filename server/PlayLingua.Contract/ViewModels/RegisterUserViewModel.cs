@@ -7,6 +7,7 @@ namespace PlayLingua.Contract.ViewModels
     public class RegisterUserViewModel
     {
         public RegisterStatus Status { get; set; }
+        public string Token { get; set; }
     }
 
     public enum RegisterStatus

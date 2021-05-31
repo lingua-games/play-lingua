@@ -41,4 +41,11 @@ export class UserService {
       user
     );
   }
+
+  public resetPassword(user: UserModel): Observable<LoginResultModel> {
+    return this.http.post<LoginResultModel>(
+      this.userUrl + 'reset-password',
+      user
+    );
+  }
 }

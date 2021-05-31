@@ -193,5 +193,21 @@ WHERE
     EmailVerificationCode = @EmailVerificationCode";
             db.Query(sql, user);
         }
+
+        public void ResetPassword(UserModel user)
+        {
+            user.Password = CreateHashPassword(user.Password, _hashKey);
+            user.LastUpdateDate = DateTime.Now;
+            var sql = @"
+update 
+    dbo.Users 
+SET     
+    Password       = @Password, 
+    LastUpdateDate = @LastUpdateDate,
+    NeedsResetPassword = 0
+WHERE 
+    Email = @Email";
+            db.Query(sql, user);
+        }
     }
 }
