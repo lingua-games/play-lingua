@@ -1,8 +1,9 @@
-﻿using System;
+﻿using PlayLingua.Domain.Entities;
+using System;
 
 namespace PlayLingua.Domain.Models
 {
-    public class UserModel 
+    public class UserModel : BaseModel
     {
         public int Id { get; set; }
         public string Email { get; set; }

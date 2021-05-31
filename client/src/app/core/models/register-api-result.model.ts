@@ -1,8 +1,9 @@
 export class RegisterApiResultModel {
   status: RegisterStatus;
-
+  token: string;
   constructor() {
     this.status = RegisterStatus.NotSet;
+    this.token = '';
   }
 }
 

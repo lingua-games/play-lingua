@@ -19,9 +19,9 @@ import { ProfileComponent } from './profile/profile.component';
 import { ComponentModule } from '../../core/component/component.module';
 import { CompleteRegistrationComponent } from './complete-registration/complete-registration';
 import { RecaptchaModule } from 'ng-recaptcha';
-import { ChangePasswordComponent } from './change-password/change-password.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ActivateUserComponent } from './activate-user/activate-user.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +35,7 @@ import { ActivateUserComponent } from './activate-user/activate-user.component';
     PrepareAddWordsComponent,
     ProfileComponent,
     CompleteRegistrationComponent,
-    ChangePasswordComponent,
+    ResetPasswordComponent,
     ForgotPasswordComponent,
     ActivateUserComponent,
   ],
