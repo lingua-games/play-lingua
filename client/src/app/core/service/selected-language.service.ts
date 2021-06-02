@@ -18,8 +18,8 @@ export class SelectedLanguageService {
     return this.http.post<{}>(
       this.selectionLanguageUrl + '/setDefaultLanguage',
       {
-        baseLanguage: selectedItems.baseLanguage.id,
-        targetLanguage: selectedItems.targetLanguage.id,
+        baseLanguage: selectedItems.defaultBaseLanguage.id,
+        targetLanguage: selectedItems.defaultTargetLanguage.id,
       }
     );
   }

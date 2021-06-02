@@ -7,7 +7,6 @@ import {
   NotificationService,
   Severity,
 } from '../../../core/service/notification.service';
-import { LanguageModel } from '../../../core/models/language.model';
 import { SecurityService } from '../../../core/service/security.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectDefaultLanguageDialogComponent } from '../../../core/dialogs/select-default-language-dialog/select-default-language-dialog.component';
@@ -23,10 +22,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class GameMenuComponent implements OnInit {
   gameMenus: GameMenu[] = [];
-  defaultSelectedLanguages: DefaultLanguageModel = {
-    baseLanguage: {} as LanguageModel,
-    targetLanguage: {} as LanguageModel,
-  };
+  defaultSelectedLanguages: DefaultLanguageModel = {} as DefaultLanguageModel;
   loadingFullPage?: boolean;
   inquiryResult: ApiResult<boolean> = new ApiResult<boolean>();
 
@@ -43,17 +39,18 @@ export class GameMenuComponent implements OnInit {
   ngOnInit(): void {
     this.getMenus();
 
-    const defaultLanguages = this.localStorageService.load(
+    this.defaultSelectedLanguages = this.localStorageService.load(
       LocalStorageHelper.defaultLanguages
     )
       ? JSON.parse(
           this.localStorageService.load(LocalStorageHelper.defaultLanguages)
         )
       : '{}';
+
     if (
-      !defaultLanguages ||
-      !defaultLanguages.defaultBaseLanguage ||
-      !defaultLanguages.defaultTargetLanguage
+      !this.defaultSelectedLanguages ||
+      !this.defaultSelectedLanguages.defaultBaseLanguage ||
+      !this.defaultSelectedLanguages.defaultTargetLanguage
     ) {
       this.loadingFullPage = true;
       this.openSelectDefaultLanguageDialog();
@@ -98,8 +95,8 @@ export class GameMenuComponent implements OnInit {
     this.inquiryResult.setLoading(true);
     this.wordService
       .getSelectedLanguagesInformation({
-        base: this.defaultSelectedLanguages.baseLanguage.id,
-        target: this.defaultSelectedLanguages.targetLanguage.id,
+        base: this.defaultSelectedLanguages.defaultBaseLanguage.id,
+        target: this.defaultSelectedLanguages.defaultTargetLanguage.id,
       })
       .subscribe(
         (res: boolean) => {

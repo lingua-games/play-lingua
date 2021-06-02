@@ -143,17 +143,17 @@ namespace PlayLingua.Data
             var user = db.Query<User>("select top 1 * from dbo.Users where id = @userId", new { userId }).Select(x => new UserModel
             {
                 TotalScore = x.TotalScore,
+                DefaultTargetLanguage = new LanguageModel { Id = (int)x.DefaultTargetLanguageId },
+                DefaultBaseLanguage = new LanguageModel { Id = (int)x.DefaultBaseLanguageId },
                 Id = x.Id
             }).FirstOrDefault();
 
-            user.DefaultBaseLanguage =
-                db.Query<LanguageModel>("select * from Language where id = @DefaultBaseLanguageId", user).FirstOrDefault();
-            user.DefaultTargetLanguage = 
-                db.Query<LanguageModel>("select * from Language where id = @DefaultTargetLanguageId", user).FirstOrDefault();
+            result.DefaultBaseLanguage =
+                db.Query<LanguageModel>("select * from Language where id = @Id", user.DefaultBaseLanguage).FirstOrDefault();
+            result.DefaultTargetLanguage =
+                db.Query<LanguageModel>("select * from Language where id = @Id", user.DefaultTargetLanguage).FirstOrDefault();
 
             result.TotalScore = user.TotalScore;
-            result.DefaultBaseLanguage = db.Query<LanguageModel>("select top 1 * from dbo.Language where id = @DefaultBaseLanguageId", user).FirstOrDefault();
-            result.DefaultTargetLanguage = db.Query<LanguageModel>("select top 1 * from dbo.Language where id = @DefaultTargetLanguageId", user).FirstOrDefault();
 
             return result;
         }

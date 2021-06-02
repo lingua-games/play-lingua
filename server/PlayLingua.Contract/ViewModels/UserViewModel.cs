@@ -14,8 +14,10 @@ namespace PlayLingua.Contract.ViewModels
         public string EmailVerificationCode { get; set; }
         public bool IsEmailVerified { get; set; }
         public DateTime EmailVerifiedDate { get; set; }
-        public LanguageViewModel DefaultBaseLanguage { get; set; }
-        public LanguageViewModel DefaultTargetLanguage { get; set; }
+#nullable enable
+        public LanguageViewModel? DefaultBaseLanguage { get; set; }
+#nullable enable
+        public LanguageViewModel? DefaultTargetLanguage { get; set; }
         public bool NeedsResetPassword { get; set; }
     }
 }

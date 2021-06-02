@@ -110,9 +110,9 @@ export class SecurityService {
     );
 
     const defaultLanguages: DefaultLanguageModel = {} as DefaultLanguageModel;
-    defaultLanguages.baseLanguage =
+    defaultLanguages.defaultBaseLanguage =
       loginResult.user?.defaultBaseLanguage || ({} as LanguageModel);
-    defaultLanguages.targetLanguage =
+    defaultLanguages.defaultTargetLanguage =
       loginResult.user?.defaultTargetLanguage || ({} as LanguageModel);
 
     this.localStorageService.delete(LocalStorageHelper.isGuest);

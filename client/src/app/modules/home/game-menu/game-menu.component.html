@@ -37,15 +37,19 @@
         <div
           class="description-menu-container mt-2"
           *ngIf="
-            defaultSelectedLanguages.targetLanguage &&
-            defaultSelectedLanguages.baseLanguage &&
+            defaultSelectedLanguages?.defaultTargetLanguage &&
+            defaultSelectedLanguages?.defaultBaseLanguage &&
             securityService.isLoggedIn()
           "
         >
           I know
-          <strong>{{ defaultSelectedLanguages.baseLanguage.name }}</strong>
+          <strong>{{
+            defaultSelectedLanguages.defaultBaseLanguage.name
+          }}</strong>
           and I want to learn
-          <strong>{{ defaultSelectedLanguages.targetLanguage.name }}</strong>
+          <strong>{{
+            defaultSelectedLanguages.defaultTargetLanguage.name
+          }}</strong>
           . This is my default learning path, but I can always
           <strong
             class="change-default-action"
@@ -60,9 +64,11 @@
         <div class="col-sm-12 alert alert-warning">
           <span class="mr-2">Oops, You selected</span>
           <span>
-            <strong>{{ defaultSelectedLanguages.baseLanguage.name }}</strong>
             <strong>{{
-              defaultSelectedLanguages.targetLanguage.name + ', '
+              defaultSelectedLanguages.defaultBaseLanguage.name
+            }}</strong>
+            <strong>{{
+              defaultSelectedLanguages.defaultTargetLanguage.name + ', '
             }}</strong>
           </span>
           <span class="ml-2"

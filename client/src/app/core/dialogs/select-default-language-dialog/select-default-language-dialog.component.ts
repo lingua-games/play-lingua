@@ -45,7 +45,7 @@ export class SelectDefaultLanguageDialogComponent implements OnInit {
     );
   }
   submit(): void {
-    if (!this.selectedItems.baseLanguage) {
+    if (!this.selectedItems.defaultBaseLanguage) {
       this.notificationService.showMessage(
         'Base language is empty',
         Severity.error
@@ -53,7 +53,7 @@ export class SelectDefaultLanguageDialogComponent implements OnInit {
       return;
     }
 
-    if (!this.selectedItems.targetLanguage) {
+    if (!this.selectedItems.defaultTargetLanguage) {
       this.notificationService.showMessage(
         'Target language is empty',
         Severity.error
@@ -70,7 +70,7 @@ export class SelectDefaultLanguageDialogComponent implements OnInit {
             LocalStorageHelper.defaultLanguages,
             JSON.stringify(this.selectedItems)
           );
-          this.dialogRef.close();
+          this.dialogRef.close(this.selectedItems);
         },
         () => {
           this.languages.setLoading(false);
