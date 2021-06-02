@@ -3,11 +3,9 @@ import { SecurityService } from '../../../core/service/security.service';
 import { UserModel } from '../../../core/models/user.model';
 import { LoginResultModel } from '../../../core/models/login-result.model';
 import { Router } from '@angular/router';
-import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { Location } from '@angular/common';
-import { LocalStorageService } from '../../../core/service/local-storage.service';
-import { NameIdModel } from '../../../core/models/name-id.model';
 import { LoginFormErrors } from '../../../core/models/form-errors.model';
+import { DefaultLanguageModel } from '../../../core/models/set-default-language.model';
 
 @Component({
   selector: 'app-login',
@@ -19,12 +17,12 @@ export class LoginComponent implements OnInit {
   errorMessage?: string;
   formError: LoginFormErrors = {} as LoginFormErrors;
   isLoading?: boolean;
+  defaultLanguages: DefaultLanguageModel = {} as DefaultLanguageModel;
 
   constructor(
     private securityService: SecurityService,
     private router: Router,
-    private location: Location,
-    private localStorageService: LocalStorageService
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -55,34 +53,8 @@ export class LoginComponent implements OnInit {
     this.securityService.login(this.user).subscribe(
       (res: LoginResultModel) => {
         if (res.isLogin) {
-          this.securityService.setToken(res.token);
-          this.localStorageService.save(
-            LocalStorageHelper.totalScore,
-            res?.user?.totalScore.toString()
-          );
-          const defaultBaseLanguageFromAPI = JSON.parse(
-            res?.user?.baseLanguages || '{[]}'
-          ).find((x: NameIdModel) => x.id === res?.user?.defaultBaseLanguageId);
-          const defaultTargetLanguageFromAPI = JSON.parse(
-            res?.user?.targetLanguages || '{[]}'
-          ).find(
-            (x: NameIdModel) => x.id === res?.user?.defaultTargetLanguageId
-          );
+          this.securityService.storeCredentialsAfterLogin(res);
 
-          this.localStorageService.delete(LocalStorageHelper.isGuest);
-          this.localStorageService.save(
-            LocalStorageHelper.defaultLanguages,
-            JSON.stringify({
-              defaultBaseLanguage: defaultBaseLanguageFromAPI,
-              defaultTargetLanguage: defaultTargetLanguageFromAPI,
-            })
-          );
-          if (res?.user?.isSelectedLanguages) {
-            this.localStorageService.save(
-              LocalStorageHelper.selectedLanguages,
-              `{ "base": ${res?.user?.baseLanguages}, "target": ${res?.user?.targetLanguages} }`
-            );
-          }
           this.router.navigate(['../game-menu']).then();
         } else {
           this.errorMessage = res.message;

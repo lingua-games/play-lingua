@@ -1,4 +1,3 @@
-import { SelectedLanguageModel } from './selected-language.model';
 import { LanguageModel } from './language.model';
 
 export interface UserModel {
@@ -7,8 +6,6 @@ export interface UserModel {
   displayName: string;
   password: string;
   rePassword: string;
-  baseLanguages: string;
-  targetLanguages: string;
   isSelectedLanguages: boolean;
   defaultBaseLanguageId: number;
   defaultBaseLanguage: LanguageModel;
@@ -16,7 +13,6 @@ export interface UserModel {
   defaultTargetLanguageId: number;
   totalScore: number;
   EmailAndDisplayName: string;
-  selectedLanguages: SelectedLanguageModel;
   captchaCode: string;
   emailVerificationCode: string;
 }

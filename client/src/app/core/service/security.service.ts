@@ -10,6 +10,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { SecurityTokenInterface } from '../models/security-token.interface';
 import { LocalStorageHelper } from '../models/local-storage.enum';
 import { LocalStorageService } from './local-storage.service';
+import { DefaultLanguageModel } from '../models/set-default-language.model';
+import { LanguageModel } from '../models/language.model';
 
 @Injectable({
   providedIn: 'root',
@@ -100,6 +102,26 @@ export class SecurityService {
     return this.http.post<LoginResultModel>(this.authUrl, user);
   }
 
+  storeCredentialsAfterLogin(loginResult: LoginResultModel): void {
+    this.setToken(loginResult.token);
+    this.localStorageService.save(
+      LocalStorageHelper.totalScore,
+      loginResult?.user?.totalScore.toString()
+    );
+
+    const defaultLanguages: DefaultLanguageModel = {} as DefaultLanguageModel;
+    defaultLanguages.baseLanguage =
+      loginResult.user?.defaultBaseLanguage || ({} as LanguageModel);
+    defaultLanguages.targetLanguage =
+      loginResult.user?.defaultTargetLanguage || ({} as LanguageModel);
+
+    this.localStorageService.delete(LocalStorageHelper.isGuest);
+    this.localStorageService.save(
+      LocalStorageHelper.defaultLanguages,
+      JSON.stringify(defaultLanguages)
+    );
+  }
+
   logout(): void {
     try {
       this.localStorageService.clear();
@@ -112,7 +134,6 @@ export class SecurityService {
       this.dialogRef.closeAll();
       this.localStorageService.delete(LocalStorageHelper.token);
       this.localStorageService.delete(LocalStorageHelper.email);
-      this.localStorageService.delete(LocalStorageHelper.selectedLanguages);
       this.router.navigate(['../login']).then();
     } catch (e) {}
   }

@@ -1,26 +1,32 @@
-<div class="default-language-main-container">
+<div
+  class="default-language-main-container"
+  appLoading
+  [loadingFlag]="languages.isLoading"
+>
   <div class="body-container">
-    <div class="header-container">
-      Set your default base and target languages
-    </div>
+    <div class="header-container">Set your base and target languages</div>
     <div class="row select-language-container">
       <div class="col-sm-4">
-        <div class="select-language-header-container">Select base language</div>
+        <div class="select-language-header-container">I know</div>
         <p-dropdown
-          [options]="baseLanguages"
-          [(ngModel)]="selectedItems.defaultBaseLanguage"
+          [filter]="true"
+          filterBy="name"
+          appendTo="body"
+          [options]="languages.data"
+          [(ngModel)]="selectedItems.baseLanguage"
           placeholder="Base language"
           optionLabel="name"
           [showClear]="true"
         ></p-dropdown>
       </div>
       <div class="col-sm-4">
-        <div class="select-language-header-container">
-          Select target language
-        </div>
+        <div class="select-language-header-container">I want to improve</div>
         <p-dropdown
-          [options]="targetLanguages"
-          [(ngModel)]="selectedItems.defaultTargetLanguage"
+          [filter]="true"
+          filterBy="name"
+          appendTo="body"
+          [options]="languages.data"
+          [(ngModel)]="selectedItems.targetLanguage"
           placeholder="Target language"
           optionLabel="name"
           [showClear]="true"
@@ -28,19 +34,8 @@
       </div>
       <div class="col-sm-4 submit-container">
         <div class="select-language-header-container"></div>
-        <button
-          class="btn btn-success"
-          type="submit"
-          [disabled]="isLoading"
-          (click)="submit()"
-        >
-          <span
-            class="spinner-border spinner-border-sm"
-            role="status"
-            aria-hidden="true"
-            *ngIf="isLoading"
-          ></span>
-          {{ isLoading ? 'Loading...' : 'Submit' }}
+        <button class="btn btn-success" type="submit" (click)="submit()">
+          Submit
         </button>
       </div>
     </div>

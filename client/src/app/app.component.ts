@@ -4,7 +4,6 @@ import { UserService } from './core/service/user.service';
 import { UserModel } from './core/models/user.model';
 import { LocalStorageHelper } from './core/models/local-storage.enum';
 import { LocalStorageService } from './core/service/local-storage.service';
-import { LanguageModel } from './core/models/language.model';
 import {
   NotificationService,
   Severity,
@@ -57,35 +56,6 @@ export class AppComponent implements OnInit {
             defaultTargetLanguage: res.defaultTargetLanguage,
           })
         );
-
-        if (
-          res &&
-          res.selectedLanguages &&
-          res.selectedLanguages.baseLanguages &&
-          res.selectedLanguages.targetLanguages
-        ) {
-          this.localStorageService.save(
-            LocalStorageHelper.selectedLanguages,
-            JSON.stringify({
-              base: JSON.parse(res.selectedLanguages.baseLanguages).map(
-                (x: LanguageModel) => {
-                  return {
-                    id: x.id,
-                    name: x.name,
-                  };
-                }
-              ),
-              target: JSON.parse(res.selectedLanguages.targetLanguages).map(
-                (x: LanguageModel) => {
-                  return {
-                    id: x.id,
-                    name: x.name,
-                  };
-                }
-              ),
-            })
-          );
-        }
         this.securityService.initialTotalScore(res.totalScore.toString());
         this.isGettingUserInformation = false;
       },

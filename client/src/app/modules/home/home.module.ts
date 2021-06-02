@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { GreetingComponent } from './greeting/greeting.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { ChooseLanguagesComponent } from './choose-languages/choose-languages.component';
 import { PrimengModule } from '../common/primeng/primeng.module';
 import { FormsModule } from '@angular/forms';
 import { DeactivateWithDelay, HomeRoutingModule } from './home-routing.module';
@@ -30,7 +29,6 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     GreetingComponent,
     LoginComponent,
     RegisterComponent,
-    ChooseLanguagesComponent,
     GameMenuComponent,
     PrepareAddWordsComponent,
     ProfileComponent,

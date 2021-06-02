@@ -118,7 +118,6 @@ export class AddWordByUserComponent implements OnInit {
       );
     });
 
-    this.getBaseAndTargetLanguages();
     if (this.wordsForEdit?.baseLanguageId) {
       this.isEditing = true;
       this.prepareEditForm();
@@ -406,14 +405,6 @@ export class AddWordByUserComponent implements OnInit {
           this.isBookLoading = false;
         }
       );
-  }
-
-  getBaseAndTargetLanguages(): void {
-    const selectedLanguages = JSON.parse(
-      this.localStorageService.load(LocalStorageHelper.selectedLanguages)
-    );
-    this.baseLanguages = selectedLanguages.base;
-    this.targetLanguages = selectedLanguages.target;
   }
 
   submitSelectedBooks(): void {

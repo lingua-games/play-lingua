@@ -32,13 +32,20 @@ namespace PlayLingua.Data
 
         public LoginResult Login(User user)
         {
+            var foundUser = new UserModel();
             var result = new LoginResult();
             user.Password = CreateHashPassword(user.Password, _hashKey);
             string query = @"
-                              SELECT * FROM [dbo].[Users] 
-                              left join [dbo].[SelectedLanguages]
-                              on [Users].Id = [SelectedLanguages].UserId
-                              where Email = @Email
+                            SELECT 
+	                            Users.Email,
+	                            Users.Id,
+	                            Users.DisplayName,
+	                            Users.TotalScore,
+	                            Users.DefaultBaseLanguageId,
+	                            Users.DefaultTargetLanguageId,
+                                Users.Password
+                            FROM [dbo].[Users]
+                            where Email = @Email
                             ";
             var usersWithSelectedEmail = db.Query<User>(query, user).ToList();
 
@@ -50,25 +57,20 @@ namespace PlayLingua.Data
             if (usersWithSelectedEmail.Any(x => x.Password == user.Password))
             {
                 var selectedUser = usersWithSelectedEmail.SingleOrDefault(x => x.Password == user.Password);
+                foundUser.Email = selectedUser.Email;
+                foundUser.Id = selectedUser.Id;
+                foundUser.DisplayName = selectedUser.DisplayName;
+                foundUser.IsAdmin = selectedUser.IsAdmin;
+                foundUser.TotalScore = selectedUser.TotalScore;
+                foundUser.NeedsResetPassword = selectedUser.NeedsResetPassword;
+
+                foundUser.DefaultBaseLanguage = db.Query<LanguageModel>("select * from Language where id = @DefaultBaseLanguageId", selectedUser).FirstOrDefault();
+                foundUser.DefaultTargetLanguage = db.Query<LanguageModel>("select * from Language where id = @DefaultTargetLanguageId", selectedUser).FirstOrDefault();
+
                 return new LoginResult
                 {
                     IsLogin = true,
-                    User = new User
-                    {
-                        Email = selectedUser.Email,
-                        Id = selectedUser.Id,
-                        DisplayName = selectedUser.DisplayName,
-                        BaseLanguages = selectedUser.BaseLanguages,
-                        TargetLanguages = selectedUser.TargetLanguages,
-                        DefaultBaseLanguageId = selectedUser.DefaultBaseLanguageId,
-                        DefaultTargetLanguageId = selectedUser.DefaultTargetLanguageId,
-                        IsAdmin = selectedUser.IsAdmin,
-                        TotalScore = selectedUser.TotalScore,
-                        NeedsResetPassword = selectedUser.NeedsResetPassword,
-                        IsSelectedLanguages =
-                            !string.IsNullOrWhiteSpace(selectedUser.TargetLanguages) && !string.IsNullOrWhiteSpace(selectedUser.BaseLanguages)
-
-                    }
+                    User = foundUser
                 };
             }
             else
@@ -93,7 +95,7 @@ namespace PlayLingua.Data
             return Convert.ToBase64String(valueBytes);
         }
 
-        public string GenerateToken(User user)
+        public string GenerateToken(UserModel user)
         {
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secret));
 
