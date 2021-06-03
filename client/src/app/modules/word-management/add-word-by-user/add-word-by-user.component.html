@@ -1,12 +1,14 @@
 <p-toast position="bottom-center" key="bc"></p-toast>
 <div appLoading [loadingFlag]="isPageLoading || isPreparingForEdit">
   <form [formGroup]="selectLanguageForm" class="select-language-container">
-    <div class="row">
+    <div class="row" *ngIf="languages.data && languages.data.length">
       <div class="col-sm-1"></div>
       <div class="col-sm-1 pre-text-container">From</div>
       <div class="col-sm-4">
         <p-dropdown
-          [options]="baseLanguages"
+          [options]="languages.data"
+          [filter]="true"
+          filterBy="name"
           placeholder="Base language"
           formControlName="baseLanguage"
           optionLabel="name"
@@ -24,7 +26,9 @@
       </div>
       <div class="col-sm-4">
         <p-dropdown
-          [options]="targetLanguages"
+          [options]="languages.data"
+          [filter]="true"
+          filterBy="name"
           placeholder="Target language"
           optionLabel="name"
           formControlName="targetLanguage"

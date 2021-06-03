@@ -31,6 +31,7 @@ import { WordOverviewsModel } from '../../../core/models/word-overviews.model';
 import { forkJoin } from 'rxjs';
 import { WordDetails } from '../../../core/models/word-details.model';
 import { BasicInformationService } from '../../../core/service/basic-information.service';
+import { ApiResult } from '../../../core/models/api-result.model';
 
 @Component({
   selector: 'app-add-word-by-user',
@@ -39,8 +40,7 @@ import { BasicInformationService } from '../../../core/service/basic-information
 })
 export class AddWordByUserComponent implements OnInit {
   @ViewChild('container') container: ElementRef = {} as ElementRef;
-  baseLanguages: LanguageModel[] = [];
-  targetLanguages: LanguageModel[] = [];
+  languages: ApiResult<LanguageModel[]> = new ApiResult<LanguageModel[]>();
   books: BookModel[] = [];
   chapters: ChapterModel[] = [];
   isBookLoading?: boolean;
@@ -112,16 +112,18 @@ export class AddWordByUserComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params: Params) => {
-      this.wordsForEdit = this.localStorageService.decryptData(
-        params['code'],
-        environment.secretKeys.queryParameters
-      );
+      if (params['code']) {
+        this.wordsForEdit = this.localStorageService.decryptData(
+          params['code'],
+          environment.secretKeys.queryParameters
+        );
+      }
     });
-
     if (this.wordsForEdit?.baseLanguageId) {
       this.isEditing = true;
       this.prepareEditForm();
     } else {
+      this.getLanguages();
       this.isEditing = false;
       this.checkDraft();
     }
@@ -135,6 +137,18 @@ export class AddWordByUserComponent implements OnInit {
         this.targetLanguage?.enable();
       }
     });
+  }
+
+  getLanguages(): void {
+    this.languages.setLoading(true);
+    this.basicInformationService.getAllLanguages().subscribe(
+      (res: LanguageModel[]) => {
+        this.languages.setData(res);
+      },
+      () => {
+        this.languages.setError('Unable to load languages');
+      }
+    );
   }
 
   prepareEditForm(): void {
@@ -157,55 +171,24 @@ export class AddWordByUserComponent implements OnInit {
       this.wordManagementService.getWordDetails(this.wordsForEdit)
     );
 
-    if (
-      !this.targetLanguages.find(
-        (x) => x.id === this.wordsForEdit.targetLanguageId
-      ) ||
-      !this.baseLanguages.find((x) => x.id === this.wordsForEdit.baseLanguageId)
-    ) {
-      servicesToCall.push(this.basicInformationService.getAllLanguages());
-    }
+    servicesToCall.push(this.basicInformationService.getAllLanguages());
 
     forkJoin(servicesToCall).subscribe(
       (
         res: (BookModel[] | ChapterModel[] | WordDetails[] | LanguageModel[])[]
       ) => {
-        if (
-          !this.targetLanguages.find(
-            (x) => x.id === this.wordsForEdit.targetLanguageId
-          )
-        ) {
-          const itemToAdd = (res[3] as LanguageModel[]).find(
-            (x) => x.id === this.wordsForEdit.targetLanguageId
-          );
-          if (itemToAdd) {
-            this.targetLanguages.push(itemToAdd);
-          }
-        }
-
-        if (
-          !this.baseLanguages.find(
-            (x) => x.id === this.wordsForEdit.baseLanguageId
-          )
-        ) {
-          const itemToAdd = (res[3] as LanguageModel[])?.find(
-            (x) => x.id === this.wordsForEdit.baseLanguageId
-          );
-          if (itemToAdd) {
-            this.baseLanguages.push(itemToAdd);
-          }
-        }
-
+        this.languages.setData(res[3] as LanguageModel[]);
         this.baseLanguage?.setValue(
-          this.baseLanguages.find(
+          this.languages.data.find(
             (x) => x.id === this.wordsForEdit.baseLanguageId
           )
         );
         this.targetLanguage?.setValue(
-          this.targetLanguages.find(
+          this.languages.data.find(
             (x) => x.id === this.wordsForEdit.targetLanguageId
           )
         );
+
         this.submitSelectedLanguages();
 
         this.books = [];

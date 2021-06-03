@@ -44,6 +44,7 @@ export class SelectDefaultLanguageDialogComponent implements OnInit {
       }
     );
   }
+
   submit(): void {
     if (!this.selectedItems.defaultBaseLanguage) {
       this.notificationService.showMessage(
