@@ -245,7 +245,7 @@ describe('ActivateUserComponent', () => {
       );
     });
 
-    it('should navigate to choose-languages page after success login', () => {
+    it('should navigate to game-menu page after success login', () => {
       mockSecurityService.login.and.callFake(() => {
         return of({ isLogin: true, token: 'I am token' } as LoginResultModel);
       });
@@ -254,7 +254,7 @@ describe('ActivateUserComponent', () => {
       component.login();
 
       jasmine.clock().tick(1501);
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['choose-languages']);
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['game-menu']);
 
       jasmine.clock().uninstall();
     });

@@ -119,6 +119,7 @@ export class AddWordByUserComponent implements OnInit {
         );
       }
     });
+
     if (this.wordsForEdit?.baseLanguageId) {
       this.isEditing = true;
       this.prepareEditForm();

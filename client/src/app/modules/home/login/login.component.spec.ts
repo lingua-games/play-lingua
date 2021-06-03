@@ -13,6 +13,7 @@ import { of, throwError } from 'rxjs';
 import { LoginResultModel } from '../../../core/models/login-result.model';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
+import { LanguageModel } from '../../../core/models/language.model';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -35,6 +36,7 @@ describe('LoginComponent', () => {
         'isLoggedIn',
         'login',
         'setToken',
+        'storeCredentialsAfterLogin',
       ]);
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule, RouterTestingModule],
@@ -108,7 +110,7 @@ describe('LoginComponent', () => {
       expect(component.formError['password']).toBe('Password field is empty');
     });
 
-    it('should save token into localStorage after API success', () => {
+    it('should call storeCredentialsAfterLogin API success', () => {
       component.user = {
         email: 'fake email',
         password: 'fake password',
@@ -116,105 +118,24 @@ describe('LoginComponent', () => {
         defaultBaseLanguageId: 1,
         defaultTargetLanguageId: 1,
       } as UserModel;
+      const res = {
+        token: 'fake token',
+        isLogin: true,
+        user: {
+          totalScore: 1,
+          defaultBaseLanguage: {} as LanguageModel,
+          defaultTargetLanguage: {} as LanguageModel,
+        },
+      } as LoginResultModel;
       mockSecurityService.login.and.callFake(() => {
-        return of({
-          token: 'fake token',
-          isLogin: true,
-          user: {
-            totalScore: 1,
-            baseLanguages: `[1,2,3]`,
-            targetLanguages: `[1,2,3]`,
-          },
-        } as LoginResultModel);
+        return of(res);
       });
 
       component.login();
 
-      expect(mockSecurityService.setToken).toHaveBeenCalledWith('fake token');
-    });
-
-    it('should save total score into localStorage after API success', () => {
-      component.user = {
-        email: 'fake email',
-        password: 'fake password',
-        totalScore: 1,
-        defaultBaseLanguageId: 1,
-        defaultTargetLanguageId: 1,
-      } as UserModel;
-      mockSecurityService.login.and.callFake(() => {
-        return of({
-          token: 'fake token',
-          isLogin: true,
-          user: {
-            totalScore: 1,
-            baseLanguages: `[1,2,3]`,
-            targetLanguages: `[1,2,3]`,
-          },
-        } as LoginResultModel);
-      });
-
-      component.login();
-
-      expect(mockLocalStorageService.save).toHaveBeenCalledWith(
-        LocalStorageHelper.totalScore,
-        '1'
-      );
-    });
-
-    it('should remove isGuest from localStorage if API success', () => {
-      component.user = {
-        email: 'fake email',
-        password: 'fake password',
-        totalScore: 1,
-        defaultBaseLanguageId: 1,
-        defaultTargetLanguageId: 1,
-      } as UserModel;
-      mockSecurityService.login.and.callFake(() => {
-        return of({
-          token: 'fake token',
-          isLogin: true,
-          user: {
-            totalScore: 1,
-            baseLanguages: `[1,2,3]`,
-            targetLanguages: `[1,2,3]`,
-          },
-        } as LoginResultModel);
-      });
-
-      component.login();
-
-      expect(mockLocalStorageService.delete).toHaveBeenCalledWith(
-        LocalStorageHelper.isGuest
-      );
-    });
-
-    it('should set base and targets into localStorage after API success', () => {
-      component.user = {
-        email: 'fake email',
-        password: 'fake password',
-        totalScore: 1,
-        defaultBaseLanguageId: 1,
-        defaultTargetLanguageId: 1,
-      } as UserModel;
-      mockSecurityService.login.and.callFake(() => {
-        return of({
-          token: 'fake token',
-          isLogin: true,
-          user: {
-            isSelectedLanguages: true,
-            totalScore: 1,
-            baseLanguages: `[1,2,3]`,
-            targetLanguages: `[1,2,3]`,
-          },
-        } as LoginResultModel);
-      });
-
-      component.login();
-
-      expect(mockLocalStorageService.save).toHaveBeenCalledWith(
-        LocalStorageHelper.selectedLanguages,
-        `{ "base": [1,2,3], "target": [1,2,3] }`
-      );
+      expect(
+        mockSecurityService.storeCredentialsAfterLogin
+      ).toHaveBeenCalledWith(res);
     });
 
     it('should set error if API return isLogin falsy', () => {
