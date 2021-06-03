@@ -38,6 +38,22 @@ export class SelectDefaultLanguageDialogComponent implements OnInit {
     this.basicInformationService.getAllLanguages().subscribe(
       (res: LanguageModel[]) => {
         this.languages.setData(res);
+
+        const defaultLanguages = this.localStorageService.load(
+          LocalStorageHelper.defaultLanguages
+        );
+        if (defaultLanguages) {
+          this.selectedItems.defaultTargetLanguage =
+            this.languages.data.find(
+              (x) =>
+                x.id === JSON.parse(defaultLanguages).defaultTargetLanguage.id
+            ) || ({} as LanguageModel);
+          this.selectedItems.defaultBaseLanguage =
+            this.languages.data.find(
+              (x) =>
+                x.id === JSON.parse(defaultLanguages).defaultBaseLanguage.id
+            ) || ({} as LanguageModel);
+        }
       },
       () => {
         this.languages.setError('Unable to load languages');

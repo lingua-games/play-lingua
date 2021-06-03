@@ -64,7 +64,6 @@ export class GameMenuComponent implements OnInit {
   }
 
   changeDefaultLanguages(): void {
-    this.localStorageService.delete(LocalStorageHelper.defaultLanguages);
     this.openSelectDefaultLanguageDialog();
   }
 
