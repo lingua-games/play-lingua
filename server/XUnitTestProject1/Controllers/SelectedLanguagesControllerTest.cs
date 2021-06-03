@@ -34,7 +34,7 @@ namespace PlayLingua.Unit.Test.Controllers
             };
             var fakeSelectDefaultLanguageViewModel = new SelectDefaultLanguageViewModel
             {
-                DefaultBaseLanguage = 1
+                BaseLanguage = 1
             };
             _mockRepo.Setup(repo => repo.SetDefaultLanguages(fakeSelectDefaultLanguageModel, 1));
 

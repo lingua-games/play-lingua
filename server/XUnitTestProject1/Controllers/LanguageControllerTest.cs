@@ -41,57 +41,5 @@ namespace PlayLingua.Unit.Test.Controllers
             var testResult = methodResult.Result as OkObjectResult;
             Assert.Equal(_fakeLanguageListViewModel.Count, (testResult.Value as List<LanguageViewModel>).Count);
         }
-
-        [Fact]
-        public void Add_Should_Return_Added_Language()
-        {
-            // Arrange
-            _mockRepo.SetupSequence(repo => repo.Add(It.IsAny<Language>())).Returns(_fakeLanguageList[0]).Returns(_fakeLanguageList[1]);
-
-            // Act
-            var methodResult = _mockController.Add(_fakeLanguageListViewModel);
-
-            // Assert
-            var testResult = methodResult.Result as OkObjectResult;
-            Assert.Equal(_fakeLanguageList.Count(), ((IEnumerable)testResult.Value).Cast<object>().ToList().Count());
-        }
-
-        [Fact]
-        public void Delete_Should_Call_Delete_Method()
-        {
-            // Arrange
-            _mockRepo.Setup(repo => repo.Delete("1"));
-
-            // Act
-            var methodResult = _mockController.Delete("1");
-
-            // Assert
-            var testResult = methodResult as OkResult;
-            Assert.Equal(200, testResult.StatusCode);
-        }
-
-        [Fact]
-        public void Update_Should_Call_Update_Method_And_Return_Updated_Language()
-        {
-            // Arrange
-            var fakeUpdatedLanguage = new Language()
-            {
-                Id = 1,
-                Name = "Fake Language"
-            };
-            var fakeUpdatedLanguageViewModel = new LanguageViewModel()
-            {
-                Id = 1,
-                Name = "Fake Language"
-            };
-            _mockRepo.Setup(repo => repo.Update(fakeUpdatedLanguage));
-
-            // Act
-            var methodResult = _mockController.Update(1, fakeUpdatedLanguageViewModel);
-
-            // Assert
-            var testResult = methodResult.Result as OkObjectResult;
-            Assert.Equal(fakeUpdatedLanguageViewModel, testResult.Value);
-        }
     }
 }
