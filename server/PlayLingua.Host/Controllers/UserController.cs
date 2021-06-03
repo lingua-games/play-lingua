@@ -27,12 +27,8 @@ namespace PlayLingua.Host.Controllers
             return Ok(_userRepository.List().Select(x => new UserViewModel
             {
                 Email = x.Email,
-                BaseLanguages = x.BaseLanguages,
-                DefaultTargetLanguageId = x.DefaultTargetLanguageId,
-                DefaultBaseLanguageId = x.DefaultBaseLanguageId,
                 DisplayName = x.DisplayName,
                 Id = x.Id,
-                TargetLanguages = x.TargetLanguages,
                 TotalScore = x.TotalScore
             }).ToList());
         }
@@ -52,35 +48,26 @@ namespace PlayLingua.Host.Controllers
                 var result = new UserViewModel
                 {
                     Email = repositoryResult.Email,
-                    BaseLanguages = repositoryResult.BaseLanguages,
-
                     DisplayName = repositoryResult.DisplayName,
                     Id = repositoryResult.Id,
-                    TargetLanguages = repositoryResult.TargetLanguages,
                     TotalScore = repositoryResult.TotalScore,
-                    SelectedLanguages = new SelectedLanguagesViewModel
-                    {
-                        TargetLanguages = repositoryResult?.SelectedLanguages?.TargetLanguages,
-                        BaseLanguages = repositoryResult?.SelectedLanguages?.BaseLanguages
-                    }
-                };
-
-                if (repositoryResult.DefaultTargetLanguage != null)
-                {
-                    result.DefaultTargetLanguage = new LanguageViewModel
+                    DefaultTargetLanguage = repositoryResult.DefaultTargetLanguage != null ? new LanguageViewModel
                     {
                         Id = repositoryResult.DefaultTargetLanguage.Id,
-                        Name = repositoryResult.DefaultTargetLanguage.Name
-                    };
-                }
-                if (repositoryResult.DefaultBaseLanguage != null)
-                {
-                    result.DefaultBaseLanguage = new LanguageViewModel
+                        Code = repositoryResult.DefaultTargetLanguage.Code,
+                        FullName = repositoryResult.DefaultTargetLanguage.FullName,
+                        Name = repositoryResult.DefaultTargetLanguage.Name,
+                        NativeName = repositoryResult.DefaultTargetLanguage.NativeName,
+                    } : null,
+                    DefaultBaseLanguage = repositoryResult.DefaultTargetLanguage != null ? new LanguageViewModel
                     {
                         Id = repositoryResult.DefaultBaseLanguage.Id,
+                        Code = repositoryResult.DefaultBaseLanguage.Code,
+                        FullName = repositoryResult.DefaultBaseLanguage.FullName,
                         Name = repositoryResult.DefaultBaseLanguage.Name,
-                    };
-                }
+                        NativeName = repositoryResult.DefaultBaseLanguage.NativeName,
+                    } : null
+                };
 
                 return Ok(result);
             }
@@ -120,11 +107,12 @@ namespace PlayLingua.Host.Controllers
                 });
 
                 var loginResult = _authRepository.Login(new Domain.Entities.User { Email = user.Email, Password = model.Password });
+                loginResult.Token = _authRepository.GenerateToken(loginResult.User);
                 return Ok(loginResult);
             }
-            catch 
+            catch
             {
-                return Ok(new LoginResult { Message = "", IsLogin = false }); ;
+                return Ok(new LoginResult { Message = "Failed to login", IsLogin = false }); ;
             }
         }
 
@@ -142,7 +130,8 @@ namespace PlayLingua.Host.Controllers
                 {
                     result.Success = false;
                     result.ErrorMessage = "Your account is already activated";
-                } else
+                }
+                else
                 {
                     result.Data = new UserViewModel
                     {
@@ -233,7 +222,7 @@ namespace PlayLingua.Host.Controllers
                 IsChangingPassword = model.IsChangingPassword,
                 NewPassword = model.NewPassword
             });
-            model.Token = _authRepository.GenerateToken(new User
+            model.Token = _authRepository.GenerateToken(new UserModel
             {
                 Email = GetUser().Email,
                 Id = GetUser().Id,

@@ -3,7 +3,6 @@ import { Routes, RouterModule, CanDeactivate } from '@angular/router';
 import { GreetingComponent } from './greeting/greeting.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { ChooseLanguagesComponent } from './choose-languages/choose-languages.component';
 import { environment } from '../../../environments/environment';
 import { HomeComponent } from './home.component';
 import { GameMenuComponent } from './game-menu/game-menu.component';
@@ -76,17 +75,6 @@ const routes: Routes = [
         path: 'activate-user/:code',
         component: ActivateUserComponent,
         canDeactivate: [DeactivateWithDelay],
-      },
-      {
-        path: 'choose-languages',
-        component: ChooseLanguagesComponent,
-        canDeactivate: [DeactivateWithDelay],
-      },
-      {
-        path: 'choose-languages/:mode',
-        component: ChooseLanguagesComponent,
-        canDeactivate: [DeactivateWithDelay],
-        canActivate: [OnlyUserAllowService],
       },
       {
         path: 'game-menu',

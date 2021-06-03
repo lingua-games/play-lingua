@@ -25,53 +25,6 @@ namespace PlayLingua.Unit.Test.Controllers
         }
 
         [Fact]
-        public void Add_Language_For_User_If_Has_Not_Added_Yet()
-        {
-            // Arrange
-            var fakeSelectedLanguages = new SelectedLanguages
-            {
-                Id = 1
-            };
-            var fakeSelectedLanguagesViewModel = new SelectedLanguagesViewModel
-            {
-                Id = 1
-            };
-            var expectedResponse = new SelectedLanguages { Id = 100 };
-            _mockRepo.Setup(repo => repo.GetByUserId(fakeSelectedLanguages.Id)).Returns(null as SelectedLanguages);
-            _mockRepo.Setup(repo => repo.Add(It.IsAny<SelectedLanguages>())).Returns(expectedResponse);
-
-            // Act
-            var methodResult = _mockController.Add(fakeSelectedLanguagesViewModel);
-
-            // Assert
-            var testResult = methodResult.Result as OkObjectResult;
-            Assert.Equal(expectedResponse, testResult.Value);
-        }
-
-        [Fact]
-        public void Update_Language_For_User_If_Is_Already_Added()
-        {
-            // Arrange
-            var fakeSelectedLanguages = new SelectedLanguages
-            {
-                Id = 1
-            };
-            var fakeSelectedLanguagesViewModel = new SelectedLanguagesViewModel
-            {
-                Id = 1
-            };
-            _mockRepo.Setup(repo => repo.GetByUserId(fakeSelectedLanguages.Id)).Returns(new SelectedLanguages());
-            _mockRepo.Setup(repo => repo.Update(fakeSelectedLanguages));
-
-            // Act
-            var methodResult = _mockController.Add(fakeSelectedLanguagesViewModel);
-
-            // Assert
-            var testResult = methodResult.Result as OkObjectResult;
-            Assert.Equal(200, testResult.StatusCode);
-        }
-
-        [Fact]
         public void SetDefaultSelection_Should_Set_Default_Language()
         {
             // Arrange
@@ -81,7 +34,7 @@ namespace PlayLingua.Unit.Test.Controllers
             };
             var fakeSelectDefaultLanguageViewModel = new SelectDefaultLanguageViewModel
             {
-                DefaultBaseLanguage = 1
+                BaseLanguage = 1
             };
             _mockRepo.Setup(repo => repo.SetDefaultLanguages(fakeSelectDefaultLanguageModel, 1));
 

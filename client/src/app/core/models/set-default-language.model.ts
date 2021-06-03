@@ -1,6 +1,6 @@
 import { LanguageModel } from './language.model';
 
-export interface SetDefaultLanguageModel {
+export interface DefaultLanguageModel {
   defaultBaseLanguage: LanguageModel;
   defaultTargetLanguage: LanguageModel;
 }

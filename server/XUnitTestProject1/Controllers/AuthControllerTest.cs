@@ -19,7 +19,7 @@ namespace PlayLingua.Unit.Test.Controllers
             {
                 Token = "Fake token",
                 IsLogin = true,
-                User = new User
+                User = new UserModel
                 {
                     Email = "Fake email"
                 }
@@ -30,7 +30,7 @@ namespace PlayLingua.Unit.Test.Controllers
             var mockRepo = new Mock<IAuthRepository>();
             var controller = new AuthController(mockRepo.Object);
             mockRepo.Setup(repo => repo.Login(It.IsAny<User>())).Returns(_fakeLoginResult);
-            mockRepo.Setup(repo => repo.GenerateToken(It.IsAny<User>())).Returns(_fakeLoginResult.Token);
+            mockRepo.Setup(repo => repo.GenerateToken(It.IsAny<UserModel>())).Returns(_fakeLoginResult.Token);
 
 
             // Act

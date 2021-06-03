@@ -11,7 +11,7 @@ namespace PlayLingua.Data
 {
     public class LanguageRepository : ILanguageRepository
     {
-        private IDbConnection db;
+        private readonly IDbConnection db;
         public LanguageRepository(string connectionString)
         {
             db = new SqlConnection(connectionString);

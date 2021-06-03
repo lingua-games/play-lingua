@@ -6,7 +6,7 @@ namespace PlayLingua.Domain.Models
     {
         public bool IsLogin { get; set; }
         public string Message { get; set; }
-        public User User { get; set; }
+        public UserModel User { get; set; }
         public string Token { get; set; }
     }
 }

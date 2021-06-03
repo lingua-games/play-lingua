@@ -2,7 +2,7 @@
 {
     public class SelectDefaultLanguageViewModel: BaseViewModel
     {
-        public int DefaultBaseLanguage { get; set; }
-        public int DefaultTargetLanguage { get; set; }
+        public int BaseLanguage { get; set; }
+        public int TargetLanguage { get; set; }
     }
 }

@@ -63,13 +63,6 @@ describe('GreetingComponent', () => {
       );
     });
 
-    it('should delete selectedLanguages', () => {
-      component.playGuest();
-      expect(mockLocalStorageService.delete).toHaveBeenCalledWith(
-        LocalStorageHelper.selectedLanguages
-      );
-    });
-
     it('should delete defaultLanguages', () => {
       component.playGuest();
       expect(mockLocalStorageService.delete).toHaveBeenCalledWith(
@@ -79,7 +72,7 @@ describe('GreetingComponent', () => {
 
     it('should navigate to choose-language page', () => {
       component.playGuest();
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['choose-languages']);
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['game-menu']);
     });
   });
 });

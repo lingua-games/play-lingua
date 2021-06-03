@@ -16,8 +16,7 @@ export class GreetingComponent {
 
   playGuest(): void {
     this.localStorageService.save(LocalStorageHelper.isGuest, 'true');
-    this.localStorageService.delete(LocalStorageHelper.selectedLanguages);
     this.localStorageService.delete(LocalStorageHelper.defaultLanguages);
-    this.router.navigate(['choose-languages']).then();
+    this.router.navigate(['game-menu']).then();
   }
 }

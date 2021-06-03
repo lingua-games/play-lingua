@@ -10,8 +10,9 @@ import { LocalStorageService } from '../../../core/service/local-storage.service
 import { SecurityService } from '../../../core/service/security.service';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { of, throwError } from 'rxjs';
-import { SetDefaultLanguageModel } from '../../../core/models/set-default-language.model';
 import { WordService } from '../../../core/service/word.service';
+import { LanguageModel } from '../../../core/models/language.model';
+import { DefaultLanguageModel } from '../../../core/models/set-default-language.model';
 
 describe('GameMenuComponent', () => {
   let component: GameMenuComponent;
@@ -103,22 +104,15 @@ describe('GameMenuComponent', () => {
 
     it('should set value into selectedLanguages', () => {
       mockLocalStorageService.load.and.callFake(() => {
-        return '{ "base": [], "target": [] }';
+        return '{ "defaultBaseLanguage": {}, "defaultTargetLanguage": {} }';
       });
 
       fixture.detectChanges();
 
-      expect(component.selectedLanguages).toEqual({ base: [], target: [] });
-    });
-
-    it('should navigate to choose-language if no language is selected as default', () => {
-      mockLocalStorageService.load.and.callFake(() => {
-        return '{ "base": null, "target": null }';
+      expect(component.defaultSelectedLanguages).toEqual({
+        defaultBaseLanguage: {} as LanguageModel,
+        defaultTargetLanguage: {} as LanguageModel,
       });
-
-      fixture.detectChanges();
-
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['./choose-languages']);
     });
 
     it('should get menus', () => {
@@ -131,33 +125,6 @@ describe('GameMenuComponent', () => {
 
       expect(component.getMenus).toHaveBeenCalled();
     });
-
-    it('should set language for guest', () => {
-      mockSecurityService.isGuest.and.callFake(() => {
-        return true;
-      });
-      mockLocalStorageService.load.and.callFake((e) => {
-        if (e === LocalStorageHelper.selectedLanguages) {
-          return '{ "base": [{"id":1}], "target": [{"id":1}] }';
-        } else if (e === LocalStorageHelper.defaultLanguages) {
-          return null;
-        }
-      });
-      spyOn(component, 'openSelectDefaultLanguageDialog');
-
-      fixture.detectChanges();
-
-      expect(mockLocalStorageService.save).toHaveBeenCalledWith(
-        LocalStorageHelper.defaultLanguages,
-        '{"defaultBaseLanguage":{"id":1},"defaultTargetLanguage":{"id":1}}'
-      );
-    });
-  });
-
-  it('should navigate to choose-language page when navigateToChangeLanguage hits', () => {
-    component.navigateToChangeLanguage();
-
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['../choose-languages']);
   });
 
   it('should open dialog when changeDefaultLanguages hits', () => {
@@ -177,7 +144,7 @@ describe('GameMenuComponent', () => {
   it('should get selected language information once dialog close', () => {
     mockMatDialog.open.and.callFake(() => {
       return {
-        afterClosed: () => of({} as SetDefaultLanguageModel),
+        afterClosed: () => of({} as DefaultLanguageModel),
       };
     });
     spyOn(component, 'getSelectedLanguagesInformation');
@@ -191,6 +158,10 @@ describe('GameMenuComponent', () => {
     mockWordService.getSelectedLanguagesInformation.and.callFake(() => {
       return of(true);
     });
+    component.defaultSelectedLanguages = {
+      defaultBaseLanguage: {} as LanguageModel,
+      defaultTargetLanguage: {} as LanguageModel,
+    } as DefaultLanguageModel;
 
     component.getSelectedLanguagesInformation();
 
@@ -201,6 +172,10 @@ describe('GameMenuComponent', () => {
     mockWordService.getSelectedLanguagesInformation.and.callFake(() => {
       return throwError('some errors');
     });
+    component.defaultSelectedLanguages = {
+      defaultTargetLanguage: {} as LanguageModel,
+      defaultBaseLanguage: {} as LanguageModel,
+    } as DefaultLanguageModel;
 
     component.getSelectedLanguagesInformation();
 

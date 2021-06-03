@@ -1,19 +1,17 @@
 import { GameMenu } from '../../../core/models/game.menu.model';
 import { Component, OnInit } from '@angular/core';
 import { BasicInformationService } from '../../../core/service/basic-information.service';
-import { Router } from '@angular/router';
 import { WordService } from '../../../core/service/word.service';
 import { ApiResult } from '../../../core/models/api-result.model';
 import {
   NotificationService,
   Severity,
 } from '../../../core/service/notification.service';
-import { LanguageModel } from '../../../core/models/language.model';
 import { SecurityService } from '../../../core/service/security.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectDefaultLanguageDialogComponent } from '../../../core/dialogs/select-default-language-dialog/select-default-language-dialog.component';
 import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
-import { SetDefaultLanguageModel } from '../../../core/models/set-default-language.model';
+import { DefaultLanguageModel } from '../../../core/models/set-default-language.model';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -24,19 +22,11 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class GameMenuComponent implements OnInit {
   gameMenus: GameMenu[] = [];
-  selectedLanguages: { base: LanguageModel[]; target: LanguageModel[] } = {
-    base: [],
-    target: [],
-  };
-  defaultSelectedLanguages: SetDefaultLanguageModel = {
-    defaultBaseLanguage: {} as LanguageModel,
-    defaultTargetLanguage: {} as LanguageModel,
-  };
+  defaultSelectedLanguages: DefaultLanguageModel = {} as DefaultLanguageModel;
   loadingFullPage?: boolean;
   inquiryResult: ApiResult<boolean> = new ApiResult<boolean>();
 
   constructor(
-    private router: Router,
     private basicInformationService: BasicInformationService,
     private wordService: WordService,
     private notificationService: NotificationService,
@@ -47,46 +37,20 @@ export class GameMenuComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.selectedLanguages = JSON.parse(
-      this.localStorageService.load(LocalStorageHelper.selectedLanguages)
-        ? this.localStorageService.load(LocalStorageHelper.selectedLanguages)
-        : '[]'
-    );
-    if (
-      !this.selectedLanguages ||
-      !this.selectedLanguages.base ||
-      !this.selectedLanguages.target
-    ) {
-      this.localStorageService.delete(LocalStorageHelper.selectedLanguages);
-      this.router.navigate(['./choose-languages']).then();
-      return;
-    }
     this.getMenus();
 
-    if (
-      this.securityService.isGuest() &&
-      !this.localStorageService.load(LocalStorageHelper.defaultLanguages)
-    ) {
-      const valueToSave = {
-        defaultBaseLanguage: this.selectedLanguages.base[0],
-        defaultTargetLanguage: this.selectedLanguages.target[0],
-      };
-      this.localStorageService.save(
-        LocalStorageHelper.defaultLanguages,
-        JSON.stringify(valueToSave)
-      );
-    }
-    const defaultLanguages = this.localStorageService.load(
+    this.defaultSelectedLanguages = this.localStorageService.load(
       LocalStorageHelper.defaultLanguages
     )
       ? JSON.parse(
           this.localStorageService.load(LocalStorageHelper.defaultLanguages)
         )
       : '{}';
+
     if (
-      !defaultLanguages ||
-      !defaultLanguages.defaultBaseLanguage ||
-      !defaultLanguages.defaultTargetLanguage
+      !this.defaultSelectedLanguages ||
+      !this.defaultSelectedLanguages.defaultBaseLanguage ||
+      !this.defaultSelectedLanguages.defaultTargetLanguage
     ) {
       this.loadingFullPage = true;
       this.openSelectDefaultLanguageDialog();
@@ -99,14 +63,7 @@ export class GameMenuComponent implements OnInit {
     }
   }
 
-  navigateToChangeLanguage(): void {
-    this.localStorageService.delete(LocalStorageHelper.defaultLanguages);
-    this.localStorageService.delete(LocalStorageHelper.selectedLanguages);
-    this.router.navigate(['../choose-languages']).then();
-  }
-
   changeDefaultLanguages(): void {
-    this.localStorageService.delete(LocalStorageHelper.defaultLanguages);
     this.openSelectDefaultLanguageDialog();
   }
 
@@ -118,7 +75,7 @@ export class GameMenuComponent implements OnInit {
       panelClass: 'select-language-dialog',
     });
 
-    dialogRef.afterClosed().subscribe((res: SetDefaultLanguageModel) => {
+    dialogRef.afterClosed().subscribe((res: DefaultLanguageModel) => {
       this.loadingFullPage = false;
       this.defaultSelectedLanguages = res;
       this.getSelectedLanguagesInformation();

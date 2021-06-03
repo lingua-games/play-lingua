@@ -433,9 +433,12 @@ export class FallingStarsComponent implements OnInit {
     } else {
       this.words[this.words.indexOf(this.currentWord) + 1].animating = true;
       setTimeout(() => {
-        this.words[this.words.indexOf(this.currentWord) + 1].isBlinking = false;
-        this.words[this.words.indexOf(this.currentWord) + 1].style.animation =
-          '';
+        if (this.words[this.words.indexOf(this.currentWord) + 1]) {
+          this.words[this.words.indexOf(this.currentWord) + 1].isBlinking =
+            false;
+          this.words[this.words.indexOf(this.currentWord) + 1].style.animation =
+            '';
+        }
       }, bufferBeforeStart);
     }
   }

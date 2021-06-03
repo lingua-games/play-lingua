@@ -139,7 +139,7 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should call getAllLanguages if target language is not in the list of target languages in local storage', () => {
-      component.targetLanguages = [{ id: 90 } as LanguageModel];
+      component.languages.data = [{ id: 90 } as LanguageModel];
       component.wordsForEdit = { targetLanguageId: 100 } as WordOverviewsModel;
 
       component.prepareEditForm();
@@ -148,8 +148,7 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should call getAllLanguages if base language is not in the list of base languages in local storage', () => {
-      component.baseLanguages = [{ id: 90 } as LanguageModel];
-      component.targetLanguages = [{ id: 10 } as LanguageModel];
+      component.languages.data = [{ id: 90 } as LanguageModel];
       component.wordsForEdit = {
         baseLanguageId: 100,
         targetLanguageId: 10,
@@ -160,9 +159,6 @@ describe('AddWordByUserComponent', () => {
       expect(mockBasicInformationService.getAllLanguages).toHaveBeenCalled();
     });
 
-    describe('forkJoin', () => {
-      beforeEach(() => {});
-    });
     it('should add new target or base languages after calling API and if word for edit does not have them', () => {
       component.wordsForEdit = {
         baseLanguageId: 10,
@@ -170,8 +166,7 @@ describe('AddWordByUserComponent', () => {
         bookId: 1,
         chapterId: 1,
       } as WordOverviewsModel;
-      component.baseLanguages = [{ id: 90 } as LanguageModel];
-      component.targetLanguages = [{ id: 90 } as LanguageModel];
+      component.languages.data = [{ id: 90 } as LanguageModel];
       mockBasicInformationService.getAllLanguages.and.callFake(() => {
         return of([{ id: 10, name: 'fake name' } as LanguageModel]);
       });
@@ -190,7 +185,7 @@ describe('AddWordByUserComponent', () => {
 
       component.prepareEditForm();
 
-      expect(component.baseLanguages[1].name).toBe('fake name');
+      expect(component.languages.data[0].name).toBe('fake name');
     });
   });
 
@@ -202,7 +197,12 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should create', () => {
+      mockBasicInformationService.getAllLanguages.and.callFake(() => {
+        return of([{ id: 10, name: 'fake name' } as LanguageModel]);
+      });
+
       fixture.detectChanges();
+
       expect(component).toBeTruthy();
     });
 
@@ -211,6 +211,10 @@ describe('AddWordByUserComponent', () => {
       mockLocalStorageService.decryptData.and.callFake(() => {
         return { baseLanguageId: 10 } as WordOverviewsModel;
       });
+      mockBasicInformationService.getAllLanguages.and.callFake(() => {
+        return of([{ id: 10, name: 'fake name' } as LanguageModel]);
+      });
+      component.wordsForEdit = { baseLanguageId: 1 } as WordOverviewsModel;
 
       fixture.detectChanges();
 
@@ -218,9 +222,13 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should disable base and target languages when subscribe true', () => {
-      fixture.detectChanges();
       spyOn(component.baseLanguage, 'disable');
       spyOn(component.targetLanguage, 'disable');
+      mockBasicInformationService.getAllLanguages.and.callFake(() => {
+        return of([{ id: 10, name: 'fake name' } as LanguageModel]);
+      });
+
+      fixture.detectChanges();
       component.isSelectedLanguageSubmit?.setValue(true);
 
       expect(component.baseLanguage.disable).toHaveBeenCalled();
@@ -228,6 +236,10 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should enable base and target languages when subscribe false', () => {
+      mockBasicInformationService.getAllLanguages.and.callFake(() => {
+        return of([{ id: 10, name: 'fake name' } as LanguageModel]);
+      });
+
       fixture.detectChanges();
 
       spyOn(component.baseLanguage, 'enable');

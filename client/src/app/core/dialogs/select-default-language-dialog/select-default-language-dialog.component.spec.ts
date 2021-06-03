@@ -6,10 +6,10 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MatDialogRef } from '@angular/material/dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { LocalStorageService } from '../../service/local-storage.service';
-import { SetDefaultLanguageModel } from '../../models/set-default-language.model';
 import { SelectedLanguageService } from '../../service/selected-language.service';
 import { of, throwError } from 'rxjs';
 import { LocalStorageHelper } from '../../models/local-storage.enum';
+import { DefaultLanguageModel } from '../../models/set-default-language.model';
 
 describe('SelectDefaultLanguageDialogComponent', () => {
   let component: SelectDefaultLanguageDialogComponent;
@@ -72,21 +72,18 @@ describe('SelectDefaultLanguageDialogComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set base and target languages at initial time', () => {
-    mockLocalStorageService.load.and.callFake(() => {
-      return `{"base": [], "target": []}`;
-    });
+  it('should call getLanguages at initial time', () => {
+    spyOn(component, 'getLanguages');
 
     fixture.detectChanges();
 
-    expect(component.baseLanguages).toEqual([]);
-    expect(component.targetLanguages).toEqual([]);
+    expect(component.getLanguages).toHaveBeenCalled();
   });
 
   it('should check defaultBaseLanguage on submit', () => {
     component.selectedItems = {
       defaultTargetLanguage: null,
-    } as SetDefaultLanguageModel;
+    } as DefaultLanguageModel;
 
     component.submit();
 
@@ -100,7 +97,7 @@ describe('SelectDefaultLanguageDialogComponent', () => {
     component.selectedItems = {
       defaultBaseLanguage: { name: 'something' },
       defaultTargetLanguage: null,
-    } as SetDefaultLanguageModel;
+    } as DefaultLanguageModel;
 
     component.submit();
 
@@ -117,11 +114,11 @@ describe('SelectDefaultLanguageDialogComponent', () => {
     component.selectedItems = {
       defaultBaseLanguage: { name: 'something' },
       defaultTargetLanguage: { name: 'something' },
-    } as SetDefaultLanguageModel;
+    } as DefaultLanguageModel;
 
     component.submit();
 
-    expect(component.isLoading).toBe(true);
+    expect(component.languages.isLoading).toBe(true);
   });
 
   it('should save API data into localStorage', () => {
@@ -177,6 +174,6 @@ describe('SelectDefaultLanguageDialogComponent', () => {
 
     component.submit();
 
-    expect(component.isLoading).toBe(false);
+    expect(component.languages.isLoading).toBe(false);
   });
 });

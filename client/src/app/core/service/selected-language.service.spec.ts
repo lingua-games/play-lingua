@@ -3,8 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { SelectedLanguageService } from './selected-language.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { SelectedLanguageModel } from '../models/selected-language.model';
-import { SetDefaultLanguageModel } from '../models/set-default-language.model';
+import { DefaultLanguageModel } from '../models/set-default-language.model';
 
 describe('SelectedLanguageService', () => {
   let service: SelectedLanguageService;
@@ -26,16 +25,11 @@ describe('SelectedLanguageService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should call selectionLanguageUrl when add() hits', () => {
-    service.add({} as SelectedLanguageModel);
-    expect(httpClientSpy.post).toHaveBeenCalled();
-  });
-
   it('should call selectionLanguageUrl/setDefaultSelection when setDefaultLanguage() hits', () => {
     service.setDefaultLanguage({
       defaultTargetLanguage: {},
       defaultBaseLanguage: {},
-    } as SetDefaultLanguageModel);
+    } as DefaultLanguageModel);
     expect(httpClientSpy.post).toHaveBeenCalled();
   });
 });

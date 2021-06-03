@@ -34,15 +34,36 @@ namespace PlayLingua.Host.Controllers
                     Email = loginResult.User.Email,
                     Id = loginResult.User.Id,
                     DisplayName = loginResult.User.DisplayName,
-                    BaseLanguages = loginResult.User.BaseLanguages,
-                    TargetLanguages = loginResult.User.TargetLanguages,
-                    DefaultBaseLanguageId = loginResult.User.DefaultBaseLanguageId,
-                    DefaultTargetLanguageId = loginResult.User.DefaultTargetLanguageId,
+
+
                     TotalScore = loginResult.User.TotalScore,
-                    IsSelectedLanguages = loginResult.User.IsSelectedLanguages
                 };
+
+                if (loginResult.User.DefaultBaseLanguage != null)
+                {
+                    result.User.DefaultBaseLanguage = new LanguageViewModel
+                    {
+                        Id = loginResult.User.DefaultBaseLanguage.Id,
+                        Code = loginResult.User.DefaultBaseLanguage.Code,
+                        FullName = loginResult.User.DefaultTargetLanguage.FullName,
+                        Name = loginResult.User.DefaultBaseLanguage.Name,
+                        NativeName = loginResult.User.DefaultBaseLanguage.NativeName,
+                    };
+                }
+                if (loginResult.User.DefaultTargetLanguage != null)
+                {
+                    result.User.DefaultTargetLanguage = new LanguageViewModel
+                    {
+                        Id = loginResult.User.DefaultTargetLanguage.Id,
+                        Code = loginResult.User.DefaultTargetLanguage.Code,
+                        FullName = loginResult.User.DefaultTargetLanguage.FullName,
+                        Name = loginResult.User.DefaultTargetLanguage.Name,
+                        NativeName = loginResult.User.DefaultTargetLanguage.NativeName,
+                    };
+                }
                 result.Token = _authRepository.GenerateToken(loginResult.User);
-            } else
+            }
+            else
             {
                 result.Message = loginResult.Message;
             }

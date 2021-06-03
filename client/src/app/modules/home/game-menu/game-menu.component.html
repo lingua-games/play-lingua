@@ -20,21 +20,6 @@
         </div>
         <hr *ngIf="isLoggedIn()" />
         <div
-          class="action-menu-container"
-          routerLink="../choose-languages/edit"
-          *ngIf="isLoggedIn()"
-        >
-          Change languages
-        </div>
-
-        <div
-          class="action-menu-container mt-2"
-          *ngIf="securityService.isGuest()"
-          (click)="navigateToChangeLanguage()"
-        >
-          Change language
-        </div>
-        <div
           class="action-menu-container mt-2"
           routerLink="../word-management"
           *ngIf="isLoggedIn()"
@@ -52,8 +37,8 @@
         <div
           class="description-menu-container mt-2"
           *ngIf="
-            defaultSelectedLanguages.defaultTargetLanguage &&
-            defaultSelectedLanguages.defaultBaseLanguage &&
+            defaultSelectedLanguages?.defaultTargetLanguage &&
+            defaultSelectedLanguages?.defaultBaseLanguage &&
             securityService.isLoggedIn()
           "
         >
@@ -78,17 +63,12 @@
       <div class="row" *ngIf="!inquiryResult.hasError && !inquiryResult.data">
         <div class="col-sm-12 alert alert-warning">
           <span class="mr-2">Oops, You selected</span>
-          <span
-            *ngFor="
-              let selectedLanguage of selectedLanguages?.base;
-              let index = index
-            "
-          >
-            <strong *ngIf="selectedLanguages.base.length - 1 === index">{{
-              selectedLanguage.name
+          <span>
+            <strong>{{
+              defaultSelectedLanguages.defaultBaseLanguage.name
             }}</strong>
-            <strong *ngIf="selectedLanguages.base.length - 1 !== index">{{
-              selectedLanguage.name + ', '
+            <strong>{{
+              defaultSelectedLanguages.defaultTargetLanguage.name + ', '
             }}</strong>
           </span>
           <span class="ml-2"

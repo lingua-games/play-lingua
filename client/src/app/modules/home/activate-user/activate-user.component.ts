@@ -107,7 +107,7 @@ export class ActivateUserComponent implements OnInit {
           this.securityService.setToken(res.token);
           this.localStorageService.delete(LocalStorageHelper.isGuest);
           setTimeout(() => {
-            this.router.navigate(['choose-languages']).then();
+            this.router.navigate(['game-menu']).then();
           }, 1500);
         } else {
           this.isLoading = false;

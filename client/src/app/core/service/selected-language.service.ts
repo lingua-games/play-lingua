@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { SelectedLanguageModel } from '../models/selected-language.model';
 import { environment } from '../../../environments/environment';
-import { SetDefaultLanguageModel } from '../models/set-default-language.model';
+import { DefaultLanguageModel } from '../models/set-default-language.model';
 
 @Injectable({
   providedIn: 'root',
@@ -13,23 +12,14 @@ export class SelectedLanguageService {
 
   constructor(private http: HttpClient) {}
 
-  public add(
-    selectedLanguages: SelectedLanguageModel
-  ): Observable<SelectedLanguageModel> {
-    return this.http.post<SelectedLanguageModel>(
-      this.selectionLanguageUrl,
-      selectedLanguages
-    );
-  }
-
   public setDefaultLanguage(
-    selectedItems: SetDefaultLanguageModel
-  ): Observable<SelectedLanguageModel> {
-    return this.http.post<SelectedLanguageModel>(
-      this.selectionLanguageUrl + '/setDefaultSelection',
+    selectedItems: DefaultLanguageModel
+  ): Observable<{}> {
+    return this.http.post<{}>(
+      this.selectionLanguageUrl + '/setDefaultLanguage',
       {
-        defaultBaseLanguage: selectedItems.defaultBaseLanguage.id,
-        defaultTargetLanguage: selectedItems.defaultTargetLanguage.id,
+        baseLanguage: selectedItems.defaultBaseLanguage.id,
+        targetLanguage: selectedItems.defaultTargetLanguage.id,
       }
     );
   }
