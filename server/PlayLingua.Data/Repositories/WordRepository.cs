@@ -1,7 +1,5 @@
 ﻿using Dapper;
 using Google.Cloud.TextToSpeech.V1;
-using Newtonsoft.Json;
-using PlayLingua.Domain;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
@@ -14,11 +12,18 @@ using System.Linq;
 
 namespace PlayLingua.Data
 {
+    public class NotFoundLanguageCode
+    {
+        public string Code { get; set; }
+        public string ErrorMessage { get; set; }
+    }
     public class WordRepository : IWordRepository
     {
         private readonly IDbConnection db;
+        private List<NotFoundLanguageCode> notFoundLanguageCodes = new List<NotFoundLanguageCode>();
         public WordRepository(string connectionString)
         {
+            notFoundLanguageCodes = new List<NotFoundLanguageCode>();
             db = new SqlConnection(connectionString);
         }
         public void EditWordSeries(SubmitWordsModel submitWords, int userId)
@@ -135,6 +140,7 @@ namespace PlayLingua.Data
         }
         public void SubmitWordSeries(SubmitWordsModel submitWords, int userId)
         {
+            notFoundLanguageCodes = new List<NotFoundLanguageCode>();
             var baseLanguage = db.Query<Language>(
                         @"select top 1 * from language where id = @Id", new { submitWords.BaseLanguage.Id })
                         .SingleOrDefault();
@@ -281,7 +287,18 @@ namespace PlayLingua.Data
         {
             if (!File.Exists("wwwroot/assets/speeches/" + speech.Code + ".mp3"))
             {
-                var response = DownloadWord(new SpeechModel { Text = word, LanguageCode = languageCode, Gender = gender });
+                var response = new ResultModel<SynthesizeSpeechResponse>();
+                if (notFoundLanguageCodes.Any(x => x.Code == languageCode))
+                {
+                    response = new ResultModel<SynthesizeSpeechResponse>
+                    {
+                        Success = false,
+                        ErrorMessage = notFoundLanguageCodes.Find(x => x.Code == languageCode).ErrorMessage
+                    };
+                } else
+                {
+                    response = DownloadWord(new SpeechModel { Text = word, LanguageCode = languageCode, Gender = gender });
+                }
 
                 if (!response.Success)
                 {
@@ -306,7 +323,8 @@ namespace PlayLingua.Data
                     speech.Status = SpeechStatus.Success;
                     db.Query<Speech>("update dbo.Speech SET Status = @Status where Id = @Id", speech).SingleOrDefault();
                 }
-            } else
+            }
+            else
             {
                 // To change status of speech to success
                 speech.Status = SpeechStatus.Success;
@@ -315,13 +333,6 @@ namespace PlayLingua.Data
         }
         public ResultModel<SynthesizeSpeechResponse> DownloadWord(SpeechModel model)
         {
-            // Donnot download speech if it is in Development mode because here we dont have Google credentials
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-            {
-                model.Id = 0;
-                return new ResultModel<SynthesizeSpeechResponse>();
-            }
-
             if (!File.Exists("wwwroot/assets/speeches/"))
             {
                 Directory.CreateDirectory("wwwroot/assets/speeches/");
@@ -356,23 +367,32 @@ namespace PlayLingua.Data
             }
             catch (Exception ex)
             {
+                notFoundLanguageCodes.Add(new NotFoundLanguageCode
+                {
+                    Code = model.LanguageCode,
+                    ErrorMessage = ex.Message
+                });
                 return new ResultModel<SynthesizeSpeechResponse> { Success = false, ErrorMessage = ex.Message };
             }
         }
         public SpeechModel GetVoicFromText(SpeechModel model)
         {
-            // Donnot download speech if it is in Development mode because here we dont have Google credentials
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-            {
-                model.Id = 0;
-                return model;
-            }
-
-
             model.Code = Guid.NewGuid();
             try
             {
-                var response = DownloadWord(model);
+                var response = new ResultModel<SynthesizeSpeechResponse>();
+                if (notFoundLanguageCodes.Any(x => x.Code == model.LanguageCode))
+                {
+                    response = new ResultModel<SynthesizeSpeechResponse>
+                    {
+                        Success = false,
+                        ErrorMessage = notFoundLanguageCodes.Find(x => x.Code == model.LanguageCode).ErrorMessage
+                    };
+                }
+                else
+                {
+                    response = DownloadWord(model);
+                }
 
                 if (response.Success)
                 {
