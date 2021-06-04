@@ -34,8 +34,7 @@ namespace PlayLingua.Host.Controllers
                     Email = loginResult.User.Email,
                     Id = loginResult.User.Id,
                     DisplayName = loginResult.User.DisplayName,
-
-
+                    IsAdmin = loginResult.User.IsAdmin,
                     TotalScore = loginResult.User.TotalScore,
                 };
 

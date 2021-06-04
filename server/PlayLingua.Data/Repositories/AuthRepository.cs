@@ -43,7 +43,8 @@ namespace PlayLingua.Data
 	                            Users.TotalScore,
 	                            Users.DefaultBaseLanguageId,
 	                            Users.DefaultTargetLanguageId,
-                                Users.Password
+                                Users.Password,
+                                Users.IsAdmin
                             FROM [dbo].[Users]
                             where Email = @Email
                             ";
