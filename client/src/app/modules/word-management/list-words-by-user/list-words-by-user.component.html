@@ -17,37 +17,68 @@
   >
     You have not added words yet, <span class="hyper-link">Add words</span>
   </div>
-  <div *ngIf="!wordOverviews.isLoading && wordOverviews?.data?.length" @fade>
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Book</th>
-          <th>Chapter</th>
-          <th>Base language</th>
-          <th>Target language</th>
-          <th>Count</th>
-          <th>Last update date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let overview of wordOverviews.data; let index = index">
-          <td>{{ index + 1 }}</td>
-          <td>{{ overview.bookName }}</td>
-          <td>{{ overview.chapterName }}</td>
-          <td>{{ overview.baseLanguageName }}</td>
-          <td>{{ overview.targetLanguageName }}</td>
-          <td>{{ overview.count }}</td>
-          <td>{{ overview.lastUpdateDate }}</td>
-          <td>
-            <fa-icon
-              class="btn btn-info"
-              (click)="editPage(overview)"
-              [icon]="['far', 'edit']"
-            ></fa-icon>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div
+    *ngIf="!wordOverviews.isLoading && wordOverviews?.data?.length"
+    style="overflow-x: hidden"
+  >
+    <div class="row">
+      <div class="col-sm-4" style="padding-left: 2.2rem"><span>Book</span></div>
+      <div class="col-sm-2"><span>Base</span></div>
+      <div class="col-sm-2" style="padding-left: 4.5%">
+        <span>Target</span>
+      </div>
+      <div class="col-sm-2" style="padding-left: 8%">
+        <span>Count</span>
+      </div>
+    </div>
+    <hr />
+    <mat-accordion class="headers-align">
+      <mat-expansion-panel
+        *ngFor="let overview of wordOverviews.data; let index = index"
+        (opened)="setStep(index)"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title> {{ overview.bookName }} </mat-panel-title>
+          <mat-panel-description>
+            <div class="row" style="width: 100%">
+              <div class="col-sm-4">{{ overview.baseLanguageName }}</div>
+              <div class="col-sm-4">{{ overview.targetLanguageName }}</div>
+              <div class="col-sm-4">{{ overview.count }}</div>
+            </div>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="panel-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Chapter</th>
+                <th>Count</th>
+                <th>Last update date</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="
+                  let WordOverviewDetails of overview.WordOverviewDetails;
+                  let index = index
+                "
+              >
+                <td>{{ WordOverviewDetails.chapterName }}</td>
+                <td>{{ WordOverviewDetails.count }}</td>
+                <td>{{ WordOverviewDetails.lastUpdateDate }}</td>
+                <td>
+                  <fa-icon
+                    class="btn btn-info"
+                    (click)="editPage(WordOverviewDetails)"
+                    [icon]="['far', 'edit']"
+                  ></fa-icon>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
   </div>
 </div>
