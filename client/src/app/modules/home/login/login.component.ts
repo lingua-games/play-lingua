@@ -55,7 +55,13 @@ export class LoginComponent implements OnInit {
         if (res.isLogin) {
           this.securityService.storeCredentialsAfterLogin(res);
 
-          this.router.navigate(['../game-menu']).then();
+          const token = this.securityService.getTokenInformation();
+
+          if (token && JSON.parse(token?.needsResetPassword)) {
+            this.router.navigate(['../reset-password']).then();
+          } else {
+            this.router.navigate(['../game-menu']).then();
+          }
         } else {
           this.errorMessage = res.message;
         }

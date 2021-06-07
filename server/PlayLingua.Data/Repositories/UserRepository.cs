@@ -133,6 +133,71 @@ namespace PlayLingua.Data
                 return false;
             }
         }
+        public bool SendPasswordToEmail(UserModel user)
+        {
+            try
+            {
+                var activationUrl = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development" ?
+    "http://localhost:4000/#/login/" + user.EmailVerificationCode :
+    "https://playinglingua.com/#/login/" + user.EmailVerificationCode;
+                using var client = new SmtpClient()
+                {
+                    Host = "smtp.office365.com",
+                    Port = 587,
+                    UseDefaultCredentials = false,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    Credentials = new NetworkCredential(_email.Username, _email.Password), // you must give a full email address for authentication 
+                    TargetName = "STARTTLS/smtp.office365.com", // Set to avoid MustIssueStartTlsFirst exception
+                    EnableSsl = true // Set to avoid secure connection exception   
+                };
+                MailMessage message = new MailMessage()
+                {
+                    From = new MailAddress(_email.Username), // sender must be a full email address
+                    Subject = "PlayingLingua - Reset password",
+                    IsBodyHtml = true,
+                    Body = @"
+<div style='
+    background-color: #EFEEE9;
+    margin: 5vh 30%;
+    width: 40%;
+    color:#2F4858;
+    font-size: .7vw'>
+
+    <div style='margin: 20px; padding-top: 20px;'>
+        <p>Dear " + user.Email + @" ,</p>
+        <hr>
+        <p>
+            Your password is <strong>" + user.Password + @"</strong> , You can login via <a href='" + activationUrl + @"'>this link</a>
+        </p>
+        <hr>
+        <p>
+            Best regards,
+            <br>
+            Arash
+            <br>
+            +31645241080
+            <br>
+            <a style = 'text-decoration: underline;' href = 'https://github.com/arashbahreini' > Github </a>,
+            <a style = 'text-decoration: underline;' href = 'https://www.linkedin.com/in/arash-bahreini-100296139/' > Linkedin </a>,
+            <a style = 'text-decoration: underline;' href = 'https://stackoverflow.com/users/3773888/arash' > Stackoverflow </a>
+        </p>
+        <br>
+    </div>
+</div>
+",
+                    BodyEncoding = System.Text.Encoding.UTF8,
+                    SubjectEncoding = System.Text.Encoding.UTF8,
+                };
+
+                message.To.Add(user.Email);
+                client.Send(message);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         public void Delete(string id)
         {
             throw new NotImplementedException();
@@ -195,7 +260,27 @@ WHERE
     EmailVerificationCode = @EmailVerificationCode";
             db.Query(sql, user);
         }
+        public void SendPassword(UserModel user)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            user.Password = new string(Enumerable.Repeat(chars, 8)
+              .Select(s => s[new Random().Next(s.Length)]).ToArray());
+            user.LastUpdateDate = DateTime.Now;
+            SendPasswordToEmail(user);
 
+            user.Password = CreateHashPassword(user.Password, _hashKey);
+            var sql = @"
+update 
+    dbo.Users 
+SET     
+    Password       = @Password, 
+    LastUpdateDate = @LastUpdateDate,
+    NeedsResetPassword = 1
+WHERE 
+    Email = @Email";
+            var foundUser = db.Query(sql, user);
+            
+        }
         public void ResetPassword(UserModel user)
         {
             user.Password = CreateHashPassword(user.Password, _hashKey);

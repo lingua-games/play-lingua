@@ -29,6 +29,10 @@ export class ResetPasswordComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  logout(): void {
+    this.securityService.logout();
+  }
+
   submit(): void {
     if (!this.user.password) {
       this.notificationService.showMessage(
