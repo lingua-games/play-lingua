@@ -116,6 +116,13 @@ namespace PlayLingua.Host.Controllers
             }
         }
 
+        [HttpPost("forgot-password")]
+        public ActionResult<ResultModel<bool>> ForgotPassword([FromBody] UserViewModel model)
+        {
+            _userRepository.SendPassword(new UserModel { Email = model.Email });
+            return Ok(true);
+        }
+
         [HttpPost("activate-user")]
         public ActionResult<ResultModel<UserViewModel>> ActivateUser([FromBody] UserViewModel model)
         {

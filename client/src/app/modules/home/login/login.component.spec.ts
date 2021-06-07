@@ -11,7 +11,6 @@ import { SecurityService } from '../../../core/service/security.service';
 import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { LoginResultModel } from '../../../core/models/login-result.model';
-import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
 import { LanguageModel } from '../../../core/models/language.model';
 
@@ -39,7 +38,7 @@ describe('LoginComponent', () => {
         'storeCredentialsAfterLogin',
       ]);
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule, RouterTestingModule],
+        imports: [HttpClientTestingModule],
         declarations: [LoginComponent],
         providers: [
           {

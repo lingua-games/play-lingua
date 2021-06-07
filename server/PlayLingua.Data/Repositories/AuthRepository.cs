@@ -44,7 +44,8 @@ namespace PlayLingua.Data
 	                            Users.DefaultBaseLanguageId,
 	                            Users.DefaultTargetLanguageId,
                                 Users.Password,
-                                Users.IsAdmin
+                                Users.IsAdmin,
+                                Users.NeedsResetPassword
                             FROM [dbo].[Users]
                             where Email = @Email
                             ";

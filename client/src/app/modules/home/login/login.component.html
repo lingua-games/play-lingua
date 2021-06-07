@@ -45,20 +45,32 @@
     >
   </div>
   <div class="mt-2 text-center">
-    <button
-      class="btn btn-success"
-      type="submit"
-      [disabled]="isLoading"
-      (click)="login()"
-    >
-      <span
-        class="spinner-border spinner-border-sm"
-        role="status"
-        aria-hidden="true"
-        *ngIf="isLoading"
-      ></span>
-      {{ isLoading ? 'Loading...' : 'Login' }}
-    </button>
+    <div class="forgot-password-container">
+      <button
+        class="btn btn-info mr-2"
+        type="submit"
+        [disabled]="isLoading"
+        routerLink="../forgot-password"
+      >
+        Forgot password!
+      </button>
+    </div>
+    <div class="login-container">
+      <button
+        class="btn btn-success"
+        type="submit"
+        [disabled]="isLoading"
+        (click)="login()"
+      >
+        <span
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+          *ngIf="isLoading"
+        ></span>
+        {{ isLoading ? 'Loading...' : 'Login' }}
+      </button>
+    </div>
   </div>
   <div *ngIf="errorMessage" class="text-center">
     <hr />

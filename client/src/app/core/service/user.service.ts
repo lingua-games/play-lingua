@@ -20,6 +20,10 @@ export class UserService {
     return this.http.post<RegisterApiResultModel>(this.userUrl, user);
   }
 
+  forgotPasswordRequest(user: UserModel): Observable<boolean> {
+    return this.http.post<boolean>(this.userUrl + 'forgot-password', user);
+  }
+
   public resendActivationCode(user: UserModel): Observable<boolean> {
     return this.http.post<boolean>(
       this.userUrl + 'resend-activation-code',
