@@ -36,6 +36,7 @@ describe('LoginComponent', () => {
         'login',
         'setToken',
         'storeCredentialsAfterLogin',
+        'getTokenInformation',
       ]);
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
