@@ -174,6 +174,7 @@
               [placeholder]="baseLanguage.value.name + ' word'"
               (ngModelChange)="word.base.isValid = true"
               [(ngModel)]="word.base.value"
+              maxlength="15"
               [ngClass]="!word.base.isValid ? 'field-not-valid' : ''"
             />
           </div>
@@ -183,6 +184,7 @@
             <div class="col-sm-3 mb-2" *ngFor="let target of word.targets">
               <input
                 type="text"
+                maxlength="15"
                 class="form-control"
                 [placeholder]="targetLanguage.value.name + ' word'"
                 (ngModelChange)="target.isValid = true"
