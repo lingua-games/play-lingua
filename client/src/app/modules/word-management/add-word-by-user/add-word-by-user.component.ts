@@ -287,20 +287,26 @@ export class AddWordByUserComponent implements OnInit {
         .afterClosed()
         .subscribe((res: { bookName: string }) => {
           if (res) {
-            const itemToAdd = {
-              id: 0,
-              targetLanguageId: this.targetLanguage?.value.id,
-              baseLanguageId: this.baseLanguage?.value.id,
-              name: res.bookName,
-            };
-            this.books = [...this.books, itemToAdd];
-            this.book?.setValue(itemToAdd);
+            if (this.books.find((x) => x.name === res.bookName)) {
+              this.book?.setValue(
+                this.books.find((x) => x.name === res.bookName)
+              );
+            } else {
+              const itemToAdd = {
+                id: 0,
+                targetLanguageId: this.targetLanguage?.value.id,
+                baseLanguageId: this.baseLanguage?.value.id,
+                name: res.bookName,
+              };
+              this.books = [...this.books, itemToAdd];
+              this.book?.setValue(itemToAdd);
 
-            this.chapters = [];
-            this.chapters.push({
-              id: -1,
-              name: 'Add new chapter',
-            });
+              this.chapters = [];
+              this.chapters.push({
+                id: -1,
+                name: 'Add new chapter',
+              });
+            }
           } else {
             this.book?.setValue('');
           }
@@ -346,12 +352,18 @@ export class AddWordByUserComponent implements OnInit {
         .afterClosed()
         .subscribe((res: { chapterName: string }) => {
           if (res) {
-            const itemToAdd = {
-              id: 0,
-              name: res.chapterName,
-            };
-            this.chapters = [...this.chapters, itemToAdd];
-            this.chapter?.setValue(itemToAdd);
+            if (this.chapters.find((x) => x.name === res.chapterName)) {
+              this.chapter?.setValue(
+                this.chapters.find((x) => x.name === res.chapterName)
+              );
+            } else {
+              const itemToAdd = {
+                id: 0,
+                name: res.chapterName,
+              };
+              this.chapters = [...this.chapters, itemToAdd];
+              this.chapter?.setValue(itemToAdd);
+            }
           } else {
             this.chapter?.setValue('');
           }
