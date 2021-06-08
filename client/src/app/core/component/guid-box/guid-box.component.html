@@ -2,22 +2,28 @@
   <div class="guid-box-header-container">
     <span>Wrong!</span>
   </div>
-  <div class="guid-box-body-container">
-    <app-speech-player
-      [code]="questionSpeech.code"
-      [status]="questionSpeech.status"
-    ></app-speech-player>
-    <span>
-      {{ question }}
-    </span>
-    <span> = </span>
-    <span>
-      {{ answer }}
+  <div class="guid-box-body-container row">
+    <div class="col-sm-5 text-right">
       <app-speech-player
-        [code]="answerSpeech.code"
-        [status]="answerSpeech.status"
+        [code]="questionSpeech.code"
+        [status]="questionSpeech.status"
       ></app-speech-player>
-    </span>
+      <span>
+        {{ question }}
+      </span>
+    </div>
+    <div class="col-sm-2 text-center">
+      <span> = </span>
+    </div>
+    <div class="col-sm-5 text-left">
+      <span>
+        {{ answer }}
+        <app-speech-player
+          [code]="answerSpeech.code"
+          [status]="answerSpeech.status"
+        ></app-speech-player>
+      </span>
+    </div>
     <hr />
   </div>
   <div class="guid-box-action-container text-right">
