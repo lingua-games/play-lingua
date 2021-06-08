@@ -7,6 +7,8 @@
   [hasSound]="true"
   [gameName]="1"
   (stopSound)="stopSound($event)"
+  [hasRemainWords]="true"
+  [remainWords]="getRemainWordCount()"
 ></app-game-options>
 <app-guid-box
   *ngIf="guidBoxShowing"

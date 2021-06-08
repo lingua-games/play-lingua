@@ -1,7 +1,9 @@
 <app-top-navbar *ngIf="isLoggedIn()"></app-top-navbar>
 <app-game-options
   *ngIf="words.length && !isGameFinished"
-  (click)="showStartDialog()"
+  [hasRemainWords]="true"
+  [remainWords]="getCountOfRemainWords()"
+  (exit)="showStartDialog()"
 ></app-game-options>
 <app-guid-box
   *ngIf="guidBoxShowing"

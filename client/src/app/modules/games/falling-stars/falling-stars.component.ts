@@ -252,6 +252,7 @@ export class FallingStarsComponent implements OnInit {
 
     res.forEach((element: WordKeyValueModel<TranslateModel[]>) => {
       this.words.push({
+        isCurrentlyPlaying: false,
         key: element.key,
         speechCode: element.speechCode,
         speechStatus: element.speechStatus,
@@ -337,6 +338,7 @@ export class FallingStarsComponent implements OnInit {
         this.words[0].isBlinking = false;
       }, bufferBeforeStart);
       this.words[0].animating = true;
+      this.words[0].isCurrentlyPlaying = true;
     }
   }
 
@@ -364,6 +366,10 @@ export class FallingStarsComponent implements OnInit {
       } as ElementStyle;
       word.isBlinking = true;
       this.words.push(JSON.parse(JSON.stringify(word)));
+
+      this.words.map((x) => (x.isCurrentlyPlaying = false));
+      this.words[this.words.indexOf(this.currentWord) + 1].isCurrentlyPlaying =
+        true;
     } else {
       if (
         word.correctAnswers.find(
@@ -394,6 +400,11 @@ export class FallingStarsComponent implements OnInit {
         } as ElementStyle;
         word.isBlinking = true;
         this.words.push(JSON.parse(JSON.stringify(word)));
+
+        this.words.map((x) => (x.isCurrentlyPlaying = false));
+        this.words[
+          this.words.indexOf(this.currentWord) + 1
+        ].isCurrentlyPlaying = true;
       }
     }
   }
@@ -422,6 +433,16 @@ export class FallingStarsComponent implements OnInit {
     this.guidBoxShowing = true;
   }
 
+  getCountOfRemainWords(): number {
+    const currentlyPlaying = this.words.find((x) => x.isCurrentlyPlaying);
+
+    let currentIndex = 0;
+    if (currentlyPlaying) {
+      currentIndex = this.words.indexOf(currentlyPlaying);
+    }
+    return this.words.length - currentIndex;
+  }
+
   playNextStar(): void {
     this.startTime = Date.now();
     this.guidBoxShowing = false;
@@ -432,6 +453,10 @@ export class FallingStarsComponent implements OnInit {
       }, 1000);
     } else {
       this.words[this.words.indexOf(this.currentWord) + 1].animating = true;
+      this.words.map((x) => (x.isCurrentlyPlaying = false));
+      this.words[this.words.indexOf(this.currentWord) + 1].isCurrentlyPlaying =
+        true;
+
       setTimeout(() => {
         if (this.words[this.words.indexOf(this.currentWord) + 1]) {
           this.words[this.words.indexOf(this.currentWord) + 1].isBlinking =

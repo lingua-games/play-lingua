@@ -339,29 +339,28 @@ namespace PlayLingua.Data
             }
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "./speech-key.json");
 
-            var client = TextToSpeechClient.Create();
-
-            // The input to be synthesized, can be provided as text or SSML.
-            var input = new SynthesisInput
-            {
-                Text = model.Text
-            };
-
-            // Build the voice request.
-            var voiceSelection = new VoiceSelectionParams
-            {
-                LanguageCode = model.LanguageCode,
-                SsmlGender = model.Gender
-            };
-
-            // Specify the type of audio file.
-            var audioConfig = new AudioConfig
-            {
-                AudioEncoding = AudioEncoding.Mp3
-            };
-
             try
             {
+                var client = TextToSpeechClient.Create();
+
+                // The input to be synthesized, can be provided as text or SSML.
+                var input = new SynthesisInput
+                {
+                    Text = model.Text
+                };
+
+                // Build the voice request.
+                var voiceSelection = new VoiceSelectionParams
+                {
+                    LanguageCode = model.LanguageCode,
+                    SsmlGender = model.Gender
+                };
+
+                // Specify the type of audio file.
+                var audioConfig = new AudioConfig
+                {
+                    AudioEncoding = AudioEncoding.Mp3
+                };
                 // Perform the text-to-speech request.
                 return new ResultModel<SynthesizeSpeechResponse> { Data = client.SynthesizeSpeech(input, voiceSelection, audioConfig), Success = true };
             }

@@ -84,9 +84,8 @@ export class SuperMarioComponent implements OnInit, OnDestroy {
   currentEnemy: WordKeyValueModel<TranslateModel[]> = {} as WordKeyValueModel<
     TranslateModel[]
   >;
-  allEnemies: GameStartInformation<
-    WordKeyValueModel<TranslateModel[]>[]
-  > = {} as GameStartInformation<WordKeyValueModel<TranslateModel[]>[]>;
+  allEnemies: GameStartInformation<WordKeyValueModel<TranslateModel[]>[]> =
+    {} as GameStartInformation<WordKeyValueModel<TranslateModel[]>[]>;
   randomNumbers: number[] = [];
   movingRightInterval?: number;
   movingLeftInterval?: number;
@@ -498,6 +497,15 @@ export class SuperMarioComponent implements OnInit, OnDestroy {
       : 1;
     this.allEnemies.words.push(JSON.parse(JSON.stringify(this.currentEnemy)));
     this.guidBoxShowing = true;
+  }
+
+  getRemainWordCount(): number {
+    const indexOfCurrent = this.allEnemies.words.indexOf(this.currentEnemy);
+    if (this.guidBoxShowing) {
+      return this.allEnemies.words.length - indexOfCurrent - 1;
+    } else {
+      return this.allEnemies.words.length - indexOfCurrent;
+    }
   }
 
   stopSound(value: boolean): void {

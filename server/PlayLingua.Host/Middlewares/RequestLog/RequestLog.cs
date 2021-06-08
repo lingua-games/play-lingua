@@ -33,7 +33,12 @@ namespace PlayLingua.Host.Middlewares
             var log = new RequestLogModel();
             try
             {
-                if (httpContext.Request.Path != "/" && !httpContext.Request.Path.ToString().Contains(".js"))
+                if (
+                    httpContext.Request.Path != "/" && 
+                    !httpContext.Request.Path.ToString().Contains(".js") &&
+                    !httpContext.Request.Path.ToString().Contains(".mp3") &&
+                    !httpContext.Request.Path.ToString().Contains(".ico") &&
+                    !httpContext.Request.Path.ToString().Contains(".png"))
                 {
                     log = await RequestIndiactor(httpContext);
                     using (var memStream = new MemoryStream())

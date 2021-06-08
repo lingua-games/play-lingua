@@ -28,6 +28,8 @@ export class GameOptionsComponent {
   @Input() hasSkip?: boolean;
   @Input() hasSound?: boolean;
   @Input() gameName: GameNameEnum = 0;
+  @Input() hasRemainWords?: boolean;
+  @Input() remainWords = 0;
 
   @Output() exit = new EventEmitter();
   @Output() skip = new EventEmitter();

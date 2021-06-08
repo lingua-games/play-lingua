@@ -15,7 +15,8 @@
     *ngIf="!wordOverviews.isLoading && wordOverviews?.data?.length === 0"
     @fade
   >
-    You have not added words yet, <span class="hyper-link">Add words</span>
+    You have not added words yet,
+    <span class="hyper-link" routerLink="../add">Add words</span>
   </div>
   <div
     *ngIf="!wordOverviews.isLoading && wordOverviews?.data?.length"
@@ -48,7 +49,7 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="panel-body">
-          <table class="table">
+          <table class="table tableFixHead">
             <thead>
               <tr>
                 <th>Chapter</th>

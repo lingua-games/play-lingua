@@ -24,7 +24,7 @@
     width: 2rem;
   }
 
-  div {
+  .text-container {
     width: 10rem;
   }
 }
@@ -55,4 +55,21 @@
 
 .text-container {
   text-align: left;
+}
+
+.remain-words {
+  border-color: #DC7633;
+  color: #DC7633;
+  width: 2.5rem;
+}
+
+.static-items-container {
+  font-size: 0.7vw;
+  border: solid 1px #D0D3D4;
+  background-color: #ECF0F1;
+  margin: 0.3rem;
+  text-transform: uppercase;
+  padding: 3px;
+  width: 3.3rem;
+  position: absolute;
 }

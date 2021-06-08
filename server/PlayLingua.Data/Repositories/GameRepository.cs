@@ -23,7 +23,7 @@ namespace PlayLingua.Data
         public int GetWordsCountForGame(GetWordsForGameInputModel model)
         {
             var sql = @"
-                    select * from WordsToWords
+                    select WordsToWords.BaseWordId from WordsToWords
 
                     left join Words as WordsBase
                     on WordsToWords.BaseWordId = WordsBase.Id
@@ -39,9 +39,11 @@ namespace PlayLingua.Data
                 sql += " AND WordsToWords.BookId = @BookId ";
                 if (model.ChapterId != 0)
                 {
-                    sql += " AND WordsToWords.ChapterId = @ChapterId";
+                    sql += " AND WordsToWords.ChapterId = @ChapterId ";
                 }
             }
+
+            sql += " group by WordsToWords.BaseWordId";
             return db.Query<string>(sql, model).Count();
         }
 

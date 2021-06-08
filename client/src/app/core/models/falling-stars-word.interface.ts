@@ -14,4 +14,5 @@ export interface FallingStarsWord {
   keyIsPressing: boolean;
   wrongCount: number;
   isBlinking: boolean;
+  isCurrentlyPlaying: boolean;
 }
