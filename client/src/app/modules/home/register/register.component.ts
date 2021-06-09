@@ -40,7 +40,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     this.registerResult.setLoading(false);
     this.registerResult.data = new RegisterApiResultModel();
-    if (this.securityService.isLoggedIn()) {
+    if (this.securityService.isLoggedIn().success) {
       this.router.navigate(['game-menu']).then();
     }
   }

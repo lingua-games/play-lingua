@@ -83,7 +83,7 @@ export class GameMenuComponent implements OnInit {
   }
 
   isLoggedIn(): boolean {
-    return this.securityService.isLoggedIn();
+    return this.securityService.isLoggedIn().success;
   }
 
   isAdmin(): boolean {

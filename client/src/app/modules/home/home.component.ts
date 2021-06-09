@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
   ) {}
 
   isLoggedIn(): boolean {
-    return this.securityService.isLoggedIn();
+    return this.securityService.isLoggedIn().success;
   }
 
   ngOnInit(): void {

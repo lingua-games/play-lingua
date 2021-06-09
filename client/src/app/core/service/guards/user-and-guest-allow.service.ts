@@ -8,10 +8,13 @@ import { Router } from '@angular/router';
 export class UserAndGuestAllowService {
   constructor(public securityService: SecurityService, public router: Router) {}
   canActivate(): boolean {
-    if (this.securityService.isGuest() || this.securityService.isLoggedIn()) {
+    if (
+      this.securityService.isGuest() ||
+      this.securityService.isLoggedIn().success
+    ) {
       return true;
     } else {
-      this.router.navigate(['./']).then();
+      this.router.navigate([this.securityService.isLoggedIn().route]).then();
       return false;
     }
   }

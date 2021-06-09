@@ -14,9 +14,7 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { UserModel } from '../../../core/models/user.model';
 import { UserService } from '../../../core/service/user.service';
-import { of, throwError } from 'rxjs';
-import { LoginResultModel } from '../../../core/models/login-result.model';
-import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
+import { throwError } from 'rxjs';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
 
 describe('RegisterComponent', () => {
@@ -91,13 +89,18 @@ describe('RegisterComponent', () => {
   });
 
   it('should create', () => {
+    mockSecurityService.isLoggedIn.and.callFake(() => {
+      return { success: true };
+    });
+
     fixture.detectChanges();
+
     expect(component).toBeTruthy();
   });
 
   it('should navigate to game menu if user is already logged in', () => {
     mockSecurityService.isLoggedIn.and.callFake(() => {
-      return true;
+      return { success: true };
     });
 
     fixture.detectChanges();

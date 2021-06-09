@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 export class OnlyNotSignedAllowService {
   constructor(public securityService: SecurityService, public router: Router) {}
   canActivate(): boolean {
-    if (!this.securityService.isLoggedIn()) {
+    if (!this.securityService.isLoggedIn().success) {
       return true;
     } else {
       this.router.navigate(['./game-menu']).then();

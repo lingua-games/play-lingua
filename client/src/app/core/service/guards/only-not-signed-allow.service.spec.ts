@@ -42,14 +42,14 @@ describe('OnlyNotSignedAllowService', () => {
 
   it('should return true if user is not logged in when calling canActivate', () => {
     mockSecurityService.isLoggedIn.and.callFake(() => {
-      return false;
+      return { success: false };
     });
     expect(service.canActivate()).toBeTruthy();
   });
 
   it('should return false if user is logged in when calling canActivate', () => {
     mockSecurityService.isLoggedIn.and.callFake(() => {
-      return true;
+      return { success: true };
     });
     expect(service.canActivate()).toBeFalse();
   });

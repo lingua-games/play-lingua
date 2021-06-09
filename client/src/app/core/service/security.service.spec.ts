@@ -75,14 +75,6 @@ describe('SecurityService', () => {
     );
   });
 
-  it('should break if it is guest', () => {
-    mockLocalStorageService.load.and.callFake(() => {
-      return true;
-    });
-
-    expect(service.setTotalScore('1')).toBe();
-  });
-
   it('should load score from storage when setTotalScore hits', () => {
     mockLocalStorageService.load.and.callFake(() => {
       return false;
@@ -93,7 +85,7 @@ describe('SecurityService', () => {
   });
 
   it('should save score into storage when initialTotalScore hits', () => {
-    spyOn(service, 'isLoggedIn').and.returnValue(true);
+    spyOn(service, 'isLoggedIn').and.returnValue({ success: true, route: '' });
 
     service.initialTotalScore('1');
 
@@ -116,7 +108,7 @@ describe('SecurityService', () => {
     mockLocalStorageService.load.and.callFake(() => {
       return false;
     });
-    spyOn(service, 'isLoggedIn').and.returnValue(true);
+    spyOn(service, 'isLoggedIn').and.returnValue({ success: true, route: '' });
 
     service.setTotalScore('0');
 

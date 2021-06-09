@@ -65,13 +65,16 @@ describe('AppComponent', () => {
   });
 
   it('should create the app', () => {
+    mockSecurityService.isLoggedIn.and.callFake(() => {
+      return { success: false };
+    });
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
   it('should call getUserInformation if isLoggedIn', () => {
     mockSecurityService.isLoggedIn.and.callFake(() => {
-      return true;
+      return { success: true };
     });
     spyOn(component, 'getUserInformation');
 

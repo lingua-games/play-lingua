@@ -58,7 +58,7 @@ describe('HomeComponent', () => {
 
   it('should check logged in when isLoggedIn hits', () => {
     mockSecurityService.isLoggedIn.and.callFake(() => {
-      return true;
+      return { success: true };
     });
     TestBed.compileComponents();
     fixture = TestBed.createComponent(HomeComponent);

@@ -156,7 +156,7 @@ export class FallingStarsComponent implements OnInit {
   }
 
   isLoggedIn(): boolean {
-    return this.securityService.isLoggedIn();
+    return this.securityService.isLoggedIn().success;
   }
 
   showEndGameDialog(): void {

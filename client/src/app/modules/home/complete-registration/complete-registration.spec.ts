@@ -19,7 +19,7 @@ import { LocalStorageHelper } from '../../../core/models/local-storage.enum';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
 import { CompleteRegistrationComponent } from './complete-registration';
 
-describe('RegisterComponent', () => {
+describe('CompleteRegistrationComponent', () => {
   let component: CompleteRegistrationComponent;
   let fixture: ComponentFixture<CompleteRegistrationComponent>;
   let mockNotificationService;
@@ -91,13 +91,18 @@ describe('RegisterComponent', () => {
   });
 
   it('should create', () => {
+    mockSecurityService.isLoggedIn.and.callFake(() => {
+      return { success: true };
+    });
+
     fixture.detectChanges();
+
     expect(component).toBeTruthy();
   });
 
   it('should navigate to game menu if user is already logged in', () => {
     mockSecurityService.isLoggedIn.and.callFake(() => {
-      return true;
+      return { success: true };
     });
 
     fixture.detectChanges();

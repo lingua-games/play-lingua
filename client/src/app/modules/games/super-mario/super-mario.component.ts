@@ -334,7 +334,7 @@ export class SuperMarioComponent implements OnInit, OnDestroy {
   }
 
   isLoggedIn(): boolean {
-    return this.securityService.isLoggedIn();
+    return this.securityService.isLoggedIn().success;
   }
 
   prepareTheWord(enemy?: WordKeyValueModel<TranslateModel[]>): void {

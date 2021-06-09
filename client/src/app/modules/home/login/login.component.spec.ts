@@ -71,6 +71,9 @@ describe('LoginComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
+    mockSecurityService.isLoggedIn.and.callFake(() => {
+      return { success: true };
+    });
   });
 
   it('should create', () => {
@@ -80,7 +83,7 @@ describe('LoginComponent', () => {
 
   it('should navigate to game menu if user is already logged in ', () => {
     mockSecurityService.isLoggedIn.and.callFake(() => {
-      return true;
+      return { success: true };
     });
 
     fixture.detectChanges();
