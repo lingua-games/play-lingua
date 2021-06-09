@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlayLingua.Contract.ViewModels;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Models;
@@ -34,6 +35,7 @@ namespace PlayLingua.Host.Controllers
         }
 
 
+        [Authorize]
         [HttpGet("get-user-information")]
         public ActionResult<UserViewModel> GetUserInformation()
         {
@@ -208,6 +210,7 @@ namespace PlayLingua.Host.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPut("update")]
         public ActionResult<EditUserViewModel> Update(EditUserViewModel model)
         {

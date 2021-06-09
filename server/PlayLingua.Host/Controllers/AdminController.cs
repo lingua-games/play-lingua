@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlayLingua.Contract.ViewModels;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Ports;
@@ -30,6 +31,7 @@ namespace PlayLingua.Host.Controllers
             _languageRepository = languageRepository;
         }
 
+        [Authorize]
         [HttpPost("send-invitation")]
         public ActionResult<InvitationViewModel> AddInvitation(InvitationViewModel model)
         {
@@ -55,6 +57,7 @@ namespace PlayLingua.Host.Controllers
             }));
         }
 
+        [Authorize]
         [HttpPost("change-invitation-visibility")]
         public ActionResult<InvitationViewModel> ChangeInvitationVisibility(InvitationViewModel model)
         {
@@ -92,6 +95,7 @@ namespace PlayLingua.Host.Controllers
             });
         }
 
+        [Authorize]
         [HttpGet("get-invitations")]
         public ActionResult<InvitationViewModel> GetVisibleInvitations()
         {
@@ -138,6 +142,7 @@ namespace PlayLingua.Host.Controllers
             }).ToList());
         }
 
+        [Authorize]
         [HttpGet("resend-invitation-email/{uniqueCode}")]
         public ActionResult ResendInvitationEmail(string uniqueCode)
         {
@@ -154,6 +159,7 @@ namespace PlayLingua.Host.Controllers
 
         }
 
+        [Authorize]
         [HttpPost("edit-invitation")]
         public ActionResult<InvitationViewModel> EditInvitation(InvitationViewModel model)
         {
@@ -192,6 +198,7 @@ namespace PlayLingua.Host.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpGet("get-user-list-for-invitations")]
         public ActionResult<List<UserListForInvitationViewModel>> GetUserListForInvitation()
         {

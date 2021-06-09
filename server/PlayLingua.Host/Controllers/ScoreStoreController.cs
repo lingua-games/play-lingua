@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlayLingua.Contract.ViewModels;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Ports;
