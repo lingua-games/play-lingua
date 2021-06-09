@@ -43,7 +43,7 @@ describe('UserAndGuestAllowService', () => {
 
   it('should return true if user is logged in', () => {
     mockSecurityService.isLoggedIn.and.callFake(() => {
-      return true;
+      return { success: true };
     });
 
     expect(service.canActivate()).toBe(true);
@@ -59,7 +59,7 @@ describe('UserAndGuestAllowService', () => {
 
   it('should return false if user is NOT logged in and also it is not guest', () => {
     mockSecurityService.isLoggedIn.and.callFake(() => {
-      return false;
+      return { success: false };
     });
     mockSecurityService.isGuest.and.callFake(() => {
       return false;

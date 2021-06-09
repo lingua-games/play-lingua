@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.securityService.isLoggedIn()) {
+    if (this.securityService.isLoggedIn().success) {
       this.router.navigate(['game-menu']).then();
     }
   }

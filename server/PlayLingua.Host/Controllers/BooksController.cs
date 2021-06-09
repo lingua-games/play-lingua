@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlayLingua.Contract.ViewModels;
 using PlayLingua.Domain.Entities;
 using PlayLingua.Domain.Ports;
@@ -56,6 +57,7 @@ namespace PlayLingua.Host.Controllers
             }).ToList());
         }
 
+        [Authorize]
         [HttpPost]
         public ActionResult<BookViewModel> Add([FromBody] BookViewModel model)
         {
@@ -68,6 +70,7 @@ namespace PlayLingua.Host.Controllers
             return Ok(addedBook);
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public ActionResult Delete(string id)
         {
@@ -75,6 +78,7 @@ namespace PlayLingua.Host.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public ActionResult<BookViewModel> Update(int id, BookViewModel model)
         {

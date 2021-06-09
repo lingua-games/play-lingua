@@ -38,7 +38,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.securityService.isLoggedIn()) {
+    if (this.securityService.isLoggedIn().success) {
       this.getUserInformation();
     }
   }

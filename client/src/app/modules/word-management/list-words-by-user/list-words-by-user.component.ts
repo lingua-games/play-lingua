@@ -98,7 +98,6 @@ export class ListWordsByUserComponent implements OnInit {
         }
 
         this.wordOverviews.setData(resultToView);
-        console.log(resultToView);
       },
       () => {
         // Todo, error handling here and maybe add refresh button etc

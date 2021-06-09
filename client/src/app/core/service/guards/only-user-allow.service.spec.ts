@@ -42,7 +42,7 @@ describe('OnlyUserAllowService', () => {
 
   it('should return true if user is logged in', () => {
     mockSecurityService.isLoggedIn.and.callFake(() => {
-      return true;
+      return { success: true };
     });
 
     expect(service.canActivate()).toBe(true);

@@ -93,7 +93,12 @@ describe('GameMenuComponent', () => {
   });
 
   it('should create', () => {
+    mockSecurityService.isLoggedIn.and.callFake(() => {
+      return { success: true };
+    });
+
     fixture.detectChanges();
+
     expect(component).toBeTruthy();
   });
 
@@ -106,6 +111,9 @@ describe('GameMenuComponent', () => {
       mockLocalStorageService.load.and.callFake(() => {
         return '{ "defaultBaseLanguage": {}, "defaultTargetLanguage": {} }';
       });
+      mockSecurityService.isLoggedIn.and.callFake(() => {
+        return { success: true };
+      });
 
       fixture.detectChanges();
 
@@ -116,6 +124,9 @@ describe('GameMenuComponent', () => {
     });
 
     it('should get menus', () => {
+      mockSecurityService.isLoggedIn.and.callFake(() => {
+        return { success: true };
+      });
       mockLocalStorageService.load.and.callFake(() => {
         return '{ "base": [], "target": [] }';
       });

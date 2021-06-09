@@ -82,8 +82,17 @@ export class SecurityService {
     ) as SecurityTokenInterface;
   }
 
-  isLoggedIn(): boolean {
-    return !!this.localStorageService.load(LocalStorageHelper.token);
+  isLoggedIn(): { success: boolean; route: string } {
+    const token = this.getTokenInformation();
+    if (!token?.email) {
+      return { success: false, route: './login' };
+    }
+
+    if (token.needsResetPassword && JSON.parse(token.needsResetPassword)) {
+      return { success: false, route: '../reset-password' };
+    }
+
+    return { success: true, route: '' };
   }
 
   isAdmin(): boolean {

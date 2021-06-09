@@ -30,7 +30,7 @@ export class TopNavbarComponent implements OnInit {
   }
 
   getUsername(): string {
-    return this.securityService.isLoggedIn()
+    return this.securityService.isLoggedIn().success
       ? `Welcome, ${this.securityService?.getTokenInformation()?.displayName}`
       : 'Welcome, guest';
   }
