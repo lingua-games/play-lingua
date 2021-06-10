@@ -1,0 +1,25 @@
+<div class="text-center header-container">
+  <h1>Thanks for donating</h1>
+</div>
+<div class="m-2">
+  <p>
+    As well as we are paying a lot of expenses for managing our servers, backup,
+    domain and etc , your donation is so valuable for us :)
+  </p>
+</div>
+<div class="text-center body-container">
+  <div>
+    <img src="../../../../assets/about-us/crypto-wallet.png" />
+  </div>
+  <div class="mt-3">
+    <p>
+      <span class="mr-2"
+        >Crypto wallet : <strong>{{ wallet }}</strong></span
+      >
+      <button class="btn btn-success" (click)="copyWalletNumber()">
+        Copy
+        <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+      </button>
+    </p>
+  </div>
+</div>

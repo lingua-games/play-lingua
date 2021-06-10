@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   faArrowCircleLeft,
   faCheck,
+  faCopy,
   faEnvelope,
   faEyeSlash,
   faPlus,
@@ -35,6 +36,7 @@ import { faPowerOff } from '@fortawesome/free-solid-svg-icons/faPowerOff';
 import { faForward } from '@fortawesome/free-solid-svg-icons/faForward';
 import {
   faCreativeCommonsShare,
+  faGithub,
   faGooglePlay,
 } from '@fortawesome/free-brands-svg-icons';
 
@@ -87,7 +89,9 @@ export class AppModule {
       faVolumeUp,
       faEnvelope,
       faEyeSlash,
-      faCreativeCommonsShare
+      faCreativeCommonsShare,
+      faGithub,
+      faCopy
     );
   }
 }
