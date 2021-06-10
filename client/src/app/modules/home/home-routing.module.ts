@@ -15,6 +15,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ActivateUserComponent } from './activate-user/activate-user.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { HasResetPasswordTokenService } from '../../core/service/guards/has-reset-password-token.service';
+import { AboutUsComponent } from './about-us/about-us.component';
 
 export interface CanComponentDeactivate {
   canDeactivate: () => Promise<boolean>;
@@ -81,6 +82,11 @@ const routes: Routes = [
         component: GameMenuComponent,
         canDeactivate: [DeactivateWithDelay],
         canActivate: [UserAndGuestAllowService],
+      },
+      {
+        path: 'about-us',
+        component: AboutUsComponent,
+        canDeactivate: [DeactivateWithDelay],
       },
       {
         path: 'prepare-adding-words',

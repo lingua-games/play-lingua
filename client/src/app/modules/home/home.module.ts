@@ -21,6 +21,9 @@ import { RecaptchaModule } from 'ng-recaptcha';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ActivateUserComponent } from './activate-user/activate-user.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { AboutUsComponent } from './about-us/about-us.component';
+import { DonateCryptoDialogComponent } from './donate-crypto-dialog/donate-crypto-dialog.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -36,6 +39,8 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     ResetPasswordComponent,
     ForgotPasswordComponent,
     ActivateUserComponent,
+    AboutUsComponent,
+    DonateCryptoDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -46,6 +51,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     DirectiveModule,
     ComponentModule,
     RecaptchaModule,
+    FontAwesomeModule,
     StoreModule.forFeature('notifications', scoreNotificationReducer),
   ],
   providers: [DeactivateWithDelay],

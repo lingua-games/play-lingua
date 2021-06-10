@@ -1,0 +1,18 @@
+.about-us-icon {
+  position: absolute;
+  right: 0;
+  top: 20vh;
+  font-size: 1vw;
+  color:white;
+  background-color: #2C3E50;
+  padding: 5px 3px 5px 8px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  text-align: center;
+  z-index: 1000;
+}
+
+.about-us-icon:hover {
+  cursor: pointer;
+  opacity: .7;
+}

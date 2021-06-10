@@ -1,0 +1,104 @@
+<div class="btn-back-container">
+  <button
+    pButton
+    pRipple
+    type="button"
+    icon="pi pi-arrow-left"
+    (click)="back()"
+    class="btn-back p-button-rounded p-button-info p-button-outlined"
+  ></button>
+</div>
+<div class="welcome-inner-main-container">
+  <div class="row about-playing-lingua-container">
+    <div class="col-sm-3 logo-container">
+      <img src="../../../../assets/about-us/lingua-logo.png" />
+    </div>
+    <div class="col-sm-9 about-playing-lingua-body-container">
+      <div class="about-playing-lingua-header">About PlayingLingua</div>
+      <p>
+        PlayingLingua is a free, non commercial, open source and cross platform
+        application which is developed to help people to learn new languages.
+      </p>
+      <p>
+        In PlayingLingua, you play games, earn scores and learn new words. You
+        can either play your own words or other players words.
+      </p>
+    </div>
+  </div>
+  <hr />
+  <div class="row">
+    <div class="col-sm-4 mt-2">
+      <div class="text-center selectable-header">Contributor(s)</div>
+      <div
+        class="selectable-container text-center mt-1"
+        (click)="
+          openExternalUrl(
+            'https://www.linkedin.com/in/arash-bahreini-100296139/'
+          )
+        "
+      >
+        <img
+          src="https://avatars.githubusercontent.com/u/25605112?v=4"
+          class="image-circle"
+        />
+        <span class="ml-3">Arash bahreini</span>
+      </div>
+    </div>
+    <div class="col-sm-4 mt-2">
+      <div class="text-center selectable-header">Source code</div>
+      <div
+        class="selectable-container text-center mt-1"
+        (click)="openExternalUrl('https://github.com/lingua-games/play-lingua')"
+      >
+        <img src="../../../../assets/about-us/Octocat.png" />
+        <span class="ml-3">Repository</span>
+      </div>
+    </div>
+    <div class="col-sm-4 mt-2">
+      <div class="text-center selectable-header">Versions</div>
+      <div
+        class="selectable-container text-center mt-1"
+        (click)="
+          openExternalUrl('https://github.com/lingua-games/play-lingua/tags')
+        "
+      >
+        <img src="../../../../assets/about-us/version-history.png" />
+        <span class="ml-3">Version history</span>
+      </div>
+    </div>
+    <div class="col-sm-6 mt-4">
+      <div class="text-center selectable-header">Whats next!</div>
+      <div
+        class="selectable-container text-center mt-1"
+        (click)="
+          openExternalUrl(
+            'https://github.com/lingua-games/play-lingua/projects/4'
+          )
+        "
+      >
+        <img src="../../../../assets/about-us/whats-next.png" />
+        <span class="ml-3">What will release in next version</span>
+      </div>
+    </div>
+    <div class="col-sm-6 mt-4">
+      <div class="text-center selectable-header">Contact us</div>
+      <div
+        class="selectable-container text-center mt-1"
+        (click)="openExternalUrl('mailto:vbhost.ir@gmail.com')"
+      >
+        <img src="../../../../assets/about-us/contact-us.png" />
+        <span class="ml-3">Vbhost.ir@gmail.com</span>
+      </div>
+    </div>
+    <div class="col-sm-6 mt-4">
+      <div class="text-center selectable-header">Donate</div>
+      <div
+        class="selectable-container text-center mt-1"
+        (click)="openDonateDialog()"
+      >
+        <img src="../../../../assets/about-us/donate.png" />
+        <span class="ml-3">Support us to manage servers!</span>
+      </div>
+    </div>
+  </div>
+</div>

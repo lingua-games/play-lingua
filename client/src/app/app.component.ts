@@ -9,6 +9,7 @@ import {
   Severity,
 } from './core/service/notification.service';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { NavigationStart, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -29,18 +30,29 @@ import { animate, style, transition, trigger } from '@angular/animations';
 })
 export class AppComponent implements OnInit {
   isGettingUserInformation = false;
+  showAboutUs = true;
 
   constructor(
     private securityService: SecurityService,
     private userService: UserService,
     private localStorageService: LocalStorageService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     if (this.securityService.isLoggedIn().success) {
       this.getUserInformation();
     }
+    this.router.events.subscribe((val) => {
+      if (val instanceof NavigationStart) {
+        if (val.url.indexOf('games/') > -1) {
+          this.showAboutUs = false;
+        } else {
+          this.showAboutUs = true;
+        }
+      }
+    });
   }
 
   getUserInformation(): void {
