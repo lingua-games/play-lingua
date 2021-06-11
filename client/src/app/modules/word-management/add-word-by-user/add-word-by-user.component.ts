@@ -59,7 +59,6 @@ export class AddWordByUserComponent implements OnInit {
   selectBookForm = this.formBuilder.group({
     book: ['', Validators.required],
     chapter: ['', Validators.required],
-    selectBookRandom: ['book'],
   });
 
   @HostListener('document:keydown ', ['$event'])
@@ -84,10 +83,6 @@ export class AddWordByUserComponent implements OnInit {
 
   get isSelectedLanguageSubmit(): AbstractControl | null {
     return this.selectLanguageForm.get('isSelectedLanguageSubmit');
-  }
-
-  get selectBookRandom(): AbstractControl | null {
-    return this.selectBookForm.get('selectBookRandom');
   }
 
   get book(): AbstractControl | null {
@@ -155,30 +150,31 @@ export class AddWordByUserComponent implements OnInit {
   prepareEditForm(): void {
     this.isPreparingForEdit = true;
     const servicesToCall = [];
-    if (this.wordsForEdit.bookId) {
-      servicesToCall.push(
-        this.bookChapterService.getBooksBySourceAndTargetLanguageId(
-          this.wordsForEdit.baseLanguageId,
-          this.wordsForEdit.targetLanguageId
-        )
-      );
-    }
-    if (this.wordsForEdit.chapterId) {
-      servicesToCall.push(
-        this.bookChapterService.getChaptersByBookId(this.wordsForEdit.bookId)
-      );
-    }
+
     servicesToCall.push(
       this.wordManagementService.getWordDetails(this.wordsForEdit)
     );
 
     servicesToCall.push(this.basicInformationService.getAllLanguages());
 
+    servicesToCall.push(
+      this.bookChapterService.getBooksBySourceAndTargetLanguageId(
+        this.wordsForEdit.baseLanguageId,
+        this.wordsForEdit.targetLanguageId
+      )
+    );
+
+    if (this.wordsForEdit.bookId) {
+      servicesToCall.push(
+        this.bookChapterService.getChaptersByBookId(this.wordsForEdit.bookId)
+      );
+    }
+
     forkJoin(servicesToCall).subscribe(
       (
         res: (BookModel[] | ChapterModel[] | WordDetails[] | LanguageModel[])[]
       ) => {
-        this.languages.setData(res[3] as LanguageModel[]);
+        this.languages.setData(res[1] as LanguageModel[]);
         this.baseLanguage?.setValue(
           this.languages.data.find(
             (x) => x.id === this.wordsForEdit.baseLanguageId
@@ -201,29 +197,31 @@ export class AddWordByUserComponent implements OnInit {
             id: -1,
           },
         ];
-        (res[0] as BookModel[]).forEach((element: BookModel) => {
+        (res[2] as BookModel[]).forEach((element: BookModel) => {
           this.books.push(element);
         });
         this.book?.setValue(
           this.books.find((x) => x.id === this.wordsForEdit.bookId)
         );
 
-        this.chapters = [];
-        this.chapters = [
-          {
-            id: -1,
-            name: 'Add new chapter',
-          },
-        ];
-        (res[1] as ChapterModel[]).forEach((chapter: ChapterModel) => {
-          this.chapters.push(chapter);
-        });
-        this.chapter?.setValue(
-          this.chapters.find((x) => x.id === this.wordsForEdit.chapterId)
-        );
+        if (this.wordsForEdit.bookId) {
+          this.chapters = [];
+          this.chapters = [
+            {
+              id: -1,
+              name: 'Add new chapter',
+            },
+          ];
+          (res[3] as ChapterModel[]).forEach((chapter: ChapterModel) => {
+            this.chapters.push(chapter);
+          });
+          this.chapter?.setValue(
+            this.chapters.find((x) => x.id === this.wordsForEdit.chapterId)
+          );
+        }
 
-        (res[2] as WordDetails[]).forEach((element: WordDetails) => {
-          const filteredElement = (res[2] as WordDetails[]).filter(
+        (res[0] as WordDetails[]).forEach((element: WordDetails) => {
+          const filteredElement = (res[0] as WordDetails[]).filter(
             (x) => x.baseWord === element.baseWord
           );
           if (
@@ -262,16 +260,12 @@ export class AddWordByUserComponent implements OnInit {
 
     if (!!draft.targetLanguage && !!draft.baseLanguage) {
       this.isSelectedLanguageSubmit?.setValue(true);
-      if (draft.isRandom === 'random') {
-        this.selectBookRandom?.setValue('random');
-      } else {
-        this.selectBookRandom?.setValue('book');
-        this.getBooks();
-        if (draft.book) {
-          this.book?.setValue(draft.book);
-          this.bookSelectionChange({ value: draft.book });
-          this.chapter?.setValue(draft.chapter);
-        }
+
+      this.getBooks();
+      if (draft.book) {
+        this.book?.setValue(draft.book);
+        this.bookSelectionChange({ value: draft.book });
+        this.chapter?.setValue(draft.chapter);
       }
     }
 
@@ -373,7 +367,6 @@ export class AddWordByUserComponent implements OnInit {
 
   getBooks(): void {
     this.selectBookForm.reset();
-    this.selectBookRandom?.setValue('book');
     this.isBookLoading = true;
     this.bookChapterService
       .getBooksByLanguage(
@@ -404,28 +397,26 @@ export class AddWordByUserComponent implements OnInit {
   }
 
   submitSelectedBooks(): void {
-    if (this.selectBookRandom?.value === 'book') {
-      if (this.book?.invalid) {
+    if (this.book?.invalid) {
+      this.notificationService.showMessage(
+        'Please select a book',
+        Severity.error,
+        '',
+        'bc'
+      );
+    } else {
+      if (this.chapter?.invalid) {
         this.notificationService.showMessage(
-          'Please select a book',
+          'Please select a chapter/reference',
           Severity.error,
           '',
           'bc'
         );
-      } else {
-        if (this.chapter?.invalid) {
-          this.notificationService.showMessage(
-            'Please select a chapter/reference',
-            Severity.error,
-            '',
-            'bc'
-          );
-        }
       }
+    }
 
-      if (this.selectBookForm?.invalid) {
-        return;
-      }
+    if (this.selectBookForm?.invalid) {
+      return;
     }
   }
 
@@ -466,27 +457,25 @@ export class AddWordByUserComponent implements OnInit {
   }
 
   submitForm(): void {
-    if (this.selectBookRandom?.value === 'book') {
-      if (this.book?.invalid) {
-        this.notificationService.showMessage(
-          'Please select a book',
-          Severity.error,
-          '',
-          'bc'
-        );
-      }
-      if (this.chapter?.invalid) {
-        this.notificationService.showMessage(
-          'Please select a chapter/reference',
-          Severity.error,
-          '',
-          'bc'
-        );
-      }
-      if (this.selectBookForm?.invalid) {
-        this.selectBookForm?.markAsDirty();
-        return;
-      }
+    if (this.book?.invalid) {
+      this.notificationService.showMessage(
+        'Please select a book',
+        Severity.error,
+        '',
+        'bc'
+      );
+    }
+    if (this.chapter?.invalid) {
+      this.notificationService.showMessage(
+        'Please select a chapter/reference',
+        Severity.error,
+        '',
+        'bc'
+      );
+    }
+    if (this.selectBookForm?.invalid) {
+      this.selectBookForm?.markAsDirty();
+      return;
     }
     if (!this.formData.words || this.formData.words.length === 0) {
       this.notificationService.showMessage(
@@ -599,7 +588,6 @@ export class AddWordByUserComponent implements OnInit {
   saveInformationInfoForm(): void {
     this.formData.baseLanguage = this.baseLanguage?.value;
     this.formData.targetLanguage = this.targetLanguage?.value;
-    this.formData.isRandom = this.selectBookRandom?.value;
     this.formData.book = this.book?.value;
     this.formData.chapter = this.chapter?.value;
   }

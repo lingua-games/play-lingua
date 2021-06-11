@@ -56,8 +56,6 @@ export class RankingComponent implements OnInit, OnChanges {
     } else {
       this.getRanks();
     }
-
-    console.log(this.data);
   }
 
   ngOnChanges(): void {

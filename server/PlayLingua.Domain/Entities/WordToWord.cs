@@ -9,7 +9,7 @@ namespace PlayLingua.Domain.Entities
         public int TargetWordId { get; set; }
         public int AddedBy { get; set; }
         public DateTime AddedDate { get; set; }
-        public int BookId { get; set; }
-        public int ChapterId { get; set; }
+        public int? BookId { get; set; }
+        public int? ChapterId { get; set; }
     }
 }

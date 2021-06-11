@@ -6,8 +6,8 @@ namespace PlayLingua.Domain.Models
 {
     public class WordOverviewModel
     {
-        public int BookId { get; set; }
-        public int ChapterId { get; set; }
+        public int? BookId { get; set; }
+        public int? ChapterId { get; set; }
         public int BaseLanguageId { get; set; }
         public int TargetLanguageId { get; set; }
         public string TargetLanguageName { get; set; }
