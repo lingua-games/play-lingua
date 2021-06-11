@@ -30,20 +30,19 @@
         >
           Admin panel
         </div>
-        <hr *ngIf="securityService.isLoggedIn()" />
+        <hr *ngIf="securityService.isLoggedIn().success" />
         <div
           class="description-menu-container mt-2"
           *ngIf="
             defaultSelectedLanguages?.defaultTargetLanguage &&
-            defaultSelectedLanguages?.defaultBaseLanguage &&
-            securityService.isLoggedIn()
+            defaultSelectedLanguages?.defaultBaseLanguage
           "
         >
           I know
           <strong>{{
             defaultSelectedLanguages.defaultBaseLanguage.name
           }}</strong>
-          and I want to learn
+          and I want to improve my
           <strong>{{
             defaultSelectedLanguages.defaultTargetLanguage.name
           }}</strong>
