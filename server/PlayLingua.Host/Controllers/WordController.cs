@@ -39,28 +39,16 @@ namespace PlayLingua.Host.Controllers
         public ActionResult SubmitWordSeries([FromBody] SubmitWordsViewModel model)
         {
             var userId = GetUser().Id;
-            if (model.IsRandom == "book")
+            if (model.Book.Id == 0)
             {
-                if (model.Book.Id == 0)
+                model.Book.Id = _bookRepository.Add(new Book
                 {
-                    model.Book.Id = _bookRepository.Add(new Book
-                    {
-                        Name = model.Book.Name,
-                        TargetLanguageId = model.Book.TargetLanguageId,
-                        BaseLanguageId = model.Book.BaseLanguageId
-                    }, userId).Id;
+                    Name = model.Book.Name,
+                    TargetLanguageId = model.Book.TargetLanguageId,
+                    BaseLanguageId = model.Book.BaseLanguageId
+                }, userId).Id;
 
-                    if (model.Chapter != null)
-                    {
-                        model.Chapter.Id = _chapterRepository.Add(new Chapter
-                        {
-                            Name = model.Chapter.Name,
-                            BookId = model.Book.Id,
-                        }, userId).Id;
-                    }
-                }
-
-                if (model.Chapter?.Id == 0)
+                if (model.Chapter != null)
                 {
                     model.Chapter.Id = _chapterRepository.Add(new Chapter
                     {
@@ -68,6 +56,15 @@ namespace PlayLingua.Host.Controllers
                         BookId = model.Book.Id,
                     }, userId).Id;
                 }
+            }
+
+            if (model.Chapter?.Id == 0)
+            {
+                model.Chapter.Id = _chapterRepository.Add(new Chapter
+                {
+                    Name = model.Chapter.Name,
+                    BookId = model.Book.Id,
+                }, userId).Id;
             }
             _wordRepository.SubmitWordSeries(new SubmitWordsModel
             {
@@ -89,28 +86,16 @@ namespace PlayLingua.Host.Controllers
         public ActionResult EditWordSeries([FromBody] SubmitWordsViewModel model)
         {
             int userId = GetUser().Id;
-            if (model.IsRandom == "book")
+            if (model.Book.Id == 0)
             {
-                if (model.Book.Id == 0)
+                model.Book.Id = _bookRepository.Add(new Book
                 {
-                    model.Book.Id = _bookRepository.Add(new Book
-                    {
-                        Name = model.Book.Name,
-                        TargetLanguageId = model.Book.TargetLanguageId,
-                        BaseLanguageId = model.Book.BaseLanguageId
-                    }, userId).Id;
+                    Name = model.Book.Name,
+                    TargetLanguageId = model.Book.TargetLanguageId,
+                    BaseLanguageId = model.Book.BaseLanguageId
+                }, userId).Id;
 
-                    if (model.Chapter != null)
-                    {
-                        model.Chapter.Id = _chapterRepository.Add(new Chapter
-                        {
-                            Name = model.Chapter.Name,
-                            BookId = model.Book.Id,
-                        }, userId).Id;
-                    }
-                }
-
-                if (model.Chapter?.Id == 0)
+                if (model.Chapter != null)
                 {
                     model.Chapter.Id = _chapterRepository.Add(new Chapter
                     {
@@ -118,6 +103,15 @@ namespace PlayLingua.Host.Controllers
                         BookId = model.Book.Id,
                     }, userId).Id;
                 }
+            }
+
+            if (model.Chapter?.Id == 0)
+            {
+                model.Chapter.Id = _chapterRepository.Add(new Chapter
+                {
+                    Name = model.Chapter.Name,
+                    BookId = model.Book.Id,
+                }, userId).Id;
             }
             _wordRepository.EditWordSeries(new SubmitWordsModel
             {

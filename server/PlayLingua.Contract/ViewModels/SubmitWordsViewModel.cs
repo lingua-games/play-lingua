@@ -9,7 +9,6 @@ namespace PlayLingua.Contract.ViewModels
         public ChapterViewModel Chapter { get; set; }
         public NameIdViewModel TargetLanguage { get; set; }
         public List<FormWordsViewModel> Words { get; set; }
-        public string IsRandom { get; set; }
     }
 
     public class FormWordsViewModel
