@@ -3,19 +3,22 @@
     {{ getUsername() }}
   </div>
   <div class="total-score-container">
-    Total score: <span *ngIf="totalScore !== 'loading'">{{ totalScore }}</span>
-    <div
-      *ngIf="totalScore === 'loading'"
-      class="spinner-border text-primary"
-      role="status"
-    >
-      <span class="sr-only">Loading...</span>
+    <div *ngIf="securityService.isLoggedIn().success">
+      Total score:
+      <span *ngIf="totalScore !== 'loading'">{{ totalScore }}</span>
+      <div
+        *ngIf="totalScore === 'loading'"
+        class="spinner-border text-primary"
+        role="status"
+      >
+        <span class="sr-only">Loading...</span>
+      </div>
     </div>
   </div>
-  <div class="log-out-container" *ngIf="securityService.isLoggedIn()">
+  <div class="log-out-container" *ngIf="securityService.isLoggedIn().success">
     <div class="log-out-item" (click)="securityService.logout()">Log out</div>
   </div>
-  <div class="log-out-container" *ngIf="!securityService.isLoggedIn()">
+  <div class="log-out-container" *ngIf="!securityService.isLoggedIn().success">
     <div class="log-in-register-container">
       <div class="log-in-register-item" routerLink="../register">Register</div>
       <span style="margin: 0 1vh">OR</span>
@@ -26,7 +29,7 @@
 
 <div
   class="half-size-main-container"
-  *ngIf="!showFullSize && securityService.isLoggedIn()"
+  *ngIf="!showFullSize && securityService.isLoggedIn().success"
 >
   <div class="total-score-container">
     Total score
@@ -37,6 +40,21 @@
       role="status"
     >
       <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+</div>
+
+<div
+  class="half-size-main-container login-register-container"
+  *ngIf="!showFullSize && !securityService.isLoggedIn().success"
+>
+  <div class="log-out-container">
+    <div class="log-in-register-container">
+      <div class="log-in-register-item" routerLink="../../register">
+        Register
+      </div>
+      <span style="margin: 0 1vh">OR</span>
+      <div class="log-in-register-item" routerLink="../../login">Login</div>
     </div>
   </div>
 </div>

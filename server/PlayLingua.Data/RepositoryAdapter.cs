@@ -8,12 +8,12 @@ namespace PlayLingua.Data
     {
         public static void AddRepository(this IServiceCollection services, string connectionString, string secret, string hashKey, EmailModel email)
         {
-            services.AddSingleton<IBookRepository, BookRepository>(x => new BookRepository(connectionString));
-            services.AddSingleton<IChapterRepository, ChapterRepository>(x => new ChapterRepository(connectionString));
-            services.AddSingleton<IWordRepository, WordRepository>(x => new WordRepository(connectionString));
-            services.AddSingleton<ILanguageRepository, LanguageRepository>(x => new LanguageRepository(connectionString));
-            services.AddSingleton<IAuthRepository, AuthRepository>(x => new AuthRepository(connectionString, secret, hashKey));
-            services.AddSingleton<ISelectedLanguagesRepository, SelectedLanguageRepository>(x => new SelectedLanguageRepository(connectionString));
+            services.AddTransient<IBookRepository, BookRepository>(x => new BookRepository(connectionString));
+            services.AddTransient<IChapterRepository, ChapterRepository>(x => new ChapterRepository(connectionString));
+            services.AddTransient<IWordRepository, WordRepository>(x => new WordRepository(connectionString));
+            services.AddTransient<ILanguageRepository, LanguageRepository>(x => new LanguageRepository(connectionString));
+            services.AddTransient<IAuthRepository, AuthRepository>(x => new AuthRepository(connectionString, secret, hashKey));
+            services.AddTransient<ISelectedLanguagesRepository, SelectedLanguageRepository>(x => new SelectedLanguageRepository(connectionString));
             services.AddTransient<IUserRepository, UserRepository>(x => new UserRepository(connectionString, hashKey, email));
             services.AddTransient<IGameRepository, GameRepository>(x => new GameRepository(connectionString));
             services.AddTransient<IScoreRepository, ScoreRepository>(x => new ScoreRepository(connectionString));

@@ -150,9 +150,9 @@ export class FallingStarsComponent implements OnInit {
       }
     });
 
+    // Todo, uncomment below
     this.showStartDialog();
     this.scoreStorageService.clearCatch();
-    // this.showEndGameDialog();
   }
 
   isLoggedIn(): boolean {
