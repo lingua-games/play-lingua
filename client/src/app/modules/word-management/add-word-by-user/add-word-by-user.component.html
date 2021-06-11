@@ -65,16 +65,7 @@
     [loadingFlag]="isBookLoading"
   >
     <div class="row">
-      <div class="col-sm-1 text-center form-check">
-        <button
-          pButton
-          pRipple
-          type="button"
-          [icon]="selectBookRandom?.value === 'book' ? 'pi pi-check' : 'pi'"
-          class="p-button-rounded"
-          (click)="selectBookRandom?.setValue('book'); selectBookForm.enable()"
-        ></button>
-      </div>
+      <div class="col-sm-1 text-center form-check"></div>
       <div class="col-sm-1 pre-text-container">Book</div>
       <div class="col-sm-4">
         <p-dropdown
@@ -84,7 +75,6 @@
           optionLabel="name"
           (onChange)="bookSelectionChange($event)"
           [showClear]="true"
-          [disabled]="selectBookRandom?.value === 'random'"
           [styleClass]="
             book?.invalid && selectBookForm?.dirty ? 'field-not-valid' : ''
           "
@@ -98,9 +88,6 @@
           placeholder="Select a chapter/reference name"
           formControlName="chapter"
           optionLabel="name"
-          [disabled]="
-            !!(selectBookRandom?.value === 'random') || !!book?.invalid
-          "
           (onChange)="chapterSelectionChange($event)"
           [showClear]="true"
           [styleClass]="
@@ -108,35 +95,8 @@
           "
         >
         </p-dropdown>
-        <label
-          style="
-            background-color: lightgray;
-            margin-top: 3px;
-            padding: 4px;
-            border-radius: 3px;
-            color: gray;
-          "
-          >Optional field</label
-        >
       </div>
       <div class="col-sm-1 text-right"></div>
-    </div>
-    <div class="row mt-2">
-      <div class="col-sm-1 text-center">
-        <button
-          pButton
-          pRipple
-          type="button"
-          [icon]="selectBookRandom?.value === 'random' ? 'pi pi-check' : 'pi'"
-          class="p-button-rounded"
-          (click)="
-            selectBookRandom?.setValue('random'); selectBookForm?.disable()
-          "
-        ></button>
-      </div>
-      <div class="col-sm-6 random-word-text-container">
-        I dont want to select any book, just want to add some words randomly.
-      </div>
     </div>
   </form>
 

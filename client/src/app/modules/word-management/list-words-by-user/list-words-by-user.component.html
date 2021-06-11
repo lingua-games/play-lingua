@@ -39,7 +39,12 @@
         (opened)="setStep(index)"
       >
         <mat-expansion-panel-header>
-          <mat-panel-title> {{ overview.bookName }} </mat-panel-title>
+          <mat-panel-title *ngIf="overview.bookName">
+            {{ overview.bookName }}
+          </mat-panel-title>
+          <mat-panel-title *ngIf="!overview.bookName">
+            <span class="no-book-chapter">No book selected</span>
+          </mat-panel-title>
           <mat-panel-description>
             <div class="row" style="width: 100%">
               <div class="col-sm-4">{{ overview.baseLanguageName }}</div>
@@ -65,7 +70,12 @@
                   let index = index
                 "
               >
-                <td>{{ WordOverviewDetails.chapterName }}</td>
+                <td *ngIf="WordOverviewDetails.chapterName">
+                  {{ WordOverviewDetails.chapterName }}
+                </td>
+                <td *ngIf="!WordOverviewDetails.chapterName">
+                  <span class="no-book-chapter">No chapter selected</span>
+                </td>
                 <td>{{ WordOverviewDetails.count }}</td>
                 <td>{{ WordOverviewDetails.lastUpdateDate }}</td>
                 <td>

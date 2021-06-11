@@ -36,7 +36,7 @@ namespace PlayLingua.Host.Controllers
 
         [HttpPost("submit-word-series")]
         [Authorize]
-        public ActionResult SubmitWordSeries([FromBody]SubmitWordsViewModel model)
+        public ActionResult SubmitWordSeries([FromBody] SubmitWordsViewModel model)
         {
             var userId = GetUser().Id;
             if (model.IsRandom == "book")
@@ -73,8 +73,8 @@ namespace PlayLingua.Host.Controllers
             {
                 BaseLanguage = new NameIdModel { Id = model.BaseLanguage.Id, Name = model.BaseLanguage.Name },
                 TargetLanguage = new NameIdModel { Id = model.TargetLanguage.Id, Name = model.TargetLanguage.Name },
-                Book = new Book { Id = model.Book.Id },
-                Chapter = new Chapter { Id = model.Chapter.Id },
+                Book = model.Book != null ? new Book { Id = model.Book.Id } : new Book(),
+                Chapter = model.Chapter != null ? new Chapter { Id = model.Chapter.Id } : new Chapter(),
                 Words = model.Words.Select(x => new FormWords
                 {
                     Base = new FormWord { Value = x.Base.Value },
@@ -123,8 +123,8 @@ namespace PlayLingua.Host.Controllers
             {
                 BaseLanguage = new NameIdModel { Id = model.BaseLanguage.Id, Name = model.BaseLanguage.Name },
                 TargetLanguage = new NameIdModel { Id = model.TargetLanguage.Id, Name = model.TargetLanguage.Name },
-                Book = new Book { Id = model.Book.Id },
-                Chapter = new Chapter { Id = model.Chapter.Id },
+                Book = model.Book != null ? new Book { Id = model.Book.Id } : new Book(),
+                Chapter = model.Chapter != null ? new Chapter { Id = model.Chapter.Id } : new Chapter(),
                 Words = model.Words.Select(x => new FormWords
                 {
                     Base = new FormWord { Value = x.Base.Value },

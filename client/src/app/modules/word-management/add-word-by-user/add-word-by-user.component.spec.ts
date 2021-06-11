@@ -132,6 +132,7 @@ describe('AddWordByUserComponent', () => {
 
     it('should call getChaptersByBookId if chapter id has value', () => {
       component.wordsForEdit = { chapterId: 10 } as WordOverviewsModel;
+      component.wordsForEdit.bookId = 1;
 
       component.prepareEditForm();
 
@@ -260,16 +261,6 @@ describe('AddWordByUserComponent', () => {
       const foo = component.checkDraft();
 
       expect(foo).toBe(undefined);
-    });
-
-    it('should set value for random if isRandom has random value', () => {
-      mockLocalStorageService.load.and.callFake(() => {
-        return '{"targetLanguage": [], "baseLanguage": [], "isRandom": "random"}';
-      });
-
-      component.checkDraft();
-
-      expect(component.selectBookRandom.value).toBe('random');
     });
 
     it('should call getBooks isRandom does not have random value', () => {
@@ -409,7 +400,6 @@ describe('AddWordByUserComponent', () => {
 
   describe('submitSelectedBooks', () => {
     it('should show error if book is invalid', () => {
-      component.selectBookRandom?.setValue('book');
       component.book.setErrors([]);
 
       component.submitSelectedBooks();
@@ -423,7 +413,6 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should show error if chapter is invalid', () => {
-      component.selectBookRandom?.setValue('book');
       component.book?.setValue('fake book');
       component.chapter?.setErrors([]);
 
@@ -441,7 +430,6 @@ describe('AddWordByUserComponent', () => {
   describe('submitForm', () => {
     it('should show error if book is invalid', () => {
       component.book?.setErrors([]);
-      component.selectBookRandom?.setValue('book');
 
       component.submitForm();
 
@@ -454,7 +442,6 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should show error if user is adding less than 4 words', () => {
-      component.selectBookRandom?.setValue('something else');
       component.chapter?.setValue('something else');
       component.formData = {
         words: [
@@ -468,6 +455,8 @@ describe('AddWordByUserComponent', () => {
           } as WordToAddModel,
         ],
       } as AddWordFormModel;
+      component.selectBookForm.controls['book']?.setValue('testValue');
+      component.selectBookForm.controls['chapter']?.setValue('testValue');
 
       component.submitForm();
 
@@ -481,7 +470,6 @@ describe('AddWordByUserComponent', () => {
 
     it('should show error if chapter is invalid', () => {
       component.chapter.setErrors([]);
-      component.selectBookRandom?.setValue('book');
 
       component.submitForm();
 
@@ -494,7 +482,8 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should show error if no word selected in the form', () => {
-      component.selectBookRandom?.setValue('something else');
+      component.selectBookForm.controls['book']?.setValue('testValue');
+      component.selectBookForm.controls['chapter']?.setValue('testValue');
 
       component.submitForm();
 
@@ -507,7 +496,6 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should set all the words invalid in the form if target.value is null', () => {
-      component.selectBookRandom?.setValue('something else');
       component.formData = {
         words: [
           {
@@ -516,6 +504,8 @@ describe('AddWordByUserComponent', () => {
           } as WordToAddModel,
         ],
       } as AddWordFormModel;
+      component.selectBookForm.controls['book']?.setValue('testValue');
+      component.selectBookForm.controls['chapter']?.setValue('testValue');
 
       component.submitForm();
 
@@ -524,7 +514,6 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should call saveInformationInfoForm', () => {
-      component.selectBookRandom?.setValue('something else');
       component.formData = {
         words: [
           {
@@ -553,6 +542,8 @@ describe('AddWordByUserComponent', () => {
       mockWordManagementService.submitForm.and.callFake(() => {
         return of();
       });
+      component.selectBookForm.controls['book']?.setValue('testValue');
+      component.selectBookForm.controls['chapter']?.setValue('testValue');
 
       component.submitForm();
 
@@ -560,7 +551,6 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should delete draft if API can store data into backend', () => {
-      component.selectBookRandom?.setValue('something else');
       component.isEditing = false;
       component.formData = {
         words: [
@@ -590,6 +580,8 @@ describe('AddWordByUserComponent', () => {
       mockWordManagementService.submitForm.and.callFake(() => {
         return of(true);
       });
+      component.selectBookForm.controls['book']?.setValue('testValue');
+      component.selectBookForm.controls['chapter']?.setValue('testValue');
 
       component.submitForm();
 
@@ -599,7 +591,6 @@ describe('AddWordByUserComponent', () => {
     });
 
     it('should stop page loading if API fail', () => {
-      component.selectBookRandom?.setValue('something else');
       component.isEditing = false;
       component.formData = {
         words: [
@@ -629,6 +620,8 @@ describe('AddWordByUserComponent', () => {
       mockWordManagementService.submitForm.and.callFake(() => {
         return throwError('some errors');
       });
+      component.selectBookForm.controls['book']?.setValue('testValue');
+      component.selectBookForm.controls['chapter']?.setValue('testValue');
 
       component.submitForm();
 
@@ -699,13 +692,6 @@ describe('AddWordByUserComponent', () => {
     expect(component.disableRemoveTarget(word)).toBeTrue();
   });
 
-  it('should return form value for selectBookRandom', () => {
-    component.selectBookForm.controls['selectBookRandom']?.setValue(
-      'testValue'
-    );
-    expect(component.selectBookRandom.value).toEqual('testValue');
-  });
-
   it('should return form value for book', () => {
     component.selectBookForm.controls['book']?.setValue('testValue');
     expect(component.book.value).toEqual('testValue');
@@ -751,7 +737,6 @@ describe('AddWordByUserComponent', () => {
     expect(component.formData.targetLanguage).toBe(
       component.targetLanguage.value
     );
-    expect(component.formData.isRandom).toBe(component.selectBookRandom.value);
     expect(component.formData.book).toBe(component.book.value);
     expect(component.formData.chapter).toBe(component.chapter.value);
   });

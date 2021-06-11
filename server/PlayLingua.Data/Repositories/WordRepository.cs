@@ -73,8 +73,8 @@ namespace PlayLingua.Data
 	                    WordsToWords.AddedBy = @AddedBy and 
 	                    wordsBase.LanguageId = @BaseLanguageId and 
 	                    wordsTarget.LanguageId = @TargetLanguageId and
-	                    WordsToWords.ChapterId = @ChapterId and
-	                    WordsToWords.BookId = @BookId
+	                    " + (overview.ChapterId != 0 && overview.ChapterId != null ? "WordsToWords.ChapterId = @ChapterId" : "WordsToWords.ChapterId is null") + @" and
+	                    " + (overview.BookId != 0 && overview.BookId != null ? "WordsToWords.BookId = @BookId" : "WordsToWords.BookId is null") + @"
                     ";
             var result = db.Query<WordForEditModel>(sql, overview).ToList();
             return result;
@@ -275,6 +275,17 @@ namespace PlayLingua.Data
                         BookId = submitWords.Book.Id
                     };
 
+                    if (submitWords.Chapter.Id == 0)
+                    {
+                        modelToAdd.ChapterId = null;
+                    }
+
+                    if (submitWords.Book.Id == 0)
+                    {
+                        modelToAdd.BookId = null;
+                    }
+
+
                     var sql = @"
                             insert into [dbo].[WordsToWords] (BaseWordId, TargetWordId, AddedBy, AddedDate, BookId, ChapterId)  
                             VALUES (@BaseWordId, @TargetWordId, @AddedBy, @AddedDate, @BookId, @ChapterId)";
@@ -295,7 +306,8 @@ namespace PlayLingua.Data
                         Success = false,
                         ErrorMessage = notFoundLanguageCodes.Find(x => x.Code == languageCode).ErrorMessage
                     };
-                } else
+                }
+                else
                 {
                     response = DownloadWord(new SpeechModel { Text = word, LanguageCode = languageCode, Gender = gender });
                 }
