@@ -150,14 +150,9 @@ export class FallingStarsComponent implements OnInit {
       }
     });
 
+    // Todo, uncomment below
     this.showStartDialog();
     this.scoreStorageService.clearCatch();
-
-    // Todo, delete below
-    // this.bookId = 8;
-    // this.chapterId = 24;
-    // this.scoreStorageService.cachedScore = 30;
-    // this.showEndGameDialog();
   }
 
   isLoggedIn(): boolean {

@@ -43,3 +43,18 @@
     </div>
   </div>
 </div>
+
+<div
+  class="half-size-main-container login-register-container"
+  *ngIf="!showFullSize && !securityService.isLoggedIn().success"
+>
+  <div class="log-out-container">
+    <div class="log-in-register-container">
+      <div class="log-in-register-item" routerLink="../../register">
+        Register
+      </div>
+      <span style="margin: 0 1vh">OR</span>
+      <div class="log-in-register-item" routerLink="../../login">Login</div>
+    </div>
+  </div>
+</div>

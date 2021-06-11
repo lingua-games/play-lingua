@@ -74,7 +74,30 @@
   z-index: 1;
 }
 
+.login-register-container {
+  width: 15%;
+}
+
 .spinner-border {
   height: 1rem;
   width: 1rem;
+}
+
+.half-size-main-container {
+  .log-out-container {
+    display: inline-block;
+  }
+
+  .log-in-register-item {
+    display: inline-block;
+    transition: 500ms;
+    padding: 0.5vh;
+  }
+
+  .log-in-register-item:hover {
+    cursor: pointer;
+    color: #273746;
+    background-color: lightgray;
+    border-radius: 10px;
+  }
 }
