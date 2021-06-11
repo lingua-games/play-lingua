@@ -53,10 +53,11 @@ export class RankingComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     if (this.data.isGameFinished) {
       this.storeRanks();
-      this.data.isGameFinished = false;
     } else {
       this.getRanks();
     }
+
+    console.log(this.data);
   }
 
   ngOnChanges(): void {

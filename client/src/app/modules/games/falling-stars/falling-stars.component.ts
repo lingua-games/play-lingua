@@ -152,6 +152,11 @@ export class FallingStarsComponent implements OnInit {
 
     this.showStartDialog();
     this.scoreStorageService.clearCatch();
+
+    // Todo, delete below
+    // this.bookId = 8;
+    // this.chapterId = 24;
+    // this.scoreStorageService.cachedScore = 30;
     // this.showEndGameDialog();
   }
 
