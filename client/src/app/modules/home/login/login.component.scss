@@ -11,8 +11,15 @@
 
 .forgot-password-container {
   float: left;
+
+  button {
+    font-size: .6vw;
+    padding: 3px;
+  }
 }
 
 .login-container {
   text-align: right;
 }
+
+

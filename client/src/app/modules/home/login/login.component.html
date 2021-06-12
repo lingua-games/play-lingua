@@ -48,11 +48,19 @@
     <div class="forgot-password-container">
       <button
         class="btn btn-info mr-2"
-        type="submit"
+        type="button"
         [disabled]="isLoading"
         routerLink="../forgot-password"
       >
         Forgot password!
+      </button>
+      <button
+        class="btn btn-info mr-2"
+        type="button"
+        [disabled]="isLoading"
+        routerLink="../register"
+      >
+        Register
       </button>
     </div>
     <div class="login-container">

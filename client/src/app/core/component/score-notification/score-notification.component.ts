@@ -32,10 +32,13 @@ export class ScoreNotificationComponent implements OnInit {
   ) {}
   notification: NotificationState = {} as NotificationState;
   showNotification?: boolean;
+  victoryMessage = '';
+
   ngOnInit(): void {
     this.store
       .select(getShowNotification)
       .subscribe((notification: NotificationState) => {
+        this.chooseMessage();
         if (notification && notification.gameName) {
           this.notification = notification;
           if (notification.position) {
@@ -48,6 +51,12 @@ export class ScoreNotificationComponent implements OnInit {
           }
         }
       });
+  }
+
+  chooseMessage(): void {
+    const messages: string[] = ['Yay', 'Hurray', 'Super', 'Perfect', 'Amazing'];
+    const randomNumber = Math.floor(Math.random() * messages.length);
+    this.victoryMessage = messages[randomNumber];
   }
 
   showMessage(): void {
