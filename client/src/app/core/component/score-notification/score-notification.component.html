@@ -4,6 +4,6 @@
 ></p-toast>
 <div class="score-container text-center" *ngIf="showNotification" @fadeIn>
   <div class="alert alert-success" role="alert">
-    Yay, +{{ notification.score }}
+    {{ victoryMessage }}, +{{ notification.score }}
   </div>
 </div>
