@@ -25,7 +25,7 @@ End-to-End testing is a methodology used to test an application from a user's pe
 
 The End-to-End test for this project has not implemented yet.
 
-##Back-end
+## Back-end
 
 Install ``Dotnet core SDK > 3`` and ``Dotnet core runtime > 3``\
 
@@ -33,7 +33,7 @@ Navigate to ``./server``
 
 Run ``dotnet restore`` and ``dotnet run``
 
-##Pipelines
+## Pipelines
 
 There are 4 pipelines
 
