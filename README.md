@@ -42,8 +42,8 @@ There are 4 pipelines
 
 1. **Front-end** responsible to build front-end part (Angular) and trigger only when any change push into ``./client`` directory. [The config file](./.github/workflows/Angular.yml)
 2. **Backend** responsible to build backend part (.Net core) and trigger only when any change push into ``./server`` directory. [The config file](./.github/workflows/dotnet-core.yml)
-3. **Canary** responsible to build develop branch on push/merge action and deploy integration of front-end and backend into [Canary](https://canary.playinglingua.com) environment
-4. **Production** responsible to build and deploy [Canary](https://canary.playinglingua.com) version into [Production](https://playinglingua.com/) 
+3. **Canary** responsible to build develop branch on push/merge action and deploy integration of front-end and backend into [Canary](https://canary.playinglingua.com) environment. [The config file](./.github/workflows/canary.yml)
+4. **Production** responsible to build and deploy [Canary](https://canary.playinglingua.com) version into [Production](https://playinglingua.com/). [The config file](./.github/workflows/deploy-eu.yml)
 
  
 ## Donate
