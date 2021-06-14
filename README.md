@@ -1,4 +1,7 @@
-# Welcome to play lingua project
+# Welcome to Playinglingua <sup><sup>[Live demo](https://www.playinglingua.com)</sup></sup> 
+PlayingLingua is a free, non-commercial, open source and cross-platform application which is developed to help people to learn new languages.
+In PlayingLingua, you play games, earn scores and learn new words. You can either play your own words or other players words.
+You can also contribute in the word pool or even project code.
 
 ### Table of content
 * [Builds](#Builds)
@@ -23,7 +26,7 @@
 
 End-to-End testing is a methodology used to test an application from a user's perspective. The tests ensure the application performs as expected from start to finish. As the tests run, you will see the browser interaction just as a user would use your application. Angular end to end tests are powered by a framework called Protractor.
 
-The End-to-End test for this project has not implemented yet.
+Note. The End-to-End test for this project has not implemented yet.
 
 ## Back-end
 
@@ -49,7 +52,7 @@ As well as we are paying a lot of expenses for managing our servers, backup, dom
 
 My crypto wallet: 
 
-![alt text](./client/src/assets/about-us/crypto-wallet.png "Logo Title Text 1")
+![alt text](./client/src/assets/about-us/crypto-wallet.png)
 
 [logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"
 
