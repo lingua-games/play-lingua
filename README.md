@@ -2,8 +2,8 @@
 
 ### Table of content
 * [Builds](#Builds)
-* [Setup front-end](#Front-end)
-* [Setup back-end](#Back-end)
+* [Setup front-end](#front-end)
+* [Setup back-end](#back-end)
 * [Pipelines](#Pipelines)
 * [Donate](#Donate)
 
