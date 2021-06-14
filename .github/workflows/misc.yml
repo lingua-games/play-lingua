@@ -1,0 +1,17 @@
+name: Misc
+
+on:
+  push:
+    paths:
+      - "**.md"
+    branches:
+      - "feature/**"
+
+jobs:
+  build:
+    runs-on: Ubuntu-20.04
+
+    steps:
+      - name: Run fake line
+        run: echo "hello world"
+
