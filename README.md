@@ -18,9 +18,10 @@ You can also contribute in the word pool or even project code.
 ## Front-end
 #### Run and serve
 1. Install the [latest node version](https://nodejs.org/en/)
-2. Open `cmd` and navigate to [client](./client) directory
-3. Execute `npm install` and then `npm start`
-4. Browse to [localhost:4000](http://localhost:4000/)
+2. Open `cmd` and navigate to `./client` directory
+3. Run `npm install`
+4. Run `npm start`
+5. Browse to [localhost:4000](http://localhost:4000/)
 
 #### Run end-to-end tests
 
@@ -30,7 +31,7 @@ Note. The End-to-End test for this project has not implemented yet.
 
 ## Back-end
 
-Install ``Dotnet core SDK > 3`` and ``Dotnet core runtime > 3``\
+Install ``Dotnet core SDK > 3`` and ``Dotnet core runtime > 3``
 
 Navigate to ``./server``
 
