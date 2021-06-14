@@ -1,4 +1,4 @@
-# Welcome to Playinglingua <sup><sup>[Live demo](https://www.playinglingua.com)</sup></sup> 
+# Welcome to Playinglingua <sup><sup>[Live demo](https://playinglingua.com/)</sup></sup> 
 PlayingLingua is a free, non-commercial, open source and cross-platform application which is developed to help people to learn new languages.
 In PlayingLingua, you play games, earn scores and learn new words. You can either play your own words or other players words.
 You can also contribute in the word pool or even project code.
@@ -42,8 +42,8 @@ There are 4 pipelines
 
 1. **Front-end** responsible to build front-end part (Angular) and trigger only when any change push into ``./client`` directory. [The config file](./.github/workflows/Angular.yml)
 2. **Backend** responsible to build backend part (.Net core) and trigger only when any change push into ``./server`` directory. [The config file](./.github/workflows/dotnet-core.yml)
-3. **Canary** responsible to build develop branch on push/merge action and deploy integration of front-end and backend into [Canary](https://www.canary.playinglingua.com) environment
-4. **Production** responsible to build and deploy [Canary](https://www.canary.playinglingua.com) version into [Production](https://www.playinglingua.com) 
+3. **Canary** responsible to build develop branch on push/merge action and deploy integration of front-end and backend into [Canary](https://canary.playinglingua.com) environment
+4. **Production** responsible to build and deploy [Canary](https://canary.playinglingua.com) version into [Production](https://playinglingua.com/) 
 
  
 ## Donate
