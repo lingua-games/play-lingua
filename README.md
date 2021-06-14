@@ -2,8 +2,8 @@
 
 ### Table of content
 * [Builds](#Builds)
-* [Setup front-end](#Setup front-end)
-* [Setup back-end](#Setup front-end)
+* [Setup front-end](#Front-end)
+* [Setup back-end](#Back-end)
 * [Pipelines](#Pipelines)
 * [Donate](#Donate)
 
@@ -12,7 +12,7 @@
 | ------------- | ------------- | ----- | ----- | 
 | [![Deploy to production](https://github.com/lingua-games/play-lingua/actions/workflows/deploy-eu.yml/badge.svg)](https://github.com/lingua-games/play-lingua/actions/workflows/deploy-eu.yml)      | Comming soon | [![.NET Core](https://github.com/lingua-games/play-lingua/actions/workflows/dotnet-core.yml/badge.svg)](https://github.com/lingua-games/play-lingua/actions/workflows/dotnet-core.yml) | [![Angular](https://github.com/lingua-games/play-lingua/actions/workflows/Angular.yml/badge.svg)](https://github.com/lingua-games/play-lingua/actions/workflows/Angular.yml) | 
 
-## Setup front-end
+## Front-end
 #### Run and serve
 1. Install the [latest node version](https://nodejs.org/en/)
 2. Open `cmd` and navigate to [client](./client) directory
@@ -25,7 +25,7 @@ End-to-End testing is a methodology used to test an application from a user's pe
 
 The End-to-End test for this project has not implemented yet.
 
-##Setup front-end
+##Back-end
 
 Install ``Dotnet core SDK > 3`` and ``Dotnet core runtime > 3``\
 
@@ -41,6 +41,7 @@ There are 4 pipelines
 2. **Backend** responsible to build backend part (.Net core) and trigger only when any change push into ``./server`` directory. [The config file](./.github/workflows/dotnet-core.yml)
 3. **Canary** responsible to build develop branch on push/merge action and deploy integration of front-end and backend into [Canary](https://www.canary.playinglingua.com) environment
 4. **Production** responsible to build and deploy [Canary](https://www.canary.playinglingua.com) version into [Production](https://www.playinglingua.com) 
+
  
 ## Donate
 As well as we are paying a lot of expenses for managing our servers, backup, domain and etc , your donation is so valuable for us :)
