@@ -5,6 +5,7 @@ on:
     paths:
       - "server/**"
       - ".github/**"
+      - "**.md"
     branches:
       - "feature/**"
 
