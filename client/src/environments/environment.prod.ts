@@ -1,4 +1,5 @@
-const secrets = require('./secretKeys.json');
+// @ts-ignore
+import * as secrets from './secretKeys.json';
 
 export const environment = {
   production: true,

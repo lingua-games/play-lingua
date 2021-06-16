@@ -11,6 +11,7 @@ on:
       - ".github/**"
     branches:
       - "feature/**"
+
 env:
   AZURE_WEBAPP_NAME: play-lingua-eu
   AZURE_WEBAPP_PACKAGE_PATH: 'deployed-directory'      # set this to the path to your web app project, defaults to the repository root
@@ -36,16 +37,6 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      # Set LocalStorage secrets
-      - name: Set front-end secrets
-        uses: microsoft/variable-substitution@v1
-        with:
-          files: './client/src/environments/secretKeys.json'
-        env:
-          localStoragePrivateKey: ${{ secrets.LOCAL_STORAGE_PRIVATE_KEY }}
-          feedbackInvitationPrivateKey: ${{ secrets.FEEDBACK_INVITATION_PRIVATE_KEY }}
-          queryParameters: ${{ secrets.QUERY_PARAMETERS }}
-
       # Setup Front end dependencies
       - name: Install dependencies
         run: npm ci
@@ -67,6 +58,16 @@ jobs:
           hashKey: ${{ secrets.HASHKEY  }}
           email.username: ${{ secrets.EMAIL_USERNAME }}
           email.password: ${{ secrets.EMAIL_PASSWORD }}
+
+      # Set LocalStorage secrets
+      - name: Set front-end secrets
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: './client/src/environments/secretKeys.json'
+        env:
+          localStoragePrivateKey: ${{ secrets.LOCAL_STORAGE_PRIVATE_KEY }}
+          feedbackInvitationPrivateKey: ${{ secrets.FEEDBACK_INVITATION_PRIVATE_KEY }}
+          queryParameters: ${{ secrets.QUERY_PARAMETERS }}
 
       # Set google secrets
       - name: Google secret Variable Substitution
