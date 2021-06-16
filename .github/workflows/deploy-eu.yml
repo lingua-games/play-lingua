@@ -42,9 +42,9 @@ jobs:
         with:
           files: './client/src/environments/secretKeys.json'
         env:
-          secretKeys.localStoragePrivateKey: ${{ LOCAL_STORAGE_PRIVATE_KEY }}
-          secretKeys.feedbackInvitationPrivateKey: ${{ FEEDBACK_INVITATION_PRIVATE_KEY }}
-          secretKeys.queryParameters: ${{ QUERY_PARAMETERS }}
+          secretKeys.localStoragePrivateKey: ${{ secrets.LOCAL_STORAGE_PRIVATE_KEY }}
+          secretKeys.feedbackInvitationPrivateKey: ${{ secrets.FEEDBACK_INVITATION_PRIVATE_KEY }}
+          secretKeys.queryParameters: ${{ secrets.QUERY_PARAMETERS }}
 
       # Setup Front end dependencies
       - name: Install dependencies
