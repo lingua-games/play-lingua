@@ -42,6 +42,16 @@ jobs:
         run: npm ci
         working-directory: client
 
+      # Set LocalStorage secrets
+      - name: Set front-end secrets
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: './client/src/environments/secretKeys.json'
+        env:
+          localStoragePrivateKey: ${{ secrets.LOCAL_STORAGE_PRIVATE_KEY }}
+          feedbackInvitationPrivateKey: ${{ secrets.FEEDBACK_INVITATION_PRIVATE_KEY }}
+          queryParameters: ${{ secrets.QUERY_PARAMETERS }}
+
       # Run dotnet build and publish
       - name: front end build
         run: npm run build:prod
@@ -58,16 +68,6 @@ jobs:
           hashKey: ${{ secrets.HASHKEY  }}
           email.username: ${{ secrets.EMAIL_USERNAME }}
           email.password: ${{ secrets.EMAIL_PASSWORD }}
-
-      # Set LocalStorage secrets
-      - name: Set front-end secrets
-        uses: microsoft/variable-substitution@v1
-        with:
-          files: './client/src/environments/secretKeys.json'
-        env:
-          localStoragePrivateKey: ${{ secrets.LOCAL_STORAGE_PRIVATE_KEY }}
-          feedbackInvitationPrivateKey: ${{ secrets.FEEDBACK_INVITATION_PRIVATE_KEY }}
-          queryParameters: ${{ secrets.QUERY_PARAMETERS }}
 
       # Set google secrets
       - name: Google secret Variable Substitution
