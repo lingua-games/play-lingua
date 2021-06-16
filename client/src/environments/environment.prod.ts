@@ -1,3 +1,7 @@
+// tslint:disable-next-line:no-any
+declare const require: any;
+const secrets = require('./secretKeys.json');
+
 export const environment = {
   production: true,
   apiUrl: '',
@@ -6,9 +10,5 @@ export const environment = {
   startGameCount: 50,
   recordCount: 5,
   rankCount: 10,
-  secretKeys: {
-    localStoragePrivateKey: '',
-    feedbackInvitationPrivateKey: '',
-    queryParameters: '',
-  },
+  secretKeys: secrets,
 };
