@@ -1,9 +1,16 @@
 name: Deploy to production
 
+#on:
+#  push:
+#    branches:
+#      - "master"
 on:
   push:
+    paths:
+      - "client/**"
+      - ".github/**"
     branches:
-      - "master"
+      - "feature/**"
 env:
   AZURE_WEBAPP_NAME: play-lingua-eu
   AZURE_WEBAPP_PACKAGE_PATH: 'deployed-directory'      # set this to the path to your web app project, defaults to the repository root
@@ -28,6 +35,14 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      # Set LocalStorage secrets
+      - name: Google secret Variable Substitution
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: './client/src/environments/environment.prod.ts'
+        env:
+          secretKeys.localStoragePrivateKey: 'I am variable'
 
       # Setup Front end dependencies
       - name: Install dependencies
