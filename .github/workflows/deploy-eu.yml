@@ -1,16 +1,9 @@
 name: Deploy to production
 
-#on:
-#  push:
-#    branches:
-#      - "master"
 on:
   push:
-    paths:
-      - "client/**"
-      - ".github/**"
     branches:
-      - "feature/**"
+      - "master"
 
 env:
   AZURE_WEBAPP_NAME: play-lingua-eu

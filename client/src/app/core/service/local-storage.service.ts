@@ -11,7 +11,6 @@ export class LocalStorageService {
   constructor() {}
 
   save(item: LocalStorageHelper, value?: string): void {
-    console.log(environment);
     localStorage.setItem(
       item,
       this.encryptData(
