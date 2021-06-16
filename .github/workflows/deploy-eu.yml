@@ -37,12 +37,14 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       # Set LocalStorage secrets
-      - name: Google secret Variable Substitution
+      - name: Set front-end secrets
         uses: microsoft/variable-substitution@v1
         with:
-          files: './client/src/environments/environment.prod.ts'
+          files: './client/src/environments/secretKeys.json'
         env:
-          secretKeys.localStoragePrivateKey: 'I am variable'
+          secretKeys.localStoragePrivateKey: ${{ LOCAL_STORAGE_PRIVATE_KEY }}
+          secretKeys.feedbackInvitationPrivateKey: ${{ FEEDBACK_INVITATION_PRIVATE_KEY }}
+          secretKeys.queryParameters: ${{ QUERY_PARAMETERS }}
 
       # Setup Front end dependencies
       - name: Install dependencies
