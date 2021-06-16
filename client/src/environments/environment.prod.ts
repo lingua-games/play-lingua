@@ -1,5 +1,6 @@
-// @ts-ignore
-import * as secrets from './secretKeys.json';
+// tslint:disable-next-line:no-any
+declare const require: any;
+const secrets = require('./secretKeys.json');
 
 export const environment = {
   production: true,
