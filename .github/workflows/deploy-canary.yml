@@ -1,12 +1,16 @@
-name: Deploy to Production
+name: Deploy to Canary
 
 on:
   push:
+    paths:
+      - "client/**"
+      - ".github/**"
     branches:
-      - "master"
+      - "feature/**"
+      - "develop"
 
 env:
-  AZURE_WEBAPP_NAME: play-lingua-eu
+  AZURE_CANARY_WEBAPP_NAME: Canary-play-lingua-eu
   AZURE_WEBAPP_PACKAGE_PATH: 'deployed-directory'      # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '3.1'
 
@@ -83,6 +87,6 @@ jobs:
       - name: 'Azure webapp deploy'
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_EU  }} # Define secret variable in repository settings as per action documentation
+          app-name: ${{ env.AZURE_CANARY_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_CANARY  }} # Define secret variable in repository settings as per action documentation
           package: 'server/${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'

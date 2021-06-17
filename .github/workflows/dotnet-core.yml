@@ -1,29 +1,29 @@
-name: .NET Core
-
-on:
-  push:
-    paths:
-      - "server/**"
-      - ".github/**"
-    branches:
-      - "feature/**"
-
-jobs:
-  build:
-    runs-on: Ubuntu-20.04
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 3.1.301
-      - name: Install dependencies
-        run: dotnet restore
-        working-directory: server
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-        working-directory: server
-      - name: Test
-        run: dotnet test --no-restore
-        working-directory: server
+#name: .NET Core
+#
+#on:
+#  push:
+#    paths:
+#      - "server/**"
+#      - ".github/**"
+#    branches:
+#      - "feature/**"
+#
+#jobs:
+#  build:
+#    runs-on: Ubuntu-20.04
+#
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Setup .NET Core
+#        uses: actions/setup-dotnet@v1
+#        with:
+#          dotnet-version: 3.1.301
+#      - name: Install dependencies
+#        run: dotnet restore
+#        working-directory: server
+#      - name: Build
+#        run: dotnet build --configuration Release --no-restore
+#        working-directory: server
+#      - name: Test
+#        run: dotnet test --no-restore
+#        working-directory: server
