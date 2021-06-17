@@ -18,7 +18,7 @@ You can also contribute in the word pool or even project code.
 | [![Deploy to production](https://github.com/lingua-games/play-lingua/actions/workflows/deploy-eu.yml/badge.svg)](https://github.com/lingua-games/play-lingua/actions/workflows/deploy-eu.yml)      | Comming soon | [![.NET Core](https://github.com/lingua-games/play-lingua/actions/workflows/dotnet-core.yml/badge.svg)](https://github.com/lingua-games/play-lingua/actions/workflows/dotnet-core.yml) | [![Angular](https://github.com/lingua-games/play-lingua/actions/workflows/Angular.yml/badge.svg)](https://github.com/lingua-games/play-lingua/actions/workflows/Angular.yml) | 
 
 ## Front-end
-#### Run and serve
+#### Run and serve 
 1. Install the [latest node version](https://nodejs.org/en/)
 2. Open `cmd` and navigate to `./client` directory
 3. Run `npm install`
