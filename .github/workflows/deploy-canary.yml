@@ -3,7 +3,7 @@ name: Deploy to Canary
 on:
   push:
     branches:
-      - "develop"
+      - "canary"
 
 env:
   AZURE_CANARY_WEBAPP_NAME: Canary-play-lingua-eu

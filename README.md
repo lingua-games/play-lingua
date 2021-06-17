@@ -15,7 +15,7 @@ You can also contribute in the word pool or even project code.
 ## Builds
 | Production        | Canary           | Backend  | Front-end  |
 | ------------- | ------------- | ----- | ----- | 
-| [![Deploy to production](https://github.com/lingua-games/play-lingua/actions/workflows/deploy-eu.yml/badge.svg)](https://github.com/lingua-games/play-lingua/actions/workflows/deploy-eu.yml)      | Comming soon | [![.NET Core](https://github.com/lingua-games/play-lingua/actions/workflows/dotnet-core.yml/badge.svg)](https://github.com/lingua-games/play-lingua/actions/workflows/dotnet-core.yml) | [![Angular](https://github.com/lingua-games/play-lingua/actions/workflows/Angular.yml/badge.svg)](https://github.com/lingua-games/play-lingua/actions/workflows/Angular.yml) | 
+| [![Deploy to production](https://github.com/lingua-games/play-lingua/actions/workflows/deploy-eu.yml/badge.svg)](https://github.com/lingua-games/play-lingua/actions/workflows/deploy-eu.yml)      | [![Deploy to Canary](https://github.com/lingua-games/play-lingua/actions/workflows/deploy-canary.yml/badge.svg)](https://github.com/lingua-games/play-lingua/actions/workflows/deploy-canary.yml) | [![.NET Core](https://github.com/lingua-games/play-lingua/actions/workflows/dotnet-core.yml/badge.svg)](https://github.com/lingua-games/play-lingua/actions/workflows/dotnet-core.yml) | [![Angular](https://github.com/lingua-games/play-lingua/actions/workflows/Angular.yml/badge.svg)](https://github.com/lingua-games/play-lingua/actions/workflows/Angular.yml) | 
 
 ## Front-end
 #### Run and serve 
