@@ -1,4 +1,6 @@
 # Welcome to Playinglingua <sup><sup>[Live demo](https://playinglingua.com/)</sup></sup> 
+Want to see the un-released features? <sup><sup>[Visit canary version](http://canary.playinglingua.com/)</sup></sup>
+
 PlayingLingua is a free, non-commercial, open source and cross-platform application which is developed to help people to learn new languages.
 In PlayingLingua, you play games, earn scores and learn new words. You can either play your own words or other players words.
 You can also contribute in the word pool or even project code.

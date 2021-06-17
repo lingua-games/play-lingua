@@ -2,11 +2,7 @@ name: Deploy to Canary
 
 on:
   push:
-    paths:
-      - "client/**"
-      - ".github/**"
     branches:
-      - "feature/**"
       - "develop"
 
 env:
