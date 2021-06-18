@@ -1,4 +1,6 @@
 # Welcome to Playinglingua <sup><sup>[Live demo](https://playinglingua.com/)</sup></sup> 
+Want to see the un-released features? <sup><sup>[Visit canary version](http://canary.playinglingua.com/)</sup></sup>
+
 PlayingLingua is a free, non-commercial, open source and cross-platform application which is developed to help people to learn new languages.
 In PlayingLingua, you play games, earn scores and learn new words. You can either play your own words or other players words.
 You can also contribute in the word pool or even project code.
@@ -13,10 +15,10 @@ You can also contribute in the word pool or even project code.
 ## Builds
 | Production        | Canary           | Backend  | Front-end  |
 | ------------- | ------------- | ----- | ----- | 
-| [![Deploy to production](https://github.com/lingua-games/play-lingua/actions/workflows/deploy-eu.yml/badge.svg)](https://github.com/lingua-games/play-lingua/actions/workflows/deploy-eu.yml)      | Comming soon | [![.NET Core](https://github.com/lingua-games/play-lingua/actions/workflows/dotnet-core.yml/badge.svg)](https://github.com/lingua-games/play-lingua/actions/workflows/dotnet-core.yml) | [![Angular](https://github.com/lingua-games/play-lingua/actions/workflows/Angular.yml/badge.svg)](https://github.com/lingua-games/play-lingua/actions/workflows/Angular.yml) | 
+| [![Deploy to production](https://github.com/lingua-games/play-lingua/actions/workflows/deploy-eu.yml/badge.svg)](https://github.com/lingua-games/play-lingua/actions/workflows/deploy-eu.yml)      | [![Deploy to Canary](https://github.com/lingua-games/play-lingua/actions/workflows/deploy-canary.yml/badge.svg)](https://github.com/lingua-games/play-lingua/actions/workflows/deploy-canary.yml) | [![.NET Core](https://github.com/lingua-games/play-lingua/actions/workflows/dotnet-core.yml/badge.svg)](https://github.com/lingua-games/play-lingua/actions/workflows/dotnet-core.yml) | [![Angular](https://github.com/lingua-games/play-lingua/actions/workflows/Angular.yml/badge.svg)](https://github.com/lingua-games/play-lingua/actions/workflows/Angular.yml) | 
 
 ## Front-end
-#### Run and serve
+#### Run and serve 
 1. Install the [latest node version](https://nodejs.org/en/)
 2. Open `cmd` and navigate to `./client` directory
 3. Run `npm install`
