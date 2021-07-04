@@ -70,16 +70,22 @@ export class SecurityService {
   }
 
   getTokenInformation(): SecurityTokenInterface | undefined {
-    if (this.localStorageService.load(LocalStorageHelper.token) === 'null') {
-      this.logoutOn401();
-      return;
-    }
-    if (!this.localStorageService.load(LocalStorageHelper.token)) {
+    try {
+      if (this.localStorageService.load(LocalStorageHelper.token) === 'null') {
+        this.logoutOn401();
+        return;
+      }
+      if (!this.localStorageService.load(LocalStorageHelper.token)) {
+        return {} as SecurityTokenInterface;
+      }
+      return jwt_decode(
+        this.localStorageService.load(LocalStorageHelper.token)
+      ) as SecurityTokenInterface;
+    } catch {
+      this.localStorageService.clear();
+      this.logout();
       return {} as SecurityTokenInterface;
     }
-    return jwt_decode(
-      this.localStorageService.load(LocalStorageHelper.token)
-    ) as SecurityTokenInterface;
   }
 
   isLoggedIn(): { success: boolean; route: string } {

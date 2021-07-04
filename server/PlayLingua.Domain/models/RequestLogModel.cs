@@ -20,7 +20,8 @@ namespace PlayLingua.Domain.Models
 		public int ResponseStatusCode { get; set; }
 		public long? ResponseSize { get; set; }
 		public string ExceptionTitle { get; set; }
-		public string ExceptionMessage { get; set; }
+        public string Environment { get; set; }
+        public string ExceptionMessage { get; set; }
 		//public ActionTypeEnum? ActionTypeId { get; set; }
 		//public ICollection<RequestException> Exceptions { get; set; }
 		//public ICollection<EntityChangeLog> EntityChanges { get; set; }

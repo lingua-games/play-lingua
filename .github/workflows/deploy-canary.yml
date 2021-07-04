@@ -61,6 +61,7 @@ jobs:
           hashKey: ${{ secrets.HASHKEY  }}
           email.username: ${{ secrets.EMAIL_USERNAME }}
           email.password: ${{ secrets.EMAIL_PASSWORD }}
+          Environment.value: 'CANARY'
 
       # Set google secrets
       - name: Google secret Variable Substitution

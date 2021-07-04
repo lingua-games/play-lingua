@@ -61,6 +61,7 @@ jobs:
           hashKey: ${{ secrets.HASHKEY  }}
           email.username: ${{ secrets.EMAIL_USERNAME }}
           email.password: ${{ secrets.EMAIL_PASSWORD }}
+          Environment.value: 'PRODUCTION'
 
       # Set google secrets
       - name: Google secret Variable Substitution
@@ -71,7 +72,7 @@ jobs:
           private_key_id: ${{ secrets.GOOGLE_PRIVATE_KEY_ID  }}
           private_key: ${{ secrets.GOOGLE_PRIVATE_KEY  }}
 
-      # Run dotnet build and publish
+      # Run dotnet build and  publish
       - name: dotnet build and publish
         run: |
           dotnet restore
