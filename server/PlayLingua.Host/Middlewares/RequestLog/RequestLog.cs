@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using PlayLingua.Domain.Models;
 using PlayLingua.Domain.Ports;
@@ -20,10 +21,16 @@ namespace PlayLingua.Host.Middlewares
         private readonly Stopwatch _stopwatch = new Stopwatch();
         private readonly IRequeustLogRepository _requeustLogRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public RequestLog(RequestDelegate next, IRequeustLogRepository requeustLogRepository, IHttpContextAccessor httpContextAccessor)
+        private readonly string _environment;
+        public class Environment
         {
+            public string Value { get; set; }
+        }
+        public RequestLog(RequestDelegate next, IRequeustLogRepository requeustLogRepository, IHttpContextAccessor httpContextAccessor, IOptions<Environment> config)
+        {
+            _environment = config.Value.Value;
             _httpContextAccessor = httpContextAccessor;
+
             _requeustLogRepository = requeustLogRepository;
             _next = next;
         }
@@ -41,6 +48,7 @@ namespace PlayLingua.Host.Middlewares
                     !httpContext.Request.Path.ToString().Contains(".png"))
                 {
                     log = await RequestIndiactor(httpContext);
+                    
                     using (var memStream = new MemoryStream())
                     {
                         var originalResponseBody = httpContext.Response.Body;
@@ -138,6 +146,7 @@ namespace PlayLingua.Host.Middlewares
             }
 
             request.RequestSize = httpContext.Request.ContentLength;
+            request.Environment = _environment;
             request.Id = _requeustLogRepository.Add(request).Id;
             return new RequestLogModel
             {

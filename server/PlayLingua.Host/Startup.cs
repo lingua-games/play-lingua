@@ -9,6 +9,7 @@ using PlayLingua.Data;
 using PlayLingua.Domain.Models;
 using PlayLingua.Host.Middlewares;
 using System.Text;
+using static PlayLingua.Host.Middlewares.RequestLog;
 
 namespace PlayLingua.Host
 {
@@ -24,6 +25,7 @@ namespace PlayLingua.Host
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<Environment>(Configuration.GetSection("Environment"));
             services.AddControllers().AddNewtonsoftJson();
 
             services.AddAuthentication(opt =>

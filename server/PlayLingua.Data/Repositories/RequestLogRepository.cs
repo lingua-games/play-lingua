@@ -20,7 +20,7 @@ namespace PlayLingua.Data
         public RequestLogModel Add(RequestLogModel requestLog)
         {
             var sql =
-                @"
+				@"
 				insert into [dbo].[RequestLogs] 
 				(
 					[StartTime],
@@ -37,7 +37,8 @@ namespace PlayLingua.Data
 					[ResponseStatusCode],
 					[ResponseSize],
 					[ExceptionTitle],
-					[ExceptionMessage]
+					[ExceptionMessage],
+					[Environment]
 				) VALUES
 				(
 					@StartTime,
@@ -54,7 +55,8 @@ namespace PlayLingua.Data
 					@ResponseStatusCode,
 					@ResponseSize,
 					@ExceptionTitle,
-					@ExceptionMessage
+					@ExceptionMessage,
+					@Environment
 				);" + "SELECT CAST(SCOPE_IDENTITY() as int)";
 
             using var db = new SqlConnection(_connectionString);
