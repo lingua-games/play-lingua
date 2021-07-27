@@ -50,7 +50,9 @@ export class GameMenuComponent implements OnInit {
     if (
       !this.defaultSelectedLanguages ||
       !this.defaultSelectedLanguages.defaultBaseLanguage ||
-      !this.defaultSelectedLanguages.defaultTargetLanguage
+      !this.defaultSelectedLanguages.defaultTargetLanguage ||
+      !this.defaultSelectedLanguages.defaultBaseLanguage.id ||
+      !this.defaultSelectedLanguages.defaultTargetLanguage.id
     ) {
       this.loadingFullPage = true;
       this.openSelectDefaultLanguageDialog();
