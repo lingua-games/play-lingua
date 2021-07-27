@@ -46,12 +46,18 @@ export class SelectDefaultLanguageDialogComponent implements OnInit {
           this.selectedItems.defaultTargetLanguage =
             this.languages.data.find(
               (x) =>
-                x.id === JSON.parse(defaultLanguages).defaultTargetLanguage.id
+                x.id ===
+                (JSON.parse(defaultLanguages).defaultTargetLanguage
+                  ? JSON.parse(defaultLanguages).defaultTargetLanguage.id
+                  : 0)
             ) || ({} as LanguageModel);
           this.selectedItems.defaultBaseLanguage =
             this.languages.data.find(
               (x) =>
-                x.id === JSON.parse(defaultLanguages).defaultBaseLanguage.id
+                x.id ===
+                (JSON.parse(defaultLanguages).defaultBaseLanguage
+                  ? JSON.parse(defaultLanguages).defaultBaseLanguage.id
+                  : 0)
             ) || ({} as LanguageModel);
         }
       },
