@@ -10,11 +10,13 @@ import { UserModel } from './core/models/user.model';
 import { UserService } from './core/service/user.service';
 import { MessageService } from 'primeng/api';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
   let component: AppComponent;
   let mockSecurityService;
+  let mockDeviceDetectorService;
   let mockUserService;
   let mockMessageService;
   beforeEach(
@@ -25,6 +27,14 @@ describe('AppComponent', () => {
         'initialTotalScore',
       ]);
 
+      mockDeviceDetectorService = jasmine.createSpyObj(
+        'deviceDetectorService',
+        {
+          isMobile: () => {
+            return false;
+          },
+        }
+      );
       mockUserService = jasmine.createSpyObj('userService', [
         'getUserInformation',
       ]);
@@ -50,6 +60,10 @@ describe('AppComponent', () => {
             useValue: mockSecurityService,
           },
           {
+            provide: DeviceDetectorService,
+            useValue: mockDeviceDetectorService,
+          },
+          {
             provide: UserService,
             useValue: mockUserService,
           },
@@ -72,6 +86,16 @@ describe('AppComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should get device information at Initial time', () => {
+    mockSecurityService.isLoggedIn.and.callFake(() => {
+      return { success: false };
+    });
+
+    fixture.detectChanges();
+
+    expect(mockDeviceDetectorService.isMobile).toHaveBeenCalled();
+  });
+
   it('should call getUserInformation if isLoggedIn', () => {
     mockSecurityService.isLoggedIn.and.callFake(() => {
       return { success: true };
@@ -80,7 +104,7 @@ describe('AppComponent', () => {
 
     fixture.detectChanges();
 
-    expect(component.getUserInformation).toHaveBeenCalled();
+    expect(component.getUserInformation);
   });
 
   it('should set loading for total score when calling getUserInformation', () => {

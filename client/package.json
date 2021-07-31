@@ -38,6 +38,7 @@
     "jwt-decode": "^3.1.2",
     "ng-recaptcha": "^7.0.1",
     "ngx-bootstrap": "^6.1.0",
+    "ngx-device-detector": "^2.1.1",
     "postcss": "^8.3.0",
     "primeicons": "^4.0.0",
     "primeng": "^11.3.1",
