@@ -86,7 +86,7 @@ describe('AppComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get device information at Initial time', () => {
+  it('should get device information at Initial time ', () => {
     mockSecurityService.isLoggedIn.and.callFake(() => {
       return { success: false };
     });
