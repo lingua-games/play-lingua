@@ -10,6 +10,7 @@ import {
 } from './core/service/notification.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { NavigationStart, Router } from '@angular/router';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-root',
@@ -31,16 +32,21 @@ import { NavigationStart, Router } from '@angular/router';
 export class AppComponent implements OnInit {
   isGettingUserInformation = false;
   showAboutUs = true;
+  isMobile = false;
 
   constructor(
     private securityService: SecurityService,
     private userService: UserService,
     private localStorageService: LocalStorageService,
     private notificationService: NotificationService,
-    private router: Router
+    private router: Router,
+    private deviceDetectorService: DeviceDetectorService
   ) {}
 
   ngOnInit(): void {
+    this.isMobile =
+      this.deviceDetectorService.isMobile() ||
+      this.deviceDetectorService.isTablet();
     if (this.securityService.isLoggedIn().success) {
       this.getUserInformation();
     }
@@ -80,5 +86,9 @@ export class AppComponent implements OnInit {
         this.isGettingUserInformation = false;
       }
     );
+  }
+
+  openExternalUrl(url: string): void {
+    window.open(url, '_blank');
   }
 }

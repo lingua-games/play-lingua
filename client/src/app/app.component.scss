@@ -16,3 +16,40 @@
   cursor: pointer;
   opacity: .7;
 }
+
+.mobile-message-container {
+  background-image: linear-gradient(to bottom, #FBFCFC , #7B7D7D);
+  height: 100%;
+}
+
+.mobile-logo-container {
+  img {
+    width: 80%;
+    margin-left: 10%;
+  }
+}
+
+.source-control-container {
+  img {
+    width: 30%;
+  }
+
+  position: absolute;
+  width: 80%;
+  left: 10%;
+  bottom: 1%;
+  padding: 2%;
+  border: solid 1px #626567;
+  border-radius: 10px;
+  font-weight: 100;
+  background-color: #FDFEFE;
+  font-size: 4vw;
+
+}
+
+.mobile-description-container {
+  width: 90%;
+  margin-left: 5%;
+}
+
+

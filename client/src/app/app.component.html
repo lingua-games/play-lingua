@@ -1,33 +1,60 @@
-<div class="about-us-icon" *ngIf="showAboutUs" routerLink="./about-us">
-  <span>A</span>
-  <br />
-  <span>B</span>
-  <br />
-  <span>O</span>
-  <br />
-  <span>U</span>
-  <br />
-  <span>T</span>
-  <br />
-  <span></span>
-  <br />
-  <span>U</span>
-  <br />
-  <span>S</span>
-</div>
-<p-toast></p-toast>
-<div *ngIf="!isGettingUserInformation" @fade>
-  <app-score-notification></app-score-notification>
-  <router-outlet> </router-outlet>
-</div>
-<div *ngIf="isGettingUserInformation" class="text-center p-5 mt-5" @fade>
-  <div
-    class="spinner-grow text-success"
-    style="width: 3rem; height: 3rem"
-    role="status"
-  >
-    <span class="sr-only">Loading...</span>
+<div *ngIf="!isMobile; else mobileContainer">
+  <div class="about-us-icon" *ngIf="showAboutUs" routerLink="./about-us">
+    <span>A</span>
+    <br />
+    <span>B</span>
+    <br />
+    <span>O</span>
+    <br />
+    <span>U</span>
+    <br />
+    <span>T</span>
+    <br />
+    <span></span>
+    <br />
+    <span>U</span>
+    <br />
+    <span>S</span>
   </div>
-  <hr />
-  <h1>Loading ...</h1>
+  <p-toast></p-toast>
+  <div *ngIf="!isGettingUserInformation" @fade>
+    <app-score-notification></app-score-notification>
+    <router-outlet> </router-outlet>
+  </div>
+  <div *ngIf="isGettingUserInformation" class="text-center p-5 mt-5" @fade>
+    <div
+      class="spinner-grow text-success"
+      style="width: 3rem; height: 3rem"
+      role="status"
+    >
+      <span class="sr-only">Loading...</span>
+    </div>
+    <hr />
+    <h1>Loading ...</h1>
+  </div>
 </div>
+<ng-template #mobileContainer>
+  <div class="mobile-message-container">
+    <div class="mobile-logo-container">
+      <img src="../../../../assets/about-us/lingua-logo.png" />
+    </div>
+    <div>
+      <div class="mobile-description-container">
+        <h1>
+          Sorry, The mobile and tablet version of PlayingLingua are not ready
+          yet.
+        </h1>
+        <p>Please try with bigger screen!</p>
+      </div>
+    </div>
+    <div
+      class="source-control-container"
+      (click)="
+        openExternalUrl('https://github.com/lingua-games/play-lingua/projects')
+      "
+    >
+      <img src="../../../../assets/about-us/Octocat.png" />
+      <span class="ml-3">Follow up next version</span>
+    </div>
+  </div>
+</ng-template>
