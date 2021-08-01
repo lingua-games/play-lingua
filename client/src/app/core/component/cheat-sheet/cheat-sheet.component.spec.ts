@@ -4,13 +4,15 @@ import { CheatSheetComponent } from './cheat-sheet.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GamesService } from '../../service/games.service';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { LocalStorageService } from '../../service/local-storage.service';
 import {
   TranslateModel,
   WordKeyValueModel,
 } from '../../models/word-key-value.model';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { GameInformationInterface } from '../../models/game-information.interface';
+import { GetGameWordsRequestModel } from '../../models/get-game-words-request.model';
 
 describe('CheatSheetComponent', () => {
   let component: CheatSheetComponent;
@@ -65,28 +67,67 @@ describe('CheatSheetComponent', () => {
     expect(component.getWords).toHaveBeenCalled();
   });
 
-  it('should call getGameWords service when getWords method call', () => {
-    mockGamesService.getGameWords.and.callFake(() => {
-      return of([]);
+  describe('getWords', () => {
+    it('should call getGameWords service when', () => {
+      mockGamesService.getGameWords.and.callFake(() => {
+        return of([]);
+      });
+      spyOn(component.words, 'setLoading');
+
+      component.getWords();
+
+      expect(mockGamesService.getGameWords).toHaveBeenCalled();
     });
-    spyOn(component.words, 'setLoading');
 
-    component.getWords();
+    it('should stop loading if getGameWords return error', () => {
+      mockGamesService.getGameWords.and.callFake(() => {
+        return throwError('fake error');
+      });
+      spyOn(component.words, 'setLoading');
 
-    expect(mockGamesService.getGameWords).toHaveBeenCalled();
-  });
+      component.getWords();
 
-  it('should set data into words if api return value successfully', () => {
-    mockGamesService.getGameWords.and.callFake(() => {
-      return of([{ key: 'fake key' } as WordKeyValueModel<TranslateModel[]>]);
+      expect(component.words.setLoading).toHaveBeenCalledWith(false);
     });
-    spyOn(component.words, 'setLoading');
-    spyOn(component.words, 'setData');
 
-    component.getWords();
+    it('should set data into words if api return value successfully', () => {
+      mockGamesService.getGameWords.and.callFake(() => {
+        return of([{ key: 'fake key' } as WordKeyValueModel<TranslateModel[]>]);
+      });
+      spyOn(component.words, 'setLoading');
+      spyOn(component.words, 'setData');
 
-    expect(component.words.setData).toHaveBeenCalledWith([
-      { key: 'fake key' } as WordKeyValueModel<TranslateModel[]>,
-    ]);
+      component.getWords();
+
+      expect(component.words.setData).toHaveBeenCalledWith([
+        { key: 'fake key' } as WordKeyValueModel<TranslateModel[]>,
+      ]);
+    });
+
+    it('should set feedback form values if its feedback session', () => {
+      mockGamesService.getGameWords.and.callFake(() => {
+        return of([{ key: 'fake key' } as WordKeyValueModel<TranslateModel[]>]);
+      });
+      component.data = {
+        isFeedback: true,
+        feedbackForm: {
+          count: 100,
+          targetLanguage: { id: 50 },
+          baseLanguage: { id: 60 },
+        },
+      } as GameInformationInterface;
+
+      const serviceInput = {
+        bookId: undefined,
+        chapterId: undefined,
+        count: 100,
+        defaultTargetLanguage: 50,
+        defaultBaseLanguage: 60,
+      } as GetGameWordsRequestModel;
+
+      component.getWords();
+
+      expect(mockGamesService.getGameWords).toHaveBeenCalledWith(serviceInput);
+    });
   });
 });
