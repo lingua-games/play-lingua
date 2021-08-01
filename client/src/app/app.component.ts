@@ -45,8 +45,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.isMobile =
-      this.deviceDetectorService.isMobile() ||
-      this.deviceDetectorService.isTablet();
+      this.deviceDetectorService.isTablet() ||
+      this.deviceDetectorService.isMobile();
+
     if (this.securityService.isLoggedIn().success) {
       this.getUserInformation();
     }
