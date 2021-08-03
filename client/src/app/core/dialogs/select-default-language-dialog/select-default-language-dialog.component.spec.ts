@@ -10,6 +10,8 @@ import { SelectedLanguageService } from '../../service/selected-language.service
 import { of, throwError } from 'rxjs';
 import { LocalStorageHelper } from '../../models/local-storage.enum';
 import { DefaultLanguageModel } from '../../models/set-default-language.model';
+import { BasicInformationService } from '../../service/basic-information.service';
+import { LanguageModel } from '../../models/language.model';
 
 describe('SelectDefaultLanguageDialogComponent', () => {
   let component: SelectDefaultLanguageDialogComponent;
@@ -18,6 +20,7 @@ describe('SelectDefaultLanguageDialogComponent', () => {
   let mockMatDialogRef;
   let mockLocalStorageService;
   let mockLanguageService;
+  let mockBasicInformationService;
 
   beforeEach(
     waitForAsync(() => {
@@ -30,7 +33,10 @@ describe('SelectDefaultLanguageDialogComponent', () => {
       mockLanguageService = jasmine.createSpyObj('languageService', [
         'setDefaultLanguage',
       ]);
-
+      mockBasicInformationService = jasmine.createSpyObj(
+        'basicInformationService',
+        { getAllLanguages: of([{} as LanguageModel]) }
+      );
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
         declarations: [SelectDefaultLanguageDialogComponent],
@@ -50,6 +56,10 @@ describe('SelectDefaultLanguageDialogComponent', () => {
           {
             provide: SelectedLanguageService,
             useValue: mockLanguageService,
+          },
+          {
+            provide: BasicInformationService,
+            useValue: mockBasicInformationService,
           },
         ],
         schemas: [NO_ERRORS_SCHEMA],
@@ -72,108 +82,154 @@ describe('SelectDefaultLanguageDialogComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call getLanguages at initial time', () => {
-    spyOn(component, 'getLanguages');
+  describe('getLanguages', () => {
+    it('should call getLanguages at initial time', () => {
+      spyOn(component, 'getLanguages');
 
-    fixture.detectChanges();
+      fixture.detectChanges();
 
-    expect(component.getLanguages).toHaveBeenCalled();
-  });
-
-  it('should check defaultBaseLanguage on submit', () => {
-    component.selectedItems = {
-      defaultTargetLanguage: null,
-    } as DefaultLanguageModel;
-
-    component.submit();
-
-    expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
-      'Base language is empty',
-      'error'
-    );
-  });
-
-  it('should check defaultTargetLanguage on submit', () => {
-    component.selectedItems = {
-      defaultBaseLanguage: { name: 'something' },
-      defaultTargetLanguage: null,
-    } as DefaultLanguageModel;
-
-    component.submit();
-
-    expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
-      'Target language is empty',
-      'error'
-    );
-  });
-
-  it('should set loading to true if validations pass', () => {
-    mockLanguageService.setDefaultLanguage.and.callFake(() => {
-      return of({});
-    });
-    component.selectedItems = {
-      defaultBaseLanguage: { name: 'something' },
-      defaultTargetLanguage: { name: 'something' },
-    } as DefaultLanguageModel;
-
-    component.submit();
-
-    expect(component.languages.isLoading).toBe(true);
-  });
-
-  it('should save API data into localStorage', () => {
-    mockLanguageService.setDefaultLanguage.and.callFake(() => {
-      return of({});
-    });
-    const expectedValue = {
-      defaultBaseLanguage: {
-        name: 'something',
-        id: 1,
-        fullName: '',
-        code: '',
-        nativeName: '',
-      },
-      defaultTargetLanguage: {
-        name: 'something',
-        id: 1,
-        fullName: '',
-        code: '',
-        nativeName: '',
-      },
-    };
-    component.selectedItems = expectedValue;
-    component.submit();
-
-    expect(mockLocalStorageService.save).toHaveBeenCalledWith(
-      LocalStorageHelper.defaultLanguages,
-      JSON.stringify(expectedValue)
-    );
-  });
-
-  it('should set loading to false on getting error in API', () => {
-    const expectedValue = {
-      defaultBaseLanguage: {
-        name: 'something',
-        id: 1,
-        fullName: '',
-        code: '',
-        nativeName: '',
-      },
-      defaultTargetLanguage: {
-        name: 'something',
-        id: 1,
-        fullName: '',
-        code: '',
-        nativeName: '',
-      },
-    };
-    component.selectedItems = expectedValue;
-    mockLanguageService.setDefaultLanguage.and.callFake(() => {
-      return throwError(new Error('Fake error'));
+      expect(component.getLanguages).toHaveBeenCalled();
     });
 
-    component.submit();
+    it('should call languages.setData with service result', () => {
+      spyOn(component.languages, 'setData');
+      const expectedValue = [{ id: 111 } as LanguageModel];
+      mockBasicInformationService.getAllLanguages.and.callFake(() => {
+        return of(expectedValue);
+      });
 
-    expect(component.languages.isLoading).toBe(false);
+      component.getLanguages();
+
+      expect(component.languages.setData).toHaveBeenCalledWith(expectedValue);
+    });
+
+    it('should set error when service throw error', () => {
+      spyOn(component.languages, 'setError');
+      mockBasicInformationService.getAllLanguages.and.callFake(() => {
+        return throwError('I am error');
+      });
+
+      component.getLanguages();
+
+      expect(component.languages.setError).toHaveBeenCalledWith(
+        'Unable to load languages'
+      );
+    });
+  });
+
+  describe('submit', () => {
+    it('should check defaultBaseLanguage on submit', () => {
+      component.selectedItems = {
+        defaultTargetLanguage: null,
+      } as DefaultLanguageModel;
+
+      component.submit();
+
+      expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+        'Base language is empty',
+        'error'
+      );
+    });
+
+    it('should check defaultTargetLanguage on submit', () => {
+      component.selectedItems = {
+        defaultBaseLanguage: { name: 'something' },
+        defaultTargetLanguage: null,
+      } as DefaultLanguageModel;
+
+      component.submit();
+
+      expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+        'Target language is empty',
+        'error'
+      );
+    });
+
+    it('should set loading to true if validations pass', () => {
+      mockLanguageService.setDefaultLanguage.and.callFake(() => {
+        return of({});
+      });
+      component.selectedItems = {
+        defaultBaseLanguage: { name: 'something' },
+        defaultTargetLanguage: { name: 'something' },
+      } as DefaultLanguageModel;
+
+      component.submit();
+
+      expect(component.languages.isLoading).toBe(true);
+    });
+
+    it('should save API data into localStorage', () => {
+      mockLanguageService.setDefaultLanguage.and.callFake(() => {
+        return of({});
+      });
+      const expectedValue = {
+        defaultBaseLanguage: {
+          name: 'something',
+          id: 1,
+          fullName: '',
+          code: '',
+          nativeName: '',
+        },
+        defaultTargetLanguage: {
+          name: 'something',
+          id: 1,
+          fullName: '',
+          code: '',
+          nativeName: '',
+        },
+      };
+      component.selectedItems = expectedValue;
+      component.submit();
+
+      expect(mockLocalStorageService.save).toHaveBeenCalledWith(
+        LocalStorageHelper.defaultLanguages,
+        JSON.stringify(expectedValue)
+      );
+    });
+
+    it('should set loading to false on getting error in API', () => {
+      const expectedValue = {
+        defaultBaseLanguage: {
+          name: 'something',
+          id: 1,
+          fullName: '',
+          code: '',
+          nativeName: '',
+        },
+        defaultTargetLanguage: {
+          name: 'something',
+          id: 1,
+          fullName: '',
+          code: '',
+          nativeName: '',
+        },
+      };
+      component.selectedItems = expectedValue;
+      mockLanguageService.setDefaultLanguage.and.callFake(() => {
+        return throwError(new Error('Fake error'));
+      });
+
+      component.submit();
+
+      expect(component.languages.isLoading).toBe(false);
+    });
+
+    it('should save selectedItems into localStorage if it is guest', () => {
+      component.selectedItems = {
+        defaultBaseLanguage: { name: 'something' },
+        defaultTargetLanguage: { name: 'something' },
+      } as DefaultLanguageModel;
+      mockLocalStorageService.load.and.callFake(() => {
+        return true;
+      });
+
+      component.submit();
+
+      expect(mockLocalStorageService.save).toHaveBeenCalledWith(
+        LocalStorageHelper.defaultLanguages,
+        '{"defaultBaseLanguage":{"name":"something"},"defaultTargetLanguage":{"name":"something"}}'
+      );
+    });
   });
 });
