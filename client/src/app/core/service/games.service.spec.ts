@@ -27,16 +27,37 @@ describe('GamesService', () => {
   });
 
   it('should call getBooks API when getBooks() method hit', () => {
-    const expectedForm: GetGameWordsRequestModel = {
+    const expectedForm = {
       defaultBaseLanguage: 1,
       count: 1,
       chapterId: 1,
       bookId: 1,
       defaultTargetLanguage: 1,
-    };
+    } as GetGameWordsRequestModel;
 
     service.getGameWords(expectedForm);
 
-    expect(httpClientSpy.post).toHaveBeenCalled();
+    console.log(service.gameUrl);
+    expect(httpClientSpy.post).toHaveBeenCalledWith(
+      `${service.gameUrl}/get-words-for-game`,
+      expectedForm
+    );
+  });
+
+  it('should call http.post when getGameCountWords() method hit', () => {
+    const expectedForm = {
+      defaultBaseLanguage: 1,
+      count: 1,
+      chapterId: 1,
+      bookId: 1,
+      defaultTargetLanguage: 1,
+    } as GetGameWordsRequestModel;
+
+    service.getGameCountWords(expectedForm);
+
+    expect(httpClientSpy.post).toHaveBeenCalledWith(
+      `${service.gameUrl}/get-words-count-for-game`,
+      expectedForm
+    );
   });
 });
