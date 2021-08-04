@@ -31,6 +31,17 @@ describe('ScoreStorageService', () => {
     expect(httpClientSpy.post).toHaveBeenCalled();
   });
 
+  it('should call http.post when getTopRanks() method hit', () => {
+    const mockBook = { gameName: 'game name' } as ScoreStoreInterface;
+
+    service.getTopRanks(mockBook);
+
+    expect(httpClientSpy.post).toHaveBeenCalledWith(
+      service.storeScoreApi + '/get-top-scores',
+      mockBook
+    );
+  });
+
   it('should increase cachedScore once catchScores() method hit', () => {
     service.cachedScore = 10;
 
