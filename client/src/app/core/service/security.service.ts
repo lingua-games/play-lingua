@@ -36,7 +36,7 @@ export class SecurityService {
   }
 
   setTotalScore(newScore: string): void {
-    if (!this.isLoggedIn()) {
+    if (!this.isLoggedIn().success) {
       return;
     }
     if (this.localStorageService.load(LocalStorageHelper.isGuest)) {
@@ -62,7 +62,7 @@ export class SecurityService {
   }
 
   initialTotalScore(score: string): void {
-    if (!this.isLoggedIn()) {
+    if (!this.isLoggedIn().success) {
       return;
     }
     this.localStorageService.save(LocalStorageHelper.totalScore, score);
