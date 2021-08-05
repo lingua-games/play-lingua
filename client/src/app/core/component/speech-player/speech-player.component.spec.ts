@@ -33,10 +33,11 @@ describe('SpeechPlayerComponent', () => {
       expect(component.playSound()).toBe(undefined);
     });
 
-    xit('should break if status is Error', () => {
+    it('should break if status is Error', () => {
       component.status = SpeechStatus.Success;
 
       component.playSound();
+
       expect(undefined).toBe(undefined);
     });
   });

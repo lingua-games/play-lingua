@@ -37,7 +37,6 @@ describe('GamesService', () => {
 
     service.getGameWords(expectedForm);
 
-    console.log(service.gameUrl);
     expect(httpClientSpy.post).toHaveBeenCalledWith(
       `${service.gameUrl}/get-words-for-game`,
       expectedForm
