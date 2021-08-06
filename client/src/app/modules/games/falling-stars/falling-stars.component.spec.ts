@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { FallingStarsWord } from '../../../core/models/falling-stars-word.interface';
 import { FallingStarsComponent } from './falling-stars.component';
@@ -8,13 +8,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Store } from '@ngrx/store';
 import {
+  SpeechStatus,
   TranslateModel,
   WordKeyValueModel,
 } from '../../../core/models/word-key-value.model';
 import { GameStartInformation } from '../../../core/models/game-start-information';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ElementStyle } from '../../../core/models/element-style.model';
-import { RouterTestingModule } from '@angular/router/testing';
+import { InvitationForm } from '../../../core/models/invitation-form.interface';
+import { SecurityService } from '../../../core/service/security.service';
 
 describe('FallingStarsComponent', () => {
   let component: FallingStarsComponent;
@@ -23,10 +25,13 @@ describe('FallingStarsComponent', () => {
   let mockStore;
   let sampleWords;
   let mockActivatedRoute;
+  let mockRouter;
+  let mockSecurityService;
 
   beforeEach(
     waitForAsync(() => {
       mockStore = jasmine.createSpyObj(['select', 'dispatch']);
+      mockRouter = jasmine.createSpyObj('router', ['navigate']);
       sampleWords = [
         { key: 'Apple', value: ['appel'] },
         { key: 'Banana', value: ['banaan'] },
@@ -34,8 +39,15 @@ describe('FallingStarsComponent', () => {
         { key: 'Pineapple', value: ['ananas'] },
         { key: 'Cherry', value: ['kers'] },
       ];
+      mockSecurityService = {
+        isLoggedIn: { success: true } as { success: boolean; route: string },
+      };
       mockActivatedRoute = {
-        paramMap: of(convertToParamMap({})),
+        paramMap: of({
+          get: () => {
+            return 'invitation code';
+          },
+        }),
       };
       mockMatDialog = jasmine.createSpyObj('dialog', {
         open: {
@@ -45,16 +57,20 @@ describe('FallingStarsComponent', () => {
         },
       });
       TestBed.configureTestingModule({
-        imports: [
-          BrowserAnimationsModule,
-          HttpClientTestingModule,
-          RouterTestingModule,
-        ],
+        imports: [BrowserAnimationsModule, HttpClientTestingModule],
         declarations: [FallingStarsComponent],
         providers: [
           {
             provide: MatDialog,
             useValue: mockMatDialog,
+          },
+          {
+            provide: SecurityService,
+            useValue: mockSecurityService,
+          },
+          {
+            provide: Router,
+            useValue: mockRouter,
           },
           {
             provide: Store,
@@ -75,25 +91,92 @@ describe('FallingStarsComponent', () => {
     component = fixture.componentInstance;
   });
 
+  describe('getAnswerSpeech', () => {
+    it('should return speech information of the correct answer', () => {
+      const methodOutput = component.getAnswerSpeech({
+        correctShowingAnswer: 'word B',
+        correctAnswers: [
+          {
+            value: 'word A',
+            speechCode: 'fake speech code A',
+            speechStatus: SpeechStatus.Success,
+          } as TranslateModel,
+          {
+            value: 'word B',
+            speechCode: 'fake speech code B',
+            speechStatus: SpeechStatus.Success,
+          } as TranslateModel,
+          {
+            value: 'word C',
+            speechCode: 'fake speech code C',
+            speechStatus: SpeechStatus.Success,
+          } as TranslateModel,
+        ],
+      } as FallingStarsWord);
+
+      expect(methodOutput).toEqual({
+        code: 'fake speech code B',
+        status: SpeechStatus.Success,
+      });
+    });
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call showStartDialog in OnInit', () => {
-    spyOn(component, 'showStartDialog');
+  describe('ngOnInit', () => {
+    it('should call showStartDialog', () => {
+      spyOn(component, 'showStartDialog');
 
-    fixture.detectChanges();
+      fixture.detectChanges();
 
-    expect(component.showStartDialog).toHaveBeenCalled();
+      expect(component.showStartDialog).toHaveBeenCalled();
+    });
+
+    it('should fill uniqueKey into feedbackForm if its feedback session', () => {
+      spyOn(component, 'showStartDialog');
+
+      fixture.detectChanges();
+
+      expect(component.feedbackForm).toEqual({
+        uniqueKey: 'invitation code',
+      } as InvitationForm);
+    });
   });
 
-  it('should set animating of first word to true on startGame method', () => {
-    spyOn(component, 'setGameWords').withArgs(sampleWords);
-    component.words = [{ animating: false, style: {} } as FallingStarsWord];
+  describe('isLoggedIn', () => {
+    it('should return false if user is not logged in', () => {
+      spyOn(mockSecurityService, 'isLoggedIn').and.returnValue({
+        success: false,
+      });
+      expect(component.isLoggedIn()).toBeFalsy();
+    });
+  });
 
-    component.startGame();
+  describe('startGame', () => {
+    it('should set animating of first word to true on startGame method', () => {
+      spyOn(component, 'setGameWords').withArgs(sampleWords);
+      component.words = [{ animating: false, style: {} } as FallingStarsWord];
 
-    expect(component.words[0].animating).toBe(true);
+      component.startGame();
+
+      expect(component.words[0].animating).toBe(true);
+    });
+
+    it('should set blinking of first word to false', () => {
+      jasmine.clock().uninstall();
+      jasmine.clock().install();
+
+      spyOn(component, 'setGameWords').withArgs(sampleWords);
+      component.words = [{ animating: false, style: {} } as FallingStarsWord];
+
+      component.startGame();
+      jasmine.clock().tick(2000);
+
+      expect(component.words[0].isBlinking).toBe(false);
+      jasmine.clock().uninstall();
+    });
   });
 
   it('getRandomNumber should return number smaller than 95', () => {
@@ -115,6 +198,24 @@ describe('FallingStarsComponent', () => {
     component.checkSelectedAnswer('testValue');
 
     expect(component.boxAnimationDone).toHaveBeenCalledWith(component.words[0]);
+  });
+
+  it('checkSelectedAnswer break if activeWord is blinking', () => {
+    component.words = [
+      {
+        animating: true,
+        style: {},
+        isBlinking: true,
+        correctAnswers: [{ value: 'testValue' } as TranslateModel],
+      } as FallingStarsWord,
+    ];
+    spyOn(component, 'boxAnimationDone');
+
+    component.checkSelectedAnswer('testValue');
+
+    expect(component.boxAnimationDone).not.toHaveBeenCalledWith(
+      component.words[0]
+    );
   });
 
   describe('keyUpEvent', () => {
@@ -439,8 +540,43 @@ describe('FallingStarsComponent', () => {
         'something',
       ]);
     });
+
+    it('should return result with random options', () => {
+      const targetWord: WordKeyValueModel<TranslateModel[]> = {
+        translates: [{ value: 'something' } as TranslateModel],
+        key: 'key1',
+      } as WordKeyValueModel<TranslateModel[]>;
+
+      spyOn(Math, 'round').and.returnValue(0);
+
+      expect(component.generateRandomOptions(targetWord, allWords)).toEqual([
+        'something',
+        'something',
+        'something',
+        'something',
+      ]);
+    });
   });
 
+  describe('getCountOfRemainWords', () => {
+    it('should return the length of remaining words', () => {
+      component.words = [
+        { isCurrentlyPlaying: false } as FallingStarsWord,
+        { isCurrentlyPlaying: true } as FallingStarsWord,
+      ];
+
+      expect(component.getCountOfRemainWords()).toBe(1);
+    });
+
+    it('should return the length of remaining words when its first word', () => {
+      component.words = [
+        { isCurrentlyPlaying: false } as FallingStarsWord,
+        { isCurrentlyPlaying: false } as FallingStarsWord,
+      ];
+
+      expect(component.getCountOfRemainWords()).toBe(2);
+    });
+  });
   describe('boxAnimationDone', () => {
     let fakeWord;
 
@@ -531,34 +667,65 @@ describe('FallingStarsComponent', () => {
     expect(component.guidBoxShowing).toBeTrue();
   });
 
-  it('should show end game dialog if playNextStar hits and there is not more word', () => {
-    jasmine.clock().uninstall();
-    jasmine.clock().install();
-    spyOn(component, 'showEndGameDialog');
+  describe('playNextStar', () => {
+    it('should show end game dialog if playNextStar hits and there is not more word', () => {
+      jasmine.clock().uninstall();
+      jasmine.clock().install();
+      spyOn(component, 'showEndGameDialog');
 
-    component.playNextStar();
-    jasmine.clock().tick(1001);
+      component.playNextStar();
+      jasmine.clock().tick(1001);
 
-    expect(component.showEndGameDialog).toHaveBeenCalled();
-    jasmine.clock().uninstall();
-  });
+      expect(component.showEndGameDialog).toHaveBeenCalled();
+      jasmine.clock().uninstall();
+    });
 
-  it('should animate next waiting work when playNextStar hits', () => {
-    spyOn(component, 'showEndGameDialog');
-    component.words.push(
-      {
-        animating: false,
-        style: { animation: '' } as ElementStyle,
-      } as FallingStarsWord,
-      {
-        animating: false,
-        style: { animation: '' } as ElementStyle,
-      } as FallingStarsWord
-    );
-    component.currentWord = component.words[0];
-    component.playNextStar();
+    it('should animate next waiting work when playNextStar hits', () => {
+      spyOn(component, 'showEndGameDialog');
+      component.words.push(
+        {
+          animating: false,
+          style: { animation: '' } as ElementStyle,
+          isBlinking: true,
+        } as FallingStarsWord,
+        {
+          animating: false,
+          isBlinking: true,
+          style: { animation: '' } as ElementStyle,
+        } as FallingStarsWord
+      );
+      component.currentWord = component.words[0];
+      component.playNextStar();
 
-    expect(component.words[1].animating).toBeTrue();
+      expect(component.words[1].animating).toBeTrue();
+    });
+
+    it('should stop blinking after buffer if next word is available', () => {
+      jasmine.clock().uninstall();
+      jasmine.clock().install();
+
+      spyOn(component, 'showEndGameDialog');
+      component.words.push(
+        {
+          key: 'Word A',
+          animating: false,
+          style: { animation: '' } as ElementStyle,
+        } as FallingStarsWord,
+        {
+          key: 'Word B',
+          animating: false,
+          style: { animation: '' } as ElementStyle,
+        } as FallingStarsWord
+      );
+      component.currentWord = component.words[0];
+      component.words[1].isBlinking = true;
+
+      component.playNextStar();
+      jasmine.clock().tick(2000);
+
+      expect(component.words[1].isBlinking).toBeFalsy();
+      jasmine.clock().uninstall();
+    });
   });
 
   it('should return true if the key is pressing', () => {

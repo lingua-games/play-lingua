@@ -10,7 +10,6 @@ import { SecurityTokenInterface } from '../models/security-token.interface';
 import { UserModel } from '../models/user.model';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { compose } from '@ngrx/store';
 import { LoginResultModel } from '../models/login-result.model';
 
 describe('SecurityService', () => {

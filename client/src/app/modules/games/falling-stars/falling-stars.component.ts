@@ -138,12 +138,12 @@ export class FallingStarsComponent implements OnInit {
     private store: Store<{}>,
     private scoreStorageService: ScoreStorageService,
     private basicInformationService: BasicInformationService,
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private securityService: SecurityService
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((paramMap) => {
+    this.activatedRoute.paramMap.subscribe((paramMap) => {
       const invitationCode = paramMap.get('code');
       if (invitationCode) {
         this.feedbackForm = { uniqueKey: invitationCode } as InvitationForm;
