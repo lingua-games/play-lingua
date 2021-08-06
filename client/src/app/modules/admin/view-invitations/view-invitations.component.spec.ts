@@ -22,6 +22,7 @@ describe('ViewInvitationsComponent', () => {
     mockInvitationService = jasmine.createSpyObj('invitationService', {
       getInvitations: () => of(),
       resendInvitationMail: () => of(),
+      changeInvitationVisibility: () => of(),
     });
 
     await TestBed.configureTestingModule({
@@ -106,5 +107,36 @@ describe('ViewInvitationsComponent', () => {
       'Failed to resend email',
       Severity.error
     );
+  });
+
+  describe('hideInvitation', () => {
+    it('should show successful message once service success', () => {
+      mockInvitationService.changeInvitationVisibility.and.callFake(() => {
+        return of({});
+      });
+      const invitations = [{ email: 'fake email' } as InvitationForm];
+      component.invitations.data = invitations;
+
+      component.hideInvitation(invitations[0]);
+
+      expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+        'Successful',
+        Severity.success
+      );
+    });
+
+    it('should show error message once service fail', () => {
+      mockInvitationService.changeInvitationVisibility.and.callFake(() => {
+        return throwError('I am error');
+      });
+      const invitations = [{ email: 'fake email' } as InvitationForm];
+
+      component.hideInvitation(invitations[0]);
+
+      expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+        'Failed to hide invitation',
+        Severity.error
+      );
+    });
   });
 });
