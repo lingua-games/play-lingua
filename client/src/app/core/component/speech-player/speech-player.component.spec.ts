@@ -33,12 +33,16 @@ describe('SpeechPlayerComponent', () => {
       expect(component.playSound()).toBe(undefined);
     });
 
-    xit('should break if status is Error', () => {
+    it('should break if status is Error', () => {
       component.status = SpeechStatus.Success;
+      spyOn(window, 'Audio').and.returnValue({
+        play: () => Promise.resolve(),
+        // tslint:disable-next-line:no-any
+      } as any);
 
       component.playSound();
 
-      expect(undefined).toBe(undefined);
+      expect(window.Audio).toHaveBeenCalled();
     });
   });
 });
