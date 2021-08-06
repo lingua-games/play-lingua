@@ -6,7 +6,7 @@ import { GameActionEnum } from '../models/game-action.enum';
   providedIn: 'root',
 })
 export class SoundService {
-  songs = [];
+  songs: any[] = [];
   constructor() {}
 
   loadSounds(game: GameNameEnum): void {
