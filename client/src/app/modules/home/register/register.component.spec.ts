@@ -1,4 +1,4 @@
-import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { RegisterComponent } from './register.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -14,8 +14,13 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { UserModel } from '../../../core/models/user.model';
 import { UserService } from '../../../core/service/user.service';
-import { throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { LocalStorageService } from '../../../core/service/local-storage.service';
+import {
+  RegisterApiResultModel,
+  RegisterStatus,
+} from '../../../core/models/register-api-result.model';
+import { RecaptchaComponent } from 'ng-recaptcha';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -42,7 +47,7 @@ describe('RegisterComponent', () => {
           .createSpy('navigate')
           .and.returnValue(Promise.resolve()),
       };
-      mockUserService = jasmine.createSpyObj(['add']);
+      mockUserService = jasmine.createSpyObj(['resendActivationCode', 'add']);
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule, RouterTestingModule],
         declarations: [RegisterComponent],
@@ -139,6 +144,81 @@ describe('RegisterComponent', () => {
       );
     });
 
+    it('should call startCountDown if API success and return status EmailSent', () => {
+      component.user = {
+        email: 'email@email.com',
+        displayName: 'fakeDisplayName',
+        password: 'fakePassword',
+        rePassword: 'fakePassword',
+      } as UserModel;
+      mockUserService.add.and.callFake(() => {
+        return of({
+          status: RegisterStatus.EmailSent,
+        } as RegisterApiResultModel);
+      });
+      spyOn(component, 'startCountDown');
+
+      component.submit();
+
+      expect(component.startCountDown).toHaveBeenCalled();
+    });
+
+    it('should navigate to reset-password if API success and return status NeedsChangePassword', () => {
+      component.user = {
+        email: 'email@email.com',
+        displayName: 'fakeDisplayName',
+        password: 'fakePassword',
+        rePassword: 'fakePassword',
+      } as UserModel;
+      mockUserService.add.and.callFake(() => {
+        return of({
+          status: RegisterStatus.NeedsChangePassword,
+        } as RegisterApiResultModel);
+      });
+
+      component.submit();
+
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['reset-password']);
+    });
+
+    it('should navigate to reset captcha if API success and return status AlreadyRegistered', () => {
+      component.user = {
+        email: 'email@email.com',
+        displayName: 'fakeDisplayName',
+        password: 'fakePassword',
+        rePassword: 'fakePassword',
+      } as UserModel;
+      mockUserService.add.and.callFake(() => {
+        return of({
+          status: RegisterStatus.AlreadyRegistered,
+        } as RegisterApiResultModel);
+      });
+      component.captchaView = { reset: () => {} } as RecaptchaComponent;
+      spyOn(component.captchaView, 'reset');
+
+      component.submit();
+
+      expect(component.captchaView.reset).toHaveBeenCalled();
+    });
+
+    it('should reset captcha if API fails', () => {
+      component.user = {
+        email: 'email@email.com',
+        displayName: 'fakeDisplayName',
+        password: 'fakePassword',
+        rePassword: 'fakePassword',
+      } as UserModel;
+      mockUserService.add.and.callFake(() => {
+        return throwError('');
+      });
+      component.captchaView = { reset: () => {} } as RecaptchaComponent;
+      spyOn(component.captchaView, 'reset');
+
+      component.submit();
+
+      expect(component.captchaView.reset).toHaveBeenCalled();
+    });
+
     it('should show error if API fails', () => {
       component.user = {
         email: 'email@email.com',
@@ -155,6 +235,85 @@ describe('RegisterComponent', () => {
       expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
         'Server error, please try again',
         Severity.error
+      );
+    });
+  });
+
+  describe('startCountDown', () => {
+    it('should decrease countdown value by one after one second', () => {
+      jasmine.clock().uninstall();
+      jasmine.clock().install();
+
+      component.startCountDown();
+      jasmine.clock().tick(1000);
+
+      expect(component.countdown).toBe(59);
+      jasmine.clock().uninstall();
+    });
+
+    it('should stop countdown after 60 seconds', () => {
+      jasmine.clock().uninstall();
+      jasmine.clock().install();
+      spyOn(window, 'clearInterval');
+
+      component.startCountDown();
+      jasmine.clock().tick(61000);
+
+      expect(clearInterval).toHaveBeenCalledWith(1);
+      jasmine.clock().uninstall();
+    });
+  });
+
+  describe('resendInvitationCode', () => {
+    xit('should call startCountDown', () => {
+      spyOn(component, 'startCountDown');
+      console.log(mockUserService);
+      mockUserService.resendActivationCode.and.returnValue(of(true));
+      component.user = { email: 'email@email.com' } as UserModel;
+
+      component.resendInvitationCode();
+
+      expect(component.startCountDown).toHaveBeenCalled();
+    });
+
+    it('should call error notificationService.showMessage if service return false', () => {
+      spyOn(component, 'startCountDown');
+      mockUserService.resendActivationCode.and.returnValue(of(false));
+      component.user = { email: 'email@email.com' } as UserModel;
+
+      component.resendInvitationCode();
+
+      expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+        'Server error, please try again',
+        Severity.error
+      );
+    });
+
+    it('should call error notificationService.showMessage if service fail', () => {
+      spyOn(component, 'startCountDown');
+      mockUserService.resendActivationCode.and.returnValue(
+        throwError('I am error')
+      );
+      component.user = { email: 'email@email.com' } as UserModel;
+
+      component.resendInvitationCode();
+
+      expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+        'Server error, please try again',
+        Severity.error
+      );
+    });
+
+    it('should call success notificationService.showMessage if service return true', () => {
+      spyOn(component, 'startCountDown');
+      mockUserService.resendActivationCode.and.returnValue(of(true));
+      component.user = { email: 'email@email.com' } as UserModel;
+
+      component.resendInvitationCode();
+
+      expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+        'Email sent',
+        Severity.success
       );
     });
   });

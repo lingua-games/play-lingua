@@ -6,6 +6,7 @@ import { GameActionEnum } from '../models/game-action.enum';
   providedIn: 'root',
 })
 export class SoundService {
+  // tslint:disable-next-line:no-any
   songs: any[] = [];
   constructor() {}
 
