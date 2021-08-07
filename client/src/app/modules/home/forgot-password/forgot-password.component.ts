@@ -8,6 +8,7 @@ import {
   Severity,
 } from '../../../core/service/notification.service';
 import { Location } from '@angular/common';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 @Component({
   selector: 'app-forgot-password',
@@ -65,6 +66,7 @@ export class ForgotPasswordComponent implements OnInit {
         }
       },
       (error: string) => {
+        console.log(this.captchaView);
         if (this.captchaView) {
           this.captchaView.reset();
         }

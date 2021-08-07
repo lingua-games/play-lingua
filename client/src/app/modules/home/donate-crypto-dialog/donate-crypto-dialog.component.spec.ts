@@ -1,23 +1,26 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DonateCryptoDialogComponent } from './donate-crypto-dialog.component';
-import { MessageService } from 'primeng/api';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import {
+  NotificationService,
+  Severity,
+} from '../../../core/service/notification.service';
 
 describe('DonateCryptoDialogComponent', () => {
   let component: DonateCryptoDialogComponent;
   let fixture: ComponentFixture<DonateCryptoDialogComponent>;
-  let mockMessageService;
+  let mockNotificationService;
 
   beforeEach(async () => {
-    mockMessageService = jasmine.createSpyObj(['add']);
+    mockNotificationService = jasmine.createSpyObj(['showMessage']);
 
     await TestBed.configureTestingModule({
       declarations: [DonateCryptoDialogComponent],
       providers: [
         {
-          provide: MessageService,
-          useValue: mockMessageService,
+          provide: NotificationService,
+          useValue: mockNotificationService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],
@@ -32,5 +35,14 @@ describe('DonateCryptoDialogComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should call showMessage with appropriate message', () => {
+    component.copyWalletNumber();
+
+    expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+      'Copied',
+      Severity.success
+    );
   });
 });
