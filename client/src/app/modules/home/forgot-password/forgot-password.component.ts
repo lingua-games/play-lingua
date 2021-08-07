@@ -8,7 +8,6 @@ import {
   Severity,
 } from '../../../core/service/notification.service';
 import { Location } from '@angular/common';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 @Component({
   selector: 'app-forgot-password',
