@@ -42,4 +42,48 @@ describe('UserService', () => {
     service.getUserInformation();
     expect(httpClientSpy.get).toHaveBeenCalled();
   });
+
+  it('should post when forgotPasswordRequest() hits', () => {
+    const expectedParam = { id: 100 } as UserModel;
+
+    service.forgotPasswordRequest(expectedParam);
+
+    expect(httpClientSpy.post).toHaveBeenCalledWith(
+      service.userUrl + 'forgot-password',
+      expectedParam
+    );
+  });
+
+  it('should post when resendActivationCode() hits', () => {
+    const expectedParam = { id: 100 } as UserModel;
+
+    service.resendActivationCode(expectedParam);
+
+    expect(httpClientSpy.post).toHaveBeenCalledWith(
+      service.userUrl + 'resend-activation-code',
+      expectedParam
+    );
+  });
+
+  it('should post when activateUser() hits', () => {
+    const expectedParam = { id: 100 } as UserModel;
+
+    service.activateUser(expectedParam);
+
+    expect(httpClientSpy.post).toHaveBeenCalledWith(
+      service.userUrl + 'activate-user',
+      expectedParam
+    );
+  });
+
+  it('should post when activateUser() hits', () => {
+    const expectedParam = { id: 100 } as UserModel;
+
+    service.resetPassword(expectedParam);
+
+    expect(httpClientSpy.post).toHaveBeenCalledWith(
+      service.userUrl + 'reset-password',
+      expectedParam
+    );
+  });
 });

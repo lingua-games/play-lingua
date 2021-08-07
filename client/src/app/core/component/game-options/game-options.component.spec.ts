@@ -43,4 +43,23 @@ describe('GameOptionsComponent', () => {
 
     expect(component.isDetailsShowing).toBeFalse();
   });
+
+  describe('soundTrigger', () => {
+    it('should trigger this.soundOn', () => {
+      component.soundOn = true;
+
+      component.soundTrigger();
+
+      expect(component.soundOn).toBeFalsy();
+    });
+
+    it('should call stopSound.emit', () => {
+      component.soundOn = true;
+      spyOn(component.stopSound, 'emit');
+
+      component.soundTrigger();
+
+      expect(component.stopSound.emit).toHaveBeenCalledWith(false);
+    });
+  });
 });

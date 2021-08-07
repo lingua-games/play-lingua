@@ -1,5 +1,4 @@
 import { TestBed, ComponentFixture, waitForAsync } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -11,6 +10,7 @@ import { UserService } from './core/service/user.service';
 import { MessageService } from 'primeng/api';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { NavigationStart, Router } from '@angular/router';
 
 describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
@@ -19,6 +19,7 @@ describe('AppComponent', () => {
   let mockDeviceDetectorService;
   let mockUserService;
   let mockMessageService;
+  let mockRouter;
   beforeEach(
     waitForAsync(() => {
       mockMessageService = jasmine.createSpyObj(['add']);
@@ -26,13 +27,12 @@ describe('AppComponent', () => {
         'isLoggedIn',
         'initialTotalScore',
       ]);
-
+      mockRouter = jasmine.createSpyObj(['events']);
       mockDeviceDetectorService = jasmine.createSpyObj(
         'deviceDetectorService',
         {
-          isMobile: () => {
-            return false;
-          },
+          isMobile: false,
+          isTablet: false,
         }
       );
       mockUserService = jasmine.createSpyObj('userService', [
@@ -40,13 +40,13 @@ describe('AppComponent', () => {
       ]);
 
       TestBed.configureTestingModule({
-        imports: [
-          RouterTestingModule,
-          HttpClientTestingModule,
-          BrowserAnimationsModule,
-        ],
+        imports: [HttpClientTestingModule, BrowserAnimationsModule],
         declarations: [AppComponent],
         providers: [
+          {
+            provide: Router,
+            useValue: mockRouter,
+          },
           {
             provide: MatDialog,
             useValue: {},
@@ -78,33 +78,51 @@ describe('AppComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should create the app', () => {
-    mockSecurityService.isLoggedIn.and.callFake(() => {
-      return { success: false };
-    });
-    fixture.detectChanges();
-    expect(component).toBeTruthy();
-  });
-
-  it('should get device information at Initial time ', () => {
-    mockSecurityService.isLoggedIn.and.callFake(() => {
-      return { success: false };
+  describe('ngOnInit', () => {
+    beforeEach(() => {
+      mockSecurityService.isLoggedIn.and.callFake(() => {
+        return { success: false };
+      });
+      mockRouter.events = of(new NavigationStart(0, 'games/'));
     });
 
-    fixture.detectChanges();
+    it('should create the app', () => {
+      fixture.detectChanges();
 
-    expect(mockDeviceDetectorService.isMobile).toHaveBeenCalled();
-  });
-
-  it('should call getUserInformation if isLoggedIn', () => {
-    mockSecurityService.isLoggedIn.and.callFake(() => {
-      return { success: true };
+      expect(component).toBeTruthy();
     });
-    spyOn(component, 'getUserInformation');
 
-    fixture.detectChanges();
+    it('should get device information at Initial time ', () => {
+      fixture.detectChanges();
 
-    expect(component.getUserInformation);
+      expect(mockDeviceDetectorService.isMobile).toHaveBeenCalled();
+      expect(mockDeviceDetectorService.isTablet).toHaveBeenCalled();
+    });
+
+    it('should call getUserInformation if isLoggedIn', () => {
+      mockSecurityService.isLoggedIn.and.callFake(() => {
+        return { success: true };
+      });
+      spyOn(component, 'getUserInformation');
+
+      fixture.detectChanges();
+
+      expect(component.getUserInformation);
+    });
+
+    it('should set showAboutUs to false if in game', () => {
+      fixture.detectChanges();
+
+      expect(component.showAboutUs).toBeFalsy();
+    });
+
+    it('should set showAboutUs to true if NOT in game', () => {
+      mockRouter.events = of(new NavigationStart(0, 'something-else/'));
+
+      fixture.detectChanges();
+
+      expect(component.showAboutUs).toBeTrue();
+    });
   });
 
   it('should set loading for total score when calling getUserInformation', () => {
@@ -140,5 +158,13 @@ describe('AppComponent', () => {
     component.getUserInformation();
 
     expect(mockSecurityService.initialTotalScore).toHaveBeenCalledWith('0');
+  });
+
+  it('should call window.open with proper url when openExternalUrl method calls', () => {
+    spyOn(window, 'open');
+
+    component.openExternalUrl('fake url');
+
+    expect(window.open).toHaveBeenCalledWith('fake url', '_blank');
   });
 });

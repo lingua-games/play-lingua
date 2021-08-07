@@ -10,7 +10,7 @@ import { SecurityTokenInterface } from '../models/security-token.interface';
 import { UserModel } from '../models/user.model';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { compose } from '@ngrx/store';
+import { LoginResultModel } from '../models/login-result.model';
 
 describe('SecurityService', () => {
   let service: SecurityService;
@@ -75,24 +75,102 @@ describe('SecurityService', () => {
     );
   });
 
-  it('should load score from storage when setTotalScore hits', () => {
-    mockLocalStorageService.load.and.callFake(() => {
-      return false;
-    });
-    service.setTotalScore('1');
+  describe('setTotalScore', () => {
+    it('should load score from storage', () => {
+      mockLocalStorageService.load.and.callFake(() => {
+        return false;
+      });
+      service.setTotalScore('1');
 
-    expect(mockLocalStorageService.load).toHaveBeenCalled();
+      expect(mockLocalStorageService.load).toHaveBeenCalled();
+    });
+
+    it('should break if new score is zero', () => {
+      mockLocalStorageService.load.and.callFake(() => {
+        return false;
+      });
+      spyOn(service, 'isLoggedIn').and.returnValue({
+        success: true,
+        route: '',
+      });
+
+      service.setTotalScore('0');
+
+      expect(mockLocalStorageService.load).toHaveBeenCalledWith(
+        LocalStorageHelper.totalScore
+      );
+    });
+
+    it('should break the method if user is not logged in', () => {
+      spyOn(service, 'isLoggedIn').and.returnValue({
+        success: false,
+        route: '',
+      });
+
+      service.setTotalScore('0');
+
+      expect(mockLocalStorageService.load).not.toHaveBeenCalled();
+    });
+
+    it('should break the method if user is guest', () => {
+      spyOn(service, 'isLoggedIn').and.returnValue({
+        success: true,
+        route: '',
+      });
+      mockLocalStorageService.load.and.callFake(() => {
+        return true;
+      });
+      spyOn(service.storageSub, 'next');
+
+      service.setTotalScore('0');
+
+      expect(service.storageSub.next).not.toHaveBeenCalled();
+    });
+
+    it('should save score if all the conditions pass', () => {
+      spyOn(service, 'isLoggedIn').and.returnValue({
+        success: true,
+        route: '',
+      });
+      mockLocalStorageService.load.and.callFake(() => {
+        return false;
+      });
+      spyOn(service.storageSub, 'next');
+
+      service.setTotalScore('10');
+
+      expect(mockLocalStorageService.save).toHaveBeenCalledWith(
+        LocalStorageHelper.totalScore,
+        '10'
+      );
+    });
   });
 
-  it('should save score into storage when initialTotalScore hits', () => {
-    spyOn(service, 'isLoggedIn').and.returnValue({ success: true, route: '' });
+  describe('initialTotalScore', () => {
+    it('should save score into storage when initialTotalScore hits', () => {
+      spyOn(service, 'isLoggedIn').and.returnValue({
+        success: true,
+        route: '',
+      });
 
-    service.initialTotalScore('1');
+      service.initialTotalScore('1');
 
-    expect(mockLocalStorageService.save).toHaveBeenCalledWith(
-      LocalStorageHelper.totalScore,
-      '1'
-    );
+      expect(mockLocalStorageService.save).toHaveBeenCalledWith(
+        LocalStorageHelper.totalScore,
+        '1'
+      );
+    });
+
+    it('should break if user is not logged in', () => {
+      spyOn(service, 'isLoggedIn').and.returnValue({
+        success: false,
+        route: '',
+      });
+
+      service.initialTotalScore('1');
+
+      expect(mockLocalStorageService.save).not.toHaveBeenCalled();
+    });
   });
 
   it('should return observable when calling getTotalScore', () => {
@@ -102,19 +180,6 @@ describe('SecurityService', () => {
     service.getTotalScore();
 
     expect(service.storageSub.asObservable).toHaveBeenCalled();
-  });
-
-  it('should break if new score is zero and setTotalScore calls', () => {
-    mockLocalStorageService.load.and.callFake(() => {
-      return false;
-    });
-    spyOn(service, 'isLoggedIn').and.returnValue({ success: true, route: '' });
-
-    service.setTotalScore('0');
-
-    expect(mockLocalStorageService.load).toHaveBeenCalledWith(
-      LocalStorageHelper.totalScore
-    );
   });
 
   it('should log out when there is not token and getTokenInformation hits', () => {
@@ -169,11 +234,77 @@ describe('SecurityService', () => {
     expect(mockLocalStorageService.delete).toHaveBeenCalled();
   });
 
-  it('should check isLoggedIn with token', () => {
-    service.isLoggedIn();
-    expect(mockLocalStorageService.load).toHaveBeenCalledWith(
-      LocalStorageHelper.token
-    );
+  describe('isLoggedIn', () => {
+    it('should check isLoggedIn with token', () => {
+      service.isLoggedIn();
+      expect(mockLocalStorageService.load).toHaveBeenCalledWith(
+        LocalStorageHelper.token
+      );
+    });
+
+    it('should return false if token has needsResetPassword flag', () => {
+      spyOn(service, 'getTokenInformation').and.returnValue({
+        needsResetPassword: 'true',
+        email: 'fake email ',
+      } as SecurityTokenInterface);
+
+      expect(service.isLoggedIn()).toEqual({
+        success: false,
+        route: '../reset-password',
+      });
+    });
+
+    it('should return true all the conditions pass', () => {
+      spyOn(service, 'getTokenInformation').and.returnValue({
+        email: 'fake email ',
+      } as SecurityTokenInterface);
+
+      expect(service.isLoggedIn()).toEqual({
+        success: true,
+        route: '',
+      });
+    });
+
+    describe('isAdmin', () => {
+      it('should generate getTokenInformation', () => {
+        spyOn(service, 'getTokenInformation');
+
+        service.isAdmin();
+
+        expect(service.getTokenInformation).toHaveBeenCalled();
+      });
+
+      it('should return isAdmin flag if user is admin', () => {
+        spyOn(service, 'getTokenInformation').and.returnValue({
+          isAdmin: 'true',
+        } as SecurityTokenInterface);
+
+        expect(service.isAdmin()).toBe(true);
+      });
+    });
+  });
+
+  describe('storeCredentialsAfterLogin', () => {
+    it('should set token', () => {
+      const loginResult = { token: 'I am token' } as LoginResultModel;
+      spyOn(service, 'setToken');
+
+      service.storeCredentialsAfterLogin(loginResult);
+
+      expect(service.setToken).toHaveBeenCalledWith(loginResult.token);
+    });
+
+    it('should save totalScore', () => {
+      const loginResult = { user: { totalScore: 100 } } as LoginResultModel;
+      spyOn(service, 'setToken');
+
+      service.storeCredentialsAfterLogin(loginResult);
+
+      expect(mockLocalStorageService.save).toHaveBeenCalledWith(
+        LocalStorageHelper.totalScore,
+        loginResult?.user?.totalScore.toString()
+      );
+    });
   });
 
   it('should check isGuest with isGuest flag', () => {

@@ -10,17 +10,6 @@ export class SoundService {
   songs: any[] = [];
   constructor() {}
 
-  // playGameSong(game: GameNameEnum, isSoundOn: boolean): void {
-  //   if (!isSoundOn) {
-  //     return;
-  //   }
-  //   if (game === GameNameEnum.supperMario) {
-  //     // this.song = new Audio('../../../assets/mario/song.mp3');
-  //     // this.song.play();
-  //     // this.song.volume = 0.1;
-  //   }
-  // }
-
   loadSounds(game: GameNameEnum): void {
     if (game === GameNameEnum.supperMario) {
       this.songs[GameActionEnum.backGroundSond] = new Audio(

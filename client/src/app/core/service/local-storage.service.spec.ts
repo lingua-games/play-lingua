@@ -42,6 +42,24 @@ describe('LocalStorageService', () => {
     );
   });
 
+  describe('decryptData', () => {
+    it('should decrypt data when decryptData() hits', () => {
+      spyOn(CryptoJS.AES, 'decrypt').and.returnValue({
+        encrypt: jasmine.createSpy(),
+      });
+      spyOn(JSON, 'parse').and.returnValue({ name: 1 });
+
+      service.decryptData('{"name": 1}');
+
+      expect(CryptoJS.AES.decrypt).toHaveBeenCalled();
+    });
+
+    it('should return empty object in case of having error', () => {
+      spyOn(console, 'error');
+      expect(service.decryptData('{"name": 1}')).toEqual({});
+    });
+  });
+
   it('should call decryptData when load() hits', () => {
     spyOn(localStorage, 'getItem').and.returnValue('something');
     spyOn(service, 'decryptData');
@@ -98,14 +116,17 @@ describe('LocalStorageService', () => {
     expect(CryptoJS.AES.encrypt).toHaveBeenCalled();
   });
 
-  it('should decrypt data when decryptData() hits', () => {
-    spyOn(CryptoJS.AES, 'decrypt').and.returnValue({
-      encrypt: jasmine.createSpy(),
-    });
-    spyOn(JSON, 'parse').and.returnValue({ name: 1 });
+  it('should replace specific character with *** in text', () => {
+    const text = 'This is fake test';
 
-    service.decryptData('{"name": 1}');
-
-    expect(CryptoJS.AES.decrypt).toHaveBeenCalled();
+    expect(service.removeCharacter(text, 'a')).toBe('This is f***ke test');
   });
+
+  it('should replace *** with specific character in text', () => {
+    const text = 'This is f***ke test';
+
+    expect(service.replaceCharacter(text, 'a')).toBe('This is fake test');
+  });
+
+  it('should ');
 });

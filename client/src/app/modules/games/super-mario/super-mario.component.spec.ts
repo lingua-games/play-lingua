@@ -8,21 +8,23 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Store } from '@ngrx/store';
 import { GameStartInformation } from '../../../core/models/game-start-information';
 import {
+  SpeechStatus,
   TranslateModel,
   WordKeyValueModel,
 } from '../../../core/models/word-key-value.model';
 import { MarioModel } from '../../../core/models/mario.model';
 import { ElementStyle } from '../../../core/models/element-style.model';
 import { ScoreStorageService } from '../../../core/service/score-storage.service';
-import { FinishGameActionEnum } from '../../../core/models/finish-game-action.enum';
 import {
   MarioEnemy,
   MarioEnemyStatus,
 } from '../../../core/models/mario-enemy.model';
 import { SoundService } from '../../../core/service/sound.service';
 import { BasicInformationService } from '../../../core/service/basic-information.service';
-import { retry } from 'rxjs/operators';
-import { RouterTestingModule } from '@angular/router/testing';
+import { InvitationForm } from '../../../core/models/invitation-form.interface';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SecurityService } from '../../../core/service/security.service';
+import { GameActionEnum } from '../../../core/models/game-action.enum';
 
 describe('SuperMarioComponent', () => {
   let component: SuperMarioComponent;
@@ -34,7 +36,9 @@ describe('SuperMarioComponent', () => {
   let mockScoreStorageService;
   let mockSoundService;
   let mockBasicInformationService;
-
+  let mockActivatedRoute;
+  let mockRouter;
+  let mockSecurityService;
   beforeEach(
     waitForAsync(() => {
       mockBasicInformationService = jasmine.createSpyObj(
@@ -48,17 +52,28 @@ describe('SuperMarioComponent', () => {
           },
         }
       );
+      mockSecurityService = {
+        isLoggedIn: { success: true } as { success: boolean; route: string },
+      };
       mockStore = jasmine.createSpyObj(['select', 'dispatch']);
       mockSoundService = jasmine.createSpyObj([
         'playActionSong',
         'stopGameSong',
         'loadSounds',
       ]);
+      mockRouter = jasmine.createSpyObj('router', ['navigate']);
       mockScoreStorageService = jasmine.createSpyObj([
         'clearCatch',
         'getCachedScores',
         'catchScores',
       ]);
+      mockActivatedRoute = {
+        paramMap: of({
+          get: () => {
+            return 'invitation code';
+          },
+        }),
+      };
       mockMatDialogRef = jasmine.createSpyObj(['close']);
       mockMatDialog = jasmine.createSpyObj('dialog', {
         open: {
@@ -69,7 +84,7 @@ describe('SuperMarioComponent', () => {
       });
       TestBed.configureTestingModule({
         declarations: [SuperMarioComponent],
-        imports: [HttpClientTestingModule, RouterTestingModule],
+        imports: [HttpClientTestingModule],
         providers: [
           {
             provide: BasicInformationService,
@@ -84,6 +99,10 @@ describe('SuperMarioComponent', () => {
             useValue: mockScoreStorageService,
           },
           {
+            provide: SecurityService,
+            useValue: mockSecurityService,
+          },
+          {
             provide: Store,
             useValue: mockStore,
           },
@@ -94,6 +113,14 @@ describe('SuperMarioComponent', () => {
           {
             provide: MatDialog,
             useValue: mockMatDialog,
+          },
+          {
+            provide: ActivatedRoute,
+            useValue: mockActivatedRoute,
+          },
+          {
+            provide: Router,
+            useValue: mockRouter,
           },
         ],
         schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
@@ -130,6 +157,20 @@ describe('SuperMarioComponent', () => {
   });
 
   describe('ngOnInit', () => {
+    it('should fill uniqueKey into feedbackForm if its feedback session', () => {
+      spyOn(component, 'showStartDialog');
+      spyOn(component.mario, 'setStyle');
+      mockBasicInformationService.loadFile.and.callFake(() => {
+        return of('something');
+      });
+
+      fixture.detectChanges();
+
+      expect(component.feedbackForm).toEqual({
+        uniqueKey: 'invitation code',
+      } as InvitationForm);
+    });
+
     it('should initial mario style', () => {
       spyOn(component.mario, 'setStyle');
       mockBasicInformationService.loadFile.and.callFake(() => {
@@ -178,6 +219,21 @@ describe('SuperMarioComponent', () => {
       fixture.detectChanges();
 
       expect(component.showStartDialog).toHaveBeenCalled();
+    });
+  });
+
+  describe('getAnswerSpeech', () => {
+    it('should return speech information of the correct answer', () => {
+      const methodOutput = component.getAnswerSpeech({
+        value: 'word C',
+        speechCode: 'fake speech code C',
+        speechStatus: SpeechStatus.Success,
+      } as TranslateModel);
+
+      expect(methodOutput).toEqual({
+        code: 'fake speech code C',
+        status: SpeechStatus.Success,
+      });
     });
   });
 
@@ -383,6 +439,82 @@ describe('SuperMarioComponent', () => {
     expect(component.startGame).toHaveBeenCalled();
   });
 
+  describe('showEndGameDialog', () => {
+    it('should stop sound', () => {
+      spyOn(component, 'stopSound');
+
+      component.showEndGameDialog();
+
+      expect(component.stopSound).toHaveBeenCalledWith(false);
+    });
+    it('should open dialog', () => {
+      spyOn(component, 'stopSound');
+
+      component.showEndGameDialog();
+
+      expect(mockMatDialog.open).toHaveBeenCalled();
+    });
+
+    it('should start game after closing dialog with res.words', () => {
+      spyOn(component, 'stopSound');
+      spyOn(component, 'startGame');
+      mockMatDialog.open.and.returnValue({
+        afterClosed: () => {
+          return of({
+            words: [{ key: '1' } as WordKeyValueModel<TranslateModel[]>],
+          } as GameStartInformation<WordKeyValueModel<TranslateModel[]>[]>);
+        },
+      });
+      component.showEndGameDialog();
+
+      expect(component.startGame).toHaveBeenCalled();
+    });
+
+    it('should NOT call start game after closing dialog with NO res.words', () => {
+      spyOn(component, 'stopSound');
+      spyOn(component, 'startGame');
+      mockMatDialog.open.and.returnValue({
+        afterClosed: () => {
+          return of({
+            words: [],
+          } as GameStartInformation<WordKeyValueModel<TranslateModel[]>[]>);
+        },
+      });
+      component.showEndGameDialog();
+
+      expect(component.startGame).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('stopSound', () => {
+    it('should call playActionSong if value is true', () => {
+      component.isSoundOn = true;
+
+      component.stopSound(true);
+
+      expect(mockSoundService.playActionSong).toHaveBeenCalledWith(
+        GameActionEnum.backGroundSond,
+        true
+      );
+    });
+    it('should call stopGameSong if value is false', () => {
+      component.stopSound(false);
+
+      expect(mockSoundService.stopGameSong).toHaveBeenCalledWith(
+        GameActionEnum.backGroundSond
+      );
+    });
+  });
+
+  describe('isLoggedIn', () => {
+    it('should return false if user is not logged in', () => {
+      spyOn(mockSecurityService, 'isLoggedIn').and.returnValue({
+        success: false,
+      });
+      expect(component.isLoggedIn()).toBeFalsy();
+    });
+  });
+
   describe('prepareTheWord', () => {
     beforeEach(() => {
       spyOn(component, 'generateRandomNumber').and.returnValue([1]);
@@ -409,6 +541,17 @@ describe('SuperMarioComponent', () => {
         bookId: 1,
         chapterId: 1,
       };
+    });
+
+    it('should playActionSoung with backgroundSound if guidboxShowing is true', () => {
+      component.guidBoxShowing = true;
+
+      component.prepareTheWord();
+
+      expect(mockSoundService.playActionSong).toHaveBeenCalledWith(
+        GameActionEnum.backGroundSond,
+        component.isSoundOn
+      );
     });
 
     it('should set next enemy as current enemy', () => {
@@ -438,6 +581,38 @@ describe('SuperMarioComponent', () => {
       component.prepareTheWord(component.allEnemies.words[0]);
 
       expect(component.currentEnemy).toEqual(component.allEnemies.words[0]);
+    });
+  });
+
+  describe('getRemainWordCount', () => {
+    it('should return the number minus one if guide box is showing', () => {
+      const allEnemies = {
+        words: [
+          { key: '1' } as WordKeyValueModel<TranslateModel[]>,
+          { key: '2' } as WordKeyValueModel<TranslateModel[]>,
+          { key: '3' } as WordKeyValueModel<TranslateModel[]>,
+        ],
+      } as GameStartInformation<WordKeyValueModel<TranslateModel[]>[]>;
+      component.guidBoxShowing = true;
+      component.allEnemies = allEnemies;
+      component.currentEnemy = allEnemies[1];
+
+      expect(component.getRemainWordCount()).toBe(3);
+    });
+
+    it('should return the number if guide box is NOT showing', () => {
+      const allEnemies = {
+        words: [
+          { key: '1' } as WordKeyValueModel<TranslateModel[]>,
+          { key: '2' } as WordKeyValueModel<TranslateModel[]>,
+          { key: '3' } as WordKeyValueModel<TranslateModel[]>,
+        ],
+      } as GameStartInformation<WordKeyValueModel<TranslateModel[]>[]>;
+      component.guidBoxShowing = false;
+      component.allEnemies = allEnemies;
+      component.currentEnemy = allEnemies[1];
+
+      expect(component.getRemainWordCount()).toBe(4);
     });
   });
 

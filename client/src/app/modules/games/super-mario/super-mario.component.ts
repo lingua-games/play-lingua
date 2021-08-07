@@ -112,7 +112,7 @@ export class SuperMarioComponent implements OnInit, OnDestroy {
     private scoreStorageService: ScoreStorageService,
     private soundService: SoundService,
     private securityService: SecurityService,
-    private route: ActivatedRoute
+    private activatedRoute: ActivatedRoute
   ) {}
 
   @HostListener('window:resize', ['$event'])
@@ -185,7 +185,7 @@ export class SuperMarioComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((paramMap) => {
+    this.activatedRoute.paramMap.subscribe((paramMap) => {
       const invitationCode = paramMap.get('code');
       if (invitationCode) {
         this.feedbackForm = { uniqueKey: invitationCode } as InvitationForm;

@@ -65,6 +65,7 @@ export class ForgotPasswordComponent implements OnInit {
         }
       },
       (error: string) => {
+        console.log(this.captchaView);
         if (this.captchaView) {
           this.captchaView.reset();
         }

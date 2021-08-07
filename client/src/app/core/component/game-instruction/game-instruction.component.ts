@@ -25,19 +25,18 @@ export class GameInstructionComponent implements OnInit {
     <li style='margin: 1rem 0'><strong>Tip: </strong><a>Be fast and boost your score!</a></li>
   </ul>
 </div>
-
       `;
     } else if (this.gameName === GameNameEnum.fallingStars) {
       template = `
-<div class='alert alert-info'>
-  <ul>
-    <li style='margin-bottom: 1rem'><a>Choose the correct translate for the falling word!</a></li>
-    <li style='margin: 1rem 0'><a>Select correct answer using your mouse or numbers on your keyboard</a></li>
-    <li style='margin: 1rem 0'><a>Wrongly answered questions, will show up again with less score</a></li>
-    <li style='margin: 1rem 0'><strong>Tip: </strong><a>Be fast and boost your score!</a></li>
-  </ul>
-</div>
-      `;
+  <div class='alert alert-info'>
+    <ul>
+      <li style='margin-bottom: 1rem'><a>Choose the correct translate for the falling word!</a></li>
+      <li style='margin: 1rem 0'><a>Select correct answer using your mouse or numbers on your keyboard</a></li>
+      <li style='margin: 1rem 0'><a>Wrongly answered questions, will show up again with less score</a></li>
+      <li style='margin: 1rem 0'><strong>Tip: </strong><a>Be fast and boost your score!</a></li>
+    </ul>
+  </div>
+        `;
     }
 
     this.textTemplate = this.sanitizer.bypassSecurityTrustHtml(template);

@@ -17,6 +17,7 @@ import { ChapterModel } from '../../../core/models/chapter.model';
 import { GameInformationInterface } from '../../../core/models/game-information.interface';
 import { InvitationService } from '../../../core/service/invitation.service';
 import { MatDialog } from '@angular/material/dialog';
+import { UserModel } from '../../../core/models/user.model';
 
 describe('SendInvitationComponent', () => {
   let component: SendInvitationComponent;
@@ -296,6 +297,34 @@ describe('SendInvitationComponent', () => {
         )
       ).toBe(-1);
     });
+
+    it('should call submit after closing dialog with res:true', () => {
+      spyOn(component, 'isFormValid').and.returnValue(true);
+      mockMatDialog.open.and.callFake(() => {
+        return {
+          afterClosed: () => of(true),
+        };
+      });
+      spyOn(component, 'submit');
+
+      component.preview();
+
+      expect(component.submit).toHaveBeenCalled();
+    });
+
+    it('should NOT call submit after closing dialog with res:false', () => {
+      spyOn(component, 'isFormValid').and.returnValue(true);
+      mockMatDialog.open.and.callFake(() => {
+        return {
+          afterClosed: () => of(false),
+        };
+      });
+      spyOn(component, 'submit');
+
+      component.preview();
+
+      expect(component.submit).not.toHaveBeenCalled();
+    });
   });
 
   describe('submit', () => {
@@ -344,6 +373,83 @@ describe('SendInvitationComponent', () => {
         Severity.error
       );
       expect(component.isFormLoading).toBeFalsy();
+    });
+  });
+
+  describe('gameSelectionChange', () => {
+    it('should set appropriate text for form.title', () => {
+      const eventName = 'fake name';
+
+      component.gameSelectionChange({
+        name: eventName,
+      } as GameInformationInterface);
+
+      expect(component.form).toEqual({
+        title: `PlayingLingua.com | ${eventName} feedback session`,
+      } as InvitationForm);
+    });
+  });
+
+  describe('getUserList', () => {
+    it('should call userList.setData with service result', () => {
+      const fakeServiceResult = [{ id: 1 } as UserModel];
+      spyOn(component.userList, 'setLoading');
+      spyOn(component.userList, 'setData');
+      component.userList.data = fakeServiceResult;
+      mockInvitationService.getUserList.and.callFake(() => {
+        return of(fakeServiceResult);
+      });
+
+      component.getUserList();
+
+      expect(component.userList.setData).toHaveBeenCalledWith(
+        fakeServiceResult
+      );
+    });
+    it('should call userList.setError if service fail', () => {
+      const errorMessage = 'I am error';
+      spyOn(component.userList, 'setLoading');
+      spyOn(component.userList, 'setError');
+      mockInvitationService.getUserList.and.callFake(() => {
+        return throwError(errorMessage);
+      });
+
+      component.getUserList();
+
+      expect(component.userList.setError).toHaveBeenCalledWith(errorMessage);
+    });
+  });
+
+  describe('clearEmailSelection', () => {
+    it('should set clear form.email', () => {
+      component.clearEmailSelection();
+
+      expect(component.form.email).toBe('');
+    });
+    it('should set clear form.playerName', () => {
+      component.clearEmailSelection();
+
+      expect(component.form.playerName).toBe('');
+    });
+  });
+
+  describe('fillEmailAndDisplayName', () => {
+    it('should set form.email with method param', () => {
+      const expectedEmail = 'fake email';
+
+      component.fillEmailAndDisplayName({ email: expectedEmail } as UserModel);
+
+      expect(component.form.email).toBe(expectedEmail);
+    });
+
+    it('should set form.playerName  with method param', () => {
+      const expectedPlayerName = 'fake playerName ';
+
+      component.fillEmailAndDisplayName({
+        email: expectedPlayerName,
+      } as UserModel);
+
+      expect(component.form.email).toBe(expectedPlayerName);
     });
   });
 });

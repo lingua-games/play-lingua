@@ -92,4 +92,69 @@ describe('BasicInformationService', () => {
   it('should return array of menus when calling getGameMenus', () => {
     expect(service.getGameMenus().length).toBeGreaterThan(0);
   });
+
+  describe('gameHints', () => {
+    it('should call bypassSecurityTrustHtml with appropriate parameter if its Super mario game', () => {
+      const game = GameNameEnum.supperMario;
+
+      service.gameHints(game);
+
+      expect(sanitizerSpy.bypassSecurityTrustHtml).toHaveBeenCalledWith(`
+        <div class='row' style='margin: 0'>
+          <div class='col-sm-12 mt-3'>
+            <div class='row'>
+               <div class='col-sm-3'>
+                  <a style='border: solid 1px gray; padding: 5px 1rem;'>ESC</a>
+              </div>
+               <div class='col-sm-6'>
+                Exit game
+               </div>
+            </div>
+          </div>
+          <div class='col-sm-6 mt-3'>
+            <div class='row'>
+               <div class='col-sm-6'>
+                  <a style='border: solid 1px gray; padding: 5px 1rem;'>A</a>
+                  <a style='border: solid 1px gray; padding: 5px 1rem; margin-left: 1%'>←</a>
+              </div>
+               <div class='col-sm-6'>
+                Move left
+               </div>
+            </div>
+          </div>
+          <div class='col-sm-6 mt-3'>
+            <div class='row'>
+               <div class='col-sm-6'>
+                  <a style='border: solid 1px gray; padding: 5px 1rem;'>D</a>
+                  <a style='border: solid 1px gray; padding: 5px 1rem; margin-left: 1%'>→</a>
+              </div>
+               <div class='col-sm-6'>
+                Move right
+               </div>
+            </div>
+          </div>
+          <div class='col-sm-6 mt-3'>
+            <div class='row'>
+               <div class='col-sm-6'>
+                  <a style='border: solid 1px gray; padding: 5px 1rem;'>SPACE</a>
+              </div>
+               <div class='col-sm-6'>
+                Jump
+               </div>
+            </div>
+          </div>
+          <div class='col-sm-6 mt-3'>
+            <div class='row'>
+               <div class='col-sm-6'>
+                  <a style='border: solid 1px gray; padding: 5px 1rem;'>Q</a>
+              </div>
+               <div class='col-sm-6'>
+                Skip mushroom
+               </div>
+            </div>
+          </div>
+        </div>
+      `);
+    });
+  });
 });

@@ -120,44 +120,51 @@ describe('StartGameDialogComponent', () => {
     expect(mockMatDialogRef.close).toHaveBeenCalled();
   });
 
-  it('should stop feedbackLoading after 1 second', () => {
-    mockInvitationService.getInvitation.and.callFake(() => {
-      return of({ uniqueKey: '' } as InvitationForm);
+  describe('getInvitationInformation', () => {
+    it('should show notification if getInvitation API Fail', () => {
+      mockInvitationService.getInvitation.and.callFake(() => {
+        return throwError('I am error');
+      });
+      mockInvitationService.setAsOpen.and.callFake(() => {
+        return of({ uniqueKey: '' } as InvitationForm);
+      });
+      component.data = {
+        feedbackForm: {
+          uniqueKey: 'test unique key',
+        } as InvitationForm,
+      } as GameInformationInterface;
+
+      component.getInvitationInformation();
+
+      expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
+        'Failed to get information, please try again',
+        Severity.error
+      );
     });
-    mockInvitationService.setAsOpen.and.callFake(() => {
-      return of({ uniqueKey: '' } as InvitationForm);
+
+    it('should stop feedbackLoading after 1 second', () => {
+      jasmine.clock().uninstall();
+      jasmine.clock().install();
+      component.isFeedbackLoading = true;
+      mockInvitationService.getInvitation.and.callFake(() => {
+        return of({ uniqueKey: '' } as InvitationForm);
+      });
+      mockInvitationService.setAsOpen.and.callFake(() => {
+        return of({ uniqueKey: '' } as InvitationForm);
+      });
+
+      component.data = {
+        feedbackForm: {
+          uniqueKey: 'test unique key',
+        } as InvitationForm,
+      } as GameInformationInterface;
+
+      component.getInvitationInformation();
+      jasmine.clock().tick(1000);
+
+      expect(component.isFeedbackLoading).toBeFalsy();
+      jasmine.clock().uninstall();
     });
-
-    component.data = {
-      feedbackForm: {
-        uniqueKey: 'test unique key',
-      } as InvitationForm,
-    } as GameInformationInterface;
-
-    component.getInvitationInformation();
-
-    expect(component.isFeedbackLoading).toBeFalsy();
-  });
-
-  it('should show notification if getInvitation API Fail', () => {
-    mockInvitationService.getInvitation.and.callFake(() => {
-      return throwError('I am error');
-    });
-    mockInvitationService.setAsOpen.and.callFake(() => {
-      return of({ uniqueKey: '' } as InvitationForm);
-    });
-    component.data = {
-      feedbackForm: {
-        uniqueKey: 'test unique key',
-      } as InvitationForm,
-    } as GameInformationInterface;
-
-    component.getInvitationInformation();
-
-    expect(mockNotificationService.showMessage).toHaveBeenCalledWith(
-      'Failed to get information, please try again',
-      Severity.error
-    );
   });
 
   it('should show message if submit hits but there is no word added yet with the session', () => {
