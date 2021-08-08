@@ -81,7 +81,7 @@ As well as we are paying a lot of expenses for managing our servers, backup, dom
 
 My crypto wallet: 
 
-![alt text](https://www.youtube.com/user/vbhostir/videos)
+![alt text](./client/src/assets/about-us/crypto-wallet.png)
 
 
 [logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"
