@@ -10,6 +10,8 @@ You can also contribute in the word pool or even project code.
 * [Setup front-end](#front-end)
 * [Setup back-end](#back-end)
 * [Pipelines](#Pipelines)
+* [Branching strategy](#Branching-strategy)
+* [More](#More)
 * [Donate](#Donate)
 
 ## Builds
@@ -25,19 +27,36 @@ You can also contribute in the word pool or even project code.
 4. Run `npm start`
 5. Browse to [localhost:4000](http://localhost:4000/)
 
-#### Run end-to-end tests
-
-End-to-End testing is a methodology used to test an application from a user's perspective. The tests ensure the application performs as expected from start to finish. As the tests run, you will see the browser interaction just as a user would use your application. Angular end to end tests are powered by a framework called Protractor.
-
-Note. The End-to-End test for this project has not implemented yet.
+#### Unit tests
+run ``npm run test``
+#### Integration tests
+Not implemented yet.
+#### End-to-end tests
+Not implemented yet.
 
 ## Back-end
 
-Install ``Dotnet core SDK > 3`` and ``Dotnet core runtime > 3``
+1. Install ``Dotnet core SDK > 3`` and ``Dotnet core runtime > 3``
+2. Setup environments, the structure of secret.json file is as below, please fill the values if you want to use that service otherwise just leave it empty
 
-Navigate to ``./server``
+```json
+{
+   "ConnectionStrings:playLinguaConnection": "Server=play-lingua.database.windows.net;Database=play-lingua;User Id=SQL SERVER USERNAME;password=SQL SERVER PASSWORD;",
+   "secret": "",
+   "hashKey": "FOR HASHING PASSWORDS, CAN BE ANY STRING",
+   "email:username": "EMAIL USERNAME IN CASE OF SENDING INVITATION EMAIL",
+   "email:password": "EMAIL PASSWORD IN CASE OF SENDING INVITATION EMAIL",
+   "googleApiKey": "GOOGLE API KEY IN CASE OF DOWNLOADING SPEECHS"
+   }
+   ```
+3. Navigate to ``./server``
+4. Run ``dotnet restore`` and ``dotnet run``
 
-Run ``dotnet restore`` and ``dotnet run``
+## Database
+The database of this project is SQL-Server, to set up and build database locally
+1. Create a Database and name it `play-lingua`
+2. Run [This query](./sql-srcipts/script2_createSchema.sql)
+3. Setup connection string into ``secret.json`` of ``PlayLingua.Host`` project
 
 ## Pipelines
 
@@ -48,6 +67,13 @@ There are 4 pipelines
 3. **Canary** responsible to build develop branch on push/merge action and deploy integration of front-end and backend into [Canary](https://canary.playinglingua.com) environment. [The config file](./.github/workflows/canary.yml)
 4. **Production** responsible to build and deploy [Canary](https://canary.playinglingua.com) version into [Production](https://playinglingua.com/). [The config file](./.github/workflows/deploy-eu.yml)
 
+## Branching-strategy
+We organise branches with feature branch pattern i.e. 
+1. **Master :** Production branch, always ready to deploy and having the latest stable changes which passed all the pipelines 
+2. **Canary :** Canary branch, always ready to deploy on canary server. Same as production but in different url and always one version ahead of master
+3. **feature/STORY NAME** normal branches which should always start with ``feature/`` keyword. 
+## More
+[Youtube channel](https://www.youtube.com/user/vbhostir/videos)
  
 ## Donate
 As well as we are paying a lot of expenses for managing our servers, backup, domain and etc , your donation is so valuable for us :)
@@ -55,7 +81,8 @@ As well as we are paying a lot of expenses for managing our servers, backup, dom
 
 My crypto wallet: 
 
-![alt text](./client/src/assets/about-us/crypto-wallet.png)
+![alt text](https://www.youtube.com/user/vbhostir/videos)
+
 
 [logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"
 
