@@ -7,7 +7,7 @@ export const environment = {
   apiUrl: '',
   productionUrl: 'https://playinglingua.com',
   intervalForRoundMainPage: 1500,
-  startGameCount: 50,
+  startGameCount: 1000,
   recordCount: 5,
   rankCount: 10,
   secretKeys: secrets,
