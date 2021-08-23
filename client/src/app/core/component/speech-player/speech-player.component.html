@@ -3,7 +3,7 @@
   class="mr-1"
   [ngClass]="{
     'sound-item': status === 1,
-    'disable-sound': status === 2 || status === 3
+    'disable-sound': status === 0 || status === 2
   }"
   (click)="playSound()"
 ></fa-icon>
