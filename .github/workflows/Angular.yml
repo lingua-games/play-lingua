@@ -24,6 +24,9 @@ jobs:
       - name: Check lint
         run: npm run lint
         working-directory: client
+      - name: E2E test
+        run: npm run e2e:ci
+        working-directory: client
       - name: Run unit tests
         run: npm run test:ci
         working-directory: client
