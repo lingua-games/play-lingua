@@ -9,7 +9,7 @@
     "test:ci": "ng test --watch=false --browsers=ChromeHeadless",
     "build:prod": "ng build --prod  --aot --output-hashing none",
     "lint": "ng lint",
-    "e2e": "ng e2e",
+    "e2e": "npx protractor e2e/protractor.conf.js",
     "e2e:ci": "ng e2e -c ci"
   },
   "private": true,
