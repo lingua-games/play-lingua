@@ -32,7 +32,11 @@ run ``npm run test``
 #### Integration tests
 Not implemented yet.
 #### End-to-end tests
-Not implemented yet.
+1. make sure app is running i.e ``npm start``
+2. run ``npm run e2e`` 
+
+**note: Running e2e does not need any backend run.** 
+
 
 ## Back-end
 
